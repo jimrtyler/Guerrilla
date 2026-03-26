@@ -1,0 +1,7 @@
+{
+    "ips": [
+        { "address": "196.251.236.82", "note": "South Africa - seen in compromised account" },
+        { "address": "196.251.236.55", "note": "South Africa - seen in compromised account" },
+        { "address": "105.246.65.98", "note": "South Africa - known issue - list to be expanded" }
+    ]
+}
