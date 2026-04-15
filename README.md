@@ -4,7 +4,7 @@
 
 Security assessment, threat detection, and continuous monitoring for Google Workspace, Active Directory, Entra ID, Azure, Intune, and Microsoft 365. PowerShell 7.0+.
 
-[![GitHub](https://img.shields.io/badge/GitHub-jimrtyler-181717?logo=github)](https://github.com/jimrtyler) [![LinkedIn](https://img.shields.io/badge/LinkedIn-jamestyler-0A66C2?logo=linkedin)](https://linkedin.com/in/jamestyler) [![YouTube](https://img.shields.io/badge/YouTube-jimrtyler-FF0000?logo=youtube)](https://youtube.com/@jimrtyler)
+[![GitHub](https://img.shields.io/badge/GitHub-jimrtyler-181717?logo=github)](https://github.com/jimrtyler) [![LinkedIn](https://img.shields.io/badge/LinkedIn-jamestyler-0A66C2?logo=linkedin)](https://linkedin.com/in/jamestyler) [![YouTube](https://img.shields.io/badge/YouTube-jimrtyler-FF0000?logo=youtube)](https://youtube.com/@powershellengineer)
 
 > **[View a sample report with all 431 checks](./PSGuerrilla-Sample-Report.html)** to see the full scope of what PSGuerrilla evaluates.
 
