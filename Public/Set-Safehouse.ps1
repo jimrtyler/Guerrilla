@@ -464,13 +464,41 @@ function Set-Safehouse {
                 $mission = Read-MissionConfig -Path $ConfigFile
                 $credReqs = $mission.CredentialRequirements
             } else {
-                # Interactive mode — prompt for all common credentials
-                $credReqs = @(
-                    @{ vaultKey = 'GUERRILLA_GWS_SA'; type = 'serviceAccount'; environment = 'googleWorkspace'; description = 'Google Workspace service account'; promptType = 'serviceAccountJson' }
-                    @{ vaultKey = 'GUERRILLA_GRAPH_TENANT'; type = 'tenantId'; environment = 'microsoftGraph'; description = 'Entra ID Tenant ID'; promptType = 'guid' }
-                    @{ vaultKey = 'GUERRILLA_GRAPH_CLIENTID'; type = 'clientId'; environment = 'microsoftGraph'; description = 'App Registration Client ID'; promptType = 'guid' }
-                    @{ vaultKey = 'GUERRILLA_GRAPH_SECRET'; type = 'clientSecret'; environment = 'microsoftGraph'; description = 'Microsoft Graph Client Secret'; promptType = 'secret' }
-                )
+                # Interactive mode — ask the user up front which environments they want
+                # to configure, so we don't march them through credentials for things
+                # they aren't using.
+                $allCredReqs = @{
+                    GoogleWorkspace = @(
+                        @{ vaultKey = 'GUERRILLA_GWS_SA'; type = 'serviceAccount'; environment = 'googleWorkspace'; description = 'Google Workspace service account'; promptType = 'serviceAccountJson' }
+                    )
+                    Entra = @(
+                        @{ vaultKey = 'GUERRILLA_GRAPH_TENANT';   type = 'tenantId';     environment = 'microsoftGraph'; description = 'Entra ID Tenant ID';            promptType = 'guid'   }
+                        @{ vaultKey = 'GUERRILLA_GRAPH_CLIENTID'; type = 'clientId';     environment = 'microsoftGraph'; description = 'App Registration Client ID';    promptType = 'guid'   }
+                        @{ vaultKey = 'GUERRILLA_GRAPH_SECRET';   type = 'clientSecret'; environment = 'microsoftGraph'; description = 'Microsoft Graph Client Secret'; promptType = 'secret' }
+                    )
+                }
+
+                Write-Host ''
+                Write-Host "  ${amber}Which environments do you want to set up credentials for?${reset}"
+                Write-Host "  ${gray}  [1] Google Workspace${reset}"
+                Write-Host "  ${gray}  [2] Microsoft Entra / Graph / Azure / M365${reset}"
+                Write-Host "  ${gray}  [3] Active Directory  (uses your current Kerberos session — no setup needed)${reset}"
+                Write-Host "  ${gray}  [A] All of the above${reset}"
+                $sel = Read-Host "  Selection (comma-separated, default: A)"
+                if (-not $sel) { $sel = 'A' }
+                $tokens = @(($sel -split '[,\s]+') | Where-Object { $_ } | ForEach-Object { $_.Trim().ToUpper() })
+                $wantAll   = ('A' -in $tokens) -or ('ALL' -in $tokens)
+                $wantGws   = $wantAll -or ('1' -in $tokens) -or ('GWS' -in $tokens) -or ('WORKSPACE' -in $tokens)
+                $wantEntra = $wantAll -or ('2' -in $tokens) -or ('ENTRA' -in $tokens) -or ('GRAPH' -in $tokens) -or ('M365' -in $tokens) -or ('AZURE' -in $tokens)
+                $wantAD    = $wantAll -or ('3' -in $tokens) -or ('AD' -in $tokens) -or ('ACTIVE' -in $tokens)
+
+                $credReqs = @()
+                if ($wantGws)   { $credReqs += $allCredReqs.GoogleWorkspace }
+                if ($wantEntra) { $credReqs += $allCredReqs.Entra }
+                if ($wantAD) {
+                    Write-Host ''
+                    Write-Host "  ${green}✓ Active Directory will use your current Kerberos session — no credentials stored.${reset}"
+                }
             }
 
             if ($credReqs.Count -eq 0) {

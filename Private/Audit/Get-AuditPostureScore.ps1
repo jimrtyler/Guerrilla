@@ -53,24 +53,35 @@ function Get-AuditPostureScore {
             $maxPossible += ($severityWeights[$f.Severity] ?? 1)
         }
 
-        $catScore = if ($maxPossible -gt 0) {
+        # If maxPossible is 0, every finding in this category was SKIP or ERROR
+        # (or the category had zero findings at all because the collector failed
+        # upstream). In that case we have no real data to score against — do NOT
+        # treat the category as a perfect 100, which would silently inflate the
+        # overall posture score whenever a collector quietly fails.
+        $evaluated = $maxPossible -gt 0
+        $catScore = if ($evaluated) {
             [Math]::Max(0, [Math]::Round(100 * (1 - ($deductions / $maxPossible)), 0))
-        } else { 100 }
+        } else { 0 }
 
         $categoryScores[$cat.Name] = @{
-            Score = [int]$catScore
-            Pass  = $passCount
-            Fail  = $failCount
-            Warn  = $warnCount
-            Skip  = $skipCount
-            Total = $catFindings.Count
+            Score     = [int]$catScore
+            Evaluated = $evaluated
+            Pass      = $passCount
+            Fail      = $failCount
+            Warn      = $warnCount
+            Skip      = $skipCount
+            Total     = $catFindings.Count
         }
     }
 
-    # Overall score: weighted average of category scores
+    # Overall score: weighted average of category scores. Categories where nothing
+    # was actually evaluated are excluded from the average — otherwise an all-skip
+    # category would either inflate (old behavior, 100) or deflate (new per-cat
+    # default, 0) the overall number and mislead the user.
     $totalWeight = 0.0
     $weightedSum = 0.0
     foreach ($cat in $categoryScores.GetEnumerator()) {
+        if (-not $cat.Value.Evaluated) { continue }
         $catFindings = @($Findings | Where-Object { $_.Category -eq $cat.Key -and $_.Status -notin @('SKIP', 'ERROR') })
         $catWeight = 0.0
         foreach ($f in $catFindings) {
@@ -79,7 +90,7 @@ function Get-AuditPostureScore {
         $totalWeight += $catWeight
         $weightedSum += ($cat.Value.Score * $catWeight)
     }
-    $overallScore = if ($totalWeight -gt 0) { [int][Math]::Round($weightedSum / $totalWeight, 0) } else { 100 }
+    $overallScore = if ($totalWeight -gt 0) { [int][Math]::Round($weightedSum / $totalWeight, 0) } else { 0 }
 
     return @{
         OverallScore   = $overallScore

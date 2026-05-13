@@ -114,6 +114,7 @@ Write-GuerrillaBanner
 $script:DeprecationWarned = @{}
 
 $aliasMap = @{
+    # PSRecon -> PSGuerrilla rename aliases
     'Invoke-GoogleRecon'           = 'Invoke-Recon'
     'Get-ReconAlerts'              = 'Get-DeadDrop'
     'Send-ReconAlert'              = 'Send-Signal'
@@ -125,6 +126,13 @@ $aliasMap = @{
     'Register-ReconScheduledTask'  = 'Register-Patrol'
     'Unregister-ReconScheduledTask' = 'Unregister-Patrol'
     'Get-ReconScheduledTask'       = 'Get-Patrol'
+
+    # Theater-disambiguating aliases — Invoke-Recon and Invoke-Reconnaissance
+    # are easily confused (different theaters). These names make the intent
+    # obvious at the call site.
+    'Invoke-WorkspaceRecon'        = 'Invoke-Recon'           # Google Workspace user-behavior recon
+    'Invoke-ADRecon'               = 'Invoke-Reconnaissance'  # Active Directory configuration audit
+    'Invoke-CloudRecon'            = 'Invoke-Infiltration'    # Entra ID / Azure / Intune / M365 audit
 }
 
 foreach ($old in $aliasMap.Keys) {

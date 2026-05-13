@@ -25,6 +25,16 @@ function Write-GuerrillaBanner {
     # Respect quiet/no-color env vars
     if ($env:PSGUERRILLA_QUIET) { return }
 
+    # Skip the banner in non-interactive contexts (scheduled tasks, CI, piped
+    # invocation) — printing a 5-line ASCII banner there is just noise that
+    # ends up in scheduled-task log files or downstream pipelines.
+    if (-not [Environment]::UserInteractive) { return }
+    try {
+        if ([Console]::IsOutputRedirected) { return }
+    } catch {
+        # Some hosts (ISE, custom hosts) don't expose [Console]; assume interactive.
+    }
+
     $version = '2.1.0'
     $awsCount = $script:ParsedAwsNetworks.Count
     $cloudCount = $script:ParsedCloudNetworks.Count
