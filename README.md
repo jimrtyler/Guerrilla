@@ -77,15 +77,30 @@ Set-Safehouse
 **What happens during setup:**
 
 1. **Dependency check** — Installs `Microsoft.PowerShell.SecretManagement` and `Microsoft.PowerShell.SecretStore` if missing (prompts for approval, or use `-Force` to auto-install)
-2. **Vault creation** — Creates an encrypted vault named `PSGuerrilla`
+2. **Vault creation** — Creates an encrypted vault named `PSGuerrilla` with no-password configuration applied up front (no contradictory "enter a password / password not needed" prompts)
    - **Windows**: Uses DPAPI (encrypted with your Windows login — no extra password needed)
-   - **Linux/macOS**: Uses an encrypted file with a password you set
+   - **Linux/macOS**: Uses an encrypted file
 3. **Credential prompts** — Walks you through each credential your config requires:
    - **Google Workspace**: Paste your service account JSON key + admin email
    - **Entra ID / M365**: Tenant ID, Client ID, Client Secret (with GUID format validation)
-   - **Active Directory**: Uses your current Kerberos session by default (no credential storage needed)
+   - **Active Directory**: Uses your current Kerberos session by default (no credential storage needed, no prompts shown)
    - **Alerting providers**: Webhook URLs, API keys, etc. for any configured alert channels
 4. **Confirmation** — Displays a summary of stored credentials and your next command
+
+**Without `-ConfigFile` (fully interactive):**
+
+If you run `Set-Safehouse` without a config file, the first question is which environments you want to set up:
+
+```
+  Which environments do you want to set up credentials for?
+    [1] Google Workspace
+    [2] Microsoft Entra / Graph / Azure / M365
+    [3] Active Directory  (uses your current Kerberos session — no setup needed)
+    [A] All of the above
+  Selection (comma-separated, default: A):
+```
+
+Pick only the ones you need. You won't be marched through Google Workspace prompts if you're an Entra-only shop, and AD never asks for stored credentials.
 
 **Example output:**
 ```
@@ -295,13 +310,15 @@ Set-Safehouse -ConfigFile './guerrilla-config.json'
 
 ### Assessments
 
-| Function | Description |
-|----------|-------------|
-| `Invoke-Recon` | Google Workspace compromise assessment with 23 behavioral detection signals |
-| `Invoke-Fortification` | Google Workspace security configuration audit (8 categories) |
-| `Invoke-Reconnaissance` | Active Directory security audit across 10 categories |
-| `Invoke-Infiltration` | Entra ID, Azure, Intune, and M365 security assessment (159 checks) |
-| `Invoke-Campaign` | Unified audit across all theaters in a single run |
+| Function | Alias | Description |
+|----------|-------|-------------|
+| `Invoke-Recon` | `Invoke-WorkspaceRecon` | Google Workspace compromise assessment with 23 behavioral detection signals |
+| `Invoke-Fortification` | — | Google Workspace security configuration audit (8 categories) |
+| `Invoke-Reconnaissance` | `Invoke-ADRecon` | Active Directory security audit across 10 categories |
+| `Invoke-Infiltration` | `Invoke-CloudRecon` | Entra ID, Azure, Intune, and M365 security assessment (159 checks) |
+| `Invoke-Campaign` | — | Unified audit across all theaters in a single run |
+
+> The theater-named aliases (`Invoke-WorkspaceRecon` / `Invoke-ADRecon` / `Invoke-CloudRecon`) are interchangeable with the canonical names — use whichever makes the intent clearer at the call site. `Invoke-Recon` (Workspace user behavior) and `Invoke-Reconnaissance` (AD configuration audit) look nearly identical but cover different theaters.
 
 ### Continuous Monitoring
 
@@ -397,7 +414,7 @@ The Guerrilla Score is a weighted composite of four components:
 
 ```powershell
 Import-Module ./PSGuerrilla.psd1
-Set-Safehouse
+Set-Safehouse                # pick the environments you actually have when prompted
 Invoke-Campaign
 Export-TechnicalReport -OrganizationName 'Contoso'
 ```
@@ -490,9 +507,25 @@ PSGuerrilla/
 
 ---
 
-## Migration from PSRecon
+## Aliases & Migration
 
-PSGuerrilla automatically migrates your PSRecon configuration on first load. All old command names (`Invoke-GoogleRecon`, `Get-ReconAlerts`, `Send-ReconAlert`, `Set-ReconConfig`, etc.) continue to work as aliases with deprecation warnings.
+### Theater-named aliases
+
+For readability at the call site — `Invoke-Recon` and `Invoke-Reconnaissance` look near-identical but cover different theaters. Use whichever name you prefer:
+
+| Alias | Resolves to | Theater |
+|-------|-------------|---------|
+| `Invoke-WorkspaceRecon` | `Invoke-Recon` | Google Workspace user-behavior assessment |
+| `Invoke-ADRecon` | `Invoke-Reconnaissance` | Active Directory configuration audit |
+| `Invoke-CloudRecon` | `Invoke-Infiltration` | Entra ID / Azure / Intune / M365 audit |
+
+### Migration from PSRecon
+
+PSGuerrilla automatically migrates your PSRecon configuration on first load. All old command names (`Invoke-GoogleRecon`, `Get-ReconAlerts`, `Send-ReconAlert`, `Set-ReconConfig`, etc.) continue to work as aliases.
+
+### Non-interactive imports
+
+The startup banner is suppressed automatically when the module is imported from a scheduled task, CI runner, or any non-interactive session (when `[Environment]::UserInteractive` is false or stdout is redirected). You can also force-quiet it with `$env:PSGUERRILLA_QUIET = 1`.
 
 ---
 
