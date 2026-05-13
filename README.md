@@ -15,11 +15,11 @@ Security assessment, threat detection, and continuous monitoring for Google Work
 | Theater | Capability | Checks |
 |---------|-----------|--------|
 | Google Workspace | Compromise assessment, 23 detection signals, 8 audit categories | 98 |
-| Active Directory | 13-category security reconnaissance | 199 |
+| Active Directory | 14-category security reconnaissance | 203 |
 | Entra ID / Azure / Intune / M365 | Infiltration audit across 14 categories | 159 |
 | All theaters | Continuous monitoring with baseline drift detection | Real-time |
 
-**Total: 455 security checks** across authentication, email security, drive/SharePoint, OAuth, admin management, conditional access, PIM, Kerberos, certificate services, group policy, Intune endpoint compliance, NTLM-relay preconditions, Tier-0 hygiene, logging/telemetry posture, and more.
+**Total: 459 security checks** across authentication, email security, drive/SharePoint, OAuth, admin management, conditional access, PIM, Kerberos, certificate services, group policy, Intune endpoint compliance, NTLM-relay preconditions, Tier-0 hygiene, logging/telemetry posture, adversary-tradecraft indicators (GPP cpassword, DCShadow, BitLocker hygiene, RODC PRP), and more.
 
 ## Requirements
 
@@ -487,6 +487,7 @@ Invoke-Reconnaissance -ConfigFile './guerrilla-config.json' -Category Privileged
 | `Network` | NTLM-relay preconditions: LDAP/SMB signing, LLMNR/NetBIOS/WPAD, IPv6 (mitm6), Spooler/WebClient — the settings that turn an ESC8 finding from theoretical into one-shot domain compromise |
 | `TierZero` | Tier-bleed scanning by service-account name pattern (Veeam / vCenter / SCCM / SQL in DA/EA/SA), plus the Azure AD Connect MSOL_ account audit (an account most enumeration tools never surface because it gets DCSync via ACL, not group membership) |
 | `Logging` | Telemetry posture: Advanced Audit Policy adoption, PowerShell Script Block / Module Logging, Process Creation cmdline auditing, Defender Tamper Protection guidance, WEF SubscriptionManager, Sysmon deployment indicator — the events investigators need to actually catch the things the other categories warn about |
+| `Tradecraft` | Adversary indicators that fall outside the standard category buckets: GPP cpassword leftovers in SYSVOL (still the #1 red-team find), DCShadow surface (rogue server objects in CN=Sites,CN=Configuration), stale BitLocker recovery keys, RODC Password Replication Policy hygiene |
 
 Runtime configuration (detection thresholds, business hours, alert suppression, etc.) is managed separately:
 
