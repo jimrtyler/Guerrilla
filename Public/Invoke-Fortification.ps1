@@ -167,7 +167,7 @@ function Invoke-Fortification {
         if (Get-Command $funcName -ErrorAction SilentlyContinue) {
             if (-not $Quiet) { Write-ProgressLine -Phase FORTIFYING -Message $cat }
             try {
-                $catFindings = & $funcName -AuditData $auditData -OrgUnitPath '/'
+                $catFindings = & $funcName -AuditData $auditData -OrgUnitPath $TargetOU
                 foreach ($f in @($catFindings)) {
                     $allFindings.Add($f)
                 }

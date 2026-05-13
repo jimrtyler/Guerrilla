@@ -84,8 +84,16 @@ function Get-TrendReport {
         try {
             $single = Get-Content -Path $singleHistoryPath -Raw | ConvertFrom-Json -AsHashtable
             if ($single.lastScore) {
+                $tsRaw = $single.timestamp
+                $tsNormalized = if ($null -eq $tsRaw) {
+                    [datetime]::UtcNow.ToString('o')
+                } elseif ($tsRaw -is [datetime]) {
+                    $tsRaw.ToString('o')
+                } else {
+                    "$tsRaw"
+                }
                 $history = @([PSCustomObject]@{
-                    Timestamp   = $single.timestamp ?? [datetime]::UtcNow.ToString('o')
+                    Timestamp   = $tsNormalized
                     Score       = $single.lastScore
                     Label       = $single.lastLabel ?? ''
                     ProfileUsed = $single.profileUsed ?? 'Default'

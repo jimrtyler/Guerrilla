@@ -40,6 +40,14 @@ function Export-TrendReportHtml {
     )
 
     $esc = { param([string]$s) [System.Web.HttpUtility]::HtmlEncode($s) }
+    # ConvertFrom-Json on PS 7.5+ rehydrates ISO 8601 strings into [DateTime],
+    # which would interpolate as a culture-dependent string. Always normalize.
+    $fmtTs = {
+        param($t)
+        if ($null -eq $t) { return '' }
+        if ($t -is [datetime]) { return $t.ToString('yyyy-MM-ddTHH:mm:ssZ') }
+        return "$t"
+    }
     $html = [System.Text.StringBuilder]::new(32768)
 
     $timestamp = [datetime]::UtcNow.ToString('yyyy-MM-dd HH:mm:ss')
@@ -71,7 +79,7 @@ function Export-TrendReportHtml {
             $x = $padding + ($i * $xStep)
             $y = $padding + $chartH - ($scores[$i] / 100.0 * $chartH)
             $svgPoints += "$x,$y "
-            $svgDots += "<circle cx='$x' cy='$y' r='4' fill='var(--olive)' stroke='var(--bg)' stroke-width='2'><title>$($History[$i].Timestamp): $($scores[$i])</title></circle>`n"
+            $svgDots += "<circle cx='$x' cy='$y' r='4' fill='var(--olive)' stroke='var(--bg)' stroke-width='2'><title>$(& $fmtTs $History[$i].Timestamp): $($scores[$i])</title></circle>`n"
         }
     } elseif ($scores.Count -eq 1) {
         $x = $padding + ($chartW / 2)
@@ -106,7 +114,7 @@ function Export-TrendReportHtml {
 
         $tableRows += @"
 <tr>
-<td style="padding:6px 12px;border-bottom:1px solid var(--border);">$(& $esc $entry.Timestamp)</td>
+<td style="padding:6px 12px;border-bottom:1px solid var(--border);">$(& $esc (& $fmtTs $entry.Timestamp))</td>
 <td style="padding:6px 12px;border-bottom:1px solid var(--border);color:$scoreColor;font-weight:bold;">$($entry.Score)</td>
 <td style="padding:6px 12px;border-bottom:1px solid var(--border);">$(& $esc ($entry.Label ?? ''))</td>
 <td style="padding:6px 12px;border-bottom:1px solid var(--border);color:$deltaColor;">$deltaDisplay</td>
