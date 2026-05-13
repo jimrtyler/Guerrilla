@@ -1,0 +1,147 @@
+{
+  "categoryId": "adnet",
+  "categoryName": "AD Network & Relay Preconditions",
+  "categoryDescription": "Checks for the network-layer Windows settings that determine whether NTLM relay, LLMNR/NBT poisoning, and IPv6 (mitm6) attack chains are feasible against the domain. These are the preconditions that turn a misconfigured ADCS template (ESC8) or a coercion primitive (PetitPotam / PrinterBug / DFSCoerce) into full domain compromise.",
+  "checks": [
+    {
+      "id": "ADNET-001",
+      "name": "LDAP Signing Required on Domain Controllers",
+      "description": "When domain controllers do not require LDAP signing, an attacker who can intercept or coerce LDAP traffic (for example via PetitPotam or any NTLM authentication trigger) can relay NTLM authentication to a DC's LDAP service and read or write directory data as the coerced principal. Enforcing LDAP signing closes the most common relay sink on a domain controller.",
+      "severity": "Critical",
+      "subcategory": "NTLM Relay",
+      "recommendedValue": "Default Domain Controllers Policy sets 'Domain controller: LDAP server signing requirements' to 'Require signing' (LDAPServerIntegrity = 2)",
+      "remediationSteps": "Edit the Default Domain Controllers Policy: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Domain controller: LDAP server signing requirements' = 'Require signing'. Verify with: reg query HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters /v LDAPServerIntegrity (should be 2). Microsoft has been hardening this default since 2020 (ADV190023) and will enforce it by default in future Windows Server releases.",
+      "compliance": {
+        "nistSp80053": ["SC-8", "SC-23"],
+        "mitreAttack": ["T1557.001"],
+        "cisAd": ["6.1.1"]
+      }
+    },
+    {
+      "id": "ADNET-002",
+      "name": "LDAP Channel Binding Enforced on Domain Controllers",
+      "description": "LDAP channel binding ties an LDAPS authentication to the underlying TLS channel. Without it, an attacker who has intercepted a TLS-protected LDAP session can still relay NTLM authentication to LDAPS. Together with LDAP signing, channel binding eliminates LDAP as a relay target.",
+      "severity": "High",
+      "subcategory": "NTLM Relay",
+      "recommendedValue": "Default Domain Controllers Policy sets 'Domain controller: LDAP server channel binding token requirements' to 'Always' (LdapEnforceChannelBinding = 2)",
+      "remediationSteps": "Edit the Default Domain Controllers Policy: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Domain controller: LDAP server channel binding token requirements' = 'Always'. Registry: HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters\\LdapEnforceChannelBinding = 2. Originally introduced for CVE-2017-8563.",
+      "compliance": {
+        "nistSp80053": ["SC-8", "SC-23"],
+        "mitreAttack": ["T1557.001"],
+        "cisAd": ["6.1.2"]
+      }
+    },
+    {
+      "id": "ADNET-003",
+      "name": "SMB Server Signing Required (Domain Policy)",
+      "description": "Without SMB signing required on the server side, an attacker who can position themselves in the network path or coerce SMB authentication can relay NTLM to SMB and execute file actions as the coerced principal. This is the classic relay sink for tools like ntlmrelayx; enforcing server-side signing closes it.",
+      "severity": "Critical",
+      "subcategory": "NTLM Relay",
+      "recommendedValue": "Default Domain Policy enables 'Microsoft network server: Digitally sign communications (always)' (RequireSecuritySignature on LanManServer = 1)",
+      "remediationSteps": "Edit the Default Domain Policy: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Microsoft network server: Digitally sign communications (always)' = Enabled. Registry: HKLM\\System\\CurrentControlSet\\Services\\LanmanServer\\Parameters\\RequireSecuritySignature = 1. Windows 11 24H2 / Server 2025 enable this by default; older OS versions need explicit policy.",
+      "compliance": {
+        "nistSp80053": ["SC-8", "SC-23"],
+        "mitreAttack": ["T1557.001"],
+        "cisAd": ["6.2.1"]
+      }
+    },
+    {
+      "id": "ADNET-004",
+      "name": "SMB Client Signing Required (Domain Policy)",
+      "description": "Client-side SMB signing is the half of the contract that prevents a workstation from being lured into authenticating to a malicious SMB server (responder-style). Without it, any user on the network who is tricked into resolving a hostile name (LLMNR poisoning, WPAD, etc.) coughs up an NTLM hash that an attacker can crack or relay.",
+      "severity": "High",
+      "subcategory": "NTLM Relay",
+      "recommendedValue": "Default Domain Policy enables 'Microsoft network client: Digitally sign communications (always)' (RequireSecuritySignature on LanmanWorkstation = 1)",
+      "remediationSteps": "Edit the Default Domain Policy: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Microsoft network client: Digitally sign communications (always)' = Enabled. Registry: HKLM\\System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters\\RequireSecuritySignature = 1.",
+      "compliance": {
+        "nistSp80053": ["SC-8", "SC-23"],
+        "mitreAttack": ["T1557.001"],
+        "cisAd": ["6.2.2"]
+      }
+    },
+    {
+      "id": "ADNET-005",
+      "name": "LLMNR Disabled by Domain Policy",
+      "description": "Link-Local Multicast Name Resolution is a broadcast-based fallback that any host on the local segment can answer. Responder.py and similar tools impersonate the answer, harvest NTLMv2 challenge-responses, and either crack them offline or relay them. Disabling LLMNR domain-wide is the single most impactful workstation hardening you can do for an internal pentest posture.",
+      "severity": "High",
+      "subcategory": "Name Resolution Poisoning",
+      "recommendedValue": "Default Domain Policy enables 'Turn off multicast name resolution' (DnsClient policy EnableMulticast = 0)",
+      "remediationSteps": "Edit the Default Domain Policy: Computer Configuration > Policies > Administrative Templates > Network > DNS Client > 'Turn off multicast name resolution' = Enabled. Registry: HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\\EnableMulticast = 0.",
+      "compliance": {
+        "nistSp80053": ["SC-8"],
+        "mitreAttack": ["T1557.001"],
+        "cisAd": ["6.3.1"]
+      }
+    },
+    {
+      "id": "ADNET-006",
+      "name": "NetBIOS over TCP/IP Configuration Reviewed",
+      "description": "NetBIOS-NS is the second leg of name-resolution poisoning attacks after LLMNR. Disabling it at the DHCP/interface level requires Reset Of network configuration that GPO can't fully express; however, the Tcpip\\Parameters\\Interfaces NetbiosOptions value can be set via DHCP scope option 1 or by direct registry. This check reports whether ANY domain-wide policy artifact addresses it, so the auditor knows whether to investigate at the DHCP or imaging layer.",
+      "severity": "Medium",
+      "subcategory": "Name Resolution Poisoning",
+      "recommendedValue": "Domain-wide method exists to disable NetBIOS over TCP/IP on workstations (DHCP option 1 = 0x2, group policy preference, or imaging baseline)",
+      "remediationSteps": "Disable NetBIOS over TCP/IP fleet-wide. Options: (1) Set DHCP scope option Microsoft Disable Netbios Option (option 1) to 0x2; (2) Group Policy Preferences > Windows Settings > Registry to push NetbiosOptions = 2 to each Tcpip_<Interface> key; (3) Bake it into the workstation imaging baseline. This setting is interface-specific and not directly addressable via standard GPO security settings.",
+      "compliance": {
+        "nistSp80053": ["SC-8"],
+        "mitreAttack": ["T1557.001"],
+        "cisAd": ["6.3.2"]
+      }
+    },
+    {
+      "id": "ADNET-007",
+      "name": "IPv6 mitm6 Mitigation Posture",
+      "description": "mitm6 is the IPv6 equivalent of Responder: a malicious DHCPv6 server hands out a link-local DNS server, then poisons WPAD lookups to harvest credentials. Enterprises that haven't deployed IPv6 typically also haven't disabled it, leaving link-local IPv6 enabled with no defensive posture. Mitigation is either to deploy IPv6 properly with RA Guard / DHCPv6 Guard at the switch, or to disable IPv6 components via DisabledComponents = 0xFF.",
+      "severity": "High",
+      "subcategory": "Name Resolution Poisoning",
+      "recommendedValue": "Either IPv6 is disabled domain-wide via DisabledComponents = 0xFF, OR the network has RA Guard + DHCPv6 Guard deployed at the access layer (out-of-band, not detectable from AD)",
+      "remediationSteps": "If you don't use IPv6: push HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\DisabledComponents = 0xFF (hex) via GPO Registry to all workstations and servers. If you do use IPv6: ensure your access switches enforce DHCPv6 Guard / RA Guard so rogue DHCPv6 advertisements are dropped at the port. Microsoft has explicitly stated that disabling IPv6 entirely is not recommended for Windows but is acceptable for environments where IPv6 is unused.",
+      "compliance": {
+        "nistSp80053": ["SC-7", "SC-8"],
+        "mitreAttack": ["T1557.001", "T1557.003"],
+        "cisAd": ["6.3.3"]
+      }
+    },
+    {
+      "id": "ADNET-008",
+      "name": "WPAD Auto-Discovery Disabled",
+      "description": "Web Proxy Auto-Discovery resolves the name 'wpad' via DNS, NetBIOS, or LLMNR and trusts whatever proxy configuration comes back. An attacker can poison any of those resolutions and proxy the victim's web traffic. Even with LLMNR and NetBIOS disabled, the WinHttpAutoProxySvc can still attempt WPAD, so a defense-in-depth GPO that disables WPAD outright is recommended.",
+      "severity": "Medium",
+      "subcategory": "Name Resolution Poisoning",
+      "recommendedValue": "GPO disables WPAD via 'Turn off auto-proxy result caching' or by setting WinHttpAutoProxySvc start type to 4 (disabled), or DNS server has a wpad GlobalQueryBlockList entry",
+      "remediationSteps": "Three complementary controls: (1) Add 'wpad' to the DNS server's GlobalQueryBlockList: dnscmd /Config /GlobalQueryBlockList wpad isatap; (2) Disable the WinHttpAutoProxySvc via GPO Services policy; (3) GPO Internet Explorer / Edge: 'Disable changing Automatic Configuration settings' and ensure no PAC URL is auto-configured. (1) is the single most impactful fix.",
+      "compliance": {
+        "nistSp80053": ["SC-8"],
+        "mitreAttack": ["T1557.001", "T1557.003"],
+        "cisAd": ["6.3.4"]
+      }
+    },
+    {
+      "id": "ADNET-009",
+      "name": "Print Spooler Service on Domain Controllers",
+      "description": "The Print Spooler service on a domain controller is the RPC endpoint exploited by the PrinterBug coercion technique (and a long list of follow-ons including the original CVE-2021-1675 PrintNightmare). When combined with any NTLM relay sink (ADCS Web, LDAP without signing, SMB without signing), it gives an unauthenticated attacker a primitive to coerce the DC machine account into authenticating to a target of their choice. Spooler is rarely needed on a DC.",
+      "severity": "Critical",
+      "subcategory": "Coercion Primitive",
+      "recommendedValue": "Print Spooler service is Disabled (start type 4) in the Default Domain Controllers Policy",
+      "remediationSteps": "Edit the Default Domain Controllers Policy: Computer Configuration > Policies > Windows Settings > Security Settings > System Services > Print Spooler > 'Define this policy setting' = Disabled. This propagates to every DC at the next gpupdate. Verify on each DC: Get-Service Spooler should show Status=Stopped, StartType=Disabled. If a DC also runs print services (it shouldn't), find another host for that role first.",
+      "compliance": {
+        "nistSp80053": ["CM-7"],
+        "mitreAttack": ["T1210", "T1557.001"],
+        "cisAd": ["6.4.1"]
+      }
+    },
+    {
+      "id": "ADNET-010",
+      "name": "WebClient Service Default State on Workstations",
+      "description": "The WebClient service (WebDAV redirector) lets an attacker coerce HTTP authentication from a workstation by referencing a UNC path that begins with a hostname containing an '@' (e.g. \\\\attacker@80\\share). This is the workstation analog of PetitPotam and is the relay source most commonly used to attack ADCS Web Enrollment (ESC8). WebClient is started on demand but should be set to Disabled domain-wide for non-mobile workstations.",
+      "severity": "High",
+      "subcategory": "Coercion Primitive",
+      "recommendedValue": "Default Domain Policy disables the WebClient service (start type 4) for all member workstations and servers that do not require WebDAV",
+      "remediationSteps": "Edit the Default Domain Policy: Computer Configuration > Policies > Windows Settings > Security Settings > System Services > WebClient > 'Define this policy setting' = Disabled. If a subset of hosts (e.g. SharePoint clients) actually need WebDAV, scope an opposing GPO to just those OUs. Monitor for sudden re-enablement.",
+      "compliance": {
+        "nistSp80053": ["CM-7"],
+        "mitreAttack": ["T1187", "T1557.001"],
+        "cisAd": ["6.4.2"]
+      }
+    }
+  ]
+}

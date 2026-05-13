@@ -6,7 +6,7 @@ function Invoke-Reconnaissance {
     param(
         [ValidateSet('All', 'DomainForest', 'Trusts', 'PrivilegedAccounts', 'PasswordPolicy',
                      'Kerberos', 'ACLDelegation', 'GroupPolicy', 'LogonScripts',
-                     'CertificateServices', 'StaleObjects')]
+                     'CertificateServices', 'StaleObjects', 'Network')]
         [string[]]$Categories = @('All'),
 
         [string]$Server,
@@ -123,6 +123,7 @@ function Invoke-Reconnaissance {
         LogonScripts       = 'Invoke-ADLogonScriptChecks'
         CertificateServices = 'Invoke-ADCertificateServicesChecks'
         StaleObjects       = 'Invoke-ADStaleObjectChecks'
+        Network            = 'Invoke-ADNetworkChecks'
     }
 
     $categoriesToRun = if ($Categories -contains 'All') { $categoryMap.Keys } else { $Categories }

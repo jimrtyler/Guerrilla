@@ -32,6 +32,7 @@ function Get-ReconnaissanceData {
         LogonScripts        = @('LogonScripts')
         CertificateServices = @('CertificateServices')
         StaleObjects        = @('StaleObjects')
+        Network             = @('NetworkConfig')
     }
 
     # Resolve which data sources are required
@@ -69,6 +70,7 @@ function Get-ReconnaissanceData {
         LogonScripts        = $null
         CertificateServices = $null
         StaleObjects        = $null
+        Network             = $null
         ModuleAvailability  = $null
         Connection          = $Connection
         Errors              = @{}
@@ -225,7 +227,20 @@ function Get-ReconnaissanceData {
         }
     }
 
-    # ── 12. Stale Objects ────────────────────────────────────────────────
+    # ── 12. Network policy (relay-precondition surface) ──────────────────
+    if (& $needsSource 'NetworkConfig') {
+        if (-not $Quiet) {
+            Write-ProgressLine -Phase RECON -Message 'Reading network-layer policy from SYSVOL'
+        }
+        try {
+            $data.Network = Get-ADNetworkConfig -Connection $Connection -Quiet:$Quiet
+        } catch {
+            Write-Warning "Failed to read network policy from SYSVOL: $_"
+            $data.Errors['NetworkConfig'] = $_.Exception.Message
+        }
+    }
+
+    # ── 13. Stale Objects ────────────────────────────────────────────────
     if (& $needsSource 'StaleObjects') {
         if (-not $Quiet) {
             Write-ProgressLine -Phase RECON -Message 'Identifying stale and abandoned objects'
@@ -249,7 +264,7 @@ function Get-ReconnaissanceData {
 
         foreach ($key in @('Domain', 'DomainControllers', 'Trusts', 'PrivilegedAccounts',
                            'PasswordPolicies', 'Kerberos', 'ACLs', 'GroupPolicies',
-                           'LogonScripts', 'CertificateServices', 'StaleObjects')) {
+                           'LogonScripts', 'CertificateServices', 'StaleObjects', 'Network')) {
             if ($null -ne $data[$key]) {
                 $collectedCount++
             } elseif ($requiredSources.Count -gt 0) {
@@ -266,6 +281,7 @@ function Get-ReconnaissanceData {
                     LogonScripts       = 'LogonScripts'
                     CertificateServices = 'CertificateServices'
                     StaleObjects       = 'StaleObjects'
+                    Network            = 'NetworkConfig'
                 }
                 if ($sourceMapping.ContainsKey($key) -and $requiredSources.Contains($sourceMapping[$key])) {
                     $nullKeys.Add($key)
