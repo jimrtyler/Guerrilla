@@ -15,11 +15,11 @@ Security assessment, threat detection, and continuous monitoring for Google Work
 | Theater | Capability | Checks |
 |---------|-----------|--------|
 | Google Workspace | Compromise assessment, 23 detection signals, 8 audit categories | 98 |
-| Active Directory | 11-category security reconnaissance | 185 |
+| Active Directory | 12-category security reconnaissance | 192 |
 | Entra ID / Azure / Intune / M365 | Infiltration audit across 14 categories | 159 |
 | All theaters | Continuous monitoring with baseline drift detection | Real-time |
 
-**Total: 441 security checks** across authentication, email security, drive/SharePoint, OAuth, admin management, conditional access, PIM, Kerberos, certificate services, group policy, Intune endpoint compliance, NTLM-relay preconditions, and more.
+**Total: 448 security checks** across authentication, email security, drive/SharePoint, OAuth, admin management, conditional access, PIM, Kerberos, certificate services, group policy, Intune endpoint compliance, NTLM-relay preconditions, Tier-0 hygiene, and more.
 
 ## Requirements
 
@@ -485,6 +485,7 @@ Invoke-Reconnaissance -ConfigFile './guerrilla-config.json' -Category Privileged
 | `CertificateServices` | ESC1–ESC16 + EKEUwu certificate template misconfigurations |
 | `StaleObjects` | Inactive users/computers, password-age outliers |
 | `Network` | NTLM-relay preconditions: LDAP/SMB signing, LLMNR/NetBIOS/WPAD, IPv6 (mitm6), Spooler/WebClient — the settings that turn an ESC8 finding from theoretical into one-shot domain compromise |
+| `TierZero` | Tier-bleed scanning by service-account name pattern (Veeam / vCenter / SCCM / SQL in DA/EA/SA), plus the Azure AD Connect MSOL_ account audit (an account most enumeration tools never surface because it gets DCSync via ACL, not group membership) |
 
 Runtime configuration (detection thresholds, business hours, alert suppression, etc.) is managed separately:
 
