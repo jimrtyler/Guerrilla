@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PSGuerrilla.psm1'
-    ModuleVersion     = '2.2.0'
+    ModuleVersion     = '2.2.1'
     GUID              = 'f7a3b2c1-4d5e-6f78-9a0b-1c2d3e4f5a6b'
     Author            = 'Jim Tyler, Microsoft MVP'
     CompanyName       = 'Jim Tyler'
@@ -76,47 +76,8 @@
         PSData = @{
             Tags       = @('GoogleWorkspace', 'ActiveDirectory', 'EntraID', 'AzureAD', 'Intune', 'M365', 'Security', 'CompromiseAssessment', 'IncidentResponse', 'ThreatDetection', 'ADSecurity', 'CloudSecurity', 'NTLMRelay', 'TierZero', 'PSGuerrilla')
             LicenseUri = 'https://creativecommons.org/licenses/by/4.0/'
-            ProjectUri = 'https://github.com/jimrtyler/PSGuerrilla'
-            ReleaseNotes = @'
-## 2.2.0
-
-Threat-coverage pass: 28 new AD reconnaissance checks across 4 new categories.
-
-* Network category (10 checks) — NTLM-relay preconditions: LDAP/SMB signing
-  state, LLMNR / NetBIOS / WPAD / IPv6 (mitm6) posture, Print Spooler on
-  domain controllers, WebClient on workstations. Reads SYSVOL GptTmpl.inf
-  for security-policy-derived state.
-* TierZero category (7 checks) — Tier-bleed scanning by service-account
-  name pattern (Veeam / vCenter / SCCM / SQL in DA/EA/SA), Azure AD Connect
-  MSOL_ account audit, Tier-0 admin OU placement hygiene.
-* Logging category (7 checks) — Advanced Audit Policy adoption,
-  PowerShell Script Block + Module Logging, process-creation cmdline
-  auditing, Defender Tamper Protection guidance, Windows Event Forwarding,
-  Sysmon deployment indicator.
-* Tradecraft category (4 checks) — GPP cpassword leftovers in SYSVOL,
-  DCShadow indicator (rogue server objects in CN=Sites,CN=Configuration),
-  stale BitLocker recovery keys, RODC Password Replication Policy hygiene.
-
-Plus:
-
-* Cross-platform data paths via Get-PSGuerrillaDataRoot — Windows / macOS /
-  Linux all land in the right per-user data directory now (previously every
-  $env:APPDATA reference returned a relative path on non-Windows).
-* Set-Safehouse interactive mode asks "which environments?" up front instead
-  of marching every user through Google Workspace AND Entra prompts.
-* Module banner suppressed in non-interactive sessions (scheduled tasks, CI).
-* SupportsShouldProcess (-WhatIf / -Confirm) on Set-Safehouse,
-  Set-RiskAcceptance, Update-ThreatIntel.
-* New theater-disambiguating aliases: Invoke-WorkspaceRecon, Invoke-ADRecon,
-  Invoke-CloudRecon.
-* Get-AuditPostureScore no longer inflates the overall score for categories
-  that produced zero findings (a quietly-failing collector used to score 100).
-* State file writes are now atomic (temp + Move-Item -Force).
-* 30+ bug fixes across reported issues (LDAP single-result unwrap,
-  DateTime/string type confusion, SecretStore double-prompt, etc.).
-
-Total checks: 459 (was 431).
-'@
+            ProjectUri = 'https://guerrilla.army'
+            ReleaseNotes = 'v2.2.1 (metadata-only): ProjectUri now points at https://guerrilla.army (canonical project site + configuration wizard). Source remains at https://github.com/jimrtyler/PSGuerrilla. v2.2.0: 28 new AD checks across 4 new categories — Network (NTLM-relay preconditions: LDAP/SMB signing, LLMNR/NetBIOS/WPAD, IPv6 mitm6, Spooler/WebClient), TierZero (AAD Connect MSOL_ audit, tier-bleed by service-account name pattern for Veeam/vCenter/SCCM/SQL), Logging (Advanced Audit Policy, PowerShell Script Block/Module Logging, 4688 cmdline, Defender Tamper Protection, WEF, Sysmon), Tradecraft (GPP cpassword scan, DCShadow indicator, stale BitLocker keys, RODC PRP). Plus: cross-platform data paths via Get-PSGuerrillaDataRoot, Set-Safehouse asks ''which environments?'' first, banner suppressed in non-interactive sessions, SupportsShouldProcess on state-mutating cmdlets, theater-disambiguating aliases (Invoke-WorkspaceRecon/ADRecon/CloudRecon), score no longer inflates for missing categories, atomic state writes, 30+ bug fixes. Total checks: 459.'
         }
     }
 }
