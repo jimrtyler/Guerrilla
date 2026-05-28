@@ -129,6 +129,16 @@ Set-Safehouse -Test -ConfigFile './guerrilla-config.json'
 
 This makes live API calls to each environment and reports back with actionable guidance if anything fails (wrong scopes, expired secrets, missing permissions, etc.).
 
+### Optional: Open the Operations Console GUI
+
+If you'd rather drive everything from a window than a prompt:
+
+```powershell
+Show-Guerrilla
+```
+
+Opens a five-tab WPF window: Operations (run scans), Safehouse (manage credentials), Patrol (continuous monitoring), Reports (browse / convert to PDF), Settings (runtime config). Windows-only — the CLI cmdlets below keep working everywhere else.
+
 ### Step 5: Run Your First Scan
 
 ```powershell
@@ -334,6 +344,7 @@ Set-Safehouse -ConfigFile './guerrilla-config.json'
 |----------|-------------|
 | `Set-Safehouse` | Manage encrypted vault, credentials, rotation, and module configuration |
 | `Get-Safehouse` | View vault status, stored credentials, and current configuration |
+| `Show-Guerrilla` | Open the WPF Operations Console — credentials, scans, reports, patrols, settings (Windows only) |
 
 ### Alerting
 
