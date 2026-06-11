@@ -6,7 +6,7 @@ Security assessment, threat detection, and continuous monitoring for Google Work
 
 [![GitHub](https://img.shields.io/badge/GitHub-jimrtyler-181717?logo=github)](https://github.com/jimrtyler) [![LinkedIn](https://img.shields.io/badge/LinkedIn-jamestyler-0A66C2?logo=linkedin)](https://linkedin.com/in/jamestyler) [![YouTube](https://img.shields.io/badge/YouTube-PowerShellEngineer-FF0000?logo=youtube)](https://youtube.com/@powershellengineer)
 
-> **[View a sample report with all 431 checks](./PSGuerrilla-Sample-Report.html)** to see the full scope of what PSGuerrilla evaluates.
+> **[View a sample report](./PSGuerrilla-Sample-Report.html)** to see the scope of what PSGuerrilla evaluates.
 
 ---
 
@@ -16,7 +16,7 @@ Security assessment, threat detection, and continuous monitoring for Google Work
 |---------|-----------|--------|
 | Google Workspace | Compromise assessment, 23 detection signals, 8 audit categories | 98 |
 | Active Directory | 14-category security reconnaissance | 203 |
-| Entra ID / Azure / Intune / M365 | Infiltration audit across 14 categories | 159 |
+| Entra ID / Azure / Intune / M365 | Infiltration audit across 14 categories | 158 |
 | All theaters | Continuous monitoring with baseline drift detection | Real-time |
 
 **Total: 459 security checks** across authentication, email security, drive/SharePoint, OAuth, admin management, conditional access, PIM, Kerberos, certificate services, group policy, Intune endpoint compliance, NTLM-relay preconditions, Tier-0 hygiene, logging/telemetry posture, adversary-tradecraft indicators (GPP cpassword, DCShadow, BitLocker hygiene, RODC PRP), and more.
@@ -43,10 +43,12 @@ Security assessment, threat detection, and continuous monitoring for Google Work
 ### Step 1: Install the Module
 
 ```powershell
-# Clone the repo
-git clone https://github.com/jimrtyler/PSGuerrilla.git
+# From the PowerShell Gallery (recommended)
+Install-Module PSGuerrilla -Scope CurrentUser
+Import-Module PSGuerrilla
 
-# Import the module
+# Or clone the repo
+git clone https://github.com/jimrtyler/PSGuerrilla.git
 Import-Module ./PSGuerrilla/PSGuerrilla.psd1
 ```
 
@@ -147,8 +149,8 @@ Invoke-Campaign -ConfigFile './guerrilla-config.json'
 
 # Or run individual theaters
 Invoke-Fortification                    # Google Workspace audit (98 checks)
-Invoke-Reconnaissance                   # Active Directory audit (175 checks)
-Invoke-Infiltration                     # Entra/Azure/M365 audit (159 checks)
+Invoke-Reconnaissance                   # Active Directory audit (203 checks)
+Invoke-Infiltration                     # Entra/Azure/Intune/M365 audit (158 checks)
 ```
 
 Results are automatically saved to `$env:APPDATA/PSGuerrilla/` (Windows) for report generation and trend tracking.
@@ -172,7 +174,7 @@ Export-RemediationScripts
 Export-BudgetJustification
 
 # Convert any HTML report to PDF
-Export-ReportPdf -InputPath './PSGuerrilla-Technical-Report.html'
+Export-ReportPdf -HtmlPath './PSGuerrilla-Technical-Report.html'
 ```
 
 ### Step 7: Set Up Continuous Monitoring (Optional)
@@ -324,8 +326,8 @@ Set-Safehouse -ConfigFile './guerrilla-config.json'
 |----------|-------|-------------|
 | `Invoke-Recon` | `Invoke-WorkspaceRecon` | Google Workspace compromise assessment with 23 behavioral detection signals |
 | `Invoke-Fortification` | — | Google Workspace security configuration audit (8 categories) |
-| `Invoke-Reconnaissance` | `Invoke-ADRecon` | Active Directory security audit across 10 categories |
-| `Invoke-Infiltration` | `Invoke-CloudRecon` | Entra ID, Azure, Intune, and M365 security assessment (159 checks) |
+| `Invoke-Reconnaissance` | `Invoke-ADRecon` | Active Directory security audit across 14 categories (203 checks) |
+| `Invoke-Infiltration` | `Invoke-CloudRecon` | Entra ID, Azure, Intune, and M365 security assessment (158 checks) |
 | `Invoke-Campaign` | — | Unified audit across all theaters in a single run |
 
 > The theater-named aliases (`Invoke-WorkspaceRecon` / `Invoke-ADRecon` / `Invoke-CloudRecon`) are interchangeable with the canonical names — use whichever makes the intent clearer at the call site. `Invoke-Recon` (Workspace user behavior) and `Invoke-Reconnaissance` (AD configuration audit) look nearly identical but cover different theaters.
@@ -348,7 +350,7 @@ Set-Safehouse -ConfigFile './guerrilla-config.json'
 
 ### Alerting
 
-Dispatch alerts through 9 providers. Each has a dedicated function or use `Send-Signal` to route automatically.
+Dispatch alerts through 10 providers. Each has a dedicated function or use `Send-Signal` to route automatically.
 
 | Function | Provider |
 |----------|----------|
@@ -360,6 +362,7 @@ Dispatch alerts through 9 providers. Each has a dedicated function or use `Send-
 | `Send-SignalSlack` | Slack (Block Kit) |
 | `Send-SignalWebhook` | Generic webhook / SIEM ingestion |
 | `Send-SignalPagerDuty` | PagerDuty with severity mapping |
+| `Send-SignalPushover` | Pushover mobile push notifications |
 | `Send-SignalSyslog` | Syslog in CEF or LEEF format |
 | `Send-SignalEventLog` | Windows Event Log |
 | `Send-SignalDigest` | Aggregated daily/weekly digest |
@@ -442,7 +445,7 @@ Export-ExecutiveSummary -OrganizationName 'Springfield USD'
 Export-TechnicalReport -OrganizationName 'Springfield USD'
 Export-RemediationPlaybook
 Export-RemediationScripts
-Export-ReportPdf -InputPath './PSGuerrilla-Executive-Summary.html'
+Export-ReportPdf -HtmlPath './PSGuerrilla-Executive-Summary.html'
 ```
 
 ### Review High-Priority Findings
@@ -476,7 +479,7 @@ PSGuerrilla uses a JSON config file generated by the [PSGuerrilla Configuration 
 ```powershell
 # All public functions accept -ConfigFile
 Invoke-Campaign -ConfigFile './guerrilla-config.json'
-Invoke-Reconnaissance -ConfigFile './guerrilla-config.json' -Category PrivilegedAccounts, Kerberos, Network
+Invoke-Reconnaissance -ConfigFile './guerrilla-config.json' -Categories PrivilegedAccounts, Kerberos, Network
 ```
 
 ### AD Reconnaissance categories
@@ -493,7 +496,7 @@ Invoke-Reconnaissance -ConfigFile './guerrilla-config.json' -Category Privileged
 | `ACLDelegation` | Dangerous ACEs on critical objects, OU delegation, MachineAccountQuota |
 | `GroupPolicy` | GPO inventory, link analysis, sensitive GPO permissions |
 | `LogonScripts` | NETLOGON share contents, embedded credentials, dangerous patterns |
-| `CertificateServices` | ESC1–ESC16 + EKEUwu certificate template misconfigurations |
+| `CertificateServices` | ESC1–ESC9, ESC11, ESC13, ESC15 (EKUwu), and ESC16 certificate template misconfigurations |
 | `StaleObjects` | Inactive users/computers, password-age outliers |
 | `Network` | NTLM-relay preconditions: LDAP/SMB signing, LLMNR/NetBIOS/WPAD, IPv6 (mitm6), Spooler/WebClient — the settings that turn an ESC8 finding from theoretical into one-shot domain compromise |
 | `TierZero` | Tier-bleed scanning by service-account name pattern (Veeam / vCenter / SCCM / SQL in DA/EA/SA), plus the Azure AD Connect MSOL_ account audit (an account most enumeration tools never surface because it gets DCSync via ACL, not group membership) |
@@ -513,15 +516,15 @@ Set-Safehouse -ConfigPath './my-runtime-config.json'
 
 ```
 PSGuerrilla/
-  PSGuerrilla.psd1              # Module manifest (40 exported functions)
+  PSGuerrilla.psd1              # Module manifest (43 exported functions)
   PSGuerrilla.psm1              # Root module (loader)
   PSGuerrilla.format.ps1xml     # Custom table formatters
   Config/                        # JSON schema and defaults
   Data/                          # Threat intel, audit check definitions, compliance crosswalks
-    AuditChecks/                 # 32 JSON files defining all 431 security checks
+    AuditChecks/                 # 36 JSON files defining all 459 security checks
     Profiles/                    # Scoring profiles (Default, K12)
-  Public/                        # 40 exported functions
-  Private/                       # 222 internal functions
+  Public/                        # 43 exported functions
+  Private/                       # 234 internal function files
     AD/                          # Active Directory collection and checks
     ADMonitor/                   # AD continuous monitoring and detections
     Audit/                       # Shared audit framework
@@ -532,6 +535,7 @@ PSGuerrilla/
     Export/                      # Report generation (HTML, CSV, JSON)
     Google/                      # Google Workspace API integration
     Graph/                       # Microsoft Graph API integration
+    Gui/                         # Show-Guerrilla WPF Operations Console
     M365Monitor/                 # M365 audit log monitoring
     Vault/                       # SecretManagement vault integration
   Tests/                         # Pester 5 unit and integration tests
@@ -613,7 +617,7 @@ Import-Module ./PSGuerrilla.psd1
 
 - GitHub: [github.com/jimrtyler](https://github.com/jimrtyler)
 - LinkedIn: [linkedin.com/in/jamestyler](https://linkedin.com/in/jamestyler)
-- YouTube: [youtube.com/@jimrtyler](https://youtube.com/@jimrtyler)
+- YouTube: [youtube.com/@powershellengineer](https://youtube.com/@powershellengineer)
 - Newsletter: [powershell.news](https://powershell.news)
 
 ## License
