@@ -898,7 +898,9 @@ function Show-GuerrillaWindow {
 
     # ── Initial state ─────────────────────────────────────────────────────
     $session.Controls['ops_OutputDir'].Text = $session.ReportsDir
-    $session.Controls['nav_VersionText'].Text = 'v2.3.0'
+    # Read the version from the manifest so the footer can't drift like it did at v2.3.0.
+    $guiVersion = try { (Import-PowerShellDataFile $session.ModulePath).ModuleVersion } catch { $null }
+    $session.Controls['nav_VersionText'].Text = if ($guiVersion) { "v$guiVersion" } else { '' }
     $session.Controls['nav_VaultText'].Text   = "Vault: $($session.VaultName)"
     & $loadCategoriesForTheater
     & $setActiveTab $StartOn

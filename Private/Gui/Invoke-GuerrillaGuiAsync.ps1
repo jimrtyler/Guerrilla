@@ -82,6 +82,10 @@ function Invoke-GuerrillaGuiAsync {
         Output          = $output
         LastVerboseIdx  = 0
         LastInfoIdx     = 0
+        LastWarnIdx     = 0
+        LineBuffer      = ''
+        StartTime       = [datetime]::Now
+        LastOutputTime  = [datetime]::Now
         Timer           = $null
         Completed       = $false
     }
@@ -93,20 +97,56 @@ function Invoke-GuerrillaGuiAsync {
     $timer = New-Object System.Windows.Threading.DispatcherTimer
     $timer.Interval = [TimeSpan]::FromMilliseconds(150)
     $timer.Add_Tick({
-        # Drain any new verbose / information messages
+        # Drain new output into the log. Write-ProgressLine emits each progress line as
+        # several `Write-Host -NoNewline` fragments carrying ANSI colour codes, so we
+        # strip the escapes and reassemble fragments into whole lines before logging.
         if ($OnLog) {
             try {
+                $ansi = "$([char]27)\[[0-9;]*m"
+
+                # Verbose stream — each record is already a complete line.
                 $vstream = $state.PowerShell.Streams.Verbose
                 while ($state.LastVerboseIdx -lt $vstream.Count) {
-                    $msg = $vstream[$state.LastVerboseIdx].Message
-                    & $OnLog $msg
+                    $msg = ($vstream[$state.LastVerboseIdx].Message -replace $ansi, '').TrimEnd()
+                    if ($msg) { & $OnLog $msg; $state.LastOutputTime = [datetime]::Now }
                     $state.LastVerboseIdx++
                 }
+
+                # Warning stream — surface these too (e.g. "GeoIP lookup failed").
+                $wstream = $state.PowerShell.Streams.Warning
+                while ($state.LastWarnIdx -lt $wstream.Count) {
+                    $msg = ($wstream[$state.LastWarnIdx].Message -replace $ansi, '').TrimEnd()
+                    if ($msg) { & $OnLog "WARNING: $msg"; $state.LastOutputTime = [datetime]::Now }
+                    $state.LastWarnIdx++
+                }
+
+                # Information stream (Write-Host / Write-ProgressLine). Reassemble the
+                # -NoNewline fragments that together form one progress line.
                 $istream = $state.PowerShell.Streams.Information
                 while ($state.LastInfoIdx -lt $istream.Count) {
-                    $rec = $istream[$state.LastInfoIdx]
-                    & $OnLog "$($rec.MessageData)"
+                    $md = $istream[$state.LastInfoIdx].MessageData
+                    if ($md -is [System.Management.Automation.HostInformationMessage]) {
+                        $text = $md.Message; $noNewline = $md.NoNewline
+                    } else {
+                        $text = "$md"; $noNewline = $false
+                    }
+                    $state.LineBuffer += ($text -replace $ansi, '')
+                    if (-not $noNewline) {
+                        $line = $state.LineBuffer.TrimEnd()
+                        $state.LineBuffer = ''
+                        if ($line) { & $OnLog $line; $state.LastOutputTime = [datetime]::Now }
+                    }
                     $state.LastInfoIdx++
+                }
+
+                # Heartbeat — long phases (e.g. AD object collection) can emit nothing
+                # for tens of seconds. Reassure the user the scan is alive rather than hung.
+                if (-not $state.Handle.IsCompleted) {
+                    if (([datetime]::Now - $state.LastOutputTime).TotalSeconds -ge 5) {
+                        $elapsed = [int]([datetime]::Now - $state.StartTime).TotalSeconds
+                        & $OnLog "  ... still working (${elapsed}s elapsed)"
+                        $state.LastOutputTime = [datetime]::Now
+                    }
                 }
             } catch {
                 # Don't crash the GUI on a logging hiccup

@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.4.2] - 2026-06-16
+
+### Fixed
+- **GUI scan log looked hung / showed nothing useful during a scan.** The scan runspace's `Write-ProgressLine` output is emitted as several `Write-Host -NoNewline` fragments carrying ANSI colour codes. The GUI now strips the ANSI escapes and reassembles the fragments into clean whole lines (e.g. `[1750 UTC] RECON > Connecting to Active Directory`) instead of dropping or garbling them, so live per-phase progress actually appears.
+- Footer version was hardcoded to `v2.3.0`; it now reads `ModuleVersion` from the manifest so it can't drift.
+
+### Added
+- GUI scan log now also surfaces the **Warning** stream and shows a **`... still working (Ns elapsed)` heartbeat** when a phase goes quiet for more than 5s, so long AD collection phases no longer look hung.
+- `Tests/Manual/Test-GuiAsyncDrain.ps1` — a headless WPF-dispatcher harness that exercises the async drain (fragment reassembly, ANSI stripping, warnings, heartbeat, completion).
+
 ## [2.4.1] - 2026-06-15
 
 ### Fixed
