@@ -43,11 +43,8 @@ function Export-ReconnaissanceReportHtml {
     # --- Module version ---
     $moduleVersion = '2.0.0'
     try {
-        $manifestPath = Join-Path (Split-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent) 'PSGuerrilla.psd1'
-        if (Test-Path $manifestPath) {
-            $manifest = Import-PowerShellDataFile -Path $manifestPath -ErrorAction SilentlyContinue
-            if ($manifest.ModuleVersion) { $moduleVersion = $manifest.ModuleVersion }
-        }
+        $modVer = $ExecutionContext.SessionState.Module.Version
+        if ($modVer) { $moduleVersion = $modVer.ToString() }
     } catch { }
 
     # --- Score color ---

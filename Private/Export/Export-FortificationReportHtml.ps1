@@ -25,6 +25,49 @@ function Export-FortificationReportHtml {
 
     $esc = { param([string]$s) [System.Web.HttpUtility]::HtmlEncode($s) }
 
+    # Render the affected accounts/objects captured in a finding's Details as one or
+    # more labeled lists. Prefers the explicit AffectedItems/AffectedLabel convention;
+    # otherwise auto-detects any Details entry that is a non-empty array of scalars
+    # (e.g. ActiveSuperAdmins, StaleAdmins) so existing checks surface their lists too.
+    $renderAffected = {
+        param($Details)
+        if (-not $Details -or $Details.Count -eq 0) { return '' }
+
+        $pairs = [System.Collections.Generic.List[object]]::new()
+        if ($Details.ContainsKey('AffectedItems')) {
+            $lbl = if ($Details.AffectedLabel) { [string]$Details.AffectedLabel } else { 'Affected items' }
+            $pairs.Add(@{ Label = $lbl; Items = @($Details.AffectedItems) })
+        } else {
+            foreach ($k in $Details.Keys) {
+                if ($k -in @('AffectedItems', 'AffectedLabel')) { continue }
+                $v = $Details[$k]
+                if ($v -is [string] -or $v -is [valuetype]) { continue }
+                if ($v -is [System.Collections.IEnumerable]) {
+                    $arr = @($v)
+                    if ($arr.Count -eq 0) { continue }
+                    $scalar = $true
+                    foreach ($el in $arr) {
+                        if (-not ($el -is [string] -or $el -is [valuetype])) { $scalar = $false; break }
+                    }
+                    if (-not $scalar) { continue }
+                    $label = ($k -creplace '([a-z0-9])([A-Z])', '$1 $2')
+                    $pairs.Add(@{ Label = $label; Items = $arr })
+                }
+            }
+        }
+
+        $out = [System.Text.StringBuilder]::new()
+        foreach ($p in $pairs) {
+            $items = @($p.Items)
+            if ($items.Count -eq 0) { continue }
+            $cap = 25
+            $shown = @($items | Select-Object -First $cap | ForEach-Object { & $esc ([string]$_) })
+            $more = if ($items.Count -gt $cap) { " <span class=`"more`">+$($items.Count - $cap) more</span>" } else { '' }
+            [void]$out.Append("<div class=`"affected`"><span class=`"affected-label`">$(& $esc $p.Label) ($($items.Count)):</span> <span class=`"affected-items`">$($shown -join ', ')$more</span></div>")
+        }
+        return $out.ToString()
+    }
+
     $timestampStr = [datetime]::UtcNow.ToString('yyyy-MM-dd HH:mm:ss') + ' UTC'
 
     # --- Counts ---
@@ -43,11 +86,8 @@ function Export-FortificationReportHtml {
     # --- Module version ---
     $moduleVersion = '2.0.0'
     try {
-        $manifestPath = Join-Path (Split-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent) 'PSGuerrilla.psd1'
-        if (Test-Path $manifestPath) {
-            $manifest = Import-PowerShellDataFile -Path $manifestPath -ErrorAction SilentlyContinue
-            if ($manifest.ModuleVersion) { $moduleVersion = $manifest.ModuleVersion }
-        }
+        $modVer = $ExecutionContext.SessionState.Module.Version
+        if ($modVer) { $moduleVersion = $modVer.ToString() }
     } catch { }
 
     # --- Score color ---
@@ -234,6 +274,22 @@ function Export-FortificationReportHtml {
 
   .remediation-cell { max-width: 300px; font-size: 0.85em; }
 
+  /* Affected accounts + actionable links (extra row beneath a finding) */
+  tr.finding-extra td {
+    background: rgba(199, 92, 46, 0.06);
+    border-left: 3px solid var(--amber);
+    padding: 4px 10px 12px 14px;
+  }
+  tr.finding-extra:hover td { background: rgba(199, 92, 46, 0.06); }
+  .extra-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .affected { font-size: 0.85em; line-height: 1.5; }
+  .affected-label { color: var(--amber); font-weight: 700; }
+  .affected-items { color: var(--text); word-break: break-word; }
+  .affected-items .more { color: var(--dim); font-style: italic; }
+  .extra-links { display: flex; flex-wrap: wrap; gap: 18px; font-size: 0.85em; margin-top: 2px; }
+  .extra-links .why a { color: var(--gold); font-weight: 700; }
+  .extra-links .admin-link { color: var(--olive); font-weight: 700; }
+
   /* Print styles */
   @media print {
     body { background: #fff; color: #000; }
@@ -376,9 +432,14 @@ function Export-FortificationReportHtml {
 '@)
         foreach ($f in $priorityFindings) {
             $sevClass = $f.Severity.ToLower()
-            $remLink = if ($f.RemediationUrl) {
-                "<a href=`"$(& $esc $f.RemediationUrl)`" target=`"_blank`" rel=`"noopener`">Admin Console &#x2197;</a>"
-            } else { '&mdash;' }
+            $remParts = [System.Collections.Generic.List[string]]::new()
+            if ($f.RemediationUrl) {
+                $remParts.Add("<a href=`"$(& $esc $f.RemediationUrl)`" target=`"_blank`" rel=`"noopener`">&#x2699; Fix in Admin Console &#x2197;</a>")
+            }
+            if ($f.ReferenceUrl) {
+                $remParts.Add("<a href=`"$(& $esc $f.ReferenceUrl)`" target=`"_blank`" rel=`"noopener`" style=`"color:var(--gold)`">&#9888; Why it's unsafe &#x2197;</a>")
+            }
+            $remLink = if ($remParts.Count -gt 0) { $remParts -join '<br>' } else { '&mdash;' }
 
             [void]$html.Append(@"
   <tr>
@@ -444,6 +505,23 @@ function Export-FortificationReportHtml {
     <td>$remedSteps</td>
   </tr>
 "@)
+
+            # --- Extra row: affected accounts + why-unsafe article + admin console deep-link ---
+            $affectedHtml = & $renderAffected $f.Details
+            $linkParts = [System.Collections.Generic.List[string]]::new()
+            if ($f.Status -in @('FAIL', 'WARN', 'ERROR')) {
+                if ($f.ReferenceUrl) {
+                    $whyTitle = if ($f.ReferenceTitle) { $f.ReferenceTitle } else { 'Why this is unsafe' }
+                    $linkParts.Add("<span class=`"why`">&#9888; <a href=`"$(& $esc $f.ReferenceUrl)`" target=`"_blank`" rel=`"noopener`">Why this is unsafe: $(& $esc $whyTitle) &#x2197;</a></span>")
+                }
+                if ($f.RemediationUrl) {
+                    $linkParts.Add("<a class=`"admin-link`" href=`"$(& $esc $f.RemediationUrl)`" target=`"_blank`" rel=`"noopener`">&#x2699; Fix in Admin Console &#x2197;</a>")
+                }
+            }
+            $linksHtml = if ($linkParts.Count -gt 0) { "<div class=`"extra-links`">$($linkParts -join '')</div>" } else { '' }
+            if ($affectedHtml -or $linksHtml) {
+                [void]$html.Append("<tr class=`"finding-extra`"><td colspan=`"7`"><div class=`"extra-wrap`">$affectedHtml$linksHtml</div></td></tr>")
+            }
         }
         [void]$html.Append('</table>')
         [void]$html.Append('</div></details>')

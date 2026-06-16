@@ -12,6 +12,9 @@
       "recommendedValue": "Enforced for all organizational units",
       "remediationUrl": "https://admin.google.com/ac/security/2sv",
       "remediationSteps": "Admin Console > Security > Authentication > 2-step verification > Set Enforcement to 'On'",
+      "referenceUrl": "https://knowledge.workspace.google.com/admin/security/protect-your-business-with-2-step-verification?hl=en",
+      "referenceTitle": "Google: Protect your business with 2-Step Verification",
+      "affectedLabel": "Active users without 2SV enforced",
       "compliance": {
         "nistSp80053": ["IA-2(1)", "IA-2(2)"],
         "mitreAttack": ["T1078.004"],
@@ -27,6 +30,9 @@
       "recommendedValue": "95% or higher enrollment among active users",
       "remediationUrl": "https://admin.google.com/ac/reporting/report/user/security",
       "remediationSteps": "Admin Console > Reporting > User Reports > Security > Review users without 2SV. Set enrollment deadline via Security > 2-Step Verification",
+      "referenceUrl": "https://knowledge.workspace.google.com/admin/security/deploy-2-step-verification?hl=en",
+      "referenceTitle": "Google: Deploy 2-Step Verification",
+      "affectedLabel": "Active users not enrolled in 2SV",
       "compliance": {
         "nistSp80053": ["IA-2(1)"],
         "mitreAttack": ["T1078.004"],
@@ -42,6 +48,8 @@
       "recommendedValue": "Security keys enforced as primary method",
       "remediationUrl": "https://admin.google.com/ac/security/2sv",
       "remediationSteps": "Admin Console > Security > Authentication > 2-step verification > Set allowed methods to 'Security key only'",
+      "referenceUrl": "https://www.vectra.ai/blog/the-hidden-risks-of-sms-based-multi-factor-authentication",
+      "referenceTitle": "Why SMS-based MFA is vulnerable (SIM-swap & interception)",
       "compliance": {
         "nistSp80053": ["IA-2(1)", "IA-2(12)"],
         "mitreAttack": ["T1111", "T1078.004"],
@@ -57,6 +65,8 @@
       "recommendedValue": "Minimum 12 characters",
       "remediationUrl": "https://admin.google.com/ac/security/passwordmanagement",
       "remediationSteps": "Admin Console > Security > Authentication > Password management > Set minimum length to 12 or higher",
+      "referenceUrl": "https://www.strongdm.com/blog/nist-password-guidelines",
+      "referenceTitle": "NIST password guidelines: why length resists brute force",
       "compliance": {
         "nistSp80053": ["IA-5(1)"],
         "mitreAttack": ["T1110.001", "T1110.003"],
@@ -72,6 +82,8 @@
       "recommendedValue": "Password reuse not allowed",
       "remediationUrl": "https://admin.google.com/ac/security/passwordmanagement",
       "remediationSteps": "Admin Console > Security > Authentication > Password management > Enable 'Enforce password policy at next sign-in' and restrict reuse",
+      "referenceUrl": "https://knowledge.workspace.google.com/admin/users/enforce-and-monitor-password-requirements-for-users",
+      "referenceTitle": "Google: Enforce and monitor password requirements",
       "compliance": {
         "nistSp80053": ["IA-5(1)"],
         "mitreAttack": ["T1110.004"],
@@ -87,6 +99,8 @@
       "recommendedValue": "Session duration of 12 hours or less",
       "remediationUrl": "https://admin.google.com/ac/security/session",
       "remediationSteps": "Admin Console > Security > Google Session Control > Set web session duration",
+      "referenceUrl": "https://knowledge.workspace.google.com/admin/security/set-session-length-for-google-services",
+      "referenceTitle": "Google: Set session length for Google services",
       "compliance": {
         "nistSp80053": ["AC-12", "SC-23"],
         "mitreAttack": ["T1550.004"],
@@ -102,6 +116,8 @@
       "recommendedValue": "SAML SSO properly configured with trusted IdP",
       "remediationUrl": "https://admin.google.com/ac/security/ssoprofile",
       "remediationSteps": "Admin Console > Security > Authentication > SSO with third-party IdP > Verify configuration",
+      "referenceUrl": "https://knowledge.workspace.google.com/admin/apps/best-practices-for-third-party-idp-and-google-workspace-configuration",
+      "referenceTitle": "Google: Best practices for third-party IdP configuration",
       "compliance": {
         "nistSp80053": ["IA-2(6)", "IA-8"],
         "mitreAttack": ["T1078.004"],
@@ -117,6 +133,8 @@
       "recommendedValue": "Disabled for all users",
       "remediationUrl": "https://admin.google.com/ac/security/lsa",
       "remediationSteps": "Admin Console > Security > Authentication > Less secure apps > Set to 'Disable access to less secure apps'",
+      "referenceUrl": "https://knowledge.workspace.google.com/admin/sync/transition-from-less-secure-apps-to-oauth",
+      "referenceTitle": "Google: Transition from less secure apps to OAuth",
       "compliance": {
         "nistSp80053": ["IA-5(2)"],
         "mitreAttack": ["T1078.004", "T1110"],
@@ -132,6 +150,8 @@
       "recommendedValue": "App passwords restricted or disabled",
       "remediationUrl": "https://admin.google.com/ac/security/2sv",
       "remediationSteps": "Admin Console > Security > Authentication > 2-step verification > Review app password settings",
+      "referenceUrl": "https://support.google.com/a/answer/9176599",
+      "referenceTitle": "Google: How 2-Step Verification works with legacy apps",
       "compliance": {
         "nistSp80053": ["IA-5(1)"],
         "mitreAttack": ["T1078.004"],
@@ -147,6 +167,9 @@
       "recommendedValue": "Super admins: no personal recovery. Regular users: recovery options allowed with admin override",
       "remediationUrl": "https://admin.google.com/ac/security/accountrecovery",
       "remediationSteps": "Admin Console > Security > Authentication > Account recovery > Disable personal recovery for super admin OU",
+      "referenceUrl": "https://support.google.com/a/answer/9436964",
+      "referenceTitle": "Google: Allow super administrators to recover their password",
+      "affectedLabel": "Super admins with personal recovery options",
       "compliance": {
         "nistSp80053": ["IA-5(1)", "AC-2(4)"],
         "mitreAttack": ["T1078.004", "T1098"],
@@ -162,6 +185,8 @@
       "recommendedValue": "Login challenges enabled with employee ID or other verification",
       "remediationUrl": "https://admin.google.com/ac/security/loginchallenges",
       "remediationSteps": "Admin Console > Security > Authentication > Login challenges > Enable",
+      "referenceUrl": "https://support.google.com/a/answer/6002699",
+      "referenceTitle": "Google: Protect accounts with security challenges",
       "compliance": {
         "nistSp80053": ["IA-2(13)"],
         "mitreAttack": ["T1078.004"],
@@ -177,6 +202,9 @@
       "recommendedValue": "100% of super admins enrolled in 2SV",
       "remediationUrl": "https://admin.google.com/ac/reporting/report/user/security",
       "remediationSteps": "Admin Console > Reporting > User Reports > Security > Filter by admin status > Ensure all super admins have 2SV enrolled",
+      "referenceUrl": "https://support.google.com/a/answer/16271818",
+      "referenceTitle": "Google: About 2SV enforcement for admins",
+      "affectedLabel": "Super admins without 2SV enrolled",
       "compliance": {
         "nistSp80053": ["IA-2(1)", "IA-2(11)"],
         "mitreAttack": ["T1078.004"],
@@ -192,6 +220,9 @@
       "recommendedValue": "No super admin accounts inactive for more than 90 days",
       "remediationUrl": "https://admin.google.com/ac/users",
       "remediationSteps": "Admin Console > Directory > Users > Filter by admin role > Review and remove or suspend inactive super admin accounts",
+      "referenceUrl": "https://cloud.google.com/resource-manager/docs/super-admin-best-practices",
+      "referenceTitle": "Google Cloud: Super administrator account best practices",
+      "affectedLabel": "Stale super admin accounts",
       "compliance": {
         "nistSp80053": ["AC-2(3)", "AC-2(4)"],
         "mitreAttack": ["T1078.004"],

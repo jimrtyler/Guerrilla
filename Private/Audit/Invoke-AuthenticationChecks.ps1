@@ -44,6 +44,7 @@ function Test-FortificationAUTH001 {
     }
 
     $enforced = @($users | Where-Object { $_.isEnforcedIn2Sv -eq $true })
+    $notEnforced = @($users | Where-Object { $_.isEnforcedIn2Sv -ne $true })
     $enforcedRate = [Math]::Round(($enforced.Count / $users.Count) * 100, 1)
 
     $status = if ($enforcedRate -ge 95) { 'PASS' }
@@ -52,9 +53,15 @@ function Test-FortificationAUTH001 {
 
     $currentValue = "$enforcedRate% ($($enforced.Count) of $($users.Count) active users) have 2SV enforced"
 
+    $details = @{ EnforcedCount = $enforced.Count; TotalActive = $users.Count; Rate = $enforcedRate }
+    if ($notEnforced.Count -gt 0) {
+        $details.AffectedItems = @($notEnforced | ForEach-Object { $_.primaryEmail })
+        $details.AffectedLabel = 'Active users without 2SV enforced'
+    }
+
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
         -CurrentValue $currentValue -OrgUnitPath $OrgUnitPath `
-        -Details @{ EnforcedCount = $enforced.Count; TotalActive = $users.Count; Rate = $enforcedRate }
+        -Details $details
 }
 
 # ── AUTH-002: 2SV Enrollment Rate ───────────────────────────────────────────
@@ -69,6 +76,7 @@ function Test-FortificationAUTH002 {
     }
 
     $enrolled = @($users | Where-Object { $_.isEnrolledIn2Sv -eq $true })
+    $notEnrolled = @($users | Where-Object { $_.isEnrolledIn2Sv -ne $true })
     $rate = [Math]::Round(($enrolled.Count / $users.Count) * 100, 1)
 
     $status = if ($rate -ge 95) { 'PASS' }
@@ -77,9 +85,15 @@ function Test-FortificationAUTH002 {
 
     $currentValue = "$rate% ($($enrolled.Count) of $($users.Count) active users) enrolled in 2SV"
 
+    $details = @{ EnrolledCount = $enrolled.Count; TotalActive = $users.Count; Rate = $rate }
+    if ($notEnrolled.Count -gt 0) {
+        $details.AffectedItems = @($notEnrolled | ForEach-Object { $_.primaryEmail })
+        $details.AffectedLabel = 'Active users not enrolled in 2SV'
+    }
+
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
         -CurrentValue $currentValue -OrgUnitPath $OrgUnitPath `
-        -Details @{ EnrolledCount = $enrolled.Count; TotalActive = $users.Count; Rate = $rate }
+        -Details $details
 }
 
 # ── AUTH-003: 2SV Method Strength ───────────────────────────────────────────
@@ -228,7 +242,11 @@ function Test-FortificationAUTH010 {
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
             -CurrentValue "$($adminsWithRecovery.Count) super admin(s) have personal recovery options configured" `
             -OrgUnitPath $OrgUnitPath `
-            -Details @{ SuperAdminsWithRecovery = $adminEmails }
+            -Details @{
+                SuperAdminsWithRecovery = $adminEmails
+                AffectedItems           = $adminEmails
+                AffectedLabel           = 'Super admins with personal recovery options'
+            }
     }
 
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
@@ -264,7 +282,12 @@ function Test-FortificationAUTH012 {
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
             -CurrentValue "$($notEnrolled.Count) of $($superAdmins.Count) super admin(s) not enrolled in 2SV" `
             -OrgUnitPath $OrgUnitPath `
-            -Details @{ NotEnrolled = $adminEmails; TotalSuperAdmins = $superAdmins.Count }
+            -Details @{
+                NotEnrolled      = $adminEmails
+                TotalSuperAdmins = $superAdmins.Count
+                AffectedItems    = $adminEmails
+                AffectedLabel    = 'Super admins without 2SV enrolled'
+            }
     }
 
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
@@ -302,7 +325,12 @@ function Test-FortificationAUTH013 {
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
             -CurrentValue "$($staleAdmins.Count) super admin(s) inactive for more than $staleDays days" `
             -OrgUnitPath $OrgUnitPath `
-            -Details @{ StaleAdmins = @($staleAdmins); ThresholdDays = $staleDays }
+            -Details @{
+                StaleAdmins   = @($staleAdmins)
+                ThresholdDays = $staleDays
+                AffectedItems = @($staleAdmins)
+                AffectedLabel = 'Stale super admin accounts'
+            }
     }
 
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `

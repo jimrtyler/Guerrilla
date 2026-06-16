@@ -30,6 +30,8 @@ function New-AuditFinding {
         OrgUnitPath      = $OrgUnitPath
         RemediationUrl   = $CheckDefinition.remediationUrl ?? ''
         RemediationSteps = $CheckDefinition.remediationSteps ?? ''
+        ReferenceUrl     = $CheckDefinition.referenceUrl ?? ''
+        ReferenceTitle   = $CheckDefinition.referenceTitle ?? ''
         Compliance       = @{
             NistSp80053  = @($CheckDefinition.compliance.nistSp80053 ?? @())
             MitreAttack  = @($CheckDefinition.compliance.mitreAttack ?? @())

@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.6.0] - 2026-06-16
+
+### Added
+- **The Google Workspace (Fortification) report is now far more actionable**, with the **Authentication** category built out as the first pass:
+  - **Affected accounts are now listed.** When a check flags a problem against specific accounts — users without 2SV enforced/enrolled, super admins not enrolled in 2SV, stale super admins, super admins with personal recovery options — the HTML report now lists the **actual affected accounts** beneath the finding (capped at 25 with a "+N more" indicator) instead of showing only a count. The renderer also **auto-surfaces** affected-object lists that existing checks already capture (e.g. `ActiveSuperAdmins`), so other categories benefit immediately.
+  - **"Fix in Admin Console" deep-links on every finding.** The Admin console deep-link previously appeared only in the Critical/High priority table; it now appears on **every actionable finding** in the per-category detail tables.
+  - **"Why this is unsafe" reference articles.** Each Authentication check now links to an authoritative article explaining *why* the misconfiguration is dangerous — Google Workspace official documentation where available, supplemented by NIST/CIS/MITRE and reputable security research where they explain the attack better. New `referenceUrl` / `referenceTitle` fields on check definitions; all 13 URLs were verified to resolve (HTTP 200).
+
+### Fixed
+- **All three HTML report footers showed "v2.0.0" regardless of the installed version.** The version-detection logic walked `$PSScriptRoot` up one level too many (three `Split-Path -Parent` calls from `Private/Export/` overshot the module root), so the manifest was never found and every report fell back to the hardcoded default. All three exporters (Fortification, Reconnaissance, Infiltration) now read the version directly from the running module via `$ExecutionContext.SessionState.Module.Version`.
+
+### Notes
+- This is the first category in a rollout. The **rendering** improvements (affected-account lists, admin-console links on every finding) apply to **all** Google Workspace categories now. The curated **reference articles** currently cover the 13 Authentication checks and will be extended to the remaining seven categories in follow-up releases.
+- New finding properties `ReferenceUrl` / `ReferenceTitle` flow through `New-AuditFinding`; the affected-account convention is `Details.AffectedItems` + `Details.AffectedLabel`. Both are backward compatible — all 64 existing HTML report validation checks still pass.
+
 ## [2.5.2] - 2026-06-16
 
 ### Fixed

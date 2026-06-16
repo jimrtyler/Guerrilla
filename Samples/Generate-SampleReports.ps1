@@ -98,7 +98,22 @@ function New-AllFailFindings {
         $path = Join-Path $dataDir $file
         $defs = Get-Content -Path $path -Raw | ConvertFrom-Json -AsHashtable
 
+        # Pool of fake accounts used to demonstrate the "affected accounts" list for
+        # checks that declare an affectedLabel (real scans populate these from live data).
+        $sampleAccounts = @(
+            'jsmith@sample.org', 'akumar@sample.org', 'mchen@sample.org', 'rlopez@sample.org',
+            'tokafor@sample.org', 'dwilson@sample.org', 'bnguyen@sample.org', 'pgarcia@sample.org'
+        )
+
         foreach ($check in $defs.checks) {
+            $details = @{}
+            if ($check.affectedLabel) {
+                $idNum = [int]([regex]::Match([string]$check.id, '\d+').Value)
+                $count = ($idNum % 5) + 3
+                $details.AffectedItems = @($sampleAccounts | Select-Object -First $count)
+                $details.AffectedLabel = $check.affectedLabel
+            }
+
             $finding = [PSCustomObject]@{
                 PSTypeName       = 'PSGuerrilla.AuditFinding'
                 CheckId          = $check.id
@@ -113,6 +128,8 @@ function New-AllFailFindings {
                 OrgUnitPath      = '/'
                 RemediationUrl   = $check.remediationUrl ?? ''
                 RemediationSteps = $check.remediationSteps ?? ''
+                ReferenceUrl     = $check.referenceUrl ?? ''
+                ReferenceTitle   = $check.referenceTitle ?? ''
                 Compliance       = @{
                     NistSp80053  = @($check.compliance.nistSp80053 ?? @())
                     MitreAttack  = @($check.compliance.mitreAttack ?? @())
@@ -123,7 +140,7 @@ function New-AllFailFindings {
                     CisM365      = @($check.compliance.cisM365 ?? @())
                     CisAzure     = @($check.compliance.cisAzure ?? @())
                 }
-                Details          = @{}
+                Details          = $details
                 Timestamp        = [datetime]::UtcNow
             }
             $findings.Add($finding)
