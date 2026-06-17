@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.8.1] - 2026-06-17
+
+### Fixed
+- **Entra / Azure / M365 (Infiltration) scans launched from the GUI appeared to hang.** The scan actually completed, but the GUI's `OnComplete` callback called the module-**private** `Get-PSGuerrillaDataRoot`, which isn't resolvable inside a `GetNewClosure()` closure — so the callback threw *before* resetting the UI, leaving the progress bar spinning on "still working…". The AD and Google Workspace paths were unaffected because their result objects carry `HtmlReportPath` and skipped that branch. Two fixes: the callback now uses the already-captured `$session.ReportsDir` instead of the private function, and `Invoke-Infiltration` now returns `HtmlReportPath` (like the other theaters) so the GUI opens the exact report.
+- **Poor contrast in the GUI dropdowns and left navigation.** The "Report style" (and Settings) dropdown popups used WPF's default light system theme, rendering the near-white item text invisible. `ComboBoxItem` now has an explicit dark control template (dark background + light text, with an amber highlight + dark text on hover). The left-nav button text was also dimmed and has been brightened for legibility.
+
 ## [2.8.0] - 2026-06-17
 
 ### Added

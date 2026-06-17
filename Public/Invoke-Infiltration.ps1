@@ -323,6 +323,7 @@ function Invoke-Infiltration {
         Score          = $score
         DataErrors     = $auditData.Errors
         AuditData      = $auditData
+        HtmlReportPath = $null
     }
 
     # --- Console output ---
@@ -359,6 +360,7 @@ function Invoke-Infiltration {
 
         # Export reports
         $baseName = "infiltration-$tenantLabel-$timestamp"
+        $htmlPath = Join-Path $outDir "$baseName.html"
 
         if (-not $Quiet) {
             Write-ProgressLine -Phase INFILTRATE -Message 'Generating reports'
@@ -368,10 +370,11 @@ function Invoke-Infiltration {
             if (-not $PSBoundParameters.ContainsKey('ReportStyle') -and $config -and $config.output -and ($config.output.reportStyle -in 'Guerrilla', 'Professional', 'Slate')) {
                 $ReportStyle = [string]$config.output.reportStyle
             }
-            Export-InfiltrationReportHtml -Result $result -OutputPath (Join-Path $outDir "$baseName.html") `
+            Export-InfiltrationReportHtml -Result $result -OutputPath $htmlPath `
                 -PreviousFindings $previousFindings `
                 -Style $ReportStyle `
                 -Branding (Get-GuerrillaBranding -Config $config)
+            $result.HtmlReportPath = $htmlPath
         } catch {
             Write-Warning "HTML report generation failed: $_"
         }

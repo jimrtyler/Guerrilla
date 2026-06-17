@@ -40,7 +40,7 @@ function Show-GuerrillaWindow {
   <Window.Resources>
     <Style x:Key="NavButton" TargetType="Button">
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="Foreground" Value="#B8A97E"/>
+      <Setter Property="Foreground" Value="#E4DBC0"/>
       <Setter Property="BorderThickness" Value="0"/>
       <Setter Property="Padding" Value="20,12"/>
       <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -95,6 +95,28 @@ function Show-GuerrillaWindow {
       <Setter Property="Foreground" Value="#F5F0E6"/>
       <Setter Property="BorderBrush" Value="#55524A"/>
       <Setter Property="Padding" Value="8,4"/>
+    </Style>
+    <!-- Dropdown items: the WPF popup defaults to a light system theme, so without this
+         the near-white item text is invisible. Force dark items with light text. -->
+    <Style TargetType="ComboBoxItem">
+      <Setter Property="Background" Value="#252420"/>
+      <Setter Property="Foreground" Value="#F5F0E6"/>
+      <Setter Property="Padding" Value="8,5"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ComboBoxItem">
+            <Border x:Name="bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+              <ContentPresenter/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="#C67A1F"/>
+                <Setter Property="Foreground" Value="#1A1A1A"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
     <Style TargetType="DataGrid">
       <Setter Property="Background" Value="#1A1A1A"/>
@@ -737,7 +759,7 @@ function Show-GuerrillaWindow {
                 $reportPath = $result.HtmlReportPath
             } else {
                 # Best-effort: pick the newest HTML in the reports dir
-                $newest = Get-ChildItem (Join-Path (Get-PSGuerrillaDataRoot) 'Reports') -Filter '*.html' -ErrorAction SilentlyContinue |
+                $newest = Get-ChildItem $session.ReportsDir -Filter '*.html' -ErrorAction SilentlyContinue |
                     Sort-Object LastWriteTime -Descending | Select-Object -First 1
                 if ($newest) { $reportPath = $newest.FullName }
             }
