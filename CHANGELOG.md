@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.10.1] - 2026-06-18
+
+### Added
+- **Attack-path analysis now flags group-nesting pivots.** Building on v2.10.0's object-control paths, `ADPATH-001` also reports **non-default groups nested inside a Tier-0 group** (Domain / Enterprise / Schema Admins, Administrators, the operator groups) as escalation pivots — controlling such a group, or being added to it, confers the Tier-0 group's privileges. Uses the already-collected recursive privileged-group membership (no new collection); the well-known Tier-0 groups themselves are excluded so only **custom** nesting is flagged. Each path now carries a `PathType` (`Object control` / `Group nesting`).
+
 ## [2.10.0] - 2026-06-18
 
 ### Added

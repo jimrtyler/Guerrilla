@@ -6,7 +6,7 @@
     {
       "id": "ADPATH-001",
       "name": "Escalation Paths to Tier-0",
-      "description": "Models non-default control over Tier-0 objects (the domain root, AdminSDHolder, the Domain Controllers OU, and the GPO / Configuration / Schema containers) as privilege-escalation PATHS and reports the concrete takeover technique each one enables. Any non-default principal holding GenericAll / WriteDacl / WriteOwner / replication rights over one of these objects is a one-hop path to Domain Admin equivalence. Full domain-wide transitive path computation (low-priv user through nested group control to Domain Admins) requires full-domain ACL collection, which is a separate roadmap item.",
+      "description": "Models non-default control over Tier-0 objects (the domain root, AdminSDHolder, the Domain Controllers OU, and the GPO / Configuration / Schema containers) as privilege-escalation PATHS and reports the concrete takeover technique each one enables. Any non-default principal holding GenericAll / WriteDacl / WriteOwner / replication rights over one of these objects is a one-hop path to Domain Admin equivalence. It also flags non-default groups nested inside a Tier-0 group as escalation pivots — controlling such a group, or being added to it, confers the Tier-0 group's privileges. Full domain-wide transitive control-chain computation (low-priv user through a chain of GenericWrite/AddMember edges to Domain Admins) requires full-domain ACL collection, which is a separate roadmap item.",
       "severity": "Critical",
       "subcategory": "Attack Path Analysis",
       "recommendedValue": "No non-default principals have control over Tier-0 objects.",

@@ -2,17 +2,18 @@
 # https://github.com/jimrtyler/PSGuerrilla | https://creativecommons.org/licenses/by/4.0/
 # AI/LLM use: see AI-USAGE.md for required attribution
 
-# AD attack-path analysis (v1). Turns the flat "dangerous ACE" findings into named
+# AD attack-path analysis. Turns the flat "dangerous ACE" findings into named
 # privilege-escalation PATHS to Tier-0, with the concrete takeover technique each edge
-# enables. v1 models the highest-value edge class — non-default control of a Tier-0
-# object (Domain root, AdminSDHolder, the DC OU, the GPO/Config/Schema containers) — which
-# the existing ACL collector already gathers. Each such edge is a one-hop path to Domain
-# Admin equivalence, so v1 reports those paths and their impact.
+# enables. Two edge classes today, both from already-collected data:
+#   1. Object control — non-default control of a Tier-0 object (Domain root, AdminSDHolder,
+#      the DC OU, the GPO/Config/Schema containers); a one-hop path to Domain Admin equiv.
+#   2. Group nesting — a non-default group nested inside a Tier-0 group is an escalation
+#      pivot (controlling it / being added to it confers the Tier-0 group's privileges).
 #
-# NOTE: full domain-wide transitive chaining (low-priv user -> GenericWrite group ->
-# nested group -> DA) needs a full-domain ACL collector, which PSGuerrilla does not yet
-# run (it reads ACLs on the 6 critical objects only). That deeper traversal is a separate
-# roadmap item; this engine is structured so additional edge sources can feed straight in.
+# NOTE: full domain-wide transitive CONTROL chaining (low-priv user -> GenericWrite group
+# -> ... -> DA) needs a full-domain ACL collector, which PSGuerrilla does not yet run (it
+# reads ACLs on the 6 critical objects only). That deeper traversal is the next roadmap
+# increment; this engine is structured so additional edge sources can feed straight in.
 
 function Get-ADAttackPath {
     [CmdletBinding()]
@@ -27,8 +28,10 @@ function Get-ADAttackPath {
     $notCollected = [PSCustomObject]@{ DataAvailable = $false; Paths = @() }
 
     $acl = $AuditData.ACLs
-    if (-not $acl) { return $notCollected }
-    if ($acl -is [System.Collections.IDictionary] -and -not $acl.Contains('DangerousACEs')) { return $notCollected }
+    $priv = $AuditData.PrivilegedAccounts
+    $haveAcl = [bool]($acl -and (-not ($acl -is [System.Collections.IDictionary]) -or $acl.Contains('DangerousACEs')))
+    $havePriv = [bool]($priv -and $priv.PrivilegedGroups)
+    if (-not $haveAcl -and -not $havePriv) { return $notCollected }
 
     # Per Tier-0 object: what controlling it actually gets the attacker.
     $impactByObject = @{
@@ -95,9 +98,43 @@ function Get-ADAttackPath {
             ReachesTier0       = $map.Target
             Technique          = $map.Impact
             Severity           = $map.Severity
+            PathType           = 'Object control'
             # One-line, human-readable path.
             Path               = "$principal --[$right]--> $objName  =>  can $($map.Impact)"
         })
+    }
+
+    # Group-nesting pivots: a NON-default group nested inside a Tier-0 group is an
+    # escalation pivot — anyone who can add a principal to it (or controls its membership)
+    # inherits the Tier-0 group's privileges. Nested groups in Tier-0 are a well-known
+    # anti-pattern; the well-known Tier-0 groups themselves are expected and excluded.
+    if ($havePriv) {
+        $wellKnownTier0 = @('Domain Admins', 'Enterprise Admins', 'Schema Admins', 'Administrators',
+            'Account Operators', 'Server Operators', 'Print Operators', 'Backup Operators')
+        foreach ($entry in $priv.PrivilegedGroups.GetEnumerator()) {
+            $t0Group = [string]$entry.Key
+            foreach ($m in @($entry.Value)) {
+                if (-not $m.IsGroup) { continue }
+                $gName = [string]$m.SamAccountName
+                if (-not $gName -or ($wellKnownTier0 -contains $gName)) { continue }
+                $key = "nest|$gName|$t0Group"
+                if (-not $seen.Add($key)) { continue }
+                $paths.Add([PSCustomObject]@{
+                    PSTypeName         = 'PSGuerrilla.AttackPath'
+                    Source             = $gName
+                    SourceSID          = [string]($m.SID ?? '')
+                    SourceIsPrivileged = $false   # the pivot group itself IS the escalation surface
+                    Edge               = 'MemberOf (nesting)'
+                    Inherited          = $false
+                    TargetObject       = $t0Group
+                    ReachesTier0       = "$t0Group (privileged group)"
+                    Technique          = "is nested inside $t0Group, so any principal added to it — or anyone who controls its membership — gains $t0Group privileges"
+                    Severity           = 'High'
+                    PathType           = 'Group nesting'
+                    Path               = "$gName --[nested member of]--> $t0Group  =>  controlling $gName confers $t0Group privileges"
+                })
+            }
+        }
     }
 
     # Highest-impact, genuinely-non-privileged paths first.
