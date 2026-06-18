@@ -46,28 +46,41 @@ function Test-ReconADPATH001 {
     }
 
     $paths = @($analysis.Paths)
-    if ($paths.Count -eq 0) {
+    # Expected paths are by-design Tier-0 service accounts (Azure AD Connect MSOL_*),
+    # already tracked by ADTIER-001 — they don't constitute a finding on their own.
+    $genuine  = @($paths | Where-Object { -not $_.Expected })
+    $expected = @($paths | Where-Object { $_.Expected })
+
+    if ($genuine.Count -eq 0) {
+        $cv = 'No non-default principals have control over Tier-0 objects — no one-hop escalation paths found'
+        if ($expected.Count -gt 0) {
+            $cv += " ($($expected.Count) expected service-account path(s) — e.g. Azure AD Connect — are tracked by ADTIER-001)"
+        }
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-            -CurrentValue 'No non-default principals have control over Tier-0 objects — no one-hop escalation paths found' `
-            -Details @{ PathCount = 0 }
+            -CurrentValue $cv `
+            -Details @{ PathCount = 0; ExpectedCount = $expected.Count; Paths = @($paths) }
     }
 
-    $nonPriv = @($paths | Where-Object { -not $_.SourceIsPrivileged })
-    $preview = @($paths | Select-Object -First 6 | ForEach-Object { $_.Path }) -join ' | '
+    $nonPriv = @($genuine | Where-Object { -not $_.SourceIsPrivileged })
+    $preview = @($genuine | Select-Object -First 6 | ForEach-Object { $_.Path }) -join ' | '
 
-    $currentValue = "$($paths.Count) escalation path(s) to Tier-0"
+    $currentValue = "$($genuine.Count) escalation path(s) to Tier-0"
     if ($nonPriv.Count -gt 0) {
         $currentValue += " — $($nonPriv.Count) from NON-privileged principals (highest risk)"
+    }
+    if ($expected.Count -gt 0) {
+        $currentValue += "; plus $($expected.Count) expected service-account path(s) (see ADTIER-001)"
     }
     $currentValue += ": $preview"
 
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
         -CurrentValue $currentValue `
         -Details @{
-            PathCount          = $paths.Count
+            PathCount          = $genuine.Count
             NonPrivilegedCount = $nonPriv.Count
+            ExpectedCount      = $expected.Count
             AffectedLabel      = 'Escalation paths to Tier-0'
-            AffectedItems      = @($paths | ForEach-Object { $_.Path })
+            AffectedItems      = @($genuine | ForEach-Object { $_.Path })
             Paths              = @($paths)
         }
 }

@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.10.3] - 2026-06-18
+
+_Fixes from the v2.10.1 attack-path validation and the v2.10.2 GUI re-check._
+
+### Fixed
+- **ADPATH-001 false positives eliminated.** The attack-path engine was reporting **default infrastructure/admin principals** (the `Domain Controllers` group, `Enterprise Domain Controllers`, RODCs, `Enterprise Read-only Domain Controllers`, `Schema Admins`) as Tier-0 escalation paths — they legitimately hold replication/control rights **by AD design**. A new centralized allowlist (`Test-DefaultControlPrincipal`, matched by **forge-proof well-known SID/RID**, not locale-dependent names) excludes them. In the reporter's live domain this drops the headline from *"32 paths, 32 non-privileged"* to the ~7 genuine ones.
+- **`SourceIsPrivileged` now correct.** Previously every path was flagged non-privileged (so the "highest-risk" sort/count was meaningless). It now returns true for default privileged principals (incl. the operator groups) and Tier-0 group members, so the non-privileged bucket contains only genuinely non-privileged custom principals.
+- **Azure AD Connect sync accounts (`MSOL_*`) relabeled.** They hold real DCSync rights but **by design** (and are already tracked by `ADTIER-001`), so they're flagged `Expected`, kept **out** of the non-privileged count, and reported separately ("plus N expected service-account path(s) — see ADTIER-001") instead of as surprise escalations.
+- **DCSync / ACL-delegation checks now share the same allowlist.** `Test-SafeAdminSid` (used by `ADPRIV-028`, `ADACL-010/015/016`, …) delegates to `Test-DefaultControlPrincipal` — a strict superset of its old list. This closes the v2.10.1 residual where **Enterprise Read-only Domain Controllers (498)** was reported as a non-default DCSync principal, and keeps the DCSync/ACL checks consistent with the attack-path engine. _(Re-validate the ADACL/ADPRIV non-default counts — they may drop slightly as more by-design infra principals are correctly excluded.)_
+- **(GUI-2) ComboBox selection box actually fixed this time.** The closed box rendered with the **system's light button chrome** (because the nested `ToggleButton`'s `{TemplateBinding Background}` bound to the unset ToggleButton background, not the ComboBox's), so near-white selection text read as blank/faint. The box fill is now hardcoded dark — verified by rendering the control off-screen to a bitmap and inspecting the pixels (`Tests/tools/render-combo-probe.ps1`), not by eye.
+
+### Notes
+- Regression tests added: `Tests/verify-adpath-fix.ps1` (19/19 — default-principal exclusion incl. a localized-name-but-RID-516 case, MSOL relabeling, genuine-path retention, headline correctness).
+- Roadmap unchanged: full domain-wide **transitive** path chaining still needs the full-domain ACL collector (next increment). The reporter also noted `ADPATH-001` object-control paths overlap `ADACL-016`; a future pass may cross-reference/dedupe them so the same ACE isn't counted by multiple checks.
+
 ## [2.10.2] - 2026-06-18
 
 _GUI + Safehouse fixes from the live GUI/Safehouse validation pass._

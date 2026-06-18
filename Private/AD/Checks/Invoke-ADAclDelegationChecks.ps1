@@ -38,29 +38,24 @@ function Test-SafeAdminSid {
         [string]$IdentityReference
     )
 
-    # Well-known safe SIDs
-    $safeSids = @(
-        'S-1-5-18'     # SYSTEM
-        'S-1-5-10'     # SELF
-        'S-1-5-32-544' # BUILTIN\Administrators
-    )
-
-    if ($Sid -in $safeSids) { return $true }
-
-    # Domain Admins (RID -512), Enterprise Admins (RID -519)
-    if ($Sid -match '-512$|-519$') { return $true }
-
-    # Name-based fallback matching
-    $safeNames = @(
-        'Domain Admins', 'Enterprise Admins', 'SYSTEM',
-        'BUILTIN\Administrators', 'Administrators'
-    )
-    foreach ($name in $safeNames) {
-        if ($IdentityReference -eq $name -or $IdentityReference -like "*\$name") {
-            return $true
-        }
+    # Delegate to the centralized default-principal allowlist (Get-ADAttackPath.ps1) so the
+    # DCSync (ADPRIV-028) and ACL-delegation checks exclude the SAME set of by-design
+    # infrastructure/admin principals as the attack-path engine. This is a strict superset
+    # of the old local list (SYSTEM, SELF, Administrators, DA 512, EA 519) — it additionally
+    # excludes the DC groups (516), Enterprise DCs (S-1-5-9), RODCs (521 / 498), Schema Admins
+    # (518), Cert Publishers (517) and krbtgt (502), all matched by forge-proof well-known
+    # SID/RID. This closes the v2.10.1 residual where Enterprise Read-only Domain Controllers
+    # (498) was reported as a non-default DCSync principal.
+    if (Get-Command Test-DefaultControlPrincipal -ErrorAction SilentlyContinue) {
+        return (Test-DefaultControlPrincipal -Sid $Sid -IdentityReference $IdentityReference)
     }
 
+    # Fallback (helper not loaded): the original local allowlist.
+    if ($Sid -in @('S-1-5-18', 'S-1-5-10', 'S-1-5-32-544')) { return $true }
+    if ($Sid -match '-512$|-519$') { return $true }
+    foreach ($name in @('Domain Admins', 'Enterprise Admins', 'SYSTEM', 'BUILTIN\Administrators', 'Administrators')) {
+        if ($IdentityReference -eq $name -or $IdentityReference -like "*\$name") { return $true }
+    }
     return $false
 }
 

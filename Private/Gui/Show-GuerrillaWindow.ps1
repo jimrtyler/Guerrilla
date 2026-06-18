@@ -107,7 +107,11 @@ function Show-GuerrillaWindow {
                             IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                 <ToggleButton.Template>
                   <ControlTemplate TargetType="ToggleButton">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="#55524A" BorderThickness="1" SnapsToDevicePixels="True">
+                    <!-- Hardcode the dark box fill. {TemplateBinding Background} here binds to
+                         the ToggleButton's own Background (never set) -> system light button
+                         chrome, which made the closed box render light grey; near-white
+                         selection text on it read as blank/faint (GUI-2, repeatedly). -->
+                    <Border Background="#252420" BorderBrush="#55524A" BorderThickness="1" SnapsToDevicePixels="True">
                       <Grid>
                         <Grid.ColumnDefinitions>
                           <ColumnDefinition Width="*"/>
