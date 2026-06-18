@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PSGuerrilla AD Reconnaissance Report - SAMPLE.LOCAL - 2026-06-18 13:17:36 UTC</title>
+<title>PSGuerrilla AD Reconnaissance Report - SAMPLE.LOCAL - 2026-06-18 13:40:42 UTC</title>
 <style>
   :root { --font-body: 'Fira Code', 'JetBrains Mono', Consolas, 'Courier New', monospace; --bg: #1a1f16; --surface: #242b1e; --surface-alt: #2d3526; --border: #3d4a35; --text: #d4c9a8; --text-muted: #8a8468; --olive: #a8b58b; --amber: #d4883a; --sage: #6b9b6b; --parchment: #d4c4a0; --gold: #c9a84c; --dim: #6b6b5a; --deep-orange: #c75c2e; --dark-red: #8b2500; --critical: #c75c2e; --high: #d4883a; --medium: #c9a84c; --low: #6b9b6b; --clean: #4a7a4a; --pass: #4a7a4a; --fail: #c75c2e; --warn: #c9a84c; --skip: #6b6b5a; --info: #a8b58b; }
   .wl-banner { background: var(--dark-red); color: #fff; text-align: center;
@@ -137,7 +137,7 @@
 <body>
 
 <h1>AD Reconnaissance Report</h1>
-<div class="subtitle">Domain: SAMPLE.LOCAL &mdash; Generated: 2026-06-18 13:17:36 UTC</div><div class="score-panel">
+<div class="subtitle">Domain: SAMPLE.LOCAL &mdash; Generated: 2026-06-18 13:40:42 UTC</div><div class="score-panel">
   <div class="score-ring">
     <svg viewBox="0 0 120 120" width="120" height="120">
       <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
@@ -155,7 +155,7 @@
 </div><div class="exec-summary">
   <h3>Executive Summary</h3>
   <p>The AD environment has critical security deficiencies. Immediate remediation is required to prevent compromise.</p>
-  <p>Critical: <strong>48</strong> &mdash; High: <strong>89</strong> &mdash;
+  <p>Critical: <strong>47</strong> &mdash; High: <strong>90</strong> &mdash;
      Medium: <strong>48</strong> &mdash; Low: <strong>9</strong></p>
 </div><div class="stat-grid">  <div class="stat-card">
     <div class="value" style="color:var(--parchment)">203</div>
@@ -164,10 +164,10 @@
     <div class="value" style="color:var(--pass)">0</div>
     <div class="label">Passed</div>
   </div>  <div class="stat-card">
-    <div class="value" style="color:var(--critical)">48</div>
+    <div class="value" style="color:var(--critical)">47</div>
     <div class="label">Critical</div>
   </div>  <div class="stat-card">
-    <div class="value" style="color:var(--high)">89</div>
+    <div class="value" style="color:var(--high)">90</div>
     <div class="label">High</div>
   </div>  <div class="stat-card">
     <div class="value" style="color:var(--medium)">48</div>
@@ -177,13 +177,25 @@
     <div class="label">Low</div>
   </div></div><h2>Category Breakdown</h2><div class="category-grid">  <div class="cat-card">
     <div class="cat-header">
-      <div class="cat-name">AD Certificate Services</div>
+      <div class="cat-name">AD Domain &amp; Forest Configuration</div>
       <div class="cat-score" style="color:var(--deep-orange)">0</div>
     </div>
     <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
     <div class="cat-counts">
       <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 19</span>
+      <span style="color:var(--fail)">Fail: 20</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">AD Privileged Account Security</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 30</span>
       <span style="color:var(--warn)">Warn: 0</span>
       <span style="color:var(--skip)">Skip: 0</span>
     </div>
@@ -213,78 +225,6 @@
     </div>
   </div>  <div class="cat-card">
     <div class="cat-header">
-      <div class="cat-name">AD Logon Scripts &amp; Network Shares</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 11</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">AD Network &amp; Relay Preconditions</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 10</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">AD ACL &amp; Delegation</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 16</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">AD Privileged Account Security</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 30</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">AD Password &amp; Lockout Policies</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 22</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">AD Domain &amp; Forest Configuration</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 20</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
       <div class="cat-name">AD Stale &amp; Obsolete Objects</div>
       <div class="cat-score" style="color:var(--deep-orange)">0</div>
     </div>
@@ -292,30 +232,6 @@
     <div class="cat-counts">
       <span style="color:var(--pass)">Pass: 0</span>
       <span style="color:var(--fail)">Fail: 11</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">Tier-0 Hygiene &amp; Hybrid Identity Surface</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 7</span>
-      <span style="color:var(--warn)">Warn: 0</span>
-      <span style="color:var(--skip)">Skip: 0</span>
-    </div>
-  </div>  <div class="cat-card">
-    <div class="cat-header">
-      <div class="cat-name">AD Group Policy</div>
-      <div class="cat-score" style="color:var(--deep-orange)">0</div>
-    </div>
-    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-    <div class="cat-counts">
-      <span style="color:var(--pass)">Pass: 0</span>
-      <span style="color:var(--fail)">Fail: 24</span>
       <span style="color:var(--warn)">Warn: 0</span>
       <span style="color:var(--skip)">Skip: 0</span>
     </div>
@@ -333,6 +249,78 @@
     </div>
   </div>  <div class="cat-card">
     <div class="cat-header">
+      <div class="cat-name">AD Certificate Services</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 19</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">Tier-0 Hygiene &amp; Hybrid Identity Surface</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 7</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">AD ACL &amp; Delegation</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 16</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">AD Network &amp; Relay Preconditions</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 10</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">AD Logon Scripts &amp; Network Shares</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 11</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">AD Group Policy</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 24</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
       <div class="cat-name">AD Kerberos Security</div>
       <div class="cat-score" style="color:var(--deep-orange)">0</div>
     </div>
@@ -340,6 +328,18 @@
     <div class="cat-counts">
       <span style="color:var(--pass)">Pass: 0</span>
       <span style="color:var(--fail)">Fail: 11</span>
+      <span style="color:var(--warn)">Warn: 0</span>
+      <span style="color:var(--skip)">Skip: 0</span>
+    </div>
+  </div>  <div class="cat-card">
+    <div class="cat-header">
+      <div class="cat-name">AD Password &amp; Lockout Policies</div>
+      <div class="cat-score" style="color:var(--deep-orange)">0</div>
+    </div>
+    <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+    <div class="cat-counts">
+      <span style="color:var(--pass)">Pass: 0</span>
+      <span style="color:var(--fail)">Fail: 22</span>
       <span style="color:var(--warn)">Warn: 0</span>
       <span style="color:var(--skip)">Skip: 0</span>
     </div>
@@ -706,14 +706,6 @@
       <td>Group Policy Preferences cpassword Leftovers in SYSVOL</td>
       <td>Misconfigured</td>
       <td><small>Scan SYSVOL: Get-ChildItem -Path \\&lt;domain&gt;\SYSVOL\&lt;domain&gt;\Policies -Recurse -Include *.xml | Select-String &#39;cpassword&#39;. For each match: (1) rotate the password of the account whose credential is exposed (the username is in the same XML), (2) audit logs for use of that credential since the preference was created, (3) delete the GPP preference once the new credential is in place. Microsoft&#39;s KB2962486 has the cleanup guidance.</small></td>
-    </tr>    <tr>
-      <td><code>ADTRADE-002</code></td>
-      <td><span class="badge badge-critical">Critical</span></td>
-      <td><span class="badge badge-fail">FAIL</span></td>
-      <td>AD Adversary Tradecraft Indicators</td>
-      <td>DCShadow Indicator (Rogue Configuration-Partition Servers)</td>
-      <td>Not configured (critical risk)</td>
-      <td><small>Enumerate: Get-ADObject -Filter {objectClass -eq &#39;server&#39;} -SearchBase &quot;CN=Sites,$((Get-ADRootDSE).configurationNamingContext)&quot; -Properties whenCreated, dNSHostName | Sort whenCreated. Cross-reference with your DC inventory (Get-ADDomainController -Filter *). Any server object not matching a real DC, especially recently created, demands immediate IR — DCShadow is a domain-takeover-grade primitive. Monitor for 5137 / 5141 events on schema container as a detection-time signal.</small></td>
     </tr>    <tr>
       <td><code>ADTRUST-004</code></td>
       <td><span class="badge badge-critical">Critical</span></td>
@@ -1419,6 +1411,14 @@
       <td>Disabled</td>
       <td><small>Identify service accounts (SPN-bearing, naming convention, or business inventory). Apply a Default Domain Policy GPO: Computer Configuration &gt; Windows Settings &gt; Security Settings &gt; Local Policies &gt; User Rights Assignment &gt; &#39;Deny log on locally&#39; = &lt;service-accounts-group&gt;. Add the same accounts to &#39;Deny log on through Remote Desktop Services&#39;. Add them to Protected Users where supported (Server 2012 R2+).</small></td>
     </tr>    <tr>
+      <td><code>ADTRADE-002</code></td>
+      <td><span class="badge badge-high">High</span></td>
+      <td><span class="badge badge-fail">FAIL</span></td>
+      <td>AD Adversary Tradecraft Indicators</td>
+      <td>DCShadow Indicator (Rogue Configuration-Partition Servers)</td>
+      <td>Disabled</td>
+      <td><small>Enumerate: Get-ADObject -Filter {objectClass -eq &#39;server&#39;} -SearchBase &quot;CN=Sites,$((Get-ADRootDSE).configurationNamingContext)&quot; -Properties whenCreated, dNSHostName | Sort whenCreated. Cross-reference with your DC inventory (Get-ADDomainController -Filter *). Any server object not matching a real DC, especially recently created, demands immediate IR — DCShadow is a domain-takeover-grade primitive. Monitor for 5137 / 5141 events on schema container as a detection-time signal.</small></td>
+    </tr>    <tr>
       <td><code>ADTRADE-004</code></td>
       <td><span class="badge badge-high">High</span></td>
       <td><span class="badge badge-fail">FAIL</span></td>
@@ -2118,10 +2118,10 @@
           <td><small>Scan SYSVOL: Get-ChildItem -Path \\&lt;domain&gt;\SYSVOL\&lt;domain&gt;\Policies -Recurse -Include *.xml | Select-String &#39;cpassword&#39;. For each match: (1) rotate the password of the account whose credential is exposed (the username is in the same XML), (2) audit logs for use of that credential since the preference was created, (3) delete the GPP preference once the new credential is in place. Microsoft&#39;s KB2962486 has the cleanup guidance.</small></td>
         </tr>        <tr>
           <td><code>ADTRADE-002</code></td>
-          <td><span class="badge badge-critical">Critical</span></td>
+          <td><span class="badge badge-high">High</span></td>
           <td><span class="badge badge-fail">FAIL</span></td>
-          <td>DCShadow Indicator (Rogue Configuration-Partition Servers)<br><small style="color:var(--dim)">DCShadow (Vincent LE TOUX / Benjamin Delpy, BlueHat IL 2018) registers an attacker-controlled host as a domain controller by writing nTDSDSA + server objects under CN=Sites,CN=Configuration. The fake DC is then used to inject malicious replication data (SID history, password hashes) without ever being a real DC. Defenders almost never check the configuration partition for new server objects — it&#39;s one of the highest-confidence persistence signals available from LDAP.</small></td>
-          <td>Not configured (critical risk)</td>
+          <td>DCShadow Indicator (Rogue Configuration-Partition Servers)<br><small style="color:var(--dim)">DCShadow (Vincent LE TOUX / Benjamin Delpy, BlueHat IL 2018) registers an attacker-controlled host as a domain controller by writing nTDSDSA + server objects under CN=Sites,CN=Configuration. The fake DC is then used to inject malicious replication data (SID history, password hashes) without ever being a real DC. NOTE: on long-lived domains an unmatched server object is far more often LINGERING DC METADATA (a DC removed without &#39;ntdsutil metadata cleanup&#39;) than an actual DCShadow attack, so this is rated High rather than Critical — investigate the whenCreated timestamp to distinguish a recently created (suspicious) object from old stale metadata.</small></td>
+          <td>Disabled</td>
           <td>All server objects under CN=Sites,CN=Configuration correspond to real, inventoried domain controllers. No recently created server objects that don&#39;t match a known DC.</td>
           <td><small>Enumerate: Get-ADObject -Filter {objectClass -eq &#39;server&#39;} -SearchBase &quot;CN=Sites,$((Get-ADRootDSE).configurationNamingContext)&quot; -Properties whenCreated, dNSHostName | Sort whenCreated. Cross-reference with your DC inventory (Get-ADDomainController -Filter *). Any server object not matching a real DC, especially recently created, demands immediate IR — DCShadow is a domain-takeover-grade primitive. Monitor for 5137 / 5141 events on schema container as a detection-time signal.</small></td>
         </tr>        <tr>
@@ -3868,8 +3868,8 @@
       <td><span class="badge badge-fail">FAIL</span></td>
       <td><code>T1557</code> <code>T1021.002</code></td><td><code>SC-8</code> <code>SC-8(1)</code></td><td><code>2.2.1</code></td><td><code>R26</code></td>
     </tr></tbody></table><div class="footer">
-  <p>Generated by PSGuerrilla v2.9.2 &mdash; AD Reconnaissance Module</p>
-  <p>Report generated: 2026-06-18 13:17:36 UTC</p>
+  <p>Generated by PSGuerrilla v2.9.3 &mdash; AD Reconnaissance Module</p>
+  <p>Report generated: 2026-06-18 13:40:42 UTC</p>
   <p>By Jim Tyler, Microsoft MVP &mdash; <a href="https://github.com/jimrtyler">GitHub</a> | <a href="https://linkedin.com/in/jamestyler">LinkedIn</a> | <a href="https://youtube.com/@jimrtyler">YouTube</a></p>
 </div>
 </body></html>

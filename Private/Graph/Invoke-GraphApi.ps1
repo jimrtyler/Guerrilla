@@ -132,7 +132,15 @@ function Invoke-GraphApi {
                     Write-Verbose "Graph API unavailable ($statusCode), waiting ${wait}s"
                     Start-Sleep -Seconds $wait
                 } elseif ($statusCode -eq 400) {
-                    Write-Warning "Graph API 400 for $($Uri): $(Get-CleanApiError $_)"
+                    $cleanMsg = Get-CleanApiError $_
+                    # License/feature-gated endpoints (e.g. PIM schedule instances need
+                    # Entra ID P2) are an expected capability gap, not an error — surface
+                    # them quietly so a tenant without P2 doesn't see alarming red warnings.
+                    if ($cleanMsg -match 'AadPremiumLicenseRequired|Premium License|Entra ID P2|ID Governance license') {
+                        Write-Verbose "Graph API 400 (license/capability-gated) for $($Uri): $cleanMsg"
+                    } else {
+                        Write-Warning "Graph API 400 for $($Uri): $cleanMsg"
+                    }
                     return $null
                 } elseif ($statusCode -in @(401, 403)) {
                     $cleanMsg = Get-CleanApiError $_

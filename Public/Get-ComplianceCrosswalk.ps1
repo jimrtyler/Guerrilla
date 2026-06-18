@@ -31,7 +31,7 @@ function Get-ComplianceCrosswalk {
     param(
         [PSCustomObject[]]$Findings,
 
-        [ValidateSet('FERPA', 'COPPA', 'CIPA', 'NIST-171', 'STATE-EDTECH')]
+        [ValidateSet('FERPA', 'COPPA', 'CIPA', 'NIST-171', 'STATE-EDTECH', 'NIST-800-53', 'MITRE-ATTACK', 'CIS')]
         [string]$Framework,
 
         [switch]$FailOnly,
@@ -74,36 +74,70 @@ function Get-ComplianceCrosswalk {
 
     $results = [System.Collections.Generic.List[PSCustomObject]]::new()
 
+    # Technical frameworks are built directly from each finding's own compliance map
+    # (NIST 800-53 / MITRE ATT&CK / CIS are already carried on every check definition),
+    # not from the education-focused ComplianceCrosswalk.json.
+    $technicalFrameworks = [ordered]@{
+        'NIST-800-53'  = @{ Name = 'NIST SP 800-53';  Props = @('NistSp80053') }
+        'MITRE-ATTACK' = @{ Name = 'MITRE ATT&CK';    Props = @('MitreAttack') }
+        'CIS'          = @{ Name = 'CIS Benchmarks';  Props = @('CisBenchmark', 'CisAd', 'CisM365', 'CisAzure') }
+    }
+
     foreach ($finding in $Findings) {
         if ($FailOnly -and $finding.Status -ne 'FAIL') { continue }
         if ($finding.Status -in @('SKIP', 'ERROR')) { continue }
 
-        $checkId = $finding.CheckId ?? $finding.Id ?? ''
-        $mapping = $crosswalk.mappings.$checkId
+        $checkId   = $finding.CheckId ?? $finding.Id ?? ''
+        $checkName = $finding.CheckName ?? $finding.Name ?? $checkId
 
-        if (-not $mapping) { continue }
-        if (-not $mapping.frameworks) { continue }
-
-        $frameworks = $mapping.frameworks
-        if ($Framework) {
-            if (-not $frameworks.$Framework) { continue }
-            $frameworks = @{ $Framework = $frameworks.$Framework }
-        }
-
-        foreach ($fw in $frameworks.GetEnumerator()) {
+        # --- Technical frameworks (from the finding's own compliance mappings) ---
+        foreach ($tfKey in $technicalFrameworks.Keys) {
+            if ($Framework -and $Framework -ne $tfKey) { continue }
+            $controls = [System.Collections.Generic.List[string]]::new()
+            foreach ($prop in $technicalFrameworks[$tfKey].Props) {
+                foreach ($v in @($finding.Compliance.$prop)) {
+                    if ($v) { [void]$controls.Add([string]$v) }
+                }
+            }
+            $controls = @($controls | Select-Object -Unique)
+            if ($controls.Count -eq 0) { continue }
             $results.Add([PSCustomObject]@{
                 PSTypeName       = 'PSGuerrilla.ComplianceMapping'
                 CheckId          = $checkId
-                CheckName        = $mapping.checkName ?? $finding.Name ?? $checkId
+                CheckName        = $checkName
                 Status           = $finding.Status
                 Severity         = $finding.Severity ?? 'Medium'
-                Framework        = $fw.Key
-                FrameworkName    = $crosswalk.frameworks.($fw.Key).fullName ?? $fw.Key
-                Requirement      = $fw.Value.requirement ?? ''
-                Citation         = $fw.Value.citation ?? ''
+                Framework        = $tfKey
+                FrameworkName    = $technicalFrameworks[$tfKey].Name
+                Requirement      = ($controls -join ', ')
+                Citation         = ($controls -join ', ')
                 Category         = $finding.Category ?? ''
                 RemediationSteps = $finding.RemediationSteps ?? ''
             })
+        }
+
+        # --- Education frameworks (FERPA / COPPA / CIPA / NIST-171 / STATE-EDTECH) ---
+        $mapping = $crosswalk.mappings.$checkId
+        if ($mapping -and $mapping.frameworks) {
+            $frameworks = $mapping.frameworks
+            if ($Framework) {
+                $frameworks = if ($frameworks.$Framework) { @{ $Framework = $frameworks.$Framework } } else { @{} }
+            }
+            foreach ($fw in $frameworks.GetEnumerator()) {
+                $results.Add([PSCustomObject]@{
+                    PSTypeName       = 'PSGuerrilla.ComplianceMapping'
+                    CheckId          = $checkId
+                    CheckName        = $mapping.checkName ?? $checkName
+                    Status           = $finding.Status
+                    Severity         = $finding.Severity ?? 'Medium'
+                    Framework        = $fw.Key
+                    FrameworkName    = $crosswalk.frameworks.($fw.Key).fullName ?? $fw.Key
+                    Requirement      = $fw.Value.requirement ?? ''
+                    Citation         = $fw.Value.citation ?? ''
+                    Category         = $finding.Category ?? ''
+                    RemediationSteps = $finding.RemediationSteps ?? ''
+                })
+            }
         }
     }
 

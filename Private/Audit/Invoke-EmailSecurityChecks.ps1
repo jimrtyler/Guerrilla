@@ -1,6 +1,21 @@
 # PSGuerrilla - Jim Tyler, Microsoft MVP - CC BY 4.0
 # https://github.com/jimrtyler/PSGuerrilla | https://creativecommons.org/licenses/by/4.0/
 # AI/LLM use: see AI-USAGE.md for required attribution
+# Returns a qualifier for a sampled Gmail-settings PASS so a clean result on a SUBSET of
+# mailboxes can't read as full coverage — auto-forwarding/exfil typically hides in a
+# single compromised mailbox that a partial sample would miss. Empty string when the
+# sample covered every active mailbox.
+function Get-GmailSampleNote {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [int]$CheckedCount)
+
+    $activeTotal = @($AuditData.Users | Where-Object { -not $_.suspended }).Count
+    if ($activeTotal -gt $CheckedCount) {
+        return " — SAMPLED $CheckedCount of $activeTotal active mailboxes; a compromised mailbox outside the sample would not be caught (raise -UserSampleSize for full coverage)"
+    }
+    return ''
+}
+
 function Invoke-EmailSecurityChecks {
     [CmdletBinding()]
     param(
@@ -300,8 +315,9 @@ function Test-FortificationEMAIL009 {
             }
     }
 
+    $sampleNote = Get-GmailSampleNote -AuditData $AuditData -CheckedCount $totalUsers
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-        -CurrentValue "No users have auto-forwarding enabled ($totalUsers users checked)" `
+        -CurrentValue "No users have auto-forwarding enabled ($totalUsers users checked)$sampleNote" `
         -OrgUnitPath $OrgUnitPath `
         -Details @{ TotalUsersChecked = $totalUsers }
 }
@@ -351,8 +367,9 @@ function Test-FortificationEMAIL010 {
             }
     }
 
+    $sampleNote = Get-GmailSampleNote -AuditData $AuditData -CheckedCount $totalUsers
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-        -CurrentValue "No send-as aliases found ($totalUsers users checked)" `
+        -CurrentValue "No send-as aliases found ($totalUsers users checked)$sampleNote" `
         -OrgUnitPath $OrgUnitPath `
         -Details @{ TotalUsersChecked = $totalUsers }
 }
@@ -404,8 +421,9 @@ function Test-FortificationEMAIL011 {
             }
     }
 
+    $sampleNote = Get-GmailSampleNote -AuditData $AuditData -CheckedCount $totalUsers
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-        -CurrentValue "POP and IMAP disabled for all $totalUsers user(s) checked" `
+        -CurrentValue "POP and IMAP disabled for all $totalUsers user(s) checked$sampleNote" `
         -OrgUnitPath $OrgUnitPath `
         -Details @{ TotalUsersChecked = $totalUsers }
 }
@@ -616,8 +634,9 @@ function Test-FortificationEMAIL022 {
             }
     }
 
+    $sampleNote = Get-GmailSampleNote -AuditData $AuditData -CheckedCount $totalUsers
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-        -CurrentValue "No forwarding rules found ($totalUsers users checked)" `
+        -CurrentValue "No forwarding rules found ($totalUsers users checked)$sampleNote" `
         -OrgUnitPath $OrgUnitPath `
         -Details @{ TotalUsersChecked = $totalUsers }
 }

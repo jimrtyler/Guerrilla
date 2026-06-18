@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.9.3] - 2026-06-18
+
+### Added
+- **`Get-ComplianceCrosswalk` now surfaces the technical frameworks** already carried on every check. Added `NIST-800-53`, `MITRE-ATTACK`, and `CIS` to `-Framework`, built directly from each finding's `Compliance` map (NIST SP 800-53 controls, MITRE ATT&CK techniques, and CIS benchmarks including CIS-AD / CIS-M365 / CIS-Azure). Previously only the education frameworks (FERPA / COPPA / CIPA / NIST-171 / STATE-EDTECH) were exposed even though the richer mappings were already collected. (REP-2)
+
+### Changed
+- **Sampled Google Workspace Gmail checks no longer overstate coverage.** `EMAIL-009/010/011/022` (auto-forwarding, send-as, POP/IMAP, forwarding rules) now append a *"SAMPLED N of M active mailboxes"* qualifier to a clean PASS when only a subset of mailboxes was inspected — so a partial scan can't read as full coverage. Pairs with the random-sampling fix from v2.9.2. (GWS-2)
+- **`ADTRADE-002` (DCShadow indicator) softened from Critical to High.** On long-lived domains an unmatched server object under `CN=Sites,CN=Configuration` is far more often **lingering DC metadata** (a DC removed without `ntdsutil` metadata cleanup) than an actual DCShadow attack; the finding now says so and points at the `whenCreated` timestamp to distinguish a recently created (suspicious) object from stale metadata. (ADTRADE-002)
+
+### Fixed
+- **Quieter Entra scans on tenants without P2.** `Invoke-GraphApi` now treats license-gated HTTP 400s (`AadPremiumLicenseRequired`, e.g. the PIM schedule-instance endpoints) as a `Write-Verbose` capability-gap note instead of an alarming red `Write-Warning`. (ENT-3)
+
+### Notes
+- **Remaining backlog (tracked, not yet done):** GWS-1 (convert the ~60 Google Workspace "verify in Admin Console" placeholders to real checks via the **Cloud Identity Policy API** — blocked until the service account's domain-wide delegation is granted `cloud-identity.policies.readonly`; **adding that scope to the requested set before it is delegated would break all Google auth** with `unauthorized_client`, so this must wait for the scope + live validation); ENT-4 (app-only Graph coverage for M365 workloads / opt-in EXO + Teams modules); ENT-5 (Azure IAM "no ARM access" vs "no resources" messaging — the safe approach is a zero-subscriptions guard that SKIPs with a "grant Reader at the root management group" message); GWS-3 (parallelize Fortification's per-user collection); and `ADDOM-007` replication health (needs a live DC + RSAT/`repadmin` to validate).
+
 ## [2.9.2] - 2026-06-18
 
 ### Fixed

@@ -20,8 +20,8 @@
     {
       "id": "ADTRADE-002",
       "name": "DCShadow Indicator (Rogue Configuration-Partition Servers)",
-      "description": "DCShadow (Vincent LE TOUX / Benjamin Delpy, BlueHat IL 2018) registers an attacker-controlled host as a domain controller by writing nTDSDSA + server objects under CN=Sites,CN=Configuration. The fake DC is then used to inject malicious replication data (SID history, password hashes) without ever being a real DC. Defenders almost never check the configuration partition for new server objects — it's one of the highest-confidence persistence signals available from LDAP.",
-      "severity": "Critical",
+      "description": "DCShadow (Vincent LE TOUX / Benjamin Delpy, BlueHat IL 2018) registers an attacker-controlled host as a domain controller by writing nTDSDSA + server objects under CN=Sites,CN=Configuration. The fake DC is then used to inject malicious replication data (SID history, password hashes) without ever being a real DC. NOTE: on long-lived domains an unmatched server object is far more often LINGERING DC METADATA (a DC removed without 'ntdsutil metadata cleanup') than an actual DCShadow attack, so this is rated High rather than Critical — investigate the whenCreated timestamp to distinguish a recently created (suspicious) object from old stale metadata.",
+      "severity": "High",
       "subcategory": "Persistence",
       "recommendedValue": "All server objects under CN=Sites,CN=Configuration correspond to real, inventoried domain controllers. No recently created server objects that don't match a known DC.",
       "remediationSteps": "Enumerate: Get-ADObject -Filter {objectClass -eq 'server'} -SearchBase \"CN=Sites,$((Get-ADRootDSE).configurationNamingContext)\" -Properties whenCreated, dNSHostName | Sort whenCreated. Cross-reference with your DC inventory (Get-ADDomainController -Filter *). Any server object not matching a real DC, especially recently created, demands immediate IR — DCShadow is a domain-takeover-grade primitive. Monitor for 5137 / 5141 events on schema container as a detection-time signal.",
