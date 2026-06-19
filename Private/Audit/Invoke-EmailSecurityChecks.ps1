@@ -444,10 +444,29 @@ function Test-FortificationEMAIL013 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Enhanced pre-delivery message scanning requires manual verification. Verify in Admin Console > Apps > Gmail > Spam, phishing and malware' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Pre-delivery scanning is an OU-level policy not fully available via API' }
+    # GWS-1: gmail.enhanced_pre_delivery_message_scanning { enableImprovedSuspiciousContentDetection=bool }.
+    # Secure when enabled — weakest-OU-wins: FAIL if any targeted OU has it disabled.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol `
+        -Type 'gmail.enhanced_pre_delivery_message_scanning' -Field 'enableImprovedSuspiciousContentDetection')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.enhanced_pre_delivery_message_scanning policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $disabled = @($vals | Where-Object { $_ -ne $true })
+    if ($disabled.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Enhanced pre-delivery message scanning disabled in $($disabled.Count) of $($vals.Count) targeted policy/policies" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Enhanced pre-delivery message scanning enabled ($($vals.Count) targeted policy/policies)" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── EMAIL-014: External Recipient Warning ─────────────────────────────────────
@@ -466,10 +485,31 @@ function Test-FortificationEMAIL015 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Attachment safety settings require manual verification. Verify in Admin Console > Apps > Gmail > Safety > Attachments' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Attachment safety configuration is an OU-level policy not fully available via API' }
+    # GWS-1: gmail.email_attachment_safety { applyFutureRecommendedSettingsAutomatically=bool }.
+    # Secure when enabled (auto-applies Google's future recommended attachment protections) —
+    # WARN (not FAIL) if any OU has it off, since the individual attachment controls may still be
+    # configured manually; we only see the future-auto-apply toggle via this policy type.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol `
+        -Type 'gmail.email_attachment_safety' -Field 'applyFutureRecommendedSettingsAutomatically')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.email_attachment_safety policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $disabled = @($vals | Where-Object { $_ -ne $true })
+    if ($disabled.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Auto-apply of future recommended attachment-safety settings is off in $($disabled.Count) of $($vals.Count) targeted policy/policies — review individual attachment protections in Admin Console" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Future recommended attachment-safety settings auto-applied ($($vals.Count) targeted policy/policies)" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── EMAIL-016: Links and External Images Protection ───────────────────────────
@@ -477,10 +517,31 @@ function Test-FortificationEMAIL016 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Links and external images protection requires manual verification. Verify in Admin Console > Apps > Gmail > Safety > Links and external images' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Link/image protection configuration is an OU-level policy not fully available via API' }
+    # GWS-1: gmail.links_and_external_images { enableShortenerScanning=bool; enableExternalImageScanning=bool }.
+    # Secure when BOTH are true — weakest-OU-wins: FAIL if any OU has either protection off.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $shortener = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.links_and_external_images' -Field 'enableShortenerScanning')
+    $images    = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.links_and_external_images' -Field 'enableExternalImageScanning')
+    if ($shortener.Count -eq 0 -and $images.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.links_and_external_images policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $shortenerOff = @($shortener | Where-Object { $_ -ne $true })
+    $imagesOff    = @($images | Where-Object { $_ -ne $true })
+    $total = [Math]::Max($shortener.Count, $images.Count)
+    if ($shortenerOff.Count -gt 0 -or $imagesOff.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Link/image protection incomplete (shortener scanning off in $($shortenerOff.Count), external-image scanning off in $($imagesOff.Count) of $total targeted policy/policies)" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Link shortener and external-image scanning both enabled ($total targeted policy/policies)" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── EMAIL-017: Spoofing and Authentication Protection ─────────────────────────
@@ -488,10 +549,34 @@ function Test-FortificationEMAIL017 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Spoofing and authentication protection requires manual verification. Verify in Admin Console > Apps > Gmail > Safety > Spoofing and authentication' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Spoofing protection configuration is an OU-level policy not fully available via API' }
+    # GWS-1: gmail.spoofing_and_authentication { detectDomainNameSpoofing=bool;
+    # detectEmployeeNameSpoofing=bool; detectUnauthenticatedEmails=bool }. Secure when all true —
+    # weakest-OU-wins: FAIL if any OU has any of the three protections off.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $domain = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.spoofing_and_authentication' -Field 'detectDomainNameSpoofing')
+    $employee = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.spoofing_and_authentication' -Field 'detectEmployeeNameSpoofing')
+    $unauth = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.spoofing_and_authentication' -Field 'detectUnauthenticatedEmails')
+    if ($domain.Count -eq 0 -and $employee.Count -eq 0 -and $unauth.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.spoofing_and_authentication policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $domainOff = @($domain | Where-Object { $_ -ne $true })
+    $employeeOff = @($employee | Where-Object { $_ -ne $true })
+    $unauthOff = @($unauth | Where-Object { $_ -ne $true })
+    $total = (@($domain.Count, $employee.Count, $unauth.Count) | Measure-Object -Maximum).Maximum
+    if ($domainOff.Count -gt 0 -or $employeeOff.Count -gt 0 -or $unauthOff.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Spoofing/authentication protection incomplete (domain-spoof off in $($domainOff.Count), employee-spoof off in $($employeeOff.Count), unauthenticated-email off in $($unauthOff.Count) of $total targeted policy/policies)" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Domain-spoof, employee-spoof, and unauthenticated-email protections all enabled ($total targeted policy/policies)" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── EMAIL-018: Compliance Rules Audit ─────────────────────────────────────────
@@ -521,10 +606,30 @@ function Test-FortificationEMAIL020 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Gmail confidential mode settings require manual verification. Verify in Admin Console > Apps > Gmail > End User Access' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Confidential mode configuration is an OU-level policy not fully available via API' }
+    # GWS-1: gmail.confidential_mode { enableConfidentialMode=bool }. No single "secure"
+    # direction — confidential mode is a legitimate DLP control but also a potential exfil
+    # vector (Google-hosted message wrapper, expiry). Report state; WARN when enabled so an
+    # auditor reviews who can use it, PASS when disabled. (Mirrors IMAP/POP "WARN if on".)
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.confidential_mode' -Field 'enableConfidentialMode')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.confidential_mode policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $enabled = @($vals | Where-Object { $_ -eq $true })
+    if ($enabled.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Gmail confidential mode enabled in $($enabled.Count) of $($vals.Count) targeted policy/policies — confirm it aligns with your data-handling policy" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Gmail confidential mode disabled ($($vals.Count) targeted policy/policies)" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── EMAIL-021: S/MIME Settings ────────────────────────────────────────────────
@@ -532,10 +637,29 @@ function Test-FortificationEMAIL021 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'S/MIME settings require manual verification. Verify in Admin Console > Apps > Gmail > End User Access > S/MIME' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'S/MIME configuration is an OU-level policy not fully available via API' }
+    # GWS-1: gmail.enhanced_smime_encryption { allowUserToUploadCertificates=bool }. Letting
+    # end users upload their own S/MIME certs is a weaker posture than admin-managed certs, so
+    # WARN when allowed (legitimate in some orgs); PASS when restricted to admin-managed.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.enhanced_smime_encryption' -Field 'allowUserToUploadCertificates')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.enhanced_smime_encryption policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $userUpload = @($vals | Where-Object { $_ -eq $true })
+    if ($userUpload.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Users may upload their own S/MIME certificates in $($userUpload.Count) of $($vals.Count) targeted policy/policies — prefer admin-managed certificates" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "S/MIME certificates are admin-managed (user upload disabled) across $($vals.Count) targeted policy/policies" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── EMAIL-022: Mail Forwarding Rule Enumeration ───────────────────────────────

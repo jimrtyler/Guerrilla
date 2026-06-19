@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.11.0] - 2026-06-19
+
+_GWS-1 complete — the Cloud Identity policy data layer (v2.10.8) is now wired into real checks._
+
+### Added
+- **GWS-1: ~60 "verify in Admin Console" placeholders converted to real checks (26 now evaluate live policy).** Building on the v2.10.8 `Get-GoogleCloudIdentityPolicies` collector, the Fortification placeholder checks that map to a Cloud Identity policy setting now read it and return real PASS/FAIL/WARN instead of an always-WARN "verify manually". Converted:
+  - **Authentication (6):** AUTH-003 (2SV method strength), AUTH-004 (password min length), AUTH-005 (password reuse), AUTH-006 (web session duration), AUTH-008 (less-secure apps), AUTH-011 (login challenges).
+  - **Email Security (6):** EMAIL-013 (pre-delivery scanning), EMAIL-015 (attachment safety), EMAIL-016 (link/image scanning), EMAIL-017 (spoofing/authentication), EMAIL-020 (confidential mode), EMAIL-021 (S/MIME cert upload).
+  - **Collaboration (5):** COLLAB-001 (Meet recording), COLLAB-002 (Meet audience), COLLAB-003 (Meet anonymous join), COLLAB-005 (Chat history), COLLAB-006 (Chat external spaces).
+  - **Drive (3):** DRIVE-001 (external sharing mode), DRIVE-004 (shared-drive creation), DRIVE-008 (Drive for Desktop).
+  - **OAuth (3):** OAUTH-001 (third-party app access), OAUTH-006 (API access control), OAUTH-007 (Marketplace app installs).
+  - **Logging/Alerting (2):** LOG-004 (cloud data sharing/export), LOG-005 (admin alert rules active).
+  - **Admin (1):** ADMIN-012 (Groups for Business service status).
+- **New shape-immune helper** `Resolve-GooglePolicyValue` (+ `ConvertFrom-GoogleDurationSeconds`). It normalizes the policy lookup so checks are immune to whether `Get-GooglePolicySetting` hands back value objects or policy objects, returns per-OU field values, and distinguishes **API-unavailable** (→ SKIP) from **type-absent** (→ SKIP/PASS) — fixing a `return @()`→`$null` unwrap that would otherwise mislabel "policy absent" as "API unavailable". Grading is **weakest-OU-wins** (min length / longest session / any-insecure boolean).
+
+### Notes
+- **Checks with no Cloud Identity Policy API equivalent remain documented manual-verify** (honest coverage, not forced mappings): most Email routing/compliance (EMAIL-005/006/007/008/014/018/019), several Drive sub-settings, Calendar/Chat-app items, OAuth unverified-app/service-account-key, Admin directory/profile/group-creation, and **all** mobile-device/MDM checks (DEVICE-002..010) — the policy API doesn't expose them.
+- **Enum caveats for live confirmation:** AUTH-003 (`allowedSignInFactorSet`), DRIVE-001 (`externalSharingMode`), COLLAB-002/003 (Meet audience enums), OAUTH-001/006/007 (access-level enums) grade known-insecure values as FAIL and **anything unrecognized as WARN — never PASS on an unknown enum**, so a different enum spelling degrades safely. Exact strings should be confirmed against the live `raw/gws-policy-schemas.txt`.
+- Check counts unchanged (AD 204 / **GWS 98** / Entra 158 = 460) — conversions changed check *logic*, not the check set.
+- Regression tests (all green): `Tests/verify-gws1-auth-checks.ps1` (20), `-email-` (15), `-collab-` (17), `-drive-` (11), `-oauth-` (16), `-admin-` (12), `-logging-` (10), `-device-` (4), plus the existing `-policy-collector` (8).
+
 ## [2.10.8] - 2026-06-19
 
 ### Added

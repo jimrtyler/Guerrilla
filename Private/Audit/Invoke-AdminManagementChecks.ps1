@@ -303,10 +303,48 @@ function Test-FortificationADMIN012 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Groups for Business settings not available via API. Verify in Admin Console > Apps > Groups for Business > Sharing settings that external posting and access are restricted' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Review settings for external posting, member visibility, and group content sharing' }
+    # GWS-1: groups_for_business.service_status { serviceState=enum(ENABLED/DISABLED) }.
+    # The Cloud Identity Policy API exposes whether Groups for Business is turned on, but NOT
+    # the granular external-posting / member-visibility sub-settings. So we can only conclude
+    # at the service level: DISABLED removes the Groups-for-Business sharing surface entirely
+    # (secure -> PASS). When ENABLED we cannot see the granular sharing config, so we WARN and
+    # point to manual review rather than inventing a PASS. Grade the WEAKEST (most-enabled) OU.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'groups_for_business.service_status' -Field 'serviceState')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No groups_for_business.service_status policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+
+    $states   = @($vals | ForEach-Object { "$_" })
+    $note     = "Service state: $((@($states) | Select-Object -Unique) -join ', ') (across $($states.Count) targeted policy/policies)"
+    $enabled  = @($states | Where-Object { $_ -match '(?i)^ENABLED$' })
+    $disabled = @($states | Where-Object { $_ -match '(?i)^DISABLED$' })
+    $unknown  = @($states | Where-Object { $_ -notmatch '(?i)^(ENABLED|DISABLED)$' })
+
+    if ($unknown.Count -gt 0) {
+        # Never PASS on an enum value we don't recognise.
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Unrecognized Groups for Business service state — verify granular sharing settings manually — $note" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Granular external-posting/visibility settings are not exposed via the Cloud Identity Policy API' }
+    }
+    if ($enabled.Count -gt 0) {
+        # Service is on somewhere; granular posting/sharing config is not in the policy API.
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Groups for Business enabled in $($enabled.Count) of $($states.Count) targeted policy/policies — verify external posting/sharing in Admin Console > Apps > Groups for Business > Sharing settings — $note" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Granular external-posting/visibility settings are not exposed via the Cloud Identity Policy API' }
+    }
+    # All targeted OUs have the service disabled -> no Groups-for-Business sharing surface.
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Groups for Business disabled in all $($disabled.Count) targeted policy/policies — no group sharing surface — $note" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── ADMIN-013: Super Admin Count ─────────────────────────────────────────

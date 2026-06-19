@@ -37,11 +37,46 @@ function Test-FortificationOAUTH001 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    # OAuth app allowlist/blocklist is managed in Admin Console and not fully exposed via API
+    # GWS-1: api_controls.unconfigured_third_party_apps { accessLevel=enum } governs how
+    # third-party apps that have not been explicitly allow/blocklisted are treated. An
+    # "allow all / sign-in + all-APIs" value means there is effectively no allowlist gate;
+    # a "blocked/restricted/signin-only" value means unconfigured apps are gated.
+    # Grade WEAKEST-OU-WINS. Enum strings are not fully documented — see caveat.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol `
+        -Type 'api_controls.unconfigured_third_party_apps' -Field 'accessLevel')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No api_controls.unconfigured_third_party_apps policy returned for this tenant' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Insecure: anything that lets unconfigured apps in (ALLOW_ALL / sign-in + all APIs).
+    $insecure = @($vals | Where-Object { "$_" -match '(?i)ALLOW_ALL|UNRESTRICTED|ALL_APIS|\bALL\b' })
+    # Secure: explicitly blocked / restricted / sign-in only.
+    $secure   = @($vals | Where-Object { "$_" -match '(?i)BLOCK|RESTRICT|SIGN_?IN_?ONLY|ALLOW_LISTED|ALLOWLIST' })
+    $note = "Unconfigured third-party app access: $((@($vals) | Select-Object -Unique) -join ', ') (across $($vals.Count) targeted policy/policies)"
+
+    if ($insecure.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Unconfigured third-party apps are allowed (no effective allowlist gate) — $note" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Enum interpretation: "allow all / all-APIs" treated as insecure. Confirm exact enum strings against a live tenant.' }
+    }
+    if ($secure.Count -eq $vals.Count) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "Unconfigured third-party apps are gated (blocked/restricted/allowlist) — $note" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Unrecognized enum -> never PASS.
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'OAuth app allowlist/blocklist configuration not available via API. Verify in Admin Console > Security > API controls > App access control' `
+        -CurrentValue "Unrecognized unconfigured-third-party-app access value — manual confirmation required. $note" `
         -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Ensure an allowlist is configured with only approved applications and a blocklist exists for known-bad apps' }
+        -Details @{ Note = 'Enum value not recognized; verify in Admin Console > Security > API controls > App access control.' }
 }
 
 # ── OAUTH-002: Installed OAuth Apps Inventory ────────────────────────────
@@ -203,10 +238,44 @@ function Test-FortificationOAUTH006 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
+    # GWS-1: api_controls.app_approval_requests { allowedForAll=enum } governs whether
+    # users may grant API access to apps without admin approval. "allowed for all" means
+    # any app can obtain API access (no admin gate) — insecure; a "restricted/admin-only"
+    # value means API access is gated. Grade WEAKEST-OU-WINS. Enum strings not fully
+    # documented — see caveat.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol `
+        -Type 'api_controls.app_approval_requests' -Field 'allowedForAll')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No api_controls.app_approval_requests policy returned for this tenant' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Booleans: insecure when API access is allowed for all (true). Weakest-OU-wins.
+    $allowedAll = @($vals | Where-Object { $_ -eq $true -or "$_" -match '(?i)ALLOW_ALL|UNRESTRICTED|\bALL\b|TRUE' })
+    if ($allowedAll.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "API access allowed for all apps (no admin approval gate) in $($allowedAll.Count) of $($vals.Count) targeted policy/policies" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Interpretation: "allowed for all" treated as insecure. Confirm exact enum/boolean shape against a live tenant.' }
+    }
+    # Recognized-secure values: restricted / admin-approval-required / false.
+    $secure = @($vals | Where-Object { $_ -eq $false -or "$_" -match '(?i)RESTRICT|ADMIN|APPROV|BLOCK|FALSE' })
+    if ($secure.Count -eq $vals.Count) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue 'API access requires admin approval (not allowed for all apps)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Unrecognized enum -> never PASS.
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'API access control settings not available via API. Verify in Admin Console > Security > API controls > Manage Google Services that API access is restricted' `
+        -CurrentValue "Unrecognized app-approval value(s): $((@($vals) | Select-Object -Unique) -join ', ') — manual confirmation required" `
         -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'API access should be restricted to trusted applications only' }
+        -Details @{ Note = 'Value not recognized; verify in Admin Console > Security > API controls > Manage Google Services.' }
 }
 
 # ── OAUTH-007: Marketplace App Installation Restrictions ─────────────────
@@ -214,10 +283,44 @@ function Test-FortificationOAUTH007 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
+    # GWS-1: workspace_marketplace.apps_access_options { accessLevel=enum(ALLOW_LISTED_APPS…) }.
+    # "allow all" lets users install any Marketplace app (insecure); ALLOW_LISTED_APPS
+    # (allowlist-only) is secure. Grade WEAKEST-OU-WINS. Enum strings not fully documented.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol `
+        -Type 'workspace_marketplace.apps_access_options' -Field 'accessLevel')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No workspace_marketplace.apps_access_options policy returned for this tenant' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Insecure: "allow all" installation.
+    $insecure = @($vals | Where-Object { "$_" -match '(?i)ALLOW_ALL|UNRESTRICTED|ALL_APPS|\bALL\b' })
+    # Secure: allowlist-only.
+    $secure   = @($vals | Where-Object { "$_" -match '(?i)ALLOW_LISTED|ALLOWLIST|ALLOW_NONE|BLOCK|RESTRICT' })
+    $note = "Marketplace app access: $((@($vals) | Select-Object -Unique) -join ', ') (across $($vals.Count) targeted policy/policies)"
+
+    if ($insecure.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Marketplace installation allows all apps (no allowlist) — $note" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Enum interpretation: "allow all" treated as insecure. Confirm exact enum strings against a live tenant.' }
+    }
+    if ($secure.Count -eq $vals.Count) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "Marketplace installation restricted to an allowlist — $note" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Unrecognized enum -> never PASS.
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Marketplace installation restrictions not available via API. Verify in Admin Console > Apps > Marketplace apps > Settings that installation is restricted to approved apps' `
+        -CurrentValue "Unrecognized Marketplace access value — manual confirmation required. $note" `
         -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Unrestricted Marketplace app installation allows users to grant third-party apps access to organizational data' }
+        -Details @{ Note = 'Enum value not recognized; verify in Admin Console > Apps > Marketplace apps > Settings.' }
 }
 
 # ── OAUTH-008: Domain-Wide Delegation Grants Audit ───────────────────────

@@ -101,20 +101,34 @@ function Test-FortificationAUTH003 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    # This check evaluates the OU policy for allowed 2SV methods
-    # Without direct API access to the 2SV policy settings, we infer from user data
-    $users = @($AuditData.Users | Where-Object { -not $_.suspended -and $_.isEnrolledIn2Sv -eq $true })
-    if ($users.Count -eq 0) {
+    # GWS-1: allowed 2SV sign-in factors come from the Cloud Identity policy.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
-            -CurrentValue 'No 2SV-enrolled users found' -OrgUnitPath $OrgUnitPath
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol `
+        -Type 'security.two_step_verification_enforcement_factor' -Field 'allowedSignInFactorSet')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No 2SV enforcement-factor policy returned for this tenant' -OrgUnitPath $OrgUnitPath
     }
 
-    # The Admin SDK doesn't expose per-user 2SV method in the users.list response.
-    # This check is reported as INFO with guidance to verify in Admin Console.
+    $allowsAll  = @($vals | Where-Object { "$_" -match '(?i)\bALL\b' })
+    $keyOnly    = @($vals | Where-Object { "$_" -match '(?i)SECURITY_KEY|FIDO|PASSKEY' })
+    $note = "Allowed sign-in factor set: $((@($vals) | Select-Object -Unique) -join ', ') (across $($vals.Count) targeted policy/policies)"
+
+    if ($allowsAll.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "All 2SV methods permitted (incl. phishable SMS/voice) — $note" -OrgUnitPath $OrgUnitPath
+    }
+    if ($keyOnly.Count -eq $vals.Count) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "Phishing-resistant 2SV methods enforced — $note" -OrgUnitPath $OrgUnitPath
+    }
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Verify in Admin Console that security keys are the required 2SV method' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'API does not expose per-user 2SV method type. Manual verification recommended.' }
+        -CurrentValue "2SV method set is restricted but not security-key-only — $note" -OrgUnitPath $OrgUnitPath
 }
 
 # ── AUTH-004: Password Minimum Length ───────────────────────────────────────
@@ -122,21 +136,24 @@ function Test-FortificationAUTH004 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    # Password policy details are not fully exposed via the Directory API
-    # Check OU policies if available
-    $policy = $AuditData.OrgUnitPolicies[$OrgUnitPath]
-    if ($policy -and $policy.passwordMinLength) {
-        $minLen = [int]$policy.passwordMinLength
-        $status = if ($minLen -ge 12) { 'PASS' }
-                  elseif ($minLen -ge 8) { 'WARN' }
-                  else { 'FAIL' }
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
-            -CurrentValue "Minimum password length: $minLen characters" -OrgUnitPath $OrgUnitPath
+    # GWS-1: security.password { minimumLength=number }. Grade the WEAKEST targeted OU.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
     }
-
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Password policy details not available via API. Verify minimum length of 12+ characters in Admin Console' `
-        -OrgUnitPath $OrgUnitPath
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'security.password' -Field 'minimumLength')
+    $nums = @($vals | Where-Object { $null -ne $_ } | ForEach-Object { [int]$_ })
+    if ($nums.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No password-length policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $minLen = ($nums | Measure-Object -Minimum).Minimum
+    $status = if ($minLen -ge 12) { 'PASS' } elseif ($minLen -ge 8) { 'WARN' } else { 'FAIL' }
+    $scope  = if ($nums.Count -gt 1) { " (weakest of $($nums.Count) targeted policies)" } else { '' }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
+        -CurrentValue "Minimum password length: $minLen characters$scope" -OrgUnitPath $OrgUnitPath
 }
 
 # ── AUTH-005: Password Reuse Restriction ────────────────────────────────────
@@ -144,17 +161,26 @@ function Test-FortificationAUTH005 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    $policy = $AuditData.OrgUnitPolicies[$OrgUnitPath]
-    if ($policy -and $null -ne $policy.passwordReuseRestriction) {
-        $status = if ($policy.passwordReuseRestriction -eq $true) { 'PASS' } else { 'FAIL' }
-        $currentValue = if ($policy.passwordReuseRestriction) { 'Password reuse restricted' } else { 'Password reuse allowed' }
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
-            -CurrentValue $currentValue -OrgUnitPath $OrgUnitPath
+    # GWS-1: security.password { allowReuse=bool }. Insecure when reuse is allowed anywhere.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
     }
-
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Password reuse policy not available via API. Verify in Admin Console' `
-        -OrgUnitPath $OrgUnitPath
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'security.password' -Field 'allowReuse')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No password-reuse policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $reuseAllowed = @($vals | Where-Object { $_ -eq $true })
+    if ($reuseAllowed.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Password reuse allowed in $($reuseAllowed.Count) of $($vals.Count) targeted policy/policies" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue 'Password reuse restricted' -OrgUnitPath $OrgUnitPath
 }
 
 # ── AUTH-006: Session Duration ──────────────────────────────────────────────
@@ -162,19 +188,25 @@ function Test-FortificationAUTH006 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    $policy = $AuditData.OrgUnitPolicies[$OrgUnitPath]
-    if ($policy -and $policy.sessionDurationHours) {
-        $hours = [int]$policy.sessionDurationHours
-        $status = if ($hours -le 12) { 'PASS' }
-                  elseif ($hours -le 24) { 'WARN' }
-                  else { 'FAIL' }
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
-            -CurrentValue "Session duration: $hours hours" -OrgUnitPath $OrgUnitPath
+    # GWS-1: security.session_controls { webSessionDuration=str("1209600s") }. Grade LONGEST OU.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
     }
-
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Session duration policy not available via API. Verify in Admin Console that sessions are limited to 12 hours or less' `
-        -OrgUnitPath $OrgUnitPath
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'security.session_controls' -Field 'webSessionDuration')
+    $seconds = @($vals | ForEach-Object { ConvertFrom-GoogleDurationSeconds $_ } | Where-Object { $null -ne $_ })
+    if ($seconds.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No web-session-duration policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $maxSec = ($seconds | Measure-Object -Maximum).Maximum
+    $hours  = [Math]::Round($maxSec / 3600, 1)
+    $status = if ($hours -le 12) { 'PASS' } elseif ($hours -le 24) { 'WARN' } else { 'FAIL' }
+    $scope  = if ($seconds.Count -gt 1) { " (longest of $($seconds.Count) targeted policies)" } else { '' }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
+        -CurrentValue "Web session duration: $hours hours$scope" -OrgUnitPath $OrgUnitPath
 }
 
 # ── AUTH-007: SSO Configuration ─────────────────────────────────────────────
@@ -195,21 +227,29 @@ function Test-FortificationAUTH008 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    # Google deprecated LSA access for most accounts in 2024
-    # Check if any users still have it enabled based on OU policy
-    $policy = $AuditData.OrgUnitPolicies[$OrgUnitPath]
-    if ($policy -and $null -ne $policy.lessSecureApps) {
-        $status = if ($policy.lessSecureApps -eq $false) { 'PASS' } else { 'FAIL' }
-        $currentValue = if ($policy.lessSecureApps) { 'Less secure apps allowed' } else { 'Less secure apps blocked' }
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
-            -CurrentValue $currentValue -OrgUnitPath $OrgUnitPath
+    # GWS-1: security.less_secure_apps { allowLessSecureApps=bool }.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
     }
-
-    # Google removed LSA for most Workspace editions by late 2024
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'security.less_secure_apps' -Field 'allowLessSecureApps')
+    if ($vals.Count -eq 0) {
+        # Type not returned — LSA was deprecated/removed for most editions in 2024.
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue 'Less secure apps access is deprecated and disabled by Google for most Workspace editions' `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'No less_secure_apps policy returned; LSA deprecated in 2024.' }
+    }
+    $allowed = @($vals | Where-Object { $_ -eq $true })
+    if ($allowed.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Less secure apps allowed in $($allowed.Count) of $($vals.Count) targeted policy/policies" `
+            -OrgUnitPath $OrgUnitPath
+    }
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-        -CurrentValue 'Less secure apps access is deprecated and disabled by Google for most Workspace editions' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Google deprecated LSA access in 2024. Verify if legacy edition.' }
+        -CurrentValue 'Less secure apps blocked' -OrgUnitPath $OrgUnitPath
 }
 
 # ── AUTH-009: App Passwords Policy ──────────────────────────────────────────
@@ -259,9 +299,27 @@ function Test-FortificationAUTH011 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Login challenge settings require manual verification. Check Admin Console > Security > Login challenges' `
-        -OrgUnitPath $OrgUnitPath
+    # GWS-1: security.login_challenges { enableEmployeeIdChallenge=bool } — an extra
+    # login challenge that hardens against suspicious sign-ins. Recommend enabling.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'security.login_challenges' -Field 'enableEmployeeIdChallenge')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No login-challenges policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $disabled = @($vals | Where-Object { $_ -ne $true })
+    if ($disabled.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Employee-ID login challenge not enabled in $($disabled.Count) of $($vals.Count) targeted policy/policies" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue 'Employee-ID login challenge enabled' -OrgUnitPath $OrgUnitPath
 }
 
 # ── AUTH-012: Super Admin 2SV Enrollment ────────────────────────────────────

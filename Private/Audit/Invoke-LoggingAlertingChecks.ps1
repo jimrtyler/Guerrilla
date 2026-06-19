@@ -150,11 +150,42 @@ function Test-FortificationLOG004 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    # Google Takeout settings are OU-level policies not directly available via the Admin SDK
+    # GWS-1: cloud_sharing_options.cloud_data_sharing { sharingOptions=enum(DISABLED…) }.
+    # This governs whether organizational data may be shared outside the tenant — the
+    # closest policy-backed signal for "users can bulk-export org data". DISABLED is secure.
+    # (Caveat: this is the cloud-data-sharing control, not the dedicated Google Takeout
+    # service toggle, which the Cloud Identity Policy API does not expose separately.)
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'cloud_sharing_options.cloud_data_sharing' -Field 'sharingOptions')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No cloud-data-sharing policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+
+    $note = "Cloud data sharing option(s): $((@($vals) | Select-Object -Unique) -join ', ') (across $($vals.Count) targeted policy/policies)"
+    $enabled = @($vals | Where-Object { "$_" -match '(?i)ENABLED' })
+    $disabled = @($vals | Where-Object { "$_" -match '(?i)DISABLED' })
+
+    if ($enabled.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Cloud data sharing outside the organization is enabled — $note" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Allows organizational data to be shared/exported outside the domain' }
+    }
+    if ($disabled.Count -eq $vals.Count) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "Cloud data sharing outside the organization is disabled — $note" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    # Unrecognized enum value(s) — never PASS on unknown.
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Google Takeout (data export) settings not available via API. Verify in Admin Console > Apps > Additional Google services > Google Takeout that data export is disabled or restricted' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Unrestricted Takeout allows users to bulk-export organizational data including emails, Drive files, and contacts' }
+        -CurrentValue "Cloud data sharing option not recognized as secure — $note" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── LOG-005: Admin Email Alerts Configuration ────────────────────────────
@@ -162,10 +193,36 @@ function Test-FortificationLOG005 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Admin email alert configuration not available via API. Verify in Admin Console > Security > Alert center that email notifications are configured for critical alert types' `
+    # GWS-1: rule.system_defined_alerts { displayName=str; action={alertCenterAction}; state=enum(ACTIVE…) }.
+    # System-defined alert rules are what surface critical admin/security events to Alert Center
+    # (and to email recipients). Count the ACTIVE ones. PASS when ≥1 is active.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'rule.system_defined_alerts')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No system-defined alert policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+
+    $active = @($vals | Where-Object { "$($_.state)".Trim() -match '(?i)^ACTIVE$' })
+    if ($active.Count -gt 0) {
+        $names = @($active | ForEach-Object { $_.displayName } | Where-Object { $_ })
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "$($active.Count) of $($vals.Count) system-defined alert rule(s) active" `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ ActiveCount = $active.Count; TotalRules = $vals.Count; ActiveRules = $names }
+    }
+
+    # No active alert rules. Severity is Medium -> WARN (would FAIL only if Critical).
+    $status = if ("$($CheckDefinition.severity)" -match '(?i)critical') { 'FAIL' } else { 'WARN' }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status $status `
+        -CurrentValue "No system-defined alert rules are active ($($vals.Count) defined, none ACTIVE)" `
         -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Email alerts should be configured for super admin changes, security setting modifications, and bulk user operations' }
+        -Details @{ Note = 'Enable system-defined alert rules so critical admin/security events generate Alert Center notifications' }
 }
 
 # ── LOG-006: Reporting API Access ────────────────────────────────────────

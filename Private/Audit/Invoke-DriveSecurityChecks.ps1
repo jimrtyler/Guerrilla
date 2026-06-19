@@ -53,10 +53,34 @@ function Test-FortificationDRIVE001 {
             -OrgUnitPath $OrgUnitPath
     }
 
+    # GWS-1: drive_and_docs.external_sharing { externalSharingMode=enum }. Grade WEAKEST-OU-WINS.
+    # 'ALLOWED' is unrestricted external sharing (insecure) -> FAIL; restrictive values are better.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'drive_and_docs.external_sharing' -Field 'externalSharingMode')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No drive_and_docs.external_sharing policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $note = "External sharing mode: $((@($vals) | Select-Object -Unique) -join ', ') (across $($vals.Count) targeted policy/policies)"
+    # Known-insecure: unrestricted external sharing.
+    $insecure = @($vals | Where-Object { "$_" -match '(?i)^ALLOWED$' })
+    if ($insecure.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Unrestricted external sharing permitted — $note" -OrgUnitPath $OrgUnitPath
+    }
+    # Known-restrictive values pass; anything unrecognized -> WARN (never PASS on unknown enum).
+    $known = @($vals | Where-Object { "$_" -match '(?i)^(DISALLOWED|ALLOWED_WITH_WARNING|ALLOWLISTED_DOMAINS)$' })
+    if ($known.Count -eq $vals.Count) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "External sharing restricted — $note" -OrgUnitPath $OrgUnitPath
+    }
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Drive external sharing settings not available via API. Verify in Admin Console > Apps > Drive > Sharing settings' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'OU-level Drive sharing policies require manual verification in Admin Console' }
+        -CurrentValue "Unrecognized external sharing mode — verify intent — $note" -OrgUnitPath $OrgUnitPath
 }
 
 # ── DRIVE-002: Link Sharing Default Settings ─────────────────────────────
@@ -108,10 +132,27 @@ function Test-FortificationDRIVE004 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Shared Drive creation restrictions not available via API. Verify in Admin Console > Apps > Drive > Sharing settings > Shared drive creation' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'OU-level Shared Drive creation policies require manual verification' }
+    # GWS-1: drive_and_docs.shared_drive_creation { allowSharedDriveCreation=bool }.
+    # Insecure (weaker) when shared-drive creation is unrestricted anywhere. Weakest-OU-wins.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'drive_and_docs.shared_drive_creation' -Field 'allowSharedDriveCreation')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No drive_and_docs.shared_drive_creation policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $allowed = @($vals | Where-Object { $_ -eq $true })
+    if ($allowed.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Shared Drive creation unrestricted in $($allowed.Count) of $($vals.Count) targeted policy/policies" `
+            -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue 'Shared Drive creation restricted' -OrgUnitPath $OrgUnitPath
 }
 
 # ── DRIVE-005: Shared Drive Member Management ────────────────────────────
@@ -177,10 +218,35 @@ function Test-FortificationDRIVE008 {
             -CurrentValue $currentValue -OrgUnitPath $OrgUnitPath
     }
 
+    # GWS-1: drive_and_docs.drive_for_desktop { allowDriveForDesktop=bool; restrictToAuthorizedDevices=bool }.
+    # Enabled allows local file sync; weaker when unrestricted to authorized devices. Weakest-OU-wins.
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' `
+            -OrgUnitPath $OrgUnitPath
+    }
+    $allowVals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'drive_and_docs.drive_for_desktop' -Field 'allowDriveForDesktop')
+    if ($allowVals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No drive_and_docs.drive_for_desktop policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $restrictVals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'drive_and_docs.drive_for_desktop' -Field 'restrictToAuthorizedDevices')
+    $enabled = @($allowVals | Where-Object { $_ -eq $true })
+    if ($enabled.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue 'Drive for Desktop is disabled' -OrgUnitPath $OrgUnitPath
+    }
+    # Enabled somewhere. If every targeted policy restricts to authorized devices, that's the safer posture.
+    $restrictedAll = ($restrictVals.Count -gt 0 -and @($restrictVals | Where-Object { $_ -ne $true }).Count -eq 0)
+    if ($restrictedAll) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+            -CurrentValue "Drive for Desktop enabled but restricted to authorized devices ($($enabled.Count) of $($allowVals.Count) targeted policies)" `
+            -OrgUnitPath $OrgUnitPath
+    }
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-        -CurrentValue 'Drive for Desktop setting not available via API. Verify in Admin Console > Apps > Drive > Features and Applications > Drive for Desktop' `
-        -OrgUnitPath $OrgUnitPath `
-        -Details @{ Note = 'Drive for Desktop allows local file sync and should be restricted to managed devices' }
+        -CurrentValue "Drive for Desktop enabled without authorized-device restriction in $($enabled.Count) of $($allowVals.Count) targeted policy/policies — files may sync to unmanaged devices" `
+        -OrgUnitPath $OrgUnitPath
 }
 
 # ── DRIVE-009: Third-Party App Drive Access ──────────────────────────────
