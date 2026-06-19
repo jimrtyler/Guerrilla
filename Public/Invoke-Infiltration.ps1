@@ -191,6 +191,9 @@ function Invoke-Infiltration {
         if (-not $ClientId) { throw 'ClientId is required. Provide -ClientId, store it in the safehouse (Set-Safehouse), -ConfigFile, or set entra.clientId in config.' }
     }
 
+    # Test mode renders zeroed timestamps for deterministic demo/sample output.
+    $script:GuerrillaTestMode = [bool]$TestMode
+
     # --- Operation header ---
     if (-not $Quiet) {
         Write-OperationHeader -Operation 'INFILTRATION AUDIT' -Mode 'Entra / Azure / M365' `

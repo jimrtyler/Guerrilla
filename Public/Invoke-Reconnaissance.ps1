@@ -72,6 +72,10 @@ function Invoke-Reconnaissance {
               elseif ($config -and $config.output.directory) { $config.output.directory }
               else { Join-Path (Get-PSGuerrillaDataRoot) 'Reports' }
 
+    # Test mode renders zeroed timestamps for deterministic demo/sample output. Set here
+    # (before any console output) and self-healing — a real run resets it to $false.
+    $script:GuerrillaTestMode = [bool]$TestMode
+
     # --- Operation header ---
     if (-not $Quiet) {
         $targetLabel = if ($Server) { $Server } else { 'Current Domain' }

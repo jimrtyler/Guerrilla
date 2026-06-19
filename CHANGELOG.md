@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.10.5] - 2026-06-19
+
+### Changed
+- **Test mode now renders deterministic (zeroed) timestamps.** When a scan runs with `-TestMode` (or the GUI "Test mode" checkbox), all console timestamps read `00:00` / `00:00:00` instead of the live clock, so demo / sample / screenshot output is stable: the operation header shows `… 0000 UTC` (date kept real), `Write-ProgressLine` shows `[0000 UTC]`, and the GUI Operations log prefixes each line with `[00:00:00]`. Driven by a self-healing module flag (`$script:GuerrillaTestMode`) the audit cmdlets set per run; a real (non-test) run resets it. Report **filenames** still use the real timestamp (zeroing them would collide).
+
 ## [2.10.4] - 2026-06-18
 
 _Backlog sweep — the code-only gaps that don't need a live tenant/DC to build and verify._

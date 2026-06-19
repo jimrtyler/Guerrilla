@@ -642,7 +642,10 @@ function Show-GuerrillaWindow {
     $appendLog = {
         param([string]$Message)
         $tb = $session.Controls['ops_LogPane']
-        $stamp = [datetime]::Now.ToString('HH:mm:ss')
+        # In test mode the log timestamps are zeroed so demo/sample output is deterministic
+        # (matches the zeroed in-scan [0000 UTC] stamps from the console helpers).
+        $tm = $session.Controls['ops_TestMode']
+        $stamp = if ($tm -and $tm.IsChecked) { '00:00:00' } else { [datetime]::Now.ToString('HH:mm:ss') }
         $tb.AppendText("[$stamp] $Message`r`n")
         $tb.ScrollToEnd()
     }

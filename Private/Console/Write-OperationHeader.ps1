@@ -12,7 +12,8 @@ function Write-OperationHeader {
         [int]$DaysBack
     )
 
-    $utcNow = [datetime]::UtcNow.ToString('HHmm')
+    # Test mode renders a zeroed time so demo/sample console output is deterministic.
+    $utcNow = if ($script:GuerrillaTestMode) { '0000' } else { [datetime]::UtcNow.ToString('HHmm') }
     $dateStr = [datetime]::UtcNow.ToString('yyyy-MM-dd')
 
     Write-Host ''

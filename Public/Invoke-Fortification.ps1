@@ -121,6 +121,9 @@ function Invoke-Fortification {
             $admin = Get-SafehouseSecret -VaultKey 'GUERRILLA_GWS_SA_ADMIN_EMAIL' -VaultName $vaultName
         }
 
+        # Test mode renders zeroed timestamps for deterministic demo/sample output.
+        $script:GuerrillaTestMode = [bool]$TestMode
+
         # Validate required parameters
         # --- Test mode: synthesize an all-FAIL report without touching a real tenant ---
         if ($TestMode) {

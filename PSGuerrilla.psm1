@@ -134,6 +134,11 @@ foreach ($file in Get-ChildItem -Path (Join-Path $ModuleRoot 'Public') -Filter '
 $script:IpClassCache = @{}
 $script:GeoCache = @{}
 
+# Test-mode flag (reset per module load). When true, the console timestamp helpers
+# (Write-ProgressLine / Write-OperationHeader) render zeroed times so -TestMode demo
+# output is deterministic. The audit cmdlets set it per run (self-healing).
+$script:GuerrillaTestMode = $false
+
 # SID-resolution caches/tables (reset per module load). Resolve-ADSid references all
 # three; without these the AD ACL/DCSync/GPO-delegation collectors throw
 # "You cannot call a method on a null-valued expression" and silently return empty.

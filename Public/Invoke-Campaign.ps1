@@ -236,6 +236,9 @@ function Invoke-Campaign {
             }
         }
 
+        # Test mode renders zeroed timestamps for deterministic demo/sample output.
+        $script:GuerrillaTestMode = [bool]$TestMode
+
         # --- Operation header ---
         if (-not $Quiet) {
             $theaterLabel = $Theaters -join ' + '
