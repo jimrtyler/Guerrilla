@@ -52,14 +52,18 @@ function Test-FortificationGTRADE001 {
     [CmdletBinding()]
     param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
 
-    if (-not $AuditData.ContainsKey('DomainWideDelegation') -or $null -eq $AuditData.DomainWideDelegation) {
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
-            -CurrentValue 'Domain-wide delegation data not available' -OrgUnitPath $OrgUnitPath
-    }
-    $grants = @($AuditData.DomainWideDelegation)
+    # NOTE: there is no reliable GA Directory API to LIST domain-wide-delegation grants (the
+    # legacy /domainwidedelegation path 404s on many tenants; DeleFriend itself enumerates grants
+    # by brute-forcing client-id/scope pairs). So an empty collection means "could not enumerate",
+    # NOT "no grants" — never report PASS on emptiness, or the check gives a false all-clear on the
+    # exact attack surface it exists for.
+    # Filter $null (a missing key makes @($null).Count == 1, which would slip past an empty check).
+    $grants = @($AuditData.DomainWideDelegation | Where-Object { $null -ne $_ })
     if ($grants.Count -eq 0) {
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-            -CurrentValue 'No domain-wide delegation grants configured' -OrgUnitPath $OrgUnitPath
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue 'Domain-wide delegation grants could not be enumerated via the Directory API (no GA list endpoint) — this is NOT a confirmation that none exist' `
+            -OrgUnitPath $OrgUnitPath `
+            -Details @{ Note = 'Verify manually: Admin Console > Security > API controls > Domain-wide delegation. Treat any grant holding full mail.google.com / drive / admin.directory / cloud-platform scopes as a DeleFriend takeover precondition — a new key on that service account grants org-wide impersonation.' }
     }
 
     # High-risk = scopes that let a delegated SA impersonate org-wide (the DeleFriend impact).
@@ -191,14 +195,16 @@ function Test-FortificationGTRADE005 {
             -CurrentValue 'No custom admin roles defined' -OrgUnitPath $OrgUnitPath
     }
 
-    # Privilege names that approximate super-admin capability.
-    $sensitive = 'SUPER_ADMIN|ROOT|SECURITY|MANAGE_USER|USER_CREATION|USER_UPDATE|DELETE_USER|RENAME_USER|MOVE_USER|ROLE_MANAGEMENT|MANAGE_ROLES|MANAGE_DELEGATED_ADMIN|DATA_TRANSFER|TAKEOUT|ORGANIZATION_UNITS'
+    # Real Google admin privilege vocabulary for super-admin-equivalent power. Match WRITE/MANAGE
+    # privileges (and the catch-all _ALL), and explicitly EXCLUDE read-only (_RETRIEVE) — a
+    # directory-reader role (e.g. USERS_RETRIEVE / GROUPS_RETRIEVE) is NOT super-admin-equivalent.
+    $writePriv = '(?i)(_ALL$|_CREATE$|_DELETE$|_UPDATE$|_SUSPEND$|_MOVE$|RESET_PASSWORD|FORCE_PASSWORD_CHANGE|DOMAIN_MANAGEMENT|APP_ADMIN|ROLE_MANAGEMENT|MANAGE_|SECURITY)'
 
     $flagged = [System.Collections.Generic.List[string]]::new()
     foreach ($role in $custom) {
         $privs = @($role.rolePrivileges ?? $role.RolePrivileges ?? @())
         $names = @($privs | ForEach-Object { "$($_.privilegeName ?? $_.PrivilegeName)" })
-        $hits = @($names | Where-Object { $_ -match "(?i)$sensitive" } | Select-Object -Unique)
+        $hits = @($names | Where-Object { $_ -match $writePriv -and $_ -notmatch '(?i)_RETRIEVE$' } | Select-Object -Unique)
         if ($hits.Count -gt 0) {
             $roleName = $role.roleName ?? $role.name ?? 'Unknown'
             $flagged.Add("$roleName ($((@($hits) | Select-Object -First 3) -join ', '))")
@@ -230,7 +236,11 @@ function Test-FortificationGTRADE006 {
     # Aggregate scopes per app across token events.
     $apps = @{}
     foreach ($event in $AuditData.OAuthApps) {
-        $name = $event.Params.app_name ?? $event.Params.client_id
+        # Prefer the friendly app name; where Google has none, label the client ID clearly
+        # (rather than surfacing a bare numeric/platform string) so the finding stays actionable.
+        $name = if ($event.Params.app_name) { "$($event.Params.app_name)" }
+                elseif ($event.Params.client_id) { "unnamed app ($($event.Params.client_id))" }
+                else { $null }
         if (-not $name) { continue }
         $scope = "$($event.Params.scope)"
         if (-not $apps.ContainsKey($name)) { $apps[$name] = [System.Collections.Generic.HashSet[string]]::new() }

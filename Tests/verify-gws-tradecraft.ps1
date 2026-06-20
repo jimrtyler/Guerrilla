@@ -31,9 +31,9 @@ $out = & $mod {
 
     $r = @{}
 
-    # ── GTRADE-001: DWD takeover ──
-    $r.G001_skip = St @{} 'Test-FortificationGTRADE001'   # no key -> SKIP
-    $r.G001_pass = St @{ DomainWideDelegation = @() } 'Test-FortificationGTRADE001'
+    # ── GTRADE-001: DWD takeover (empty/unenumerable must NEVER PASS — false-PASS regression) ──
+    $r.G001_nokey = St @{} 'Test-FortificationGTRADE001'                              # no key -> WARN
+    $r.G001_empty = St @{ DomainWideDelegation = @() } 'Test-FortificationGTRADE001'  # empty -> WARN (not PASS)
     $r.G001_narrow = St @{ DomainWideDelegation = @(@{ clientId = '1'; scopes = @('https://www.googleapis.com/auth/admin.directory.user.readonly') }) } 'Test-FortificationGTRADE001'
     $r.G001_mail = St @{ DomainWideDelegation = @(@{ clientId = '2'; scopes = @('https://mail.google.com/') }) } 'Test-FortificationGTRADE001'
     $r.G001_drive = St @{ DomainWideDelegation = @(@{ clientId = '3'; scopes = @('https://www.googleapis.com/auth/drive') }) } 'Test-FortificationGTRADE001'
@@ -56,9 +56,11 @@ $out = & $mod {
 
     # ── GTRADE-005: super-admin-equivalent custom roles ──
     $r.G005_skip = St @{ Roles = @() } 'Test-FortificationGTRADE005'
-    $r.G005_warn = St @{ Roles = @(@{ roleName = 'HelpDesk'; isSystemRole = $false; isSuperAdminRole = $false; rolePrivileges = @(@{ privilegeName = 'MANAGE_USER_SECURITY' }) }) } 'Test-FortificationGTRADE005'
-    $r.G005_pass = St @{ Roles = @(@{ roleName = 'Viewer'; isSystemRole = $false; isSuperAdminRole = $false; rolePrivileges = @(@{ privilegeName = 'APPS_REPORTS_RETRIEVE' }) }) } 'Test-FortificationGTRADE005'
-    $r.G005_sys  = St @{ Roles = @(@{ roleName = '_SEED_ADMIN_ROLE'; isSystemRole = $true; rolePrivileges = @(@{ privilegeName = 'SUPER_ADMIN' }) }) } 'Test-FortificationGTRADE005'  # system role ignored -> PASS
+    # Real Google privilege vocabulary: _ALL / write verbs -> WARN; pure _RETRIEVE -> PASS (the over-match fix).
+    $r.G005_warn     = St @{ Roles = @(@{ roleName = 'R1'; isSystemRole = $false; isSuperAdminRole = $false; rolePrivileges = @(@{ privilegeName = 'USERS_ALL' }) }) } 'Test-FortificationGTRADE005'
+    $r.G005_write    = St @{ Roles = @(@{ roleName = 'R2'; isSystemRole = $false; isSuperAdminRole = $false; rolePrivileges = @(@{ privilegeName = 'USERS_CREATE' }, @{ privilegeName = 'GROUPS_RETRIEVE' }) }) } 'Test-FortificationGTRADE005'
+    $r.G005_readonly = St @{ Roles = @(@{ roleName = 'R3'; isSystemRole = $false; isSuperAdminRole = $false; rolePrivileges = @(@{ privilegeName = 'USERS_RETRIEVE' }, @{ privilegeName = 'GROUPS_RETRIEVE' }, @{ privilegeName = 'ORGANIZATION_UNITS_RETRIEVE' }) }) } 'Test-FortificationGTRADE005'
+    $r.G005_sys      = St @{ Roles = @(@{ roleName = '_SEED_ADMIN_ROLE'; isSystemRole = $true; rolePrivileges = @(@{ privilegeName = 'USERS_ALL' }) }) } 'Test-FortificationGTRADE005'  # system role ignored -> PASS
 
     # ── GTRADE-006: persistent/over-scoped OAuth ──
     $r.G006_skip = St @{ OAuthApps = @() } 'Test-FortificationGTRADE006'
@@ -68,8 +70,8 @@ $out = & $mod {
     $r
 }
 
-Add-R 'GTRADE-001 no DWD data -> SKIP'        ($out.G001_skip -eq 'SKIP') ("got=$($out.G001_skip)")
-Add-R 'GTRADE-001 no grants -> PASS'          ($out.G001_pass -eq 'PASS') ("got=$($out.G001_pass)")
+Add-R 'GTRADE-001 no DWD key -> WARN (not PASS)'   ($out.G001_nokey -eq 'WARN') ("got=$($out.G001_nokey)")
+Add-R 'GTRADE-001 empty grants -> WARN (not PASS)' ($out.G001_empty -eq 'WARN') ("got=$($out.G001_empty)")
 Add-R 'GTRADE-001 narrow readonly -> PASS'    ($out.G001_narrow -eq 'PASS') ("got=$($out.G001_narrow)")
 Add-R 'GTRADE-001 full Gmail scope -> FAIL'   ($out.G001_mail -eq 'FAIL') ("got=$($out.G001_mail)")
 Add-R 'GTRADE-001 full Drive scope -> FAIL'   ($out.G001_drive -eq 'FAIL') ("got=$($out.G001_drive)")
@@ -85,8 +87,9 @@ Add-R 'GTRADE-004 3 super admins -> PASS'     ($out.G004_pass -eq 'PASS') ("got=
 Add-R 'GTRADE-004 7 super admins -> WARN'     ($out.G004_warn -eq 'WARN') ("got=$($out.G004_warn)")
 Add-R 'GTRADE-004 12 super admins -> FAIL'    ($out.G004_fail -eq 'FAIL') ("got=$($out.G004_fail)")
 Add-R 'GTRADE-005 no roles -> SKIP'           ($out.G005_skip -eq 'SKIP') ("got=$($out.G005_skip)")
-Add-R 'GTRADE-005 sensitive custom role -> WARN' ($out.G005_warn -eq 'WARN') ("got=$($out.G005_warn)")
-Add-R 'GTRADE-005 benign custom role -> PASS' ($out.G005_pass -eq 'PASS') ("got=$($out.G005_pass)")
+Add-R 'GTRADE-005 USERS_ALL -> WARN'                 ($out.G005_warn -eq 'WARN') ("got=$($out.G005_warn)")
+Add-R 'GTRADE-005 write verb (USERS_CREATE) -> WARN' ($out.G005_write -eq 'WARN') ("got=$($out.G005_write)")
+Add-R 'GTRADE-005 read-only role -> PASS (over-match fix)' ($out.G005_readonly -eq 'PASS') ("got=$($out.G005_readonly)")
 Add-R 'GTRADE-005 system role ignored -> PASS' ($out.G005_sys -eq 'PASS') ("got=$($out.G005_sys)")
 Add-R 'GTRADE-006 no OAuth data -> SKIP'      ($out.G006_skip -eq 'SKIP') ("got=$($out.G006_skip)")
 Add-R 'GTRADE-006 full mail scope -> FAIL'    ($out.G006_fail -eq 'FAIL') ("got=$($out.G006_fail)")

@@ -330,8 +330,10 @@ function Test-FortificationOAUTH008 {
 
     $grants = @($AuditData.DomainWideDelegation)
     if ($grants.Count -eq 0) {
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-            -CurrentValue 'No domain-wide delegation grants configured' `
+        # Empty means "could not enumerate" (no GA list API for DWD grants), not "none exist" —
+        # never PASS here or the finding is a false all-clear.
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue 'Domain-wide delegation grants could not be enumerated via the Directory API — verify manually in Admin Console > Security > API controls > Domain-wide delegation' `
             -OrgUnitPath $OrgUnitPath
     }
 

@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.14.1] - 2026-06-20
+
+_Live-validation fixes for the Adversary Tradecraft category._
+
+### Fixed
+- **GTRADE-001 (DeleFriend) no longer reports a false PASS.** There is no GA Directory API to *list* domain-wide-delegation grants (the legacy `/domainwidedelegation` path 404s on many tenants), so an empty collection means "could not enumerate," not "no grants." The check previously reported **PASS "no grants configured"** on emptiness — a false all-clear on the highest-value Google persistence vector. It now returns **WARN** with manual-verify guidance when grants can't be enumerated, and only PASS/FAIL when grants are actually present. (Also fixed the same empty→PASS masking in **OAUTH-008**.) Note: `@($null).Count` is 1, so the null case is now filtered explicitly.
+- **GTRADE-005 (super-admin-equivalent custom roles) no longer over-matches read-only roles.** The privilege matcher used guessed names; it now uses the **real Google admin privilege vocabulary** (`USERS_ALL`/`USERS_CREATE`/`USERS_RESET_PASSWORD`/`GROUPS_ALL`/`DOMAIN_MANAGEMENT`/`ORGANIZATION_UNITS_*`/`APP_ADMIN`/`ROLE_MANAGEMENT`/`MANAGE_*`/`SECURITY`) and **excludes read-only (`_RETRIEVE`) privileges**, so a directory-reader role is no longer flagged as super-admin-equivalent.
+
+### Changed
+- **GTRADE-006** now labels OAuth grants with no friendly app name as `unnamed app (<client_id>)` instead of surfacing a bare numeric/platform string, keeping the finding actionable.
+
+### Notes
+- Live validation confirmed the v2.13.0 enum values (all booleans / a `"0s"` duration) — existing grading is correct, no change needed.
+- GTRADE-002/003 (group exposure) remain pending live confirmation until the `apps.groups.settings` domain-wide-delegation scope is delegated on the assessing service account; graceful degradation (collector → `$null` → SKIP, scan completes) was confirmed live.
+- Counts unchanged (GWS 110 / AD 204 / Entra 158). `Tests/verify-gws-tradecraft.ps1` now 24/24; test-mode dispatches 110 findings, 0 ERROR.
+
 ## [2.14.0] - 2026-06-20
 
 _New Google Workspace **Adversary Tradecraft** category — detecting attack preconditions Google itself does not surface or alert on. GWS is now 110 checks across 9 categories (472 total)._
