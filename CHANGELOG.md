@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.19.0] - 2026-06-20
+
+_Full-domain ACL collector — shallow one-hop findings become deep low-priv → Domain Admins chains._
+
+### Added
+- **Full-domain ACL collector** (`Get-ADFullDomainAcl`, surfaced via **`Invoke-Reconnaissance -FullDomainAcl`**). Where the existing collector reads ACLs on the six critical Tier-0 objects, this sweeps **every group / user / computer / gMSA** in the domain, parsing each DACL from the binary `nTSecurityDescriptor` in one paged LDAP query (**no per-object DirectoryEntry bind** — the per-object path doesn't scale to a domain). Dangerous, non-default control ACEs are merged into `ACLs.DangerousACEs`, so the transitive attack-path engine **and** the BloodHound export consume them unchanged.
+
+### Fixed
+- **Chains now actually form.** ACE records previously carried no `ObjectClass` or `ObjectSID`, so the transitive engine could never classify an ACE target as a group node (`grp:`) and chains dead-ended regardless of coverage. Every ACE the full-domain collector emits now carries **`ObjectClass` + `ObjectSID` + `ObjectName`**, so a principal with `GenericAll`/`WriteDacl`/`WriteOwner` over a group anywhere in the Tier-0 membership closure produces a real transitive path (e.g. `HelpDesk --GenericAll--> CORP-Helpdesk-Admins --MemberOf--> Domain Admins`), and BloodHound keys the target node by SID.
+
+### Notes
+- **Opt-in** (off by default — it is the heaviest read PSGuerrilla performs). `MaxObjects` cap of 50000 with **explicit truncation reporting** (`FullDomainTruncated` + a log line — never a silent cap). SID→name resolution is cached. Read-only throughout.
+- Detection vocabulary matches the critical-object pass (GenericAll/GenericWrite/WriteDacl/WriteOwner + dangerous extended rights + WriteProperty on dangerous GUIDs incl. `member`, `msDS-KeyCredentialLink`, DCSync, ForceChangePassword), with self-ACE / SELF / CREATOR OWNER skips on top of the existing default-principal ignores; the engine still applies its own default-principal exclusion downstream.
+- 46 public functions. Test: `Tests/verify-fulldomain-acl.ps1` (18/18 — dangerous-ACE predicate, the `ObjectClass`/`ObjectSID` chain fix end-to-end through the engine, a regression guard proving no `ObjectClass` → no chain, and SID-keyed BloodHound nodes). Check counts unchanged.
+- **PingCastle plan remaining: cartography** (the visual domain/trust/attack-path map). The next depth lever beyond this is full-domain *group membership* (control edges already land in the existing Tier-0 closure; all-group membership widens multi-control-hop chains through non-privileged groups).
+
 ## [2.18.0] - 2026-06-20
 
 _BloodHound export — PSGuerrilla now feeds the best attack-path graph tool, free._

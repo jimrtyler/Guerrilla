@@ -17,6 +17,10 @@ function Get-ReconnaissanceData {
 
         [string]$WeakPasswordList,
 
+        # Opt-in: sweep ACLs across every domain object (not just the six critical Tier-0 objects).
+        # Heaviest read PSGuerrilla performs; unlocks deep transitive chains + a richer BloodHound export.
+        [switch]$FullDomainAcl,
+
         [switch]$Quiet
     )
 
@@ -196,6 +200,33 @@ function Get-ReconnaissanceData {
         } catch {
             Write-Warning "Failed to audit object ACLs: $_"
             $data.Errors['ObjectACLs'] = $_.Exception.Message
+        }
+
+        # ── Full-domain ACL sweep (opt-in) — merges domain-wide control ACEs into DangerousACEs ──
+        # so the transitive engine and BloodHound export see the whole control graph, not just the
+        # six critical objects. Only runs when ACL collection succeeded.
+        if ($FullDomainAcl -and $data.ACLs -and $null -ne $data.ACLs.DangerousACEs) {
+            if (-not $Quiet) {
+                Write-ProgressLine -Phase RECON -Message 'Full-domain ACL sweep (this can take a while on large domains)'
+            }
+            try {
+                $fd = Get-ADFullDomainAcl -Connection $Connection -Quiet:$Quiet
+                if ($fd.Error) {
+                    $data.Errors['FullDomainAcl'] = $fd.Error
+                } else {
+                    $data.ACLs.DangerousACEs            = @($data.ACLs.DangerousACEs) + @($fd.DangerousACEs)
+                    $data.ACLs.FullDomainScanned        = $true
+                    $data.ACLs.FullDomainObjectsScanned = $fd.ObjectsScanned
+                    $data.ACLs.FullDomainTruncated      = $fd.Truncated
+                    if (-not $Quiet) {
+                        $detail = "$($fd.ObjectsScanned) objects, $(@($fd.DangerousACEs).Count) dangerous ACE(s)$(if ($fd.Truncated) { ' (TRUNCATED at cap — coverage incomplete)' })"
+                        Write-ProgressLine -Phase RECON -Message 'Full-domain ACL sweep complete' -Detail $detail
+                    }
+                }
+            } catch {
+                Write-Warning "Full-domain ACL sweep failed: $_"
+                $data.Errors['FullDomainAcl'] = $_.Exception.Message
+            }
         }
 
         # Derive DCSync principals from the domain-root DACL so ADPRIV-028 (DCSync rights)

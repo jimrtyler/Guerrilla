@@ -33,7 +33,12 @@ function Invoke-Reconnaissance {
         [switch]$TestMode,
 
         # When set, also writes a BloodHound OpenGraph export of the collected AD graph to this path.
-        [string]$BloodHoundPath
+        [string]$BloodHoundPath,
+
+        # Opt-in deep scan: collect dangerous ACLs across EVERY domain object, not just the six
+        # critical Tier-0 objects. Unlocks deep low-priv -> Domain Admins transitive chains and a
+        # far richer BloodHound export. Significantly slower on large domains.
+        [switch]$FullDomainAcl
     )
 
     # --- Resolve mission config (guerrilla-config.json) ---
@@ -118,6 +123,7 @@ function Invoke-Reconnaissance {
         -PasswordAgeDays $PasswordAgeDays `
         -NtdsPath $NtdsPath `
         -WeakPasswordList $WeakPasswordList `
+        -FullDomainAcl:$FullDomainAcl `
         -Quiet:$Quiet
 
     # Report collection errors
