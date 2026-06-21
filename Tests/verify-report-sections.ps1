@@ -53,6 +53,8 @@ $h = & $mod {
         Paths         = Get-GuerrillaAttackPathSectionHtml -Findings $ad -Esc $esc
         PathsOmitGWS  = Get-GuerrillaAttackPathSectionHtml -Findings $gws -Esc $esc -OmitIfAbsent
         Color3        = Get-GuerrillaMaturityLevelColor 3
+        Carto         = Get-GuerrillaCartographyHtml -Findings $ad -Esc $esc
+        CartoGWS      = Get-GuerrillaCartographyHtml -Findings $gws -Esc $esc
     }
 } $adFindings $gwsFindings
 
@@ -60,6 +62,9 @@ Add-R 'helper: maturity returns a section'      ($h.Maturity -match '<h2>Securit
 Add-R 'helper: attack-path renders full chain'  ($h.Paths -match 'MemberOf.*Domain Admins') ''
 Add-R 'helper: OmitIfAbsent => empty on GWS'    ([string]::IsNullOrEmpty($h.PathsOmitGWS)) ''
 Add-R 'helper: level color maps'                ($h.Color3 -eq 'var(--gold)') "got=$($h.Color3)"
+Add-R 'helper: cartography emits SVG'           (($h.Carto -match '<svg ') -and ($h.Carto -match '<h2>Attack-Path Cartography</h2>')) ''
+Add-R 'helper: cartography has nodes+arrow'     (($h.Carto -match '<rect ') -and ($h.Carto -match 'marker-end')) ''
+Add-R 'helper: cartography empty on GWS'        ([string]::IsNullOrEmpty($h.CartoGWS)) ''
 
 # ── 2. AD reconnaissance report: all three sections ──
 $catScores = @{
@@ -76,6 +81,7 @@ try {
     } $adFindings $catScores $tmp '/tmp/corp-bloodhound.json'
     $html = Get-Content $tmp -Raw
     Add-R 'recon: Security Maturity present'    ($html -match '<h2>Security Maturity</h2>') ''
+    Add-R 'recon: Cartography (SVG) present'    (($html -match '<h2>Attack-Path Cartography</h2>') -and ($html -match '<svg ')) ''
     Add-R 'recon: Attack Paths present'         ($html -match '<h2>Attack Paths to Tier-0</h2>') ''
     Add-R 'recon: full chain rendered'          ($html -match 'MemberOf.*Domain Admins') ''
     Add-R 'recon: BloodHound callout + path'    (($html -match '<h2>BloodHound Export</h2>') -and ($html -match 'corp-bloodhound.json')) ''
@@ -120,6 +126,7 @@ try {
     } $result $tmp3
     $html3 = Get-Content $tmp3 -Raw
     Add-R 'campaign: Security Maturity present'  ($html3 -match '<h2>Security Maturity</h2>') ''
+    Add-R 'campaign: Cartography (SVG) present'  (($html3 -match '<h2>Attack-Path Cartography</h2>') -and ($html3 -match '<svg ')) ''
     Add-R 'campaign: Attack Paths present'       ($html3 -match '<h2>Attack Paths to Tier-0</h2>') ''
     Add-R 'campaign: full chain rendered'        ($html3 -match 'MemberOf.*Domain Admins') ''
     Add-R 'campaign: both theaters present'      (($html3 -match 'Active Directory') -and ($html3 -match 'Google Workspace')) ''
@@ -134,6 +141,7 @@ try {
     } $adFindings $tmp4
     $html4 = Get-Content $tmp4 -Raw
     Add-R 'technical: Security Maturity present' ($html4 -match '<h2>Security Maturity</h2>') ''
+    Add-R 'technical: Cartography (SVG) present' (($html4 -match '<h2>Attack-Path Cartography</h2>') -and ($html4 -match '<svg ')) ''
     Add-R 'technical: Attack Paths present'      ($html4 -match '<h2>Attack Paths to Tier-0</h2>') ''
     Add-R 'technical: full chain rendered'       ($html4 -match 'MemberOf.*Domain Admins') ''
 } finally { Remove-Item $tmp4 -ErrorAction SilentlyContinue }

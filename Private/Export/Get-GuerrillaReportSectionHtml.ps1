@@ -141,3 +141,124 @@ function Get-GuerrillaAttackPathSectionHtml {
     [void]$sb.Append('</ul>')
     return $sb.ToString()
 }
+
+# Attack-Path Cartography: a native in-report SVG node-link map of the escalation routes to Tier-0,
+# laid out left-to-right by longest-path rank. Built purely from the ADPATH chain Path strings already
+# in findings (no extra data plumbing), so it renders self-contained in any report — no external tool.
+# Returns '' when there are no attack-path chains. This is the PingCastle-cartography answer, inline.
+function Get-GuerrillaCartographyHtml {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][AllowEmptyCollection()][AllowNull()][PSCustomObject[]]$Findings,
+        [Parameter(Mandatory)][scriptblock]$Esc,
+        [int]$MaxChains = 25
+    )
+
+    $pathFindings = @($Findings | Where-Object { $_.CheckId -in @('ADPATH-001', 'ADPATH-002') -and $_.Status -eq 'FAIL' })
+    if ($pathFindings.Count -eq 0) { return '' }
+
+    # Gather unique chain Path strings (prefer rich Chains, fall back to AffectedItems) + priv flag.
+    $chainList = [System.Collections.Generic.List[object]]::new()
+    $seen = [System.Collections.Generic.HashSet[string]]::new()
+    foreach ($pf in $pathFindings) {
+        $rich = @($pf.Details.Chains)
+        if ($rich.Count -gt 0) {
+            foreach ($c in $rich) { $p = "$($c.Path)"; if ($p -and $seen.Add($p)) { $chainList.Add([PSCustomObject]@{ Path = $p; NonPriv = (-not $c.SourceIsPrivileged) }) } }
+        } else {
+            foreach ($p in @($pf.Details.AffectedItems)) { $ps = "$p"; if ($ps -and $seen.Add($ps)) { $chainList.Add([PSCustomObject]@{ Path = $ps; NonPriv = $true }) } }
+        }
+    }
+    if ($chainList.Count -eq 0) { return '' }
+    $truncated = $false
+    if ($chainList.Count -gt $MaxChains) { $truncated = $true; $chainList = @($chainList | Select-Object -First $MaxChains) }
+
+    # Parse each chain "A --[edge]--> B  ==>  B --[edge]--> C  =>  reaches ..." into nodes + edges.
+    $nodes = [ordered]@{}
+    $edges = [System.Collections.Generic.List[object]]::new()
+    $edgeSeen = [System.Collections.Generic.HashSet[string]]::new()
+    $tier0Re = '(?i)(domain admins|enterprise admins|schema admins|^administrators$|administrators \(tier)'
+    $ensure = { param($n) if (-not $nodes.Contains($n)) { $nodes[$n] = @{ IsTier0 = $false; NonPrivSource = $false; IsSource = $false; IsTarget = $false } } }
+
+    foreach ($ch in $chainList) {
+        $core = ($ch.Path -replace '\s*=>\s*reaches.*$', '').Trim()
+        $hops = @($core -split '\s*==>\s*')
+        $firstFrom = $null; $lastTo = $null
+        foreach ($h in $hops) {
+            if ($h -match '^(.*?)\s+--\[(.*?)\]-->\s+(.*)$') {
+                $from = $Matches[1].Trim(); $tech = $Matches[2].Trim(); $to = $Matches[3].Trim()
+                if (-not $from -or -not $to) { continue }
+                & $ensure $from; & $ensure $to
+                if (-not $firstFrom) { $firstFrom = $from }
+                $lastTo = $to
+                $k = "$from|$to|$tech"
+                if ($edgeSeen.Add($k)) { $edges.Add([PSCustomObject]@{ From = $from; To = $to; Tech = $tech }) }
+            }
+        }
+        if ($firstFrom) { $nodes[$firstFrom].IsSource = $true; if ($ch.NonPriv) { $nodes[$firstFrom].NonPrivSource = $true } }
+        if ($lastTo) { $nodes[$lastTo].IsTarget = $true }
+    }
+    if ($edges.Count -eq 0) { return '' }
+
+    $toSet = [System.Collections.Generic.HashSet[string]]::new()
+    foreach ($e in $edges) { [void]$toSet.Add($e.To) }
+    foreach ($n in @($nodes.Keys)) {
+        if ($n -match $tier0Re -or $nodes[$n].IsTarget) { $nodes[$n].IsTier0 = $true }
+        if (-not $toSet.Contains($n)) { $nodes[$n].IsSource = $true }
+    }
+
+    # Longest-path rank from sources (DAG; chains are acyclic and depth-bounded).
+    $rank = @{}
+    foreach ($n in $nodes.Keys) { $rank[$n] = 0 }
+    for ($i = 0; $i -lt $nodes.Count; $i++) {
+        $changed = $false
+        foreach ($e in $edges) { if ($rank[$e.To] -lt $rank[$e.From] + 1) { $rank[$e.To] = $rank[$e.From] + 1; $changed = $true } }
+        if (-not $changed) { break }
+    }
+    $maxRank = 0; foreach ($v in $rank.Values) { if ($v -gt $maxRank) { $maxRank = $v } }
+    foreach ($n in @($nodes.Keys)) { if ($nodes[$n].IsTier0) { $rank[$n] = $maxRank } }  # targets on the right
+
+    # Layout
+    $nodeW = 168; $nodeH = 34; $colGap = 74; $rowGap = 22
+    $colW = $nodeW + $colGap
+    $byRank = @{}
+    foreach ($n in $nodes.Keys) { $r = $rank[$n]; if (-not $byRank.ContainsKey($r)) { $byRank[$r] = [System.Collections.Generic.List[string]]::new() }; $byRank[$r].Add($n) }
+    $pos = @{}; $maxRows = 1
+    foreach ($r in ($byRank.Keys | Sort-Object)) {
+        $list = $byRank[$r]
+        if ($list.Count -gt $maxRows) { $maxRows = $list.Count }
+        for ($j = 0; $j -lt $list.Count; $j++) { $pos[$list[$j]] = @{ X = (20 + $r * $colW); Y = (50 + $j * ($nodeH + $rowGap)) } }
+    }
+    $svgW = 40 + ($maxRank + 1) * $colW
+    $svgH = 60 + $maxRows * ($nodeH + $rowGap) + 10
+    $trunc = { param($s) if ("$s".Length -gt 22) { "$s".Substring(0, 21) + [char]0x2026 } else { "$s" } }
+    $half = $nodeH / 2
+
+    $sb = [System.Text.StringBuilder]::new()
+    [void]$sb.Append('<h2>Attack-Path Cartography</h2>')
+    [void]$sb.Append("<p class=`"ap-note`">Visual map of escalation routes to Tier-0. <span style='color:var(--deep-orange)'>&#9873; Red</span> = non-privileged start, <span style='color:var(--amber)'>amber</span> = already-privileged, <span style='color:var(--gold)'>&#9733; gold</span> = Tier-0 objective. Follow the arrows left to right.$(if ($truncated) { " Showing the first $MaxChains paths." })</p>")
+    [void]$sb.Append("<div style='overflow-x:auto;border:1px solid var(--border);border-radius:4px;background:var(--surface);padding:8px;margin-bottom:24px'>")
+    [void]$sb.Append("<svg viewBox='0 0 $svgW $svgH' width='$svgW' height='$svgH' style='max-width:100%;height:auto;font-family:var(--font-body,sans-serif)' xmlns='http://www.w3.org/2000/svg'>")
+    [void]$sb.Append("<defs><marker id='ggarrow' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--dim)'/></marker></defs>")
+
+    foreach ($e in $edges) {
+        $a = $pos[$e.From]; $b = $pos[$e.To]
+        if (-not $a -or -not $b) { continue }
+        $x1 = $a.X + $nodeW; $y1 = $a.Y + $half; $x2 = $b.X; $y2 = $b.Y + $half; $mx = ($x1 + $x2) / 2
+        [void]$sb.Append("<path d='M $x1 $y1 C $mx $y1 $mx $y2 $x2 $y2' fill='none' stroke='var(--dim)' stroke-width='1.5' marker-end='url(#ggarrow)' opacity='0.75'/>")
+        [void]$sb.Append("<text x='$mx' y='$(($y1 + $y2) / 2 - 4)' text-anchor='middle' font-size='9' fill='var(--gold)'>$(& $Esc (& $trunc $e.Tech))</text>")
+    }
+    foreach ($n in $nodes.Keys) {
+        $p = $pos[$n]; if (-not $p) { continue }
+        $meta = $nodes[$n]
+        $border = if ($meta.IsTier0) { 'var(--gold)' } elseif ($meta.NonPrivSource) { 'var(--deep-orange)' } elseif ($meta.IsSource) { 'var(--amber)' } else { 'var(--olive)' }
+        $fill = if ($meta.IsTier0) { 'rgba(201,168,76,0.18)' } else { 'var(--surface-alt,var(--surface))' }
+        $weight = if ($meta.IsTier0) { '700' } else { '400' }
+        $icon = if ($meta.IsTier0) { [char]0x2605 + ' ' } elseif ($meta.NonPrivSource) { [char]0x2691 + ' ' } else { '' }
+        [void]$sb.Append("<g><title>$(& $Esc $n)</title>")
+        [void]$sb.Append("<rect x='$($p.X)' y='$($p.Y)' width='$nodeW' height='$nodeH' rx='4' fill='$fill' stroke='$border' stroke-width='2'/>")
+        [void]$sb.Append("<text x='$($p.X + $nodeW / 2)' y='$($p.Y + $half + 4)' text-anchor='middle' font-size='11' font-weight='$weight' fill='var(--parchment)'>$(& $Esc ($icon + (& $trunc $n)))</text>")
+        [void]$sb.Append('</g>')
+    }
+    [void]$sb.Append('</svg></div>')
+    return $sb.ToString()
+}

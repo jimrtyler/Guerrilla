@@ -144,6 +144,7 @@ pre { background:var(--surface-alt); padding:10px; border-radius:4px; overflow-x
     # Security Maturity + Attack Paths (shared sections). Maturity spans all checks; the attack-path
     # section only renders when AD attack-path findings are present (-OmitIfAbsent).
     [void]$html.Append((Get-GuerrillaMaturitySectionHtml -Findings $Findings -Esc $esc))
+    [void]$html.Append((Get-GuerrillaCartographyHtml -Findings $Findings -Esc $esc))
     [void]$html.Append((Get-GuerrillaAttackPathSectionHtml -Findings $Findings -Esc $esc -OmitIfAbsent))
 
     [void]$html.Append(@"

@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.21.0] - 2026-06-21
+
+_Attack-Path Cartography — a native visual map of escalation routes to Tier-0. The last PingCastle gap, closed._
+
+### Added
+- **Attack-Path Cartography** (`Get-GuerrillaCartographyHtml`) — a native, in-report **SVG node-link map** of the escalation routes to Tier-0, laid out left-to-right by longest-path rank. Non-privileged starting points are red (&#9873;), already-privileged amber, Tier-0 objectives gold (&#9733;); shared targets (e.g. Domain Admins reached from multiple sources) converge into one node. It's built entirely from the attack-path chain data already in findings — **no extra collection, no external tool** — so it renders self-contained in the HTML. Added to the **AD reconnaissance**, **Campaign**, and **Technical** reports (renders only when AD attack paths exist; capped at 25 paths with a shown notice).
+
+### Notes
+- This is the cartography half of the PingCastle plan. Unlike PingCastle's built-in map it's free, and it sits *alongside* the BloodHound export (static picture in the report + the full interactive graph in BloodHound CE). **The PingCastle plan is now complete** — maturity model, transitive attack-path engine, full-domain ACL collection, BloodHound export, and cartography all shipped.
+- Report/presentation only — no engine, check, or scoring changes. Check counts and 46 public functions unchanged. Samples regenerated to include the map. Test: `Tests/verify-report-sections.ps1` (24/24).
+
 ## [2.20.1] - 2026-06-21
 
 _All four HTML report types now carry maturity + attack paths; sample reports regenerated to match._
