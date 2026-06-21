@@ -13,6 +13,8 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/AuthenticationMethodsMenuBlade/~/AdminAuthMethods",
       "remediationSteps": "Navigate to Entra ID > Protection > Authentication methods > Policies. Review each enabled method and disable any that are not required by your organization. Ensure phishing-resistant methods such as FIDO2 and Microsoft Authenticator are prioritized over SMS and voice.",
       "compliance": {
+        "scuba": ["MS.AAD.3.4v1", "MS.AAD.3.5v2"],
+        "eidsca": ["AG01", "AM01"],
         "nistSp80053": ["IA-2"],
         "cisM365": ["5.2.1"]
       }
@@ -26,6 +28,7 @@
       "recommendedValue": "100% of active users registered for MFA",
       "remediationSteps": "Review MFA registration status via Entra ID > Protection > Authentication methods > User registration details. Enforce MFA registration through Conditional Access policies requiring MFA for all users. Set a registration deadline and communicate requirements to unregistered users.",
       "compliance": {
+        "scuba": ["MS.AAD.3.2v2"],
         "nistSp80053": ["IA-2(1)", "IA-2(2)"],
         "mitreAttack": ["T1078", "T1110"],
         "cisM365": ["5.2.2.1"]
@@ -52,6 +55,8 @@
       "recommendedValue": "No users relying exclusively on SMS or voice as their only MFA method",
       "remediationSteps": "Identify users with only SMS/voice MFA via Entra ID > Protection > Authentication methods > User registration details. Create a migration plan to move these users to Microsoft Authenticator or FIDO2 security keys. Consider disabling SMS/voice as allowed methods in the authentication methods policy after migration is complete.",
       "compliance": {
+        "scuba": ["MS.AAD.3.5v2"],
+        "eidsca": ["AS04", "AV01"],
         "nistSp80053": ["IA-2(1)"],
         "mitreAttack": ["T1111", "T1078"],
         "cisM365": ["5.2.2.4"]
@@ -80,6 +85,8 @@
       "recommendedValue": "All registered FIDO2 keys inventoried with documented owner assignments and regular attestation reviews",
       "remediationSteps": "Review FIDO2 key registrations via Entra ID > Protection > Authentication methods > FIDO2 security key. Cross-reference registered keys with your hardware asset inventory and remove keys for departed users. Implement key registration policies that restrict allowed AAGUID values to approved vendor models.",
       "compliance": {
+        "scuba": ["MS.AAD.3.1v1"],
+        "eidsca": ["AF01"],
         "nistSp80053": ["IA-2(6)"]
       }
     },
@@ -105,6 +112,7 @@
       "recommendedValue": "Organization has a passwordless deployment plan with at least 50% of users capable of passwordless sign-in",
       "remediationSteps": "Review authentication method registrations to determine how many users have passwordless-capable methods enrolled. Enable FIDO2 and Microsoft Authenticator passwordless sign-in in the authentication methods policy. Create a phased rollout plan starting with privileged users and IT staff before expanding to the broader organization.",
       "compliance": {
+        "scuba": ["MS.AAD.3.1v1"],
         "nistSp80053": ["IA-2(6)"]
       }
     },
@@ -131,6 +139,7 @@
       "recommendedValue": "TAP enabled with maximum lifetime of 1 hour, single-use only, restricted to authorized onboarding administrators",
       "remediationSteps": "Review the TAP policy in Entra ID > Protection > Authentication methods > Temporary Access Pass. Set the minimum and maximum lifetime to the shortest practical duration and enable one-time use. Restrict TAP issuance permissions to a limited set of administrators through role-based access controls.",
       "compliance": {
+        "eidsca": ["AT01"],
         "nistSp80053": ["IA-5(1)"],
         "mitreAttack": ["T1078"]
       }
@@ -145,6 +154,7 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/PasswordResetMenuBlade/~/Properties",
       "remediationSteps": "Navigate to Entra ID > Protection > Password reset > Properties and enable SSPR for all users. Set the number of methods required to reset to 2. Under Authentication methods, ensure only strong methods such as mobile app notification, mobile app code, and email are allowed while disabling security questions.",
       "compliance": {
+        "eidsca": ["AP01"],
         "nistSp80053": ["IA-5(1)"],
         "cisM365": ["5.2.4"]
       }
@@ -172,6 +182,7 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/AuthenticationMethodsMenuBlade/~/PasswordProtection",
       "remediationSteps": "Navigate to Entra ID > Protection > Authentication methods > Password protection. Set the mode to Enforced and ensure the global banned password list is enabled. If using hybrid identity with on-premises Active Directory, deploy the Entra ID Password Protection proxy and DC agents to extend protection to on-premises password changes.",
       "compliance": {
+        "eidsca": ["PR01"],
         "nistSp80053": ["IA-5(1)"],
         "mitreAttack": ["T1110.001", "T1110.003"],
         "cisM365": ["5.2.5"]
@@ -186,6 +197,7 @@
       "recommendedValue": "Custom banned password list enabled with organization-specific terms including company name, products, locations, and common variations",
       "remediationSteps": "Navigate to Entra ID > Protection > Authentication methods > Password protection. Enable the custom banned password list and add entries for your organization name, product names, office locations, and commonly used internal terms. Review and update the list quarterly to include new terms and patterns identified in password audits.",
       "compliance": {
+        "eidsca": ["PR02"],
         "nistSp80053": ["IA-5(1)"],
         "cisM365": ["5.2.5"]
       }
@@ -199,6 +211,7 @@
       "recommendedValue": "All legacy authentication protocols blocked via Conditional Access with no active usage detected in sign-in logs",
       "remediationSteps": "Review legacy authentication usage in Entra ID > Monitoring > Sign-in logs > Filter by client app (legacy protocols). Create a Conditional Access policy to block legacy authentication for all users and all cloud apps. Monitor for blocked sign-in attempts and work with affected users to migrate to modern authentication clients.",
       "compliance": {
+        "scuba": ["MS.AAD.1.1v1"],
         "nistSp80053": ["IA-2", "AC-17(2)"],
         "mitreAttack": ["T1078", "T1110.001"],
         "cisM365": ["5.2.2.3"]

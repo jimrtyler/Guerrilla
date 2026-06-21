@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.22.0] - 2026-06-21
+
+_CISA SCuBA baseline crosswalk — PSGuerrilla now produces a SCuBA secure-configuration mapping, not just prose references._
+
+### Added
+- **CISA SCuBA crosswalk**: 55 Entra/M365 checks now carry `scuba` compliance tags mapping to live CISA ScubaGear baseline policy IDs (MS.AAD / MS.EXO / MS.SHAREPOINT / MS.TEAMS / MS.DEFENDER / MS.POWERPLATFORM). `Get-ComplianceCrosswalk -Framework SCUBA` emits per-policy mapping rows, and the Executive Summary auto-surfaces a "SCUBA: N gap(s)" chip. **~76% of the assessable SCuBA baseline mapped** (72 of 95 policies; see the coverage matrix). Baseline IDs were pulled live from `cisagov/ScubaGear`, not fabricated.
+- **EIDSCA tagging** (Maester EIDSCA / P4.2): 8 checks tagged with `eidsca` control IDs; `Get-ComplianceCrosswalk -Framework EIDSCA`.
+
+### Changed
+- `New-AuditFinding` now carries `Scuba` and `Eidsca` compliance arrays through to finding objects — the one engine change required for the new tags to flow into the crosswalk.
+
+### Notes
+- **Honest by design**: only *tagged* checks produce SCuBA rows. 23 baseline policies and all of Microsoft Power BI are **not yet assessed** (no Power BI checks exist) — a report says "not assessed" rather than implying full compliance. The GAP list feeds a future net-new-check release (S1.4).
+- Tag-only change: no check logic, scoring, or count changes (473 checks, 46 public functions unchanged). Clean additive JSON diffs. Test: `Tests/verify-scuba-crosswalk.ps1` (12/12 — tags survive finding construction, SCUBA/EIDSCA rows produced + filter, untagged checks emit none, no CIS/NIST regression).
+
 ## [2.21.0] - 2026-06-21
 
 _Attack-Path Cartography — a native visual map of escalation routes to Tier-0. The last PingCastle gap, closed._

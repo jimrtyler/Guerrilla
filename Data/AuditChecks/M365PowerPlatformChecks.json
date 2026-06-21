@@ -12,6 +12,7 @@
       "recommendedValue": "Environment creation restricted to Global Admins and Power Platform Admins only; all production environments managed through a formal provisioning process",
       "remediationSteps": "Navigate to the Power Platform admin center and restrict environment creation to only Global Administrators and Power Platform Administrators by configuring the tenant-level setting. Implement a formal request and provisioning process for new environments that includes security review, data classification, and DLP policy assignment before environment creation. Audit existing environments to identify and decommission any ungoverned environments that were created before restrictions were put in place.",
       "compliance": {
+        "scuba": ["MS.POWERPLATFORM.1.1v1", "MS.POWERPLATFORM.1.2v1"],
         "nistSp80053": ["CM-7"],
         "cisM365": ["9.1"]
       }
@@ -25,6 +26,7 @@
       "recommendedValue": "Tenant-level DLP policy classifying business-critical connectors (SharePoint, Outlook, Dataverse) as Business and blocking their combination with non-business connectors; environment-level policies for specific use cases",
       "remediationSteps": "Create a tenant-level DLP policy that classifies all connectors containing corporate data (such as SharePoint, Outlook, Dataverse, Azure SQL, and OneDrive) in the Business group and moves known non-business connectors to the Blocked group. Review the default connector classification to ensure that newly released connectors are automatically placed in the Non-Business group until reviewed and approved. Create environment-specific DLP policies for environments that require access to additional connectors beyond the tenant-level policy, ensuring they are at least as restrictive as the tenant policy.",
       "compliance": {
+        "scuba": ["MS.POWERPLATFORM.2.1v1", "MS.POWERPLATFORM.2.2v1"],
         "nistSp80053": ["AC-4"],
         "cisM365": ["9.2"]
       }
@@ -38,6 +40,7 @@
       "recommendedValue": "Tenant isolation enabled with inbound and outbound restrictions; allow-listed exceptions only for approved partner tenants",
       "remediationSteps": "Enable Power Platform tenant isolation in the Power Platform admin center to restrict both inbound and outbound cross-tenant connections by default. Configure an allow list of specific trusted partner tenant IDs that require cross-tenant connectivity for legitimate business scenarios. Review the allow list quarterly to remove tenants that no longer require cross-tenant access and monitor the audit logs for any cross-tenant connection attempts that are being blocked by the isolation policy.",
       "compliance": {
+        "scuba": ["MS.POWERPLATFORM.3.1v1", "MS.POWERPLATFORM.3.2v1"],
         "nistSp80053": ["AC-20"],
         "cisM365": ["9.3"]
       }

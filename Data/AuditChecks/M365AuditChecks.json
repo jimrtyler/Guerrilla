@@ -12,6 +12,7 @@
       "recommendedValue": "Unified Audit Log enabled organization-wide with no per-user or per-mailbox overrides disabling auditing",
       "remediationSteps": "Verify that unified audit logging is enabled by running Get-AdminAuditLogConfig and confirming that UnifiedAuditLogIngestionEnabled is set to True. If auditing is disabled, enable it immediately and investigate the audit history to determine when and by whom it was disabled, as this may indicate a security compromise. Set up a monitoring alert to detect any future attempts to disable the unified audit log and restrict the permissions required to modify audit log settings to a minimal set of trusted administrators.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.6.1v1"],
         "nistSp80053": ["AU-2", "AU-3"],
         "mitreAttack": ["T1562.008"],
         "cisM365": ["3.1.1"]
@@ -26,6 +27,7 @@
       "recommendedValue": "Audit log retention set to at least 365 days; priority activity types retained for longer periods; logs exported to external SIEM for long-term storage",
       "remediationSteps": "Configure audit log retention policies in the Microsoft Purview compliance portal to retain all audit log records for at least 365 days, extending retention for high-priority record types such as MailItemsAccessed, FileAccessed, and UserLoggedIn. For organizations with Microsoft 365 E5 or equivalent licensing, configure 10-year retention policies for critical audit record types to support long-term forensic investigations. Implement log export to an external SIEM or log analytics platform such as Microsoft Sentinel for long-term storage and advanced correlation beyond the native retention period.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.6.3v1"],
         "nistSp80053": ["AU-11"],
         "cisM365": ["3.1.2"]
       }

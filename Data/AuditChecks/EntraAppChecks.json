@@ -39,6 +39,7 @@
       "recommendedValue": "All application credentials inventoried with defined rotation schedules and no credentials older than 12 months",
       "remediationSteps": "Review all application registrations and examine the Certificates & secrets blade for each. Document all active credentials including their expiration dates and creation timestamps. Remove expired or unused credentials immediately and establish a rotation policy requiring credentials to be renewed at least annually with automated alerts before expiration.",
       "compliance": {
+        "scuba": ["MS.AAD.5.5v1"],
         "nistSp80053": ["IA-5"],
         "mitreAttack": ["T1098.001"]
       }
@@ -104,6 +105,7 @@
       "recommendedValue": "All application credentials have a maximum validity of 12 months with automated alerts at 30 and 60 days before expiration",
       "remediationSteps": "Enumerate all application credentials and their expiration dates using the Microsoft Graph API. Identify credentials expiring within 30 days and those with validity periods exceeding 12 months. Establish an automated monitoring process that alerts application owners and security teams when credentials approach expiration, and enforce a maximum credential lifetime policy through governance procedures.",
       "compliance": {
+        "scuba": ["MS.AAD.5.6v1", "MS.AAD.5.7v1"],
         "nistSp80053": ["IA-5(1)"]
       }
     },
@@ -156,6 +158,7 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/ConsentPoliciesMenuBlade/~/UserSettings",
       "remediationSteps": "Navigate to Entra ID > Enterprise applications > Consent and permissions > User consent settings. Set user consent to 'Do not allow user consent' or 'Allow user consent for apps from verified publishers, for selected permissions only' with only low-risk permissions selected. Enable the admin consent workflow to provide a structured process for users to request access to applications that require admin approval.",
       "compliance": {
+        "scuba": ["MS.AAD.5.2v1"],
         "nistSp80053": ["AC-6"],
         "cisM365": ["5.3.1"]
       }
@@ -169,6 +172,8 @@
       "recommendedValue": "Admin consent workflow enabled with designated reviewers and defined SLA for review completion",
       "remediationSteps": "Navigate to Entra ID > Enterprise applications > Consent and permissions > Admin consent settings. Enable the admin consent workflow and designate appropriate reviewers from your security or IT administration teams. Configure notification settings to alert reviewers of pending requests and establish a service level agreement for review turnaround to prevent workflow bottlenecks.",
       "compliance": {
+        "scuba": ["MS.AAD.5.3v1"],
+        "eidsca": ["CR01"],
         "nistSp80053": ["AC-6"],
         "cisM365": ["5.3.1"]
       }

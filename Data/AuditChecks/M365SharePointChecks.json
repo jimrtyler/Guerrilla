@@ -12,6 +12,7 @@
       "recommendedValue": "External sharing limited to existing guests or new and existing guests with authentication required; anonymous sharing links disabled",
       "remediationSteps": "Navigate to the SharePoint admin center sharing settings and configure the organization-level sharing to 'New and existing guests' or 'Existing guests only' based on your collaboration requirements. Disable anonymous access links (Anyone links) to ensure all external access requires authentication and can be tracked. Review site-level sharing overrides to ensure no individual sites have more permissive sharing settings than the organizational default.",
       "compliance": {
+        "scuba": ["MS.SHAREPOINT.1.1v1", "MS.SHAREPOINT.1.2v1", "MS.SHAREPOINT.1.3v1"],
         "nistSp80053": ["AC-21"],
         "cisM365": ["7.2.1"]
       }
@@ -25,6 +26,7 @@
       "recommendedValue": "Guest access expiration set to 30-90 days; sharing links expire within 30 days",
       "remediationSteps": "Configure the guest access expiration policy in the SharePoint admin center to automatically expire guest permissions after 30 to 90 days based on organizational data sensitivity requirements. Set sharing link expiration to a maximum of 30 days for external sharing links to prevent long-lived access tokens. Implement a recurring guest access review process to audit active external sharing and remove access that is no longer needed.",
       "compliance": {
+        "scuba": ["MS.SHAREPOINT.3.1v1"],
         "nistSp80053": ["AC-2(3)"],
         "cisM365": ["7.2.3"]
       }
@@ -38,6 +40,7 @@
       "recommendedValue": "Default sharing link type set to 'Specific people' with 'View' permission level",
       "remediationSteps": "Set the default sharing link type to 'Specific people' in the SharePoint admin center to require users to explicitly specify recipients when sharing. Configure the default link permission to 'View' rather than 'Edit' to enforce a least-privilege approach to shared content. Educate users on the differences between sharing link types and the importance of selecting the most restrictive link type appropriate for their sharing scenario.",
       "compliance": {
+        "scuba": ["MS.SHAREPOINT.2.1v1", "MS.SHAREPOINT.2.2v1", "MS.SHAREPOINT.3.2v1"],
         "nistSp80053": ["AC-3"],
         "cisM365": ["7.2.2"]
       }
@@ -64,6 +67,7 @@
       "recommendedValue": "DLP policies configured for all regulated data types with user notifications and sharing blocks for external sharing of sensitive content",
       "remediationSteps": "Create DLP policies targeting SharePoint Online and OneDrive locations that detect sensitive information types relevant to your regulatory requirements such as PII, PCI, or HIPAA data. Configure policy rules to display user notifications with guidance on proper handling when sensitive content is detected, and block external sharing of documents containing high-sensitivity data. Enable incident reports to notify the compliance team of policy matches and review the DLP activity reports to tune policy accuracy and reduce false positives.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.4.1v1"],
         "nistSp80053": ["AC-4", "SC-7"]
       }
     }

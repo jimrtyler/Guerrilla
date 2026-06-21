@@ -25,6 +25,7 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/UserSettings",
       "remediationSteps": "Navigate to Entra ID > User settings and review each setting. Disable 'Users can register applications' to prevent uncontrolled app registration sprawl. Restrict user consent settings to allow consent only for apps from verified publishers with low-risk permissions. Limit who can create Microsoft 365 groups and security groups to designated administrators or group owners.",
       "compliance": {
+        "scuba": ["MS.AAD.5.1v1"],
         "nistSp80053": ["AC-6"],
         "cisM365": ["1.3"]
       }
@@ -38,6 +39,7 @@
       "recommendedValue": "Guest user access restricted to properties and memberships of their own directory objects only",
       "remediationSteps": "Navigate to Entra ID > External Identities > External collaboration settings and review the guest user access restrictions. Set guest user access to the most restrictive option that limits guests to properties and memberships of their own directory objects. Verify that guests cannot enumerate the full user list, group memberships, or application registrations by testing with a guest account.",
       "compliance": {
+        "scuba": ["MS.AAD.8.1v1"],
         "nistSp80053": ["AC-14"],
         "mitreAttack": ["T1078.004"],
         "cisM365": ["1.3.1"]
@@ -52,6 +54,7 @@
       "recommendedValue": "Guest invitations restricted to users with specific admin roles or guest inviter role, with no self-service guest access enabled",
       "remediationSteps": "Navigate to Entra ID > External Identities > External collaboration settings and review the guest invite settings. Restrict guest invitations to users assigned the Guest Inviter role or specific administrator roles rather than allowing all members to invite. Disable the option for guests to invite other guests to prevent uncontrolled invitation chains and establish an approval workflow for guest invitation requests.",
       "compliance": {
+        "scuba": ["MS.AAD.8.2v1"],
         "nistSp80053": ["AC-14"],
         "cisM365": ["1.3.1"]
       }
@@ -65,6 +68,7 @@
       "recommendedValue": "External collaboration restricted to specific allowed domains with a deny list for known high-risk domains",
       "remediationSteps": "Navigate to Entra ID > External Identities > External collaboration settings and configure collaboration restrictions. Implement either an allowlist of approved partner domains or a blocklist of known high-risk and competitor domains based on your organization's collaboration model. Review and update the domain list quarterly to reflect changes in partner relationships and ensure that collaboration restrictions align with data classification and information sharing policies.",
       "compliance": {
+        "scuba": ["MS.AAD.8.3v1"],
         "nistSp80053": ["AC-20"],
         "cisM365": ["1.3.1"]
       }
@@ -142,6 +146,7 @@
       "recommendedValue": "All Entra ID log categories (audit, sign-in, non-interactive sign-in, service principal sign-in, managed identity sign-in, provisioning) exported to a Log Analytics workspace or SIEM",
       "remediationSteps": "Navigate to Entra ID > Monitoring > Diagnostic settings and create or verify a diagnostic setting that exports all log categories to a Log Analytics workspace, Azure Storage account, or Event Hub for SIEM ingestion. Ensure all available log categories are selected including audit logs, sign-in logs, non-interactive sign-in logs, service principal sign-in logs, managed identity sign-in logs, and provisioning logs. Verify that the destination storage has appropriate retention policies and access controls configured.",
       "compliance": {
+        "scuba": ["MS.AAD.4.1v1"],
         "nistSp80053": ["AU-2", "AU-3", "AU-6"],
         "mitreAttack": ["T1562.008"],
         "cisM365": ["3.1"]
@@ -156,6 +161,7 @@
       "recommendedValue": "Audit logs retained for a minimum of 1 year in an immutable storage location with at least 90 days immediately queryable",
       "remediationSteps": "Review the retention settings on the Log Analytics workspace, Azure Storage account, or SIEM destination where Entra ID logs are exported. Configure retention for at least 365 days for all Entra ID log categories to support incident investigation and compliance requirements. Ensure that at least 90 days of logs are immediately queryable without restore operations, and implement immutable storage or write-once policies to prevent tampering with historical log data.",
       "compliance": {
+        "scuba": ["MS.AAD.4.1v1"],
         "nistSp80053": ["AU-11"],
         "cisM365": ["3.1"]
       }

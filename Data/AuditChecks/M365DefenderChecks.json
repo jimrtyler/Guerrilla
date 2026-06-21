@@ -12,6 +12,7 @@
       "recommendedValue": "Standard Protection preset policy applied to all users at minimum; Strict Protection applied to priority accounts and executives",
       "remediationSteps": "Enable the Standard Protection preset security policy and assign it to all users to establish a Microsoft-recommended security baseline for email threat protection. Apply the Strict Protection preset policy to priority accounts, executives, and high-value targets who are most likely to be targeted by sophisticated attacks. If custom policies are preferred over presets, verify that each custom policy meets or exceeds the settings defined in the Standard or Strict preset configuration.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.1.1v1", "MS.DEFENDER.1.2v1", "MS.DEFENDER.1.3v1"],
         "nistSp80053": ["SI-3", "SI-8"],
         "cisM365": ["2.1.8"]
       }
@@ -25,6 +26,7 @@
       "recommendedValue": "All default alert policies enabled; custom alert policies for organization-specific threats; alert recipients configured for the security team",
       "remediationSteps": "Review all default and custom alert policies in the Microsoft 365 Defender portal and ensure that default security alert policies have not been disabled or modified to reduce their effectiveness. Configure alert notification recipients to include the security operations team and verify that email notifications are being delivered and monitored. Create custom alert policies for organization-specific threat scenarios such as unusual mail flow patterns, bulk permission changes, or access from blocked geographies.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.5.1v1", "MS.DEFENDER.5.2v1"],
         "nistSp80053": ["SI-4", "AU-5"]
       }
     },

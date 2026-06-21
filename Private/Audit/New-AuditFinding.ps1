@@ -41,6 +41,8 @@ function New-AuditFinding {
             CisAd        = @($CheckDefinition.compliance.cisAd ?? @())
             CisM365      = @($CheckDefinition.compliance.cisM365 ?? @())
             CisAzure     = @($CheckDefinition.compliance.cisAzure ?? @())
+            Scuba        = @($CheckDefinition.compliance.scuba ?? @())
+            Eidsca       = @($CheckDefinition.compliance.eidsca ?? @())
         }
         Details          = $Details
         Timestamp        = [datetime]::UtcNow

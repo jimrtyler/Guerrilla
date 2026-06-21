@@ -115,6 +115,7 @@
       "remediationSteps": "Create a Conditional Access policy targeting all users and all cloud applications with a grant control requiring multifactor authentication. Verify the policy covers all user types including guests and external collaborators. Monitor the sign-in logs to confirm MFA is being prompted and review the CA insights workbook for coverage gaps.",
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies",
       "compliance": {
+        "scuba": ["MS.AAD.3.1v1", "MS.AAD.3.2v2"],
         "nistSp80053": ["IA-2(1)", "IA-2(2)"],
         "mitreAttack": ["T1078", "T1110"],
         "cisBenchmark": [],
@@ -132,6 +133,7 @@
       "remediationSteps": "Create a Conditional Access policy targeting all users and all cloud applications with the client apps condition set to Exchange ActiveSync clients and other clients, then set the grant control to block access. Verify the policy is in enabled state and monitor sign-in logs for any remaining legacy authentication attempts. Coordinate with application owners to migrate any remaining legacy protocol dependencies to modern authentication.",
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies",
       "compliance": {
+        "scuba": ["MS.AAD.1.1v1"],
         "nistSp80053": ["IA-2", "AC-17(2)"],
         "mitreAttack": ["T1078", "T1110.001"],
         "cisBenchmark": [],
@@ -149,6 +151,7 @@
       "remediationSteps": "Create or update Conditional Access policies to require device compliance or Hybrid Azure AD join as a grant control for all cloud applications. Ensure Intune device compliance policies are configured with appropriate security baselines before enforcing this requirement. Use report-only mode initially to assess impact, then transition to enforcement after confirming managed device coverage is sufficient.",
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies",
       "compliance": {
+        "scuba": ["MS.AAD.3.7v1"],
         "nistSp80053": ["AC-17(2)", "CM-6"],
         "mitreAttack": [],
         "cisBenchmark": [],
@@ -200,6 +203,7 @@
       "remediationSteps": "Create Conditional Access policies that target all users with the sign-in risk condition set to medium and high, requiring multifactor authentication as the grant control. Ensure Azure AD Identity Protection is enabled and properly licensed (requires Entra ID P2). Monitor the risky sign-ins report regularly and tune risk detection sensitivity based on organizational patterns.",
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies",
       "compliance": {
+        "scuba": ["MS.AAD.2.3v1"],
         "nistSp80053": ["IA-2(13)"],
         "mitreAttack": ["T1078.004", "T1110"],
         "cisBenchmark": [],
@@ -217,6 +221,7 @@
       "remediationSteps": "Create Conditional Access policies targeting all users with user risk conditions set to medium and high, requiring a secure password change as the grant control for high risk and MFA for medium risk. Ensure self-service password reset (SSPR) is enabled and registered for all users to allow automated remediation. Review the risky users report regularly and investigate accounts that remain at elevated risk levels.",
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies",
       "compliance": {
+        "scuba": ["MS.AAD.2.1v1"],
         "nistSp80053": ["IA-2(13)"],
         "mitreAttack": ["T1078.004"],
         "cisBenchmark": [],

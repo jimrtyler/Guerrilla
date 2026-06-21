@@ -25,6 +25,7 @@
       "recommendedValue": "User impersonation protection enabled for executives and VIPs; domain impersonation protection enabled for all organizational domains; mailbox intelligence enabled",
       "remediationSteps": "Configure anti-phishing policies with impersonation protection for high-value targets including executives, finance team members, and IT administrators. Enable domain impersonation protection for all organizational domains and key partner domains, setting the action to quarantine impersonated messages. Enable mailbox intelligence and spoof intelligence with appropriate safety tips to warn users about potentially impersonated senders.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.2.1v1", "MS.DEFENDER.2.2v1"],
         "nistSp80053": ["SI-8"],
         "mitreAttack": ["T1566"],
         "cisM365": ["2.1.2"]
@@ -53,6 +54,7 @@
       "recommendedValue": "Safe Attachments enabled in Dynamic Delivery mode for all users; global settings enabled for SharePoint, OneDrive, and Teams",
       "remediationSteps": "Create or update the Safe Attachments policy to use Dynamic Delivery mode, which delivers the email body immediately while attachments are scanned, minimizing user impact while maintaining protection. Enable Safe Attachments for SharePoint, OneDrive, and Teams in the global settings to extend file detonation protection beyond email. Assign the policy to all users and monitor the Threat Explorer for detections to validate policy effectiveness.",
       "compliance": {
+        "scuba": ["MS.DEFENDER.3.1v1"],
         "nistSp80053": ["SI-3"],
         "cisM365": ["2.1.4"]
       }
@@ -80,6 +82,7 @@
       "recommendedValue": "SPF record with -all (hard fail); DKIM signing enabled for all domains; DMARC policy set to reject or quarantine with aggregate reporting enabled",
       "remediationSteps": "Verify that each organizational domain has a valid SPF record ending with -all (hard fail) that includes all authorized sending sources. Enable DKIM signing in Exchange Online for all custom domains and publish the DKIM CNAME records in DNS. Publish a DMARC record for each domain starting with a policy of none for monitoring, then progressively move to quarantine and finally reject once legitimate sending sources are confirmed, with aggregate reports configured for ongoing visibility.",
       "compliance": {
+        "scuba": ["MS.EXO.2.2v3", "MS.EXO.3.1v1", "MS.EXO.4.1v1", "MS.EXO.4.2v1"],
         "nistSp80053": ["SI-8"],
         "mitreAttack": ["T1566.001"],
         "cisM365": ["2.1.9"]
@@ -94,6 +97,7 @@
       "recommendedValue": "External auto-forwarding blocked via anti-spam outbound policy; existing forwarding rules audited and approved",
       "remediationSteps": "Configure the outbound spam filter policy to set automatic forwarding to 'Automatic - System-controlled' or 'Off' to block external auto-forwarding at the transport level. Audit all existing mailbox forwarding rules and SMTP forwarding configurations to identify any unauthorized external forwarding that may indicate compromise. Remove any unapproved forwarding rules and implement monitoring alerts to detect new forwarding rule creation using the unified audit log.",
       "compliance": {
+        "scuba": ["MS.EXO.1.1v2"],
         "nistSp80053": ["AC-4"],
         "mitreAttack": ["T1114.003"],
         "cisM365": ["2.1.6"]
@@ -120,6 +124,7 @@
       "recommendedValue": "Mailbox auditing enabled for all mailboxes; default audit actions include MailItemsAccessed, Send, and SoftDelete for all logon types",
       "remediationSteps": "Verify that mailbox auditing is enabled organization-wide by checking that the AuditDisabled parameter is set to False on all mailboxes. Review the audited actions for each logon type (Owner, Delegate, Admin) and ensure that critical actions such as MailItemsAccessed, Send, SoftDelete, HardDelete, and UpdateFolderPermissions are being recorded. For mailboxes that have audit disabled, re-enable auditing and investigate why it was disabled to rule out malicious tampering.",
       "compliance": {
+        "scuba": ["MS.EXO.13.1v1"],
         "nistSp80053": ["AU-2", "AU-3"],
         "cisM365": ["3.1.1"]
       }
@@ -133,6 +138,7 @@
       "recommendedValue": "External sender tag or mail tip enabled to visually identify emails from external senders",
       "remediationSteps": "Enable the external sender identification feature in the Exchange Online anti-phishing policy to display a visual indicator on emails from external senders. Consider implementing a transport rule that prepends '[External]' to the subject line of inbound emails from outside the organization as an additional visual warning. Communicate the change to end users and provide guidance on how to identify and respond to suspicious external emails.",
       "compliance": {
+        "scuba": ["MS.EXO.7.1v1"],
         "nistSp80053": ["SI-8"],
         "cisM365": ["2.1.7"]
       }
@@ -146,6 +152,7 @@
       "recommendedValue": "SMTP AUTH disabled organization-wide with per-mailbox exceptions only for documented service accounts; legacy OAuth disabled",
       "remediationSteps": "Disable SMTP AUTH at the organization level using Set-TransportConfig and then selectively enable it only for specific service account mailboxes that require it for application integration. Audit all mailboxes with SMTP AUTH enabled to verify there is a documented business justification and that the credentials are managed securely. Monitor sign-in logs for SMTP AUTH usage to detect potential credential abuse and plan migration of legacy applications to modern authentication methods.",
       "compliance": {
+        "scuba": ["MS.EXO.5.1v1"],
         "nistSp80053": ["IA-2"],
         "mitreAttack": ["T1078"],
         "cisM365": ["1.1.16"]
@@ -160,6 +167,7 @@
       "recommendedValue": "Auto-forwarding disabled on the default remote domain (*) and all custom remote domains unless explicitly required",
       "remediationSteps": "Review the default remote domain (*) configuration and set AutoForwardEnabled to False to prevent automatic forwarding to all external domains. Audit any custom remote domain entries and disable auto-forwarding unless there is a documented business requirement for a specific partner domain. Verify that the remote domain settings align with the outbound spam policy auto-forwarding configuration to ensure consistent enforcement across both control layers.",
       "compliance": {
+        "scuba": ["MS.EXO.1.1v2"],
         "nistSp80053": ["AC-4"],
         "mitreAttack": ["T1114.003"]
       }

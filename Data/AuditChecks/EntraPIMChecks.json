@@ -13,6 +13,7 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/RolesManagementMenuBlade/~/AllRoles",
       "remediationSteps": "Navigate to Entra ID > Roles and administrators > Global Administrator and review all assigned users. Remove unnecessary permanent assignments and ensure no more than 4 accounts hold this role. Convert permanent assignments to PIM eligible assignments where possible",
       "compliance": {
+        "scuba": ["MS.AAD.7.1v1"],
         "nistSp80053": ["AC-2", "AC-6(5)"],
         "mitreAttack": ["T1078.004"],
         "cisM365": ["1.1.1"]
@@ -27,6 +28,7 @@
       "recommendedValue": "All privileged role assignments documented and reviewed quarterly. Eligible assignments preferred over permanent",
       "remediationSteps": "Review all role assignments in Entra ID > Roles and administrators for each privileged role. Document all permanent and eligible assignments with business justification. Establish a quarterly access review process to validate continued need for each assignment",
       "compliance": {
+        "scuba": ["MS.AAD.7.2v1"],
         "nistSp80053": ["AC-2", "AC-6"],
         "mitreAttack": ["T1078.004"],
         "cisM365": ["1.1.3"]
@@ -41,6 +43,7 @@
       "recommendedValue": "No permanent privileged role assignments except for break-glass accounts. All other privileged assignments should be PIM eligible",
       "remediationSteps": "Navigate to Entra ID > Roles and administrators and identify all permanent role assignments. Convert each permanent assignment to an eligible assignment through PIM by removing the active assignment and creating a corresponding eligible assignment. Only break-glass accounts should retain permanent Global Administrator assignments",
       "compliance": {
+        "scuba": ["MS.AAD.7.4v1"],
         "nistSp80053": ["AC-2(3)", "AC-6(1)"],
         "mitreAttack": ["T1078.004"],
         "cisM365": ["1.1.3"]
@@ -69,6 +72,7 @@
       "recommendedValue": "No synced (hybrid) accounts assigned to privileged Entra ID roles. All privileged accounts should be cloud-only",
       "remediationSteps": "Identify all privileged role members whose onPremisesSyncEnabled property is true. Create dedicated cloud-only administrative accounts for each administrator and assign the required privileged roles to these new accounts. Remove privileged role assignments from all synced accounts to eliminate the on-premises to cloud escalation path",
       "compliance": {
+        "scuba": ["MS.AAD.7.3v1"],
         "nistSp80053": ["AC-6(5)"],
         "mitreAttack": ["T1078.004"]
       }
@@ -82,6 +86,7 @@
       "recommendedValue": "100% of privileged users with MFA registered and enforced via Conditional Access",
       "remediationSteps": "Review MFA registration status for all privileged users via Entra ID > Users > Per-user MFA or the Authentication Methods activity report. Ensure a Conditional Access policy requires MFA for all directory role assignments. Contact any privileged users lacking MFA registration and enforce registration within a defined deadline",
       "compliance": {
+        "scuba": ["MS.AAD.3.6v1"],
         "nistSp80053": ["IA-2(1)", "IA-2(2)"],
         "mitreAttack": ["T1078", "T1110"],
         "cisM365": ["5.2.2.1"]
@@ -96,6 +101,7 @@
       "recommendedValue": "All privileged users using phishing-resistant MFA methods (FIDO2, Windows Hello for Business, or certificate-based authentication). No SMS, voice, or email OTP",
       "remediationSteps": "Review authentication methods registered for each privileged user via Entra ID > Authentication methods > Activity. Create a Conditional Access policy targeting privileged roles that requires authentication strength of phishing-resistant MFA. Provision FIDO2 security keys or configure Windows Hello for Business for all privileged users and remove weak methods",
       "compliance": {
+        "scuba": ["MS.AAD.3.6v1"],
         "nistSp80053": ["IA-2(1)"],
         "mitreAttack": ["T1111", "T1078"]
       }
@@ -136,6 +142,7 @@
       "remediationUrl": "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/RolesManagementMenuBlade/~/Settings",
       "remediationSteps": "Navigate to Entra ID > Roles and administrators > Settings and review each privileged role configuration. Enable approval requirement with designated approvers, require activation justification, set maximum activation duration to 8 hours or less, and configure notification recipients for activation events. Pay special attention to Global Administrator, Privileged Role Administrator, and Exchange Administrator roles",
       "compliance": {
+        "scuba": ["MS.AAD.7.5v1", "MS.AAD.7.6v1"],
         "nistSp80053": ["AC-2(4)", "AC-6(1)"],
         "mitreAttack": ["T1078.004"],
         "cisM365": ["1.1.3"]
@@ -177,6 +184,7 @@
       "recommendedValue": "All administrators use dedicated admin accounts separate from their daily-use accounts. Admin accounts should not have mailboxes or productivity licenses assigned",
       "remediationSteps": "Review all privileged role members and identify accounts that also have productivity licenses (Exchange Online, SharePoint, Teams) assigned, indicating dual-use. Create dedicated admin accounts following a naming convention such as adm-username for each administrator. Assign privileged roles to the dedicated admin accounts only and remove privileged roles from daily-use accounts",
       "compliance": {
+        "scuba": ["MS.AAD.7.2v1"],
         "nistSp80053": ["AC-5", "AC-6(2)"],
         "mitreAttack": ["T1078.004"],
         "cisM365": ["1.1.1"]
@@ -191,6 +199,7 @@
       "recommendedValue": "Notifications enabled for all privileged role activations and new permanent assignments, sent to designated security operations contacts",
       "remediationSteps": "Navigate to Entra ID > Roles and administrators > Settings for each privileged role. Under the Notification tab, ensure notifications are enabled for role activation, permanent assignment, and eligible assignment events. Configure notification recipients to include the security operations team distribution list. Verify notifications are being received by performing a test activation",
       "compliance": {
+        "scuba": ["MS.AAD.7.7v1", "MS.AAD.7.8v1", "MS.AAD.7.9v1"],
         "nistSp80053": ["AU-5", "SI-4"],
         "mitreAttack": ["T1078.004"]
       }

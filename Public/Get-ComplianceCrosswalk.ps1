@@ -31,7 +31,7 @@ function Get-ComplianceCrosswalk {
     param(
         [PSCustomObject[]]$Findings,
 
-        [ValidateSet('FERPA', 'COPPA', 'CIPA', 'NIST-171', 'STATE-EDTECH', 'NIST-800-53', 'MITRE-ATTACK', 'CIS')]
+        [ValidateSet('FERPA', 'COPPA', 'CIPA', 'NIST-171', 'STATE-EDTECH', 'NIST-800-53', 'MITRE-ATTACK', 'CIS', 'SCUBA', 'EIDSCA')]
         [string]$Framework,
 
         [switch]$FailOnly,
@@ -81,6 +81,8 @@ function Get-ComplianceCrosswalk {
         'NIST-800-53'  = @{ Name = 'NIST SP 800-53';  Props = @('NistSp80053') }
         'MITRE-ATTACK' = @{ Name = 'MITRE ATT&CK';    Props = @('MitreAttack') }
         'CIS'          = @{ Name = 'CIS Benchmarks';  Props = @('CisBenchmark', 'CisAd', 'CisM365', 'CisAzure') }
+        'SCUBA'        = @{ Name = 'CISA SCuBA Secure Configuration Baselines'; Props = @('Scuba') }
+        'EIDSCA'       = @{ Name = 'Entra ID Security Config Analyzer';          Props = @('Eidsca') }
     }
 
     foreach ($finding in $Findings) {

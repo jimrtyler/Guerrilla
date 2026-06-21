@@ -12,6 +12,7 @@
       "recommendedValue": "External access limited to specific allowed domains rather than open federation; Skype consumer access disabled",
       "remediationSteps": "Configure Teams external access to use a domain allow list containing only trusted partner organization domains rather than allowing open federation with all external tenants. Disable communication with Skype consumer users unless there is a specific business requirement. Review and update the allowed domain list quarterly to remove organizations that no longer require federation access.",
       "compliance": {
+        "scuba": ["MS.TEAMS.2.1v2"],
         "nistSp80053": ["AC-20"],
         "cisM365": ["8.1.1"]
       }
@@ -38,6 +39,7 @@
       "recommendedValue": "External participants default to attendee role; lobby bypass disabled for external users; screen sharing restricted to organizer and presenters only",
       "remediationSteps": "Configure the global meeting policy to require external participants to wait in the lobby and default to the attendee role when admitted to meetings. Restrict screen sharing and content sharing to meeting organizers and designated presenters to prevent unauthorized content sharing by external attendees. Create specific meeting policies for different user groups if some departments require more permissive settings for regular external collaboration.",
       "compliance": {
+        "scuba": ["MS.TEAMS.1.1v1"],
         "nistSp80053": ["AC-20"],
         "cisM365": ["8.5.1"]
       }
@@ -51,6 +53,7 @@
       "recommendedValue": "Anonymous meeting join disabled; all meeting participants required to authenticate; lobby enabled for unauthenticated users",
       "remediationSteps": "Disable anonymous meeting join in the Teams meeting policy to require all participants to sign in before joining meetings. If anonymous join must be allowed for specific use cases such as public webinars, create a separate meeting policy with anonymous join enabled and assign it only to the users who need it. Enable the lobby for all external and guest participants and configure meeting organizers to manually admit attendees from the lobby.",
       "compliance": {
+        "scuba": ["MS.TEAMS.1.2v2", "MS.TEAMS.1.3v1"],
         "nistSp80053": ["AC-14"],
         "cisM365": ["8.5.2"]
       }
@@ -64,6 +67,7 @@
       "recommendedValue": "Cloud recording restricted to meeting organizers; automatic transcription requires consent; recordings stored in approved locations with appropriate retention",
       "remediationSteps": "Configure the meeting policy to restrict cloud recording initiation to meeting organizers and co-organizers rather than all participants. Enable recording consent notifications so that all participants are aware when a recording begins, and configure automatic transcription settings to comply with privacy regulations in your jurisdiction. Review the storage location and retention policies for meeting recordings to ensure they are stored in a governed location with appropriate access controls and lifecycle management.",
       "compliance": {
+        "scuba": ["MS.TEAMS.1.6v1", "MS.TEAMS.1.7v2"],
         "nistSp80053": ["AU-2"],
         "cisM365": ["8.5.5"]
       }
@@ -77,6 +81,7 @@
       "recommendedValue": "External chat limited to specific domains; URL preview disabled for external conversations; file sharing restricted in external chats",
       "remediationSteps": "Review the Teams messaging policies and restrict the ability to chat with external users to only those personnel who have a business need for cross-organization communication. Disable URL previews in conversations with external users to prevent accidental data exposure through link expansion. Consider implementing DLP policies for Teams chat to detect and block sharing of sensitive information types in external conversations.",
       "compliance": {
+        "scuba": ["MS.TEAMS.2.2v2", "MS.TEAMS.2.3v2"],
         "nistSp80053": ["AC-20"],
         "cisM365": ["8.2.1"]
       }
@@ -90,6 +95,7 @@
       "recommendedValue": "Third-party apps restricted to an approved list; custom app uploads restricted to authorized developers; app permission requests reviewed by administrators",
       "remediationSteps": "Configure the Teams app permission policy to block all third-party apps by default and selectively allow only approved applications that have been vetted by the security team. Restrict custom app sideloading to authorized developers and require all custom apps to go through an approval process before publication. Review the list of currently installed third-party apps, remove any that are unapproved or no longer needed, and audit the permissions each app has been granted.",
       "compliance": {
+        "scuba": ["MS.TEAMS.5.1v2", "MS.TEAMS.5.2v2", "MS.TEAMS.5.3v2"],
         "nistSp80053": ["CM-7"],
         "cisM365": ["8.6.1"]
       }
