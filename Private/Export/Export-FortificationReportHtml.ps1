@@ -386,6 +386,11 @@ $($brand.Header)
 "@)
 
     # ═══════════════════════════════════════════════════════════════
+    # SECURITY MATURITY (shared section — spans the GWS categories)
+    # ═══════════════════════════════════════════════════════════════
+    [void]$html.Append((Get-GuerrillaMaturitySectionHtml -Findings $Findings -Esc $esc))
+
+    # ═══════════════════════════════════════════════════════════════
     # CATEGORY SCORE DASHBOARD
     # ═══════════════════════════════════════════════════════════════
     [void]$html.Append('<h2>Category Scores</h2>')

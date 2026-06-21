@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.20.0] - 2026-06-21
+
+_Reports now showcase what PSGuerrilla actually does — maturity, attack paths, and the BloodHound export are no longer buried._
+
+### Added
+- **AD reconnaissance report** (`Export-ReconnaissanceReportHtml`) gains three sections:
+  - **Security Maturity** (CMMI 1-5) — the maturity rating was previously only in the Executive Summary; a normal scan's HTML now shows it.
+  - **Attack Paths to Tier-0** — renders the **full** transitive chains (`HelpDesk --GenericAll--> CORP-Helpdesk-Admins --MemberOf--> Domain Admins`), non-privileged sources first, instead of the single buried finding-row preview. When none are found it names the coverage lever (`-FullDomainAcl`).
+  - **BloodHound Export callout** — when `-BloodHoundPath` was used, the report shows the written file path and BloodHound CE import steps.
+- **GWS report** (`Export-FortificationReportHtml`) gains the **Security Maturity** section (GWS Adversary Tradecraft findings were already surfaced via the detailed-findings renderer).
+- **Unified Campaign report** (`Export-CampaignReportHtml`) — the "one big report" — gains **Security Maturity** and **Attack Paths to Tier-0** across all theaters, so the aggregate view is no longer missing the marquee features.
+
+### Changed
+- `Invoke-Reconnaissance` now runs the BloodHound export **before** report generation so the HTML callout references a file that already exists.
+- New shared helpers (`Get-GuerrillaMaturitySectionHtml`, `Get-GuerrillaAttackPathSectionHtml`) keep the three reports' sections identical and theme-agnostic.
+
+### Notes
+- Report/presentation only — no engine, check, or scoring changes. Check counts and 46 public functions unchanged.
+- Test: `Tests/verify-report-sections.ps1` (15/15 — shared helpers in isolation, plus maturity/attack-path/BloodHound inclusion across the recon, GWS, and Campaign reports).
+- **PingCastle plan remaining: cartography** (the visual domain/trust/attack-path map).
+
 ## [2.19.0] - 2026-06-20
 
 _Full-domain ACL collector — shallow one-hop findings become deep low-priv → Domain Admins chains._

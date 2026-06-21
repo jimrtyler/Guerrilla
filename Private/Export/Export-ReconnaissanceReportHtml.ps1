@@ -25,7 +25,10 @@ function Export-ReconnaissanceReportHtml {
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
         [string]$Style = 'Guerrilla',
 
-        [hashtable]$Branding
+        [hashtable]$Branding,
+
+        # When a BloodHound OpenGraph export was written, its path — surfaced as a report callout.
+        [string]$BloodHoundPath
     )
 
     $esc = { param([string]$s) [System.Web.HttpUtility]::HtmlEncode($s) }
@@ -249,6 +252,23 @@ $($brand.Header)
      Medium: <strong>$medCount</strong> &mdash; Low: <strong>$lowCount</strong></p>
 </div>
 "@)
+
+    # ═══ SECURITY MATURITY (CMMI 1-5) — shared section ═══
+    [void]$html.Append((Get-GuerrillaMaturitySectionHtml -Findings $Findings -Esc $esc))
+
+    # ═══ ATTACK PATHS TO TIER-0 — shared section (always shown in the AD report) ═══
+    [void]$html.Append((Get-GuerrillaAttackPathSectionHtml -Findings $Findings -Esc $esc))
+
+    # ═══ BLOODHOUND EXPORT CALLOUT ═══
+    if ($BloodHoundPath) {
+        [void]$html.Append(@"
+<h2>BloodHound Export</h2>
+<div class="exec-summary" style="border-left-color:var(--gold)">
+  <p>An OpenGraph export of the collected AD attack graph was written to <code>$(& $esc $BloodHoundPath)</code>.</p>
+  <p>Import in BloodHound CE: <strong>Administration &rarr; File Ingest</strong> &rarr; upload the file, then run the built-in pathfinding queries. Nodes are SID-keyed (they overlay native SharpHound data) and edges use native BloodHound kinds.</p>
+</div>
+"@)
+    }
 
     # ═══ STAT CARDS ═══
     [void]$html.Append('<div class="stat-grid">')

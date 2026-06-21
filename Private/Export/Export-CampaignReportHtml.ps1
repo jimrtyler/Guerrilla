@@ -411,6 +411,13 @@ $($brand.Header)
 "@)
 
     # =================================================================
+    # SECURITY MATURITY + ATTACK PATHS (shared sections)
+    # Maturity spans all theaters; attack paths only render if an AD theater was scanned.
+    # =================================================================
+    [void]$html.Append((Get-GuerrillaMaturitySectionHtml -Findings $findings -Esc $esc))
+    [void]$html.Append((Get-GuerrillaAttackPathSectionHtml -Findings $findings -Esc $esc -OmitIfAbsent))
+
+    # =================================================================
     # THEATER SUMMARY CARDS
     # =================================================================
     [void]$html.Append('<h2>Theater Summary</h2>')

@@ -234,6 +234,19 @@ function Invoke-Reconnaissance {
             -DomainName $domainName
     }
 
+    # --- Optional BloodHound OpenGraph export of the collected AD graph ---
+    # Runs before report generation so the HTML report can reference the written file.
+    $bloodHoundWritten = $null
+    if ($BloodHoundPath -and -not $TestMode -and $auditData) {
+        try {
+            $bh = Export-BloodHoundData -AuditData $auditData -OutputPath $BloodHoundPath
+            $bloodHoundWritten = $BloodHoundPath
+            if (-not $Quiet) { Write-ProgressLine -Phase REPORTING -Message 'BloodHound export' -Detail $bh.Message }
+        } catch {
+            Write-Warning "BloodHound export failed: $_"
+        }
+    }
+
     # --- Generate reports ---
     $csvPath = $null; $htmlPath = $null; $jsonPath = $null
     if (-not $NoReports) {
@@ -267,7 +280,8 @@ function Invoke-Reconnaissance {
                 -Delta $delta `
                 -FilePath $htmlPath `
                 -Style $ReportStyle `
-                -Branding $reportBranding
+                -Branding $reportBranding `
+                -BloodHoundPath $bloodHoundWritten
             if (-not $Quiet) { Write-ProgressLine -Phase REPORTING -Message 'HTML report' -Detail $htmlPath }
         }
         if ($genJson) {
@@ -310,16 +324,6 @@ function Invoke-Reconnaissance {
             categoryScores    = $scoreResult.CategoryScores
         }
         $newState | ConvertTo-Json -Depth 5 | Set-Content -Path $statePath -Encoding UTF8
-    }
-
-    # --- Optional BloodHound OpenGraph export of the collected AD graph ---
-    if ($BloodHoundPath -and -not $TestMode -and $auditData) {
-        try {
-            $bh = Export-BloodHoundData -AuditData $auditData -OutputPath $BloodHoundPath
-            if (-not $Quiet) { Write-ProgressLine -Phase REPORTING -Message 'BloodHound export' -Detail $bh.Message }
-        } catch {
-            Write-Warning "BloodHound export failed: $_"
-        }
     }
 
     # --- Emit result object ---
