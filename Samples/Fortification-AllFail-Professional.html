@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PSGuerrilla Fortification Report - sample.org - 2026-06-21 12:57:51 UTC</title>
+<title>PSGuerrilla Fortification Report - sample.org - 2026-06-22 16:01:25 UTC</title>
 <style>
   :root { --font-body: 'Segoe UI', 'Helvetica Neue', Arial, system-ui, sans-serif; --bg: #ffffff; --surface: #f8fafc; --surface-alt: #eef2f7; --border: #d8dee9; --text: #1e293b; --text-muted: #64748b; --olive: #0f766e; --amber: #c2620f; --sage: #15803d; --parchment: #0f172a; --gold: #b7791f; --dim: #64748b; --deep-orange: #c2410c; --dark-red: #b91c1c; --critical: #b91c1c; --high: #c2410c; --medium: #b45309; --low: #15803d; --clean: #15803d; --pass: #15803d; --fail: #b91c1c; --warn: #b45309; --skip: #94a3b8; --info: #1d4ed8; }
   .wl-banner { background: var(--dark-red); color: #fff; text-align: center;
@@ -195,7 +195,7 @@
 <div class="wl-header"><div><div class="wl-firm">Northwind Security</div><div class="wl-meta">Prepared by A. Analyst &middot; analyst@northwind.example</div><div class="wl-meta">Prepared for Globex Corporation</div></div></div>
 <h1>&#x1F6E1; PSGuerrilla Fortification Report</h1>
 <div class="subtitle">
-  Generated 2026-06-21 12:57:51 UTC &mdash; sample.org &mdash;
+  Generated 2026-06-22 16:01:25 UTC &mdash; sample.org &mdash;
   104 configuration checks evaluated
 </div><div class="score-panel">
   <div class="score-ring">
@@ -239,40 +239,30 @@
   <p>The lowest unmet control anchors the rating (CMMI-style scale: 1 Initial to 5 Optimized), so a single critical exposure caps the score until it is resolved.</p>
   <p>To reach <strong>Level 2</strong>, address:</p><ul style='margin:4px 0 8px 20px'><li>AUTH-001: 2SV Enforcement</li><li>AUTH-012: Super Admin 2SV Enrollment</li><li>EMAIL-001: SPF Record Validation</li><li>EMAIL-002: DKIM Signing Enabled</li><li>EMAIL-003: DMARC Policy Audit</li><li>EMAIL-017: Spoofing and Authentication Protection</li><li>OAUTH-003: OAuth Scope Analysis</li><li>OAUTH-008: Domain-Wide Delegation Grants Audit</li></ul>
   <table class="mat-tbl"><thead><tr><th>Category</th><th>Level</th><th>Maturity</th></tr></thead><tbody><tr><td>Admin &amp; User Management</td><td style='color:var(--dark-red);font-weight:700'>Level 1</td><td>Initial</td></tr><tr><td>Authentication &amp; Access Controls</td><td style='color:var(--dark-red);font-weight:700'>Level 1</td><td>Initial</td></tr><tr><td>Email Security</td><td style='color:var(--dark-red);font-weight:700'>Level 1</td><td>Initial</td></tr><tr><td>OAuth &amp; API Security</td><td style='color:var(--dark-red);font-weight:700'>Level 1</td><td>Initial</td></tr><tr><td>Collaboration &amp; Communication Security</td><td style='color:var(--deep-orange);font-weight:700'>Level 2</td><td>Managed</td></tr><tr><td>Device &amp; Endpoint Management</td><td style='color:var(--deep-orange);font-weight:700'>Level 2</td><td>Managed</td></tr><tr><td>Drive Security &amp; Data Protection</td><td style='color:var(--deep-orange);font-weight:700'>Level 2</td><td>Managed</td></tr><tr><td>Logging, Alerting &amp; Monitoring</td><td style='color:var(--deep-orange);font-weight:700'>Level 2</td><td>Managed</td></tr></tbody></table>
-</div><h2>Category Scores</h2><div class="category-grid"><div class="cat-card">
-  <div class="cat-header">
-    <span class="cat-name">Device &amp; Endpoint Management</span>
-    <span class="cat-score" style="color:var(--deep-orange)">0</span>
-  </div>
-  <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-  <div class="cat-counts">
-    <span style="color:var(--pass)">Pass: 0</span>
-    <span style="color:var(--fail)">Fail: 11</span>
-    <span style="color:var(--warn)">Warn: 0</span>
-  </div>
-</div><div class="cat-card">
-  <div class="cat-header">
-    <span class="cat-name">OAuth &amp; API Security</span>
-    <span class="cat-score" style="color:var(--deep-orange)">0</span>
-  </div>
-  <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-  <div class="cat-counts">
-    <span style="color:var(--pass)">Pass: 0</span>
-    <span style="color:var(--fail)">Fail: 10</span>
-    <span style="color:var(--warn)">Warn: 0</span>
-  </div>
-</div><div class="cat-card">
-  <div class="cat-header">
-    <span class="cat-name">Admin &amp; User Management</span>
-    <span class="cat-score" style="color:var(--deep-orange)">0</span>
-  </div>
-  <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
-  <div class="cat-counts">
-    <span style="color:var(--pass)">Pass: 0</span>
-    <span style="color:var(--fail)">Fail: 13</span>
-    <span style="color:var(--warn)">Warn: 0</span>
-  </div>
-</div><div class="cat-card">
+</div><style>
+  .ioe-sum { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 12px; }
+  .ioe-chip { border:1px solid var(--border); border-radius:4px; padding:4px 10px; font-size:0.8em; }
+  .ioe-list { list-style:none; margin:0 0 24px; padding:0; }
+  .ioe-item { display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--border);
+              border-left:4px solid var(--dim); border-radius:0 4px 4px 0; padding:10px 14px; margin-bottom:8px; }
+  .ioe-item.sev-critical { border-left-color:var(--critical); }
+  .ioe-item.sev-high { border-left-color:var(--high); }
+  .ioe-item.sev-medium { border-left-color:var(--medium); }
+  .ioe-item.sev-low { border-left-color:var(--low); }
+  .ioe-sev { flex:0 0 64px; font-size:0.68em; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding-top:2px; }
+  .ioe-name { font-size:0.92em; color:var(--parchment); font-weight:700; }
+  .ioe-meta { font-size:0.72em; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:2px 0; }
+  .ioe-ev { font-size:0.82em; color:var(--text); word-break:break-word; }
+</style>
+<h2>Indicators of Exposure</h2>
+<p class="ioe-note" style="color:var(--dim);font-size:0.85em;margin:4px 0 8px">104 open exposure(s), ranked by severity and blast radius.</p>
+<div class="ioe-sum">
+  <span class="ioe-chip" style="color:var(--critical)">Critical: 9</span>
+  <span class="ioe-chip" style="color:var(--high)">High: 40</span>
+  <span class="ioe-chip" style="color:var(--medium)">Medium: 43</span>
+  <span class="ioe-chip" style="color:var(--low)">Low: 12</span>
+</div>
+<ul class="ioe-list"><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">Super Admin 2SV Enrollment</div><div class="ioe-meta">Authentication &amp; Access Controls &middot; AUTH-012 &middot; 5 affected</div><div class="ioe-ev">Excessive permissions found</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">2SV Enforcement</div><div class="ioe-meta">Authentication &amp; Access Controls &middot; AUTH-001 &middot; 4 affected</div><div class="ioe-ev">Not configured (critical risk)</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">DKIM Signing Enabled</div><div class="ioe-meta">Email Security &middot; EMAIL-002</div><div class="ioe-ev">Disabled</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">DMARC Policy Audit</div><div class="ioe-meta">Email Security &middot; EMAIL-003</div><div class="ioe-ev">Disabled</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">Domain-Wide Delegation Grants Audit</div><div class="ioe-meta">OAuth &amp; API Security &middot; OAUTH-008</div><div class="ioe-ev">Disabled</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">OAuth Scope Analysis</div><div class="ioe-meta">OAuth &amp; API Security &middot; OAUTH-003</div><div class="ioe-ev">Unreviewed permissions</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">SPF Record Validation</div><div class="ioe-meta">Email Security &middot; EMAIL-001</div><div class="ioe-ev">Not configured</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">Spoofing and Authentication Protection</div><div class="ioe-meta">Email Security &middot; EMAIL-017</div><div class="ioe-ev">Not configured (critical risk)</div></div></li><li class="ioe-item sev-critical"><div class="ioe-sev" style="color:var(--critical)">Critical</div><div><div class="ioe-name">Super Admin Account Inventory</div><div class="ioe-meta">Admin &amp; User Management &middot; ADMIN-001</div><div class="ioe-ev">Excessive permissions found</div></div></li><li class="ioe-item sev-high"><div class="ioe-sev" style="color:var(--high)">High</div><div><div class="ioe-name">Stale Super Admin Accounts</div><div class="ioe-meta">Authentication &amp; Access Controls &middot; AUTH-013 &middot; 6 affected</div><div class="ioe-ev">Excessive permissions found</div></div></li><li class="ioe-item sev-high"><div class="ioe-sev" style="color:var(--high)">High</div><div><div class="ioe-name">2SV Enrollment Rate</div><div class="ioe-meta">Authentication &amp; Access Controls &middot; AUTH-002 &middot; 5 affected</div><div class="ioe-ev">Disabled</div></div></li><li class="ioe-item sev-high"><div class="ioe-sev" style="color:var(--high)">High</div><div><div class="ioe-name">Recovery Options Configuration</div><div class="ioe-meta">Authentication &amp; Access Controls &middot; AUTH-010 &middot; 3 affected</div><div class="ioe-ev">Disabled</div></div></li></ul><p class="ioe-note" style="color:var(--dim);font-size:0.8em;margin-top:-16px">+ 92 more exposure(s) in the detailed findings below.</p><h2>Category Scores</h2><div class="category-grid"><div class="cat-card">
   <div class="cat-header">
     <span class="cat-name">Drive Security &amp; Data Protection</span>
     <span class="cat-score" style="color:var(--deep-orange)">0</span>
@@ -296,13 +286,46 @@
   </div>
 </div><div class="cat-card">
   <div class="cat-header">
-    <span class="cat-name">Collaboration &amp; Communication Security</span>
+    <span class="cat-name">OAuth &amp; API Security</span>
     <span class="cat-score" style="color:var(--deep-orange)">0</span>
   </div>
   <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
   <div class="cat-counts">
     <span style="color:var(--pass)">Pass: 0</span>
-    <span style="color:var(--fail)">Fail: 12</span>
+    <span style="color:var(--fail)">Fail: 10</span>
+    <span style="color:var(--warn)">Warn: 0</span>
+  </div>
+</div><div class="cat-card">
+  <div class="cat-header">
+    <span class="cat-name">Email Security</span>
+    <span class="cat-score" style="color:var(--deep-orange)">0</span>
+  </div>
+  <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+  <div class="cat-counts">
+    <span style="color:var(--pass)">Pass: 0</span>
+    <span style="color:var(--fail)">Fail: 22</span>
+    <span style="color:var(--warn)">Warn: 0</span>
+  </div>
+</div><div class="cat-card">
+  <div class="cat-header">
+    <span class="cat-name">Admin &amp; User Management</span>
+    <span class="cat-score" style="color:var(--deep-orange)">0</span>
+  </div>
+  <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+  <div class="cat-counts">
+    <span style="color:var(--pass)">Pass: 0</span>
+    <span style="color:var(--fail)">Fail: 13</span>
+    <span style="color:var(--warn)">Warn: 0</span>
+  </div>
+</div><div class="cat-card">
+  <div class="cat-header">
+    <span class="cat-name">Device &amp; Endpoint Management</span>
+    <span class="cat-score" style="color:var(--deep-orange)">0</span>
+  </div>
+  <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
+  <div class="cat-counts">
+    <span style="color:var(--pass)">Pass: 0</span>
+    <span style="color:var(--fail)">Fail: 11</span>
     <span style="color:var(--warn)">Warn: 0</span>
   </div>
 </div><div class="cat-card">
@@ -318,13 +341,13 @@
   </div>
 </div><div class="cat-card">
   <div class="cat-header">
-    <span class="cat-name">Email Security</span>
+    <span class="cat-name">Collaboration &amp; Communication Security</span>
     <span class="cat-score" style="color:var(--deep-orange)">0</span>
   </div>
   <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%;background:var(--deep-orange)"></div></div>
   <div class="cat-counts">
     <span style="color:var(--pass)">Pass: 0</span>
-    <span style="color:var(--fail)">Fail: 22</span>
+    <span style="color:var(--fail)">Fail: 12</span>
     <span style="color:var(--warn)">Warn: 0</span>
   </div>
 </div></div><h2>Priority Findings &mdash; Critical &amp; High</h2><table class="priority-table">
@@ -2272,8 +2295,8 @@
   </tr></table><div style="margin-top: 40px; padding-top: 16px; border-top: 2px solid var(--border);
             color: var(--dim); font-size: 0.8em; text-align: center; letter-spacing: 1px;">
   &#x1F6E1; PSGuerrilla Fortification Report &nbsp;|&nbsp;
-  2026-06-21 12:57:51 UTC &nbsp;|&nbsp;
-  Generated by PSGuerrilla v2.22.0 &nbsp;|&nbsp;
+  2026-06-22 16:01:25 UTC &nbsp;|&nbsp;
+  Generated by PSGuerrilla v2.26.0 &nbsp;|&nbsp;
   104 checks &nbsp;|&nbsp; Score: 0/100 (Critical Risk)
   <br>By Jim Tyler, Microsoft MVP &nbsp;|&nbsp; <a href="https://github.com/jimrtyler" style="color:var(--dim)">GitHub</a> &nbsp;|&nbsp; <a href="https://linkedin.com/in/jamestyler" style="color:var(--dim)">LinkedIn</a> &nbsp;|&nbsp; <a href="https://youtube.com/@jimrtyler" style="color:var(--dim)">YouTube</a>
 </div>

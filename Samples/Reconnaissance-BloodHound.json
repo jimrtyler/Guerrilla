@@ -1,21 +1,11 @@
 {
   "metadata": {
-    "version": 1,
     "generated_by": "PSGuerrilla",
+    "version": 1,
     "source_kind": "PSGuerrilla"
   },
   "graph": {
     "nodes": [
-      {
-        "id": "NAME:ADMINSDHOLDER",
-        "kinds": [
-          "Base",
-          "Base"
-        ],
-        "properties": {
-          "name": "ADMINSDHOLDER"
-        }
-      },
       {
         "id": "S-1-5-21-99-1-1-512",
         "kinds": [
@@ -25,17 +15,6 @@
         "properties": {
           "name": "DOMAIN ADMINS",
           "objectid": "S-1-5-21-99-1-1-512"
-        }
-      },
-      {
-        "id": "S-1-5-21-99-1-1-1200",
-        "kinds": [
-          "Group",
-          "Base"
-        ],
-        "properties": {
-          "name": "WORKSTATION-ADMINS",
-          "objectid": "S-1-5-21-99-1-1-1200"
         }
       },
       {
@@ -50,6 +29,16 @@
         }
       },
       {
+        "id": "NAME:ADMINSDHOLDER",
+        "kinds": [
+          "Base",
+          "Base"
+        ],
+        "properties": {
+          "name": "ADMINSDHOLDER"
+        }
+      },
+      {
         "id": "S-1-5-21-99-1-1-1147",
         "kinds": [
           "Base",
@@ -58,6 +47,17 @@
         "properties": {
           "name": "HELPDESK",
           "objectid": "S-1-5-21-99-1-1-1147"
+        }
+      },
+      {
+        "id": "S-1-5-21-99-1-1-1200",
+        "kinds": [
+          "Group",
+          "Base"
+        ],
+        "properties": {
+          "name": "WORKSTATION-ADMINS",
+          "objectid": "S-1-5-21-99-1-1-1200"
         }
       }
     ],

@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.27.0] - 2026-06-21
+
+_Indicators of Exposure — a ranked, severity-scored exposure view in every report. Closes Purple Knight's signature edge (roadmap M3)._
+
+### Added
+- **Indicators of Exposure** (`Get-GuerrillaIndicatorsOfExposureHtml`) — a Purple-Knight-style ranked view of the estate's *actual* exposures, added to the **Reconnaissance, Google Workspace, Campaign, and Technical** reports. Each open (FAIL/WARN) finding becomes a named, severity-scored indicator with its **blast radius** (affected-object count); the list is ranked by severity → FAIL-before-WARN → impact, under a Critical/High/Medium/Low summary. It's the same data you already collect, presented the way a CISO (or a Purple Knight user) expects to read it.
+
+### Notes
+- Report/presentation only — no engine, check, or scoring changes (517 checks, 48 public functions). Samples regenerated (the Infiltration/Campaign samples now also include the 44 EIDSCA checks). Test: `Tests/verify-report-sections.ps1` (36/36 — IOE ranking, severity ordering, empty-when-all-pass, plus presence in all four reports).
+- Maester roadmap: **M1 (EIDSCA), M2 (CA what-if), M4 (CI/CD), M3 (Indicators of Exposure) done.** Remaining: M3 interactive filtering (polish), **M6 (EXO/email depth + SCuBA EXO baseline refresh)**, M7 (Entra governance). **Purple Knight: presentation edge closed.**
+
 ## [2.26.0] - 2026-06-21
 
 _Security config as code — JUnit output so PSGuerrilla drops into CI/CD like Maester (roadmap M4)._

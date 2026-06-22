@@ -256,6 +256,9 @@ $($brand.Header)
     # ═══ SECURITY MATURITY (CMMI 1-5) — shared section ═══
     [void]$html.Append((Get-GuerrillaMaturitySectionHtml -Findings $Findings -Esc $esc))
 
+    # ═══ INDICATORS OF EXPOSURE — shared ranked exposure view ═══
+    [void]$html.Append((Get-GuerrillaIndicatorsOfExposureHtml -Findings $Findings -Esc $esc))
+
     # ═══ ATTACK-PATH CARTOGRAPHY (visual map) + ATTACK PATHS list — shared sections ═══
     [void]$html.Append((Get-GuerrillaCartographyHtml -Findings $Findings -Esc $esc))
     [void]$html.Append((Get-GuerrillaAttackPathSectionHtml -Findings $Findings -Esc $esc))

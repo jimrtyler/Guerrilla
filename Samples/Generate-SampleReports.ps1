@@ -363,6 +363,7 @@ $entraFiles = @(
     'EntraAppChecks.json'
     'EntraFedChecks.json'
     'EntraTenantChecks.json'
+    'EidscaChecks.json'
     'AzureIAMChecks.json'
     'IntuneChecks.json'
     'M365ExchangeChecks.json'

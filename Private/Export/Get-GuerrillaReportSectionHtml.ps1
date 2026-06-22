@@ -264,3 +264,92 @@ function Get-GuerrillaCartographyHtml {
     [void]$sb.Append('</svg></div>')
     return $sb.ToString()
 }
+
+# Indicators of Exposure — a Purple-Knight-style ranked view of the estate's actual exposures, derived
+# from the FAIL/WARN findings: each is a named, severity-scored indicator with its blast radius (affected
+# count). Theme-var styled; returns '' when there are no open exposures. Theater-agnostic.
+function Get-GuerrillaIndicatorsOfExposureHtml {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][AllowEmptyCollection()][AllowNull()][PSCustomObject[]]$Findings,
+        [Parameter(Mandatory)][scriptblock]$Esc,
+        [int]$Top = 12
+    )
+
+    $open = @($Findings | Where-Object { $_.Status -in @('FAIL', 'WARN') })
+    if ($open.Count -eq 0) { return '' }
+
+    $sevRank = @{ Critical = 0; High = 1; Medium = 2; Low = 3; Info = 4 }
+    $affectedOf = {
+        param($f)
+        $d = $f.Details
+        if ($d.AffectedItems) { return @($d.AffectedItems).Count }
+        if ($null -ne $d.ChainCount) { return [int]$d.ChainCount }
+        if ($null -ne $d.PathCount) { return [int]$d.PathCount }
+        return 1
+    }
+
+    $ind = foreach ($f in $open) {
+        [PSCustomObject]@{
+            Name     = "$($f.CheckName)"
+            CheckId  = "$($f.CheckId)"
+            Category = "$($f.Category)"
+            Severity = "$($f.Severity)"
+            Status   = "$($f.Status)"
+            Affected = (& $affectedOf $f)
+            Evidence = "$($f.CurrentValue)"
+        }
+    }
+    $ranked = @($ind | Sort-Object `
+        @{ Expression = { $sevRank["$($_.Severity)"] ?? 5 } }, `
+        @{ Expression = { if ($_.Status -eq 'FAIL') { 0 } else { 1 } } }, `
+        @{ Expression = { -1 * [int]$_.Affected } }, `
+        Name)
+
+    $crit = @($open | Where-Object Severity -eq 'Critical').Count
+    $high = @($open | Where-Object Severity -eq 'High').Count
+    $med  = @($open | Where-Object Severity -eq 'Medium').Count
+    $low  = @($open | Where-Object Severity -eq 'Low').Count
+
+    $shown = @($ranked | Select-Object -First $Top)
+    $more = $ranked.Count - $shown.Count
+    $trunc = { param($s) if ("$s".Length -gt 140) { "$s".Substring(0, 138) + [char]0x2026 } else { "$s" } }
+
+    $sb = [System.Text.StringBuilder]::new()
+    [void]$sb.Append(@"
+<style>
+  .ioe-sum { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 12px; }
+  .ioe-chip { border:1px solid var(--border); border-radius:4px; padding:4px 10px; font-size:0.8em; }
+  .ioe-list { list-style:none; margin:0 0 24px; padding:0; }
+  .ioe-item { display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--border);
+              border-left:4px solid var(--dim); border-radius:0 4px 4px 0; padding:10px 14px; margin-bottom:8px; }
+  .ioe-item.sev-critical { border-left-color:var(--critical); }
+  .ioe-item.sev-high { border-left-color:var(--high); }
+  .ioe-item.sev-medium { border-left-color:var(--medium); }
+  .ioe-item.sev-low { border-left-color:var(--low); }
+  .ioe-sev { flex:0 0 64px; font-size:0.68em; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding-top:2px; }
+  .ioe-name { font-size:0.92em; color:var(--parchment); font-weight:700; }
+  .ioe-meta { font-size:0.72em; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:2px 0; }
+  .ioe-ev { font-size:0.82em; color:var(--text); word-break:break-word; }
+</style>
+<h2>Indicators of Exposure</h2>
+<p class="ioe-note" style="color:var(--dim);font-size:0.85em;margin:4px 0 8px">$($open.Count) open exposure(s), ranked by severity and blast radius.</p>
+<div class="ioe-sum">
+  <span class="ioe-chip" style="color:var(--critical)">Critical: $crit</span>
+  <span class="ioe-chip" style="color:var(--high)">High: $high</span>
+  <span class="ioe-chip" style="color:var(--medium)">Medium: $med</span>
+  <span class="ioe-chip" style="color:var(--low)">Low: $low</span>
+</div>
+<ul class="ioe-list">
+"@)
+    foreach ($i in $shown) {
+        $sevClass = 'sev-' + ("$($i.Severity)").ToLower()
+        $sevColor = switch ("$($i.Severity)") { 'Critical' { 'var(--critical)' } 'High' { 'var(--high)' } 'Medium' { 'var(--medium)' } 'Low' { 'var(--low)' } default { 'var(--dim)' } }
+        $aff = if ($i.Affected -gt 1) { " &middot; $($i.Affected) affected" } else { '' }
+        $warn = if ($i.Status -eq 'WARN') { ' &middot; warning' } else { '' }
+        [void]$sb.Append("<li class=`"ioe-item $sevClass`"><div class=`"ioe-sev`" style=`"color:$sevColor`">$(& $Esc $i.Severity)</div><div><div class=`"ioe-name`">$(& $Esc $i.Name)</div><div class=`"ioe-meta`">$(& $Esc $i.Category) &middot; $(& $Esc $i.CheckId)$aff$warn</div><div class=`"ioe-ev`">$(& $Esc (& $trunc $i.Evidence))</div></div></li>")
+    }
+    [void]$sb.Append('</ul>')
+    if ($more -gt 0) { [void]$sb.Append("<p class=`"ioe-note`" style=`"color:var(--dim);font-size:0.8em;margin-top:-16px`">+ $more more exposure(s) in the detailed findings below.</p>") }
+    return $sb.ToString()
+}

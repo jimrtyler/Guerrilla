@@ -415,6 +415,7 @@ $($brand.Header)
     # Maturity spans all theaters; attack paths only render if an AD theater was scanned.
     # =================================================================
     [void]$html.Append((Get-GuerrillaMaturitySectionHtml -Findings $findings -Esc $esc))
+    [void]$html.Append((Get-GuerrillaIndicatorsOfExposureHtml -Findings $findings -Esc $esc))
     [void]$html.Append((Get-GuerrillaCartographyHtml -Findings $findings -Esc $esc))
     [void]$html.Append((Get-GuerrillaAttackPathSectionHtml -Findings $findings -Esc $esc -OmitIfAbsent))
 

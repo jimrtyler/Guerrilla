@@ -67,6 +67,8 @@ $h = & $mod {
         Carto         = Get-GuerrillaCartographyHtml -Findings $ad -Esc $esc
         CartoGWS      = Get-GuerrillaCartographyHtml -Findings $gws -Esc $esc
         ChainData     = Get-GuerrillaAttackChainData -Findings $ad
+        Ioe           = Get-GuerrillaIndicatorsOfExposureHtml -Findings $ad -Esc $esc
+        IoeAllPass    = Get-GuerrillaIndicatorsOfExposureHtml -Findings @([pscustomobject]@{ CheckId='P1'; CheckName='p'; Category='Kerberos'; Severity='Low'; Status='PASS'; CurrentValue=''; Details=@{} }) -Esc $esc
     }
 } $adFindings $gwsFindings
 
@@ -78,6 +80,9 @@ Add-R 'helper: chain data reads both shapes'    ($h.ChainData.Count -eq 2) "got=
 Add-R 'helper: hop count derived when no Length' (@($h.ChainData | Where-Object { $_.Path -match 'AdminSDHolder' }).Length -eq 1) ''
 Add-R 'helper: OmitIfAbsent => empty on GWS'    ([string]::IsNullOrEmpty($h.PathsOmitGWS)) ''
 Add-R 'helper: level color maps'                ($h.Color3 -eq 'var(--gold)') "got=$($h.Color3)"
+Add-R 'helper: IOE emits ranked section'        (($h.Ioe -match '<h2>Indicators of Exposure</h2>') -and ($h.Ioe -match 'ioe-item')) ''
+Add-R 'helper: IOE Critical ranked first'       ($h.Ioe -match '(?s)Indicators of Exposure.*?sev-critical') ''
+Add-R 'helper: IOE empty when all pass'         ([string]::IsNullOrEmpty($h.IoeAllPass)) ''
 Add-R 'helper: cartography emits SVG'           (($h.Carto -match '<svg ') -and ($h.Carto -match '<h2>Attack-Path Cartography</h2>')) ''
 Add-R 'helper: cartography includes ADPATH-001 node' ($h.Carto -match 'AdminSDHolder') ''
 Add-R 'helper: cartography has nodes+arrow'     (($h.Carto -match '<rect ') -and ($h.Carto -match 'marker-end')) ''
@@ -98,6 +103,7 @@ try {
     } $adFindings $catScores $tmp '/tmp/corp-bloodhound.json'
     $html = Get-Content $tmp -Raw
     Add-R 'recon: Security Maturity present'    ($html -match '<h2>Security Maturity</h2>') ''
+    Add-R 'recon: Indicators of Exposure present' ($html -match '<h2>Indicators of Exposure</h2>') ''
     Add-R 'recon: Cartography (SVG) present'    (($html -match '<h2>Attack-Path Cartography</h2>') -and ($html -match '<svg ')) ''
     Add-R 'recon: Attack Paths present'         ($html -match '<h2>Attack Paths to Tier-0</h2>') ''
     Add-R 'recon: full chain rendered'          ($html -match 'MemberOf.*Domain Admins') ''
@@ -118,6 +124,7 @@ try {
     } $gwsFindings $gwsCat $tmp2
     $html2 = Get-Content $tmp2 -Raw
     Add-R 'gws: Security Maturity present'      ($html2 -match '<h2>Security Maturity</h2>') ''
+    Add-R 'gws: Indicators of Exposure present' ($html2 -match '<h2>Indicators of Exposure</h2>') ''
     Add-R 'gws: no Attack Paths section'        (-not ($html2 -match '<h2>Attack Paths to Tier-0</h2>')) ''
     Add-R 'gws: Tradecraft finding surfaced'    ($html2 -match 'GTRADE-001') ''
 } finally { Remove-Item $tmp2 -ErrorAction SilentlyContinue }
@@ -143,6 +150,7 @@ try {
     } $result $tmp3
     $html3 = Get-Content $tmp3 -Raw
     Add-R 'campaign: Security Maturity present'  ($html3 -match '<h2>Security Maturity</h2>') ''
+    Add-R 'campaign: Indicators of Exposure present' ($html3 -match '<h2>Indicators of Exposure</h2>') ''
     Add-R 'campaign: Cartography (SVG) present'  (($html3 -match '<h2>Attack-Path Cartography</h2>') -and ($html3 -match '<svg ')) ''
     Add-R 'campaign: Attack Paths present'       ($html3 -match '<h2>Attack Paths to Tier-0</h2>') ''
     Add-R 'campaign: full chain rendered'        ($html3 -match 'MemberOf.*Domain Admins') ''
@@ -158,6 +166,7 @@ try {
     } $adFindings $tmp4
     $html4 = Get-Content $tmp4 -Raw
     Add-R 'technical: Security Maturity present' ($html4 -match '<h2>Security Maturity</h2>') ''
+    Add-R 'technical: Indicators of Exposure present' ($html4 -match '<h2>Indicators of Exposure</h2>') ''
     Add-R 'technical: Cartography (SVG) present' (($html4 -match '<h2>Attack-Path Cartography</h2>') -and ($html4 -match '<svg ')) ''
     Add-R 'technical: Attack Paths present'      ($html4 -match '<h2>Attack Paths to Tier-0</h2>') ''
     Add-R 'technical: full chain rendered'       ($html4 -match 'MemberOf.*Domain Admins') ''
