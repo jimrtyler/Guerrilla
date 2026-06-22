@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.29.0] - 2026-06-21
+
+_Turnkey CI/CD — a GitHub Action and a severity gate for security-config-as-code._
+
+### Added
+- **`Get-GuerrillaCIGate`** — decides whether a CI build should fail from findings + a `-FailOn` severity threshold (`Critical` / `High` / `Medium` / `Low` / `Any` / `None`). FAIL gates (plus WARN with `-WarningsAsFailures`); SKIP / "Not Assessed" never gates. Returns `{ShouldFail; GatingCount; GatingCheckIds}`.
+- **`action.yml`** — a turnkey GitHub Action (composite) at the repo root: installs the module, runs a chosen theater (Infiltration / Reconnaissance / Fortification / Campaign), publishes JUnit results via `Export-GuerrillaJUnit`, and gates the build. The caller authenticates to the tenant/domain first; the Action does not handle auth.
+
+### Notes
+- Builds on the JUnit primitive. Gating logic is unit-tested (`Tests/verify-ci-gate.ps1`, 11/11); the Action itself wraps validated cmdlets — confirm end-to-end in a live runner. 49 public functions; 517 checks unchanged.
+
 ## [2.28.1] - 2026-06-21
 
 _Release-notes maintenance — no functional change._

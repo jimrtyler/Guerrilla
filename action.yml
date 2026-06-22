@@ -1,0 +1,96 @@
+# PSGuerrilla - Jim Tyler, Microsoft MVP - CC BY 4.0
+# Turnkey GitHub Action: run a PSGuerrilla security audit, publish JUnit results, and gate the build.
+#
+# Authenticate to your tenant/domain BEFORE this step (e.g. azure/login OIDC for Entra/M365, or your
+# own connect flow). This action wraps the published, unit-tested cmdlets — it does not handle auth.
+#
+#   - uses: azure/login@v2
+#     with: { client-id: ..., tenant-id: ..., allow-no-subscriptions: true }
+#   - uses: jimrtyler/PSGuerrilla@main
+#     with:
+#       theater: Infiltration       # Infiltration (Entra/M365) | Reconnaissance (AD) | Fortification (GWS) | Campaign (all)
+#       fail-on: High               # Critical | High | Medium | Low | Any | None
+#   - uses: mikepenz/action-junit-report@v4
+#     if: always()
+#     with: { report_paths: psguerrilla-results.xml }
+
+name: 'PSGuerrilla Security Audit'
+description: 'Run a PSGuerrilla security audit, publish JUnit results, and fail the build on findings (security config as code).'
+author: 'Jim Tyler'
+branding:
+  icon: 'shield'
+  color: 'green'
+
+inputs:
+  theater:
+    description: 'Which audit to run: Infiltration | Reconnaissance | Fortification | Campaign'
+    required: false
+    default: 'Infiltration'
+  categories:
+    description: 'Comma-separated categories, or All (Infiltration/Reconnaissance only)'
+    required: false
+    default: 'All'
+  output:
+    description: 'JUnit XML output path'
+    required: false
+    default: 'psguerrilla-results.xml'
+  fail-on:
+    description: 'Fail the build on FAIL findings at this severity-or-higher: Critical | High | Medium | Low | Any | None'
+    required: false
+    default: 'High'
+  warnings-as-failures:
+    description: 'Count WARN findings toward the gate (true/false)'
+    required: false
+    default: 'false'
+  module-version:
+    description: 'Pin a specific PSGuerrilla version (default: latest)'
+    required: false
+    default: ''
+
+outputs:
+  failures:
+    description: 'Number of failing checks'
+    value: ${{ steps.audit.outputs.failures }}
+  results:
+    description: 'Path to the JUnit XML report'
+    value: ${{ steps.audit.outputs.results }}
+
+runs:
+  using: composite
+  steps:
+    - id: audit
+      shell: pwsh
+      env:
+        PSG_THEATER: ${{ inputs.theater }}
+        PSG_CATEGORIES: ${{ inputs.categories }}
+        PSG_OUTPUT: ${{ inputs.output }}
+        PSG_FAILON: ${{ inputs.fail-on }}
+        PSG_WAF: ${{ inputs.warnings-as-failures }}
+        PSG_VERSION: ${{ inputs.module-version }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $installArgs = @{ Name = 'PSGuerrilla'; Force = $true; Scope = 'CurrentUser'; AllowClobber = $true }
+        if ($env:PSG_VERSION) { $installArgs.RequiredVersion = $env:PSG_VERSION }
+        Install-Module @installArgs
+        Import-Module PSGuerrilla
+
+        $fn = "Invoke-$($env:PSG_THEATER)"
+        $params = @{ PassThru = $true; Quiet = $true }
+        if ($env:PSG_THEATER -in 'Infiltration', 'Reconnaissance' -and $env:PSG_CATEGORIES) {
+            $params.Categories = @($env:PSG_CATEGORIES -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+        }
+        $result = & $fn @params
+        $findings = @($result.Findings)
+
+        $waf = $false; [void][bool]::TryParse($env:PSG_WAF, [ref]$waf)
+        $j = Export-GuerrillaJUnit -Findings $findings -OutputPath $env:PSG_OUTPUT -WarningsAsFailures:$waf
+        "results=$($j.Path)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        "failures=$($j.Failures)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        Write-Host "PSGuerrilla [$($env:PSG_THEATER)]: $($j.Passed) passed, $($j.Failures) failed, $($j.Skipped) not assessed"
+
+        $gate = Get-GuerrillaCIGate -Findings $findings -FailOn $env:PSG_FAILON -WarningsAsFailures:$waf
+        if ($gate.ShouldFail) {
+            Write-Host "::error::$($gate.GatingCount) finding(s) at or above '$($env:PSG_FAILON)' severity — failing the build."
+            exit 1
+        }
+        Write-Host "Gate (fail-on=$($env:PSG_FAILON)): passed."
