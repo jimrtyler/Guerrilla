@@ -252,10 +252,29 @@ function Test-ReconADTRADE006 {
             -CurrentValue 'No msDS-KeyCredentialLink (shadow credential) values found on privileged/Tier-0 principals (admins, domain controllers, adminCount=1 objects).' `
             -Details @{ ScannedScope = 'adminCount=1 + domain controllers' }
     }
-    $summary = @($hits | Select-Object -First 8 | ForEach-Object { "$($_.SamAccountName) ($($_.KeyCredentialCount) key(s))" }) -join '; '
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
-        -CurrentValue "$($hits.Count) privileged/Tier-0 principal(s) carry msDS-KeyCredentialLink values: $summary. Each is a potential shadow-credential backdoor (Whisker/pyWhisker) allowing PKINIT logon as that account. Verify every key against a legitimate WHfB/passwordless enrollment and remove unrecognised entries." `
-        -Details @{ HitCount = $hits.Count; Principals = @($hits) }
+
+    # A member computer carrying its own msDS-KeyCredentialLink is the normal signature of a
+    # Windows Hello for Business / Entra hybrid device-registration key — NOT the shadow-credential
+    # primitive. Failing on those screams on every hybrid-joined estate. Score key credentials on
+    # user/admin principals or domain controllers as high-signal (FAIL); treat member-computer
+    # device keys as review-only (WARN) — never silently PASS, but never a false FAIL either.
+    $highSignal = @($hits | Where-Object { -not $_.IsComputer -or $_.IsDomainController })
+    $deviceKeys = @($hits | Where-Object { $_.IsComputer -and -not $_.IsDomainController })
+
+    if ($highSignal.Count -gt 0) {
+        $summary = @($highSignal | Select-Object -First 8 | ForEach-Object {
+            "$($_.SamAccountName) [$($_.ObjectClass)$(if ($_.IsDomainController) { '/DC' })] ($($_.KeyCredentialCount) key(s))" }) -join '; '
+        $tail = if ($deviceKeys.Count) { " ($($deviceKeys.Count) member-computer device key(s) excluded as likely-legitimate.)" } else { '' }
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "$($highSignal.Count) privileged principal(s) (user/admin/domain controller) carry msDS-KeyCredentialLink values: $summary. A key credential on an admin account or a domain controller is the shadow-credential backdoor (Whisker/pyWhisker, T1556) allowing PKINIT logon as that account. Verify every key against a legitimate enrollment and remove unrecognised entries.$tail" `
+            -Details @{ HitCount = $highSignal.Count; Principals = @($highSignal); DeviceKeyComputers = $deviceKeys.Count }
+    }
+
+    # Only member-computer device keys remain — overwhelmingly legitimate WHfB / Entra-hybrid registrations.
+    $summary = @($deviceKeys | Select-Object -First 8 | ForEach-Object { "$($_.SamAccountName) ($($_.KeyCredentialCount) key(s))" }) -join '; '
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+        -CurrentValue "$($deviceKeys.Count) member-computer account(s) carry msDS-KeyCredentialLink values: $summary. These are typically legitimate Windows Hello for Business / Entra hybrid device-registration keys, not shadow credentials. Confirm each key's owner matches the computer object — a key whose owner differs from the object is the actual shadow-credential primitive. Not failing on expected device keys." `
+        -Details @{ DeviceKeyComputers = $deviceKeys.Count; Principals = @($deviceKeys) }
 }
 
 # ── ADTRADE-007: BadSuccessor dMSA Escalation Surface ──────────────────────

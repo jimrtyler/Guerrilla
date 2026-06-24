@@ -61,6 +61,20 @@ function Get-EntraFederationData {
         $data.Errors['OnPremisesSync'] = $_.Exception.Message
     }
 
+    # Reliable hybrid signal, independent of the scope above. /directory/onPremisesSynchronization
+    # requires OnPremDirectorySynchronization.Read.All and returns 403 without it, leaving
+    # OnPremisesSyncSettings $null — which previously made hybrid tenants look cloud-only.
+    # organization.onPremisesSyncEnabled is readable with Organization.Read.All, so federation
+    # checks can still tell hybrid from cloud-only when the sync-config endpoint is forbidden.
+    try {
+        $org = Invoke-GraphApi -AccessToken $AccessToken -Uri '/organization'
+        $orgObj = if ($org.value) { @($org.value)[0] } elseif ($org -is [array]) { $org[0] } else { $org }
+        $data.OnPremisesSyncEnabled      = [bool]$orgObj.onPremisesSyncEnabled
+        $data.OnPremisesLastSyncDateTime = $orgObj.onPremisesLastSyncDateTime
+    } catch {
+        $data.Errors['OrgSyncSignal'] = $_.Exception.Message
+    }
+
     # ── User sync status summary (sampled) ────────────────────────────────
     try {
         $cloudOnlyCount = Invoke-GraphApi -AccessToken $AccessToken `

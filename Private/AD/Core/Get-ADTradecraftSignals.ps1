@@ -84,7 +84,7 @@ function Get-ADTradecraftSignals {
                 @{
                     SamAccountName    = "$($_['samaccountname'])"
                     ObjectClass       = $leaf
-                    ObjectSid         = "$($_['objectsid'])"
+                    ObjectSid         = if ($_['objectsid']) { try { ([System.Security.Principal.SecurityIdentifier]::new([byte[]]$_['objectsid'], 0)).Value } catch { '' } } else { '' }
                     DistinguishedName = "$($_['distinguishedname'])"
                 }
             })
@@ -101,7 +101,17 @@ function Get-ADTradecraftSignals {
         $dObj = @(Invoke-LdapQuery -SearchRoot $dRoot -Filter '(objectClass=domainDNS)' `
             -Properties @('objectSid') -Scope Base)
         if ($dObj.Count -gt 0 -and $dObj[0].ContainsKey('objectsid')) {
-            $domainSidString = "$($dObj[0]['objectsid'])"
+            # objectSid is returned as a System.Byte[]. String-interpolating it yields the
+            # space-joined decimal bytes (a malformed SID), so every RID-relative group lookup
+            # (Cert Publishers / Key Admins / Enterprise Key Admins) silently failed and the
+            # checks SKIP'd. Convert to the canonical S-1-5-21-… string before appending RIDs;
+            # resolveGroupMembers then re-parses and binary-escapes it correctly.
+            $rawSid = $dObj[0]['objectsid']
+            if ($rawSid -is [byte[]]) {
+                $domainSidString = ([System.Security.Principal.SecurityIdentifier]::new($rawSid, 0)).Value
+            } elseif ("$rawSid" -match '^S-\d') {
+                $domainSidString = "$rawSid"
+            }
         }
     } catch {
         $result.Errors['DomainSID'] = $_.Exception.Message
@@ -228,19 +238,24 @@ function Get-ADTradecraftSignals {
         # the DC filter captures domain controllers, which are Tier-0 by definition.
         $scFilter = '(&(|(objectCategory=person)(objectCategory=computer))(msDS-KeyCredentialLink=*)(|(adminCount=1)(userAccountControl:1.2.840.113556.1.4.803:=8192)(userAccountControl:1.2.840.113556.1.4.803:=67108864)))'
         $scHits = @(Invoke-LdapQuery -SearchRoot $scRoot -Filter $scFilter `
-            -Properties @('sAMAccountName', 'distinguishedName', 'objectClass', 'adminCount', 'msDS-KeyCredentialLink'))
+            -Properties @('sAMAccountName', 'distinguishedName', 'objectClass', 'adminCount', 'userAccountControl', 'msDS-KeyCredentialLink'))
         $result.ShadowCredCollected = $true
         foreach ($h in $scHits) {
             $oc = $h['objectclass']
             $leaf = if ($oc -is [System.Array]) { "$($oc[-1])" } else { "$oc" }
             $kcl = $h['msds-keycredentiallink']
             $kclCount = if ($kcl -is [System.Array]) { $kcl.Count } elseif ($kcl) { 1 } else { 0 }
+            $uac = 0; [void][int]::TryParse("$($h['useraccountcontrol'])", [ref]$uac)
+            # SERVER_TRUST_ACCOUNT (0x2000) or PARTIAL_SECRETS_ACCOUNT/RODC (0x4000000) => domain controller.
+            $isDc = (($uac -band 8192) -ne 0) -or (($uac -band 67108864) -ne 0)
             $result.ShadowCredentials += @{
-                SamAccountName    = "$($h['samaccountname'])"
-                DistinguishedName = "$($h['distinguishedname'])"
-                ObjectClass       = $leaf
-                AdminCount        = "$($h['admincount'])"
+                SamAccountName     = "$($h['samaccountname'])"
+                DistinguishedName  = "$($h['distinguishedname'])"
+                ObjectClass        = $leaf
+                AdminCount         = "$($h['admincount'])"
                 KeyCredentialCount = $kclCount
+                IsComputer         = ($leaf -eq 'computer')
+                IsDomainController = $isDc
             }
         }
     } catch {

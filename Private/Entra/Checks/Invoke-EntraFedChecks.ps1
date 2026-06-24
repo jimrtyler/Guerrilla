@@ -265,8 +265,19 @@ function Test-InfiltrationEIDFED005 {
 
     $syncSettings = $AuditData.Federation.OnPremisesSyncSettings
     if (-not $syncSettings) {
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-            -CurrentValue 'No on-premises synchronization configured — cloud-only tenant' `
+        # Distinguish a genuine cloud-only tenant from a hybrid tenant whose sync-config endpoint is
+        # unreadable (the collector 403s on /directory/onPremisesSynchronization without
+        # OnPremDirectorySynchronization.Read.All). Never score "config unreadable" as PASS —
+        # absence of evidence is not compliance.
+        $syncEnabled = [bool]$AuditData.Federation.OnPremisesSyncEnabled -or
+                       (($AuditData.Federation.Users.SyncedCount ?? 0) -gt 0)
+        if ($syncEnabled) {
+            return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+                -CurrentValue 'Directory synchronization is enabled but the Azure AD Connect configuration could not be read (requires OnPremDirectorySynchronization.Read.All, or the endpoint returned an error). Not Assessed — grant the scope or verify on the Connect server.' `
+                -Details @{ SyncConfigured = $true; ConfigReadable = $false }
+        }
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No on-premises synchronization configured — cloud-only tenant; no Azure AD Connect to assess.' `
             -Details @{ SyncConfigured = $false }
     }
 
@@ -549,13 +560,21 @@ function Test-InfiltrationEIDFED013 {
     $minimumSafe = $script:EntraConnectMinimumSafeVersion
 
     # ── Layer 2 (cloud): is on-premises synchronization enabled at all? ──
+    # Don't depend solely on /directory/onPremisesSynchronization — it requires
+    # OnPremDirectorySynchronization.Read.All and 403s without it, which would make a hybrid tenant
+    # look cloud-only and SKIP. Fall back to authorized signals: organization.onPremisesSyncEnabled
+    # and the synced-user count.
     $syncSettings = $AuditData.Federation.OnPremisesSyncSettings
-    $syncEnabled  = $null -ne $syncSettings
-    $lastSyncDateTime = $null
-    if ($syncEnabled) {
+    $syncEnabled  = ($null -ne $syncSettings) -or
+                    [bool]$AuditData.Federation.OnPremisesSyncEnabled -or
+                    (($AuditData.Federation.Users.SyncedCount ?? 0) -gt 0)
+    $lastSyncDateTime = $AuditData.Federation.OnPremisesLastSyncDateTime
+    if ($syncSettings) {
+        # Only derive last-sync from the sync-config object when it was actually readable; otherwise
+        # keep the organization-level value above (don't overwrite it with null on a 403).
         $settings = if ($syncSettings.value) { $syncSettings.value } else { @($syncSettings) }
         $config   = if ($settings -is [array] -and $settings.Count -gt 0) { $settings[0] } else { $settings }
-        $lastSyncDateTime = $config.configuration.lastImportFromAd ?? $config.lastSyncDateTime
+        $lastSyncDateTime = ($config.configuration.lastImportFromAd ?? $config.lastSyncDateTime) ?? $lastSyncDateTime
     }
 
     # ── Layer 1 (authoritative): read the installed build from the Connect host ──

@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.30.1] - 2026-06-24
+
+_Reliability fixes from live validation of the v2.30.0 checks. No check-count or public-surface change (580 checks)._
+
+### Fixed
+- **AD Tier-0 group resolution (`ADTRADE-008`, `ADTRADE-009`)** — the domain SID was read as a raw `System.Byte[]` and string-interpolated, producing a malformed SID so the RID-relative lookups for **Cert Publishers / Key Admins / Enterprise Key Admins** always failed and the checks reported *Not Assessed*. Now converted to the canonical SID string before use, so membership is evaluated correctly (an honesty-doctrine fix — a disguised SKIP could hide real members).
+- **Entra Connect / hybrid identity (`EIDFED-013` and the federation family)** — hybrid detection no longer depends solely on `/directory/onPremisesSynchronization` (which requires `OnPremDirectorySynchronization.Read.All` and returns 403 without it). It now falls back to the authorized `organization.onPremisesSyncEnabled` signal and synced-user count, so a synchronized tenant is no longer misreported as cloud-only. The Azure AD Connect configuration review (`EIDFED-005`) no longer returns **PASS** when the sync configuration is unreadable — it reports **Not Assessed** and distinguishes a genuine cloud-only tenant from a hybrid tenant whose config is forbidden.
+
+### Changed
+- **Shadow-credential check (`ADTRADE-006`)** — distinguishes legitimate Windows Hello for Business / Entra hybrid device-registration keys on **member computers** (reported as **WARN**, review-only) from key credentials on **user/admin principals or domain controllers** (reported as **FAIL**, the real shadow-credential primitive). Eliminates the false positive on hybrid-joined estates while preserving detection of the actual attack.
+
 ## [2.30.0] - 2026-06-23
 
 _+63 checks (580 total) — closing remaining framework-coverage gaps across all three theaters._
