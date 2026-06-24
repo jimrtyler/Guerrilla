@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.30.3] - 2026-06-24
+
+_Honesty fix — six AD checks could report PASS without actually performing the assessment._
+
+### Fixed
+- **DSInternals NT-hash password checks (`ADPWD-010`, `-011`, `-012`, `-013`, `-014`)** — these treated *DSInternals being installed* as *analysis performed* and returned **PASS** ("no blank/duplicate/HIBP/dictionary/common passwords") against a result field that no collector populates. They now return **Not Assessed** when the NT-hash analysis was not actually run (no hash dataset collected — requires replication / ntds.dit access), and still FAIL/PASS correctly once a real dataset is present.
+- **AD CS ESC6 (`ADCS-009`)** — read the LDAP `pKIEnrollmentService` `flags` attribute, which cannot carry the `EDITF_ATTRIBUTESUBJECTALTNAME2` policy-module **registry** bit, so it returned a false **PASS** ("not set"). It now reports **Not Assessed** with guidance (`certutil -getreg policy\EditFlags` on each CA host), since the flag isn't determinable via agentless LDAP.
+
+_Surfaced via live-domain Azure lab validation. Related coverage gaps that already SKIP honestly (`ADDOM-007` replication health, `ADPRIV-016` privileged-password strength, `ADPRIV-026/027` DC user-rights) remain Not Assessed and are tracked as planned collector features._
+
 ## [2.30.2] - 2026-06-24
 
 _Live-domain reliability fix (validated on a domain controller)._

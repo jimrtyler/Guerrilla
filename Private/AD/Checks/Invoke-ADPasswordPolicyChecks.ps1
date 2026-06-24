@@ -377,8 +377,15 @@ function Test-ReconADPWD010 {
             -Details @{ Reason = 'DSInternals module not available' }
     }
 
-    # If DSInternals data was collected and populated
-    $blankPwdUsers = @($AuditData.PasswordPolicies.BlankPasswordUsers ?? @())
+    # DSInternals being installed does NOT mean the NT-hash analysis ran. No collector populates
+    # this result field today, so an absent field means the analysis was never performed — report
+    # Not Assessed rather than a false PASS ("clean") without ever checking.
+    if ($null -eq $AuditData.PasswordPolicies.BlankPasswordUsers) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'DSInternals is installed, but NT-hash analysis was not performed (no hash dataset collected — requires replication / ntds.dit access on a DC). Not Assessed.' `
+            -Details @{ Reason = 'NT-hash analysis not performed' }
+    }
+    $blankPwdUsers = @($AuditData.PasswordPolicies.BlankPasswordUsers)
 
     if ($blankPwdUsers.Count -gt 0) {
         $first20 = @($blankPwdUsers | Select-Object -First 20 | ForEach-Object { $_.SamAccountName })
@@ -410,7 +417,12 @@ function Test-ReconADPWD011 {
             -Details @{ Reason = 'DSInternals module not available' }
     }
 
-    $dupeGroups = @($AuditData.PasswordPolicies.DuplicateHashGroups ?? @())
+    if ($null -eq $AuditData.PasswordPolicies.DuplicateHashGroups) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'DSInternals is installed, but NT-hash analysis was not performed (no hash dataset collected — requires replication / ntds.dit access on a DC). Not Assessed.' `
+            -Details @{ Reason = 'NT-hash analysis not performed' }
+    }
+    $dupeGroups = @($AuditData.PasswordPolicies.DuplicateHashGroups)
 
     if ($dupeGroups.Count -gt 0) {
         $totalAffected = ($dupeGroups | ForEach-Object { @($_.Accounts).Count } | Measure-Object -Sum).Sum
@@ -442,7 +454,12 @@ function Test-ReconADPWD012 {
             -Details @{ Reason = 'DSInternals module not available' }
     }
 
-    $compromised = @($AuditData.PasswordPolicies.HIBPCompromisedUsers ?? @())
+    if ($null -eq $AuditData.PasswordPolicies.HIBPCompromisedUsers) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'DSInternals is installed, but no HIBP/NT-hash comparison was performed (requires replication / ntds.dit access plus a pwned-password dataset). Not Assessed.' `
+            -Details @{ Reason = 'HIBP comparison not performed' }
+    }
+    $compromised = @($AuditData.PasswordPolicies.HIBPCompromisedUsers)
 
     if ($compromised.Count -gt 0) {
         $first20 = @($compromised | Select-Object -First 20 | ForEach-Object { $_.SamAccountName })
@@ -474,7 +491,12 @@ function Test-ReconADPWD013 {
             -Details @{ Reason = 'DSInternals module not available' }
     }
 
-    $dictMatches = @($AuditData.PasswordPolicies.DictionaryMatchUsers ?? @())
+    if ($null -eq $AuditData.PasswordPolicies.DictionaryMatchUsers) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'DSInternals is installed, but NT-hash dictionary analysis was not performed (no hash dataset collected — requires replication / ntds.dit access on a DC). Not Assessed.' `
+            -Details @{ Reason = 'NT-hash analysis not performed' }
+    }
+    $dictMatches = @($AuditData.PasswordPolicies.DictionaryMatchUsers)
 
     if ($dictMatches.Count -gt 0) {
         $first20 = @($dictMatches | Select-Object -First 20 | ForEach-Object { $_.SamAccountName })
@@ -506,7 +528,12 @@ function Test-ReconADPWD014 {
             -Details @{ Reason = 'DSInternals module not available' }
     }
 
-    $commonPwd = @($AuditData.PasswordPolicies.CommonPasswordUsers ?? @())
+    if ($null -eq $AuditData.PasswordPolicies.CommonPasswordUsers) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'DSInternals is installed, but NT-hash analysis was not performed (no hash dataset collected — requires replication / ntds.dit access on a DC). Not Assessed.' `
+            -Details @{ Reason = 'NT-hash analysis not performed' }
+    }
+    $commonPwd = @($AuditData.PasswordPolicies.CommonPasswordUsers)
 
     if ($commonPwd.Count -gt 0) {
         $first20 = @($commonPwd | Select-Object -First 20 | ForEach-Object { $_.SamAccountName })

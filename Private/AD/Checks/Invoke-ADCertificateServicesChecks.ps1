@@ -631,31 +631,15 @@ function Test-ReconADCS009 {
         }
     }
 
-    if ($vulnerableCAs.Count -gt 0) {
-        $caNames = @($vulnerableCAs | ForEach-Object { $_.CAName })
-        $currentValue = "$($vulnerableCAs.Count) CA(s) have EDITF_ATTRIBUTESUBJECTALTNAME2 enabled: $($caNames -join ', '). " +
-            'Any certificate request can include a user-defined SAN regardless of template configuration, making all templates vulnerable to ESC1-style attacks'
-
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
-            -CurrentValue $currentValue `
-            -Details @{
-                VulnerableCACount = $vulnerableCAs.Count
-                VulnerableCAs     = @($vulnerableCAs)
-                AllCAs            = @($checkedCAs)
-            }
-    }
-
-    # If flags are all zero, the flag data may not have been collected via LDAP
-    $allZeroFlags = ($checkedCAs | Where-Object { $_.Flags -eq 0 }).Count -eq $checkedCAs.Count
-    if ($allZeroFlags -and $checkedCAs.Count -gt 0) {
-        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
-            -CurrentValue "CA flags could not be fully verified via LDAP for $($cas.Count) CA(s). Run 'certutil -getreg policy\EditFlags' on each CA server to check for EDITF_ATTRIBUTESUBJECTALTNAME2" `
-            -Details @{ AllCAs = @($checkedCAs) }
-    }
-
-    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
-        -CurrentValue "EDITF_ATTRIBUTESUBJECTALTNAME2 flag is not set on any of the $($cas.Count) CA(s)" `
-        -Details @{ AllCAs = @($checkedCAs) }
+    # EDITF_ATTRIBUTESUBJECTALTNAME2 (ESC6) lives in the CA host's policy-module registry
+    # (HKLM\...\CertSvc\Configuration\<CA>\PolicyModules\...\EditFlags) and is exposed only via the
+    # CA's RPC interface — NOT via the LDAP pKIEnrollmentService 'flags' attribute read here (that is
+    # a different flags field). A "not set" result from LDAP is therefore not evidence the flag is
+    # off, so this cannot be assessed agentlessly: report Not Assessed rather than a false PASS.
+    $caNames = @($checkedCAs | ForEach-Object { $_.CAName }) -join ', '
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+        -CurrentValue "EDITF_ATTRIBUTESUBJECTALTNAME2 (ESC6) cannot be determined via agentless LDAP for $($cas.Count) CA(s) ($caNames) — it is a CA-host policy-module registry flag. Not Assessed: verify with 'certutil -getreg policy\EditFlags' on each CA server, or run a CA-RPC-aware tool." `
+        -Details @{ AllCAs = @($checkedCAs); NotAssessed = $true }
 }
 
 # ── ADCS-010: ESC7 - Vulnerable CA ACLs ──────────────────────────────────
