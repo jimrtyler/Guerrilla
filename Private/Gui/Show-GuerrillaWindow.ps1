@@ -34,69 +34,111 @@ function Show-GuerrillaWindow {
         Title="PSGuerrilla — Operations Console"
         Height="720" Width="1100"
         MinHeight="560" MinWidth="900"
-        Background="#1A1A1A"
+        Background="#F4F6F8"
         WindowStartupLocation="CenterScreen"
-        FontFamily="Segoe UI" FontSize="13" Foreground="#F5F0E6">
+        FontFamily="Segoe UI" FontSize="13" Foreground="#1F2933">
   <Window.Resources>
     <Style x:Key="NavButton" TargetType="Button">
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="Foreground" Value="#E4DBC0"/>
+      <Setter Property="Foreground" Value="#44515E"/>
       <Setter Property="BorderThickness" Value="0"/>
       <Setter Property="Padding" Value="20,12"/>
       <Setter Property="HorizontalContentAlignment" Value="Left"/>
       <Setter Property="FontSize" Value="14"/>
       <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6"
+                    Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
       <Style.Triggers>
         <Trigger Property="IsMouseOver" Value="True">
-          <Setter Property="Background" Value="#33322C"/>
-          <Setter Property="Foreground" Value="#F5F0E6"/>
+          <Setter Property="Background" Value="#EDF1F6"/>
+          <Setter Property="Foreground" Value="#1F2933"/>
         </Trigger>
       </Style.Triggers>
     </Style>
     <Style x:Key="NavButtonActive" TargetType="Button" BasedOn="{StaticResource NavButton}">
-      <Setter Property="Background" Value="#33322C"/>
-      <Setter Property="Foreground" Value="#C67A1F"/>
+      <Setter Property="Background" Value="#EFF4FF"/>
+      <Setter Property="Foreground" Value="#2563EB"/>
       <Setter Property="FontWeight" Value="Bold"/>
     </Style>
     <Style x:Key="PrimaryButton" TargetType="Button">
-      <Setter Property="Background" Value="#C67A1F"/>
-      <Setter Property="Foreground" Value="#1A1A1A"/>
+      <Setter Property="Background" Value="#2563EB"/>
+      <Setter Property="Foreground" Value="#FFFFFF"/>
       <Setter Property="BorderThickness" Value="0"/>
       <Setter Property="Padding" Value="16,8"/>
       <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6"
+                    Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
       <Style.Triggers>
-        <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#D88E33"/></Trigger>
-        <Trigger Property="IsEnabled" Value="False"><Setter Property="Background" Value="#55524A"/><Setter Property="Foreground" Value="#8B8B7A"/></Trigger>
+        <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#1D4ED8"/></Trigger>
+        <Trigger Property="IsEnabled" Value="False"><Setter Property="Background" Value="#F1F5F9"/><Setter Property="Foreground" Value="#94A3B8"/></Trigger>
       </Style.Triggers>
     </Style>
     <Style x:Key="SecondaryButton" TargetType="Button">
-      <Setter Property="Background" Value="#252420"/>
-      <Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="Padding" Value="12,6"/>
       <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
       <Style.Triggers>
-        <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#33322C"/></Trigger>
-        <Trigger Property="IsEnabled" Value="False"><Setter Property="Foreground" Value="#8B8B7A"/></Trigger>
+        <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#EDF1F6"/></Trigger>
+        <Trigger Property="IsEnabled" Value="False"><Setter Property="Foreground" Value="#94A3B8"/></Trigger>
       </Style.Triggers>
     </Style>
     <Style TargetType="TextBox">
-      <Setter Property="Background" Value="#252420"/>
-      <Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
       <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="Padding" Value="8,4"/>
-      <Setter Property="CaretBrush" Value="#F5F0E6"/>
+      <Setter Property="Padding" Value="8,5"/>
+      <Setter Property="CaretBrush" Value="#1F2933"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="TextBox">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4" SnapsToDevicePixels="True">
+              <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
     <!-- Full dark template. The stock ComboBox template renders the closed selection box
          (SelectionBoxItem) via the system theme, ignoring Foreground, so the selected text
          was invisible/blank when collapsed. This template themes the selection box too. -->
     <Style TargetType="ComboBox">
-      <Setter Property="Background" Value="#252420"/>
-      <Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
       <Setter Property="Padding" Value="8,4"/>
       <Setter Property="Height" Value="28"/>
       <Setter Property="Template">
@@ -107,18 +149,17 @@ function Show-GuerrillaWindow {
                             IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                 <ToggleButton.Template>
                   <ControlTemplate TargetType="ToggleButton">
-                    <!-- Hardcode the dark box fill. {TemplateBinding Background} here binds to
-                         the ToggleButton's own Background (never set) -> system light button
-                         chrome, which made the closed box render light grey; near-white
-                         selection text on it read as blank/faint (GUI-2, repeatedly). -->
-                    <Border Background="#252420" BorderBrush="#55524A" BorderThickness="1" SnapsToDevicePixels="True">
+                    <!-- Hardcode the box fill so the closed selection box matches the theme
+                         instead of inheriting system button chrome. Light surface with dark
+                         selection text now; the chevron uses primary text color. -->
+                    <Border Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="4" SnapsToDevicePixels="True">
                       <Grid>
                         <Grid.ColumnDefinitions>
                           <ColumnDefinition Width="*"/>
                           <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <Path Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                              Data="M 0 0 L 4 4 L 8 0 Z" Fill="#F5F0E6"/>
+                              Data="M 0 0 L 4 4 L 8 0 Z" Fill="#1F2933"/>
                       </Grid>
                     </Border>
                   </ControlTemplate>
@@ -129,12 +170,12 @@ function Show-GuerrillaWindow {
                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                 Margin="8,0,28,0" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                TextElement.Foreground="#F5F0E6"/>
+                                TextElement.Foreground="#1F2933"/>
               <Popup x:Name="Popup" Placement="Bottom" Focusable="False" AllowsTransparency="True"
                      IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
                 <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
                       MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
-                  <Border Background="#252420" BorderBrush="#55524A" BorderThickness="1">
+                  <Border Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="4">
                     <ScrollViewer SnapsToDevicePixels="True">
                       <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                     </ScrollViewer>
@@ -146,11 +187,11 @@ function Show-GuerrillaWindow {
         </Setter.Value>
       </Setter>
     </Style>
-    <!-- Dropdown items: the WPF popup defaults to a light system theme, so without this
-         the near-white item text is invisible. Force dark items with light text. -->
+    <!-- Dropdown items: force a light surface with dark text, and an accent-tint
+         highlight so the highlighted item stays readable (dark text on tint). -->
     <Style TargetType="ComboBoxItem">
-      <Setter Property="Background" Value="#252420"/>
-      <Setter Property="Foreground" Value="#F5F0E6"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
       <Setter Property="Padding" Value="8,5"/>
       <Setter Property="Template">
         <Setter.Value>
@@ -160,8 +201,8 @@ function Show-GuerrillaWindow {
             </Border>
             <ControlTemplate.Triggers>
               <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="bd" Property="Background" Value="#C67A1F"/>
-                <Setter Property="Foreground" Value="#1A1A1A"/>
+                <Setter TargetName="bd" Property="Background" Value="#EFF4FF"/>
+                <Setter Property="Foreground" Value="#1F2933"/>
               </Trigger>
             </ControlTemplate.Triggers>
           </ControlTemplate>
@@ -169,13 +210,13 @@ function Show-GuerrillaWindow {
       </Setter>
     </Style>
     <Style TargetType="DataGrid">
-      <Setter Property="Background" Value="#1A1A1A"/>
-      <Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/>
+      <Setter Property="Background" Value="#F4F6F8"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
       <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-      <Setter Property="HorizontalGridLinesBrush" Value="#33322C"/>
-      <Setter Property="RowBackground" Value="#1A1A1A"/>
-      <Setter Property="AlternatingRowBackground" Value="#1F1E1A"/>
+      <Setter Property="HorizontalGridLinesBrush" Value="#EDF1F6"/>
+      <Setter Property="RowBackground" Value="#FFFFFF"/>
+      <Setter Property="AlternatingRowBackground" Value="#EDF1F6"/>
       <Setter Property="HeadersVisibility" Value="Column"/>
       <Setter Property="AutoGenerateColumns" Value="False"/>
       <Setter Property="CanUserAddRows" Value="False"/>
@@ -184,11 +225,11 @@ function Show-GuerrillaWindow {
       <Setter Property="SelectionMode" Value="Single"/>
     </Style>
     <Style TargetType="DataGridColumnHeader">
-      <Setter Property="Background" Value="#252420"/>
-      <Setter Property="Foreground" Value="#C67A1F"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#2563EB"/>
       <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="Padding" Value="8,6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
       <Setter Property="BorderThickness" Value="0,0,0,1"/>
     </Style>
     <Style TargetType="DataGridCell">
@@ -196,17 +237,17 @@ function Show-GuerrillaWindow {
       <Setter Property="Padding" Value="8,6"/>
     </Style>
     <Style TargetType="CheckBox">
-      <Setter Property="Foreground" Value="#F5F0E6"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
       <Setter Property="Margin" Value="0,4"/>
     </Style>
     <Style TargetType="RadioButton">
-      <Setter Property="Foreground" Value="#F5F0E6"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
       <Setter Property="Margin" Value="0,4,16,4"/>
     </Style>
     <Style TargetType="ListBox">
-      <Setter Property="Background" Value="#252420"/>
-      <Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
       <Setter Property="BorderThickness" Value="1"/>
     </Style>
   </Window.Resources>
@@ -218,16 +259,16 @@ function Show-GuerrillaWindow {
     </Grid.ColumnDefinitions>
 
     <!-- ═══ LEFT NAV RAIL ════════════════════════════════════════════════ -->
-    <Border Grid.Column="0" Background="#252420" BorderBrush="#55524A" BorderThickness="0,0,1,0">
+    <Border Grid.Column="0" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="0,0,1,0">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0,20,0,12">
-          <TextBlock Text="PSGuerrilla" Foreground="#F5F0E6" FontSize="20" FontWeight="Bold" Margin="20,0,20,4"/>
-          <TextBlock Text="Operations Console" Foreground="#8B8B7A" FontSize="11" Margin="20,0,20,16"/>
-          <Border Height="1" Background="#55524A" Margin="0,0,0,8"/>
+          <TextBlock Text="PSGuerrilla" Foreground="#1F2933" FontSize="20" FontWeight="Bold" Margin="20,0,20,4"/>
+          <TextBlock Text="Operations Console" Foreground="#94A3B8" FontSize="11" Margin="20,0,20,16"/>
+          <Border Height="1" Background="#E2E8F0" Margin="0,0,0,8"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Margin="20,12,20,16">
-          <TextBlock x:Name="nav_VersionText" Text="" Foreground="#55524A" FontSize="10"/>
-          <TextBlock x:Name="nav_VaultText"   Text="" Foreground="#55524A" FontSize="10" Margin="0,2,0,0"/>
+          <TextBlock x:Name="nav_VersionText" Text="" Foreground="#94A3B8" FontSize="10"/>
+          <TextBlock x:Name="nav_VaultText"   Text="" Foreground="#94A3B8" FontSize="10" Margin="0,2,0,0"/>
         </StackPanel>
         <StackPanel x:Name="navPanel">
           <Button x:Name="nav_Operations" Content="Operations"  Style="{StaticResource NavButton}"/>
@@ -257,20 +298,20 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Run a scan" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" Text="Pick a theater, select categories, click Run. The HTML report opens when the scan completes." Foreground="#8B8B7A" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Run a scan" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="Pick a theater, select categories, click Run. The HTML report opens when the scan completes." Foreground="#94A3B8" Margin="0,0,0,16"/>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,12">
-          <TextBlock Text="Theater:" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,0,12,0"/>
+          <TextBlock Text="Theater:" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,12,0"/>
           <RadioButton x:Name="ops_TheaterAD"        Content="Active Directory" GroupName="Theater" IsChecked="True"/>
           <RadioButton x:Name="ops_TheaterWorkspace" Content="Google Workspace" GroupName="Theater"/>
           <RadioButton x:Name="ops_TheaterCloud"     Content="Entra / Azure / M365" GroupName="Theater"/>
           <RadioButton x:Name="ops_TheaterCampaign"  Content="All theaters (Campaign)" GroupName="Theater"/>
         </StackPanel>
 
-        <Border Grid.Row="3" BorderBrush="#55524A" BorderThickness="1" Padding="12" Margin="0,0,0,12">
+        <Border Grid.Row="3" BorderBrush="#E2E8F0" BorderThickness="1" Padding="12" Margin="0,0,0,12">
           <StackPanel>
-            <TextBlock Text="Categories" Foreground="#C67A1F" FontWeight="Bold" Margin="0,0,0,8"/>
+            <TextBlock Text="Categories" Foreground="#2563EB" FontWeight="Bold" Margin="0,0,0,8"/>
             <WrapPanel x:Name="ops_CategoryPanel" Orientation="Horizontal"/>
           </StackPanel>
         </Border>
@@ -281,7 +322,7 @@ function Show-GuerrillaWindow {
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
           <StackPanel Grid.Column="0" Orientation="Horizontal">
-            <TextBlock Text="Scan mode:" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,0,12,0"/>
+            <TextBlock Text="Scan mode:" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,12,0"/>
             <RadioButton x:Name="ops_ModeFast" Content="Fast" GroupName="Mode" IsChecked="True"/>
             <RadioButton x:Name="ops_ModeFull" Content="Full" GroupName="Mode"/>
             <CheckBox x:Name="ops_NoReports" Content="No reports" Margin="24,0,12,0"/>
@@ -289,7 +330,7 @@ function Show-GuerrillaWindow {
             <CheckBox x:Name="ops_TestMode"  Content="Test mode" Margin="12,0,0,0" ToolTip="Simulate a scan with no live connection — produces an all-fail report so you can preview themes and branding."/>
           </StackPanel>
           <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <TextBlock Text="Report style:" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBlock Text="Report style:" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,8,0"/>
             <ComboBox x:Name="ops_ReportStyle" Width="140">
               <ComboBoxItem Content="Guerrilla" IsSelected="True"/>
               <ComboBoxItem Content="Professional"/>
@@ -304,7 +345,7 @@ function Show-GuerrillaWindow {
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBlock Grid.Column="0" Text="Output:" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="0" Text="Output:" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,12,0"/>
           <TextBox   Grid.Column="1" x:Name="ops_OutputDir"/>
           <Button    Grid.Column="2" x:Name="ops_BrowseOutput" Content="Browse..." Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
         </Grid>
@@ -322,23 +363,23 @@ function Show-GuerrillaWindow {
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" x:Name="ops_RunButton" Content="Run Scan" Style="{StaticResource PrimaryButton}"/>
             <Button Grid.Column="2" x:Name="ops_CancelButton" Content="Cancel" Style="{StaticResource SecondaryButton}" Visibility="Collapsed"/>
-            <ProgressBar Grid.Column="1" x:Name="ops_Progress" IsIndeterminate="True" Height="6" Margin="16,0,16,0" Visibility="Collapsed" Foreground="#C67A1F" Background="#252420"/>
+            <ProgressBar Grid.Column="1" x:Name="ops_Progress" IsIndeterminate="True" Height="6" Margin="16,0,16,0" Visibility="Collapsed" Foreground="#2563EB" Background="#EDF1F6"/>
           </Grid>
-          <Border Grid.Row="1" BorderBrush="#55524A" BorderThickness="1" Margin="0,12,0,0">
+          <Border Grid.Row="1" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,12,0,0">
             <TextBox x:Name="ops_LogPane" IsReadOnly="True" VerticalScrollBarVisibility="Auto"
                      AcceptsReturn="True" TextWrapping="NoWrap" FontFamily="Consolas" FontSize="12"
-                     Background="#0F0F0F" Foreground="#B8A97E" BorderThickness="0" Padding="8"/>
+                     Background="#FFFFFF" Foreground="#1F2933" BorderThickness="0" Padding="8"/>
           </Border>
         </Grid>
 
-        <Border Grid.Row="7" x:Name="ops_ResultBanner" Background="#1F2F1F" BorderBrush="#6B8E6B" BorderThickness="1"
+        <Border Grid.Row="7" x:Name="ops_ResultBanner" Background="#ECFDF5" BorderBrush="#16A34A" BorderThickness="1"
                 Padding="12,8" Margin="0,8,0,0" Visibility="Collapsed">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" x:Name="ops_ResultText" Foreground="#F5F0E6" VerticalAlignment="Center" TextWrapping="Wrap"/>
+            <TextBlock Grid.Column="0" x:Name="ops_ResultText" Foreground="#1F2933" VerticalAlignment="Center" TextWrapping="Wrap"/>
             <Button    Grid.Column="1" x:Name="ops_OpenReport" Content="Open Report" Style="{StaticResource PrimaryButton}" Margin="12,0,0,0"/>
           </Grid>
         </Border>
@@ -352,8 +393,8 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Safehouse" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" Text="Stored credentials, expiration status, and rotation history." Foreground="#8B8B7A" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Safehouse" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="Stored credentials, expiration status, and rotation history." Foreground="#94A3B8" Margin="0,0,0,16"/>
         <DataGrid x:Name="sh_Grid" Grid.Row="2">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Environment"   Binding="{Binding Environment}"   Width="140"/>
@@ -382,8 +423,8 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Patrol" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" Text="Scheduled scans that run continuously and dispatch alerts on new findings." Foreground="#8B8B7A" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Patrol" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="Scheduled scans that run continuously and dispatch alerts on new findings." Foreground="#94A3B8" Margin="0,0,0,16"/>
         <DataGrid x:Name="pt_Grid" Grid.Row="2">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Task Name"  Binding="{Binding TaskName}"  Width="*"/>
@@ -408,8 +449,8 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Reports" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" x:Name="rp_DirHint" Foreground="#8B8B7A" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Reports" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" x:Name="rp_DirHint" Foreground="#94A3B8" Margin="0,0,0,16"/>
         <DataGrid x:Name="rp_Grid" Grid.Row="2">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Name"     Binding="{Binding Name}"     Width="*"/>
@@ -434,8 +475,8 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Settings" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" Text="Runtime configuration applied to all subsequent scans." Foreground="#8B8B7A" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Settings" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="Runtime configuration applied to all subsequent scans." Foreground="#94A3B8" Margin="0,0,0,16"/>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
           <Grid Margin="0,0,16,0">
             <Grid.ColumnDefinitions>
@@ -449,19 +490,19 @@ function Show-GuerrillaWindow {
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Profile" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Profile" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <ComboBox  Grid.Row="0" Grid.Column="1" x:Name="st_Profile" Margin="0,8">
               <ComboBoxItem Content="Default" IsSelected="True"/>
               <ComboBoxItem Content="K12"/>
             </ComboBox>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Minimum alert level" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Minimum alert level" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <ComboBox  Grid.Row="1" Grid.Column="1" x:Name="st_AlertLevel" Margin="0,8">
               <ComboBoxItem Content="CRITICAL"/>
               <ComboBoxItem Content="HIGH" IsSelected="True"/>
               <ComboBoxItem Content="MEDIUM"/>
               <ComboBoxItem Content="LOW"/>
             </ComboBox>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Output directory" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Output directory" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <Grid Grid.Row="2" Grid.Column="1" Margin="0,8">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -470,9 +511,9 @@ function Show-GuerrillaWindow {
               <TextBox Grid.Column="0" x:Name="st_OutputDir"/>
               <Button  Grid.Column="1" x:Name="st_BrowseOutput" Content="Browse..." Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
             </Grid>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Config file path" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Config file path" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <TextBox   Grid.Row="3" Grid.Column="1" x:Name="st_ConfigPath" Margin="0,8" IsReadOnly="True"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="st_StatusLine" Foreground="#6B8E6B" Margin="0,16,0,0"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="st_StatusLine" Foreground="#16A34A" Margin="0,16,0,0"/>
           </Grid>
         </ScrollViewer>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,12,0,0">
@@ -489,8 +530,8 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Function &amp; Scan Inspector" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" Text="Read the actual source of every scan, check, and helper in this module. Filter by area or search by name, then select a function to view its code." Foreground="#8B8B7A" Margin="0,0,0,16" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="0" Text="Function &amp; Scan Inspector" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="Read the actual source of every scan, check, and helper in this module. Filter by area or search by name, then select a function to view its code." Foreground="#94A3B8" Margin="0,0,0,16" TextWrapping="Wrap"/>
         <Grid Grid.Row="2" Margin="0,0,0,12">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240"/>
@@ -499,7 +540,7 @@ function Show-GuerrillaWindow {
           </Grid.ColumnDefinitions>
           <ComboBox  Grid.Column="0" x:Name="src_AreaFilter" Margin="0,0,8,0"/>
           <TextBox   Grid.Column="1" x:Name="src_Search"/>
-          <TextBlock Grid.Column="2" x:Name="src_Count" Foreground="#8B8B7A" VerticalAlignment="Center" Margin="12,0,0,0"/>
+          <TextBlock Grid.Column="2" x:Name="src_Count" Foreground="#94A3B8" VerticalAlignment="Center" Margin="12,0,0,0"/>
         </Grid>
         <Grid Grid.Row="3">
           <Grid.ColumnDefinitions>
@@ -517,11 +558,11 @@ function Show-GuerrillaWindow {
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
-              <TextBlock Grid.Column="0" x:Name="src_Meta" Foreground="#8B8B7A" VerticalAlignment="Center" TextWrapping="Wrap" Text="Select a function to view its source."/>
+              <TextBlock Grid.Column="0" x:Name="src_Meta" Foreground="#94A3B8" VerticalAlignment="Center" TextWrapping="Wrap" Text="Select a function to view its source."/>
               <Button Grid.Column="1" x:Name="src_Copy" Content="Copy" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
             </Grid>
             <TextBox Grid.Row="1" x:Name="src_Code" IsReadOnly="True" FontFamily="Consolas, Courier New" FontSize="12"
-                     Background="#161512" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                     Background="#FFFFFF" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                      TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True"/>
           </Grid>
         </Grid>
@@ -535,8 +576,8 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Report Branding (White-Label)" FontSize="22" FontWeight="Bold" Foreground="#F5F0E6" Margin="0,0,0,4"/>
-        <TextBlock Grid.Row="1" Text="Add your firm's details to the header of generated reports. The &quot;Generated with PSGuerrilla by Jim Tyler, Microsoft MVP&quot; attribution always remains in the footer. Saved to your config and applied on the next scan." Foreground="#8B8B7A" Margin="0,0,0,16" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="0" Text="Report Branding (White-Label)" FontSize="22" FontWeight="Bold" Foreground="#1F2933" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="Add your firm's details to the header of generated reports. The &quot;Generated with PSGuerrilla by Jim Tyler, Microsoft MVP&quot; attribution always remains in the footer. Saved to your config and applied on the next scan." Foreground="#94A3B8" Margin="0,0,0,16" TextWrapping="Wrap"/>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
           <Grid Margin="0,0,16,0">
             <Grid.ColumnDefinitions>
@@ -552,9 +593,9 @@ function Show-GuerrillaWindow {
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Firm / company name" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Firm / company name" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <TextBox   Grid.Row="0" Grid.Column="1" x:Name="br_FirmName" Margin="0,8"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Logo (file path or URL)" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Logo (file path or URL)" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <Grid Grid.Row="1" Grid.Column="1" Margin="0,8">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -563,15 +604,15 @@ function Show-GuerrillaWindow {
               <TextBox Grid.Column="0" x:Name="br_LogoPath"/>
               <Button  Grid.Column="1" x:Name="br_BrowseLogo" Content="Browse..." Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
             </Grid>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Consultant name" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Consultant name" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <TextBox   Grid.Row="2" Grid.Column="1" x:Name="br_ConsultantName" Margin="0,8"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Consultant email" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Consultant email" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <TextBox   Grid.Row="3" Grid.Column="1" x:Name="br_ConsultantEmail" Margin="0,8"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Client / org assessed" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Client / org assessed" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <TextBox   Grid.Row="4" Grid.Column="1" x:Name="br_ClientName" Margin="0,8"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="Confidentiality banner" Foreground="#B8A97E" VerticalAlignment="Center" Margin="0,8"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Confidentiality banner" Foreground="#64748B" VerticalAlignment="Center" Margin="0,8"/>
             <TextBox   Grid.Row="5" Grid.Column="1" x:Name="br_Confidentiality" Margin="0,8"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" x:Name="br_StatusLine" Foreground="#6B8E6B" Margin="0,16,0,0"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" x:Name="br_StatusLine" Foreground="#16A34A" Margin="0,16,0,0"/>
           </Grid>
         </ScrollViewer>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,12,0,0">

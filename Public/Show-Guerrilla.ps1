@@ -42,6 +42,10 @@ function Show-Guerrilla {
         Which tab to open on launch. One of: Operations, Safehouse, Patrol, Reports,
         Settings, Source. Default: Operations.
 
+    .PARAMETER KeepConsole
+        Keep the host console visible; by default it is hidden while the GUI is open
+        and restored on close.
+
     .EXAMPLE
         Show-Guerrilla
         # Opens the GUI on the Operations tab against the default vault.
@@ -62,7 +66,9 @@ function Show-Guerrilla {
         [string]$ConfigPath,
 
         [ValidateSet('Operations', 'Safehouse', 'Patrol', 'Reports', 'Settings', 'Source', 'Branding')]
-        [string]$StartOn = 'Operations'
+        [string]$StartOn = 'Operations',
+
+        [switch]$KeepConsole
     )
 
     # Windows-only guard. WPF doesn't exist on macOS/Linux — point users at the CLI.
@@ -97,9 +103,29 @@ function Show-Guerrilla {
         throw "Could not resolve the PSGuerrilla manifest path. The GUI's background runspace needs it to import the module. Try Import-Module PSGuerrilla -Force then retry."
     }
 
-    Show-GuerrillaWindow `
-        -VaultName  $VaultName `
-        -ConfigPath $ConfigPath `
-        -StartOn    $StartOn `
-        -ModulePath $manifestPath
+    # Hide the host PowerShell console while the GUI is open so the experience reads
+    # as a standalone desktop app. Restore it on close (try/finally) so launching from
+    # an interactive prompt leaves the console exactly as it was found. A no-console
+    # host (e.g. some IDE/runspace launches) returns IntPtr.Zero — skip gracefully.
+    Add-Type -Name NativeConsole -Namespace PSG -MemberDefinition @"
+[System.Runtime.InteropServices.DllImport("kernel32.dll")] public static extern System.IntPtr GetConsoleWindow();
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool ShowWindow(System.IntPtr hWnd, int nCmdShow);
+"@ -ErrorAction SilentlyContinue
+
+    $consoleHandle = [PSG.NativeConsole]::GetConsoleWindow()
+    if (-not $KeepConsole -and $consoleHandle -ne [IntPtr]::Zero) {
+        [void][PSG.NativeConsole]::ShowWindow($consoleHandle, 0)  # 0 = SW_HIDE
+    }
+
+    try {
+        Show-GuerrillaWindow `
+            -VaultName  $VaultName `
+            -ConfigPath $ConfigPath `
+            -StartOn    $StartOn `
+            -ModulePath $manifestPath
+    } finally {
+        if (-not $KeepConsole -and $consoleHandle -ne [IntPtr]::Zero) {
+            [void][PSG.NativeConsole]::ShowWindow($consoleHandle, 5)  # 5 = SW_SHOW
+        }
+    }
 }

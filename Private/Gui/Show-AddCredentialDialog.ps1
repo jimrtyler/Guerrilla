@@ -94,23 +94,55 @@ function Show-AddCredentialDialog {
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Add Credential" Width="520" Height="480" ResizeMode="NoResize"
-        WindowStartupLocation="CenterOwner" Background="#1A1A1A">
+        WindowStartupLocation="CenterOwner" Background="#F4F6F8" FontFamily="Segoe UI" Foreground="#1F2933">
   <Window.Resources>
-    <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#F5F0E6"/><Setter Property="Margin" Value="0,8,0,2"/></Style>
+    <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#1F2933"/><Setter Property="Margin" Value="0,8,0,2"/></Style>
     <Style TargetType="TextBox">
-      <Setter Property="Background" Value="#252420"/><Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/><Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="Padding" Value="6,4"/><Setter Property="CaretBrush" Value="#F5F0E6"/>
+      <Setter Property="Background" Value="#FFFFFF"/><Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/><Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="6,5"/><Setter Property="CaretBrush" Value="#1F2933"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="TextBox">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4" SnapsToDevicePixels="True">
+              <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
     <Style TargetType="PasswordBox">
-      <Setter Property="Background" Value="#252420"/><Setter Property="Foreground" Value="#F5F0E6"/>
-      <Setter Property="BorderBrush" Value="#55524A"/><Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="Padding" Value="6,4"/><Setter Property="CaretBrush" Value="#F5F0E6"/>
+      <Setter Property="Background" Value="#FFFFFF"/><Setter Property="Foreground" Value="#1F2933"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/><Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="6,5"/><Setter Property="CaretBrush" Value="#1F2933"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="PasswordBox">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4" SnapsToDevicePixels="True">
+              <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
-    <Style TargetType="RadioButton"><Setter Property="Foreground" Value="#F5F0E6"/><Setter Property="Margin" Value="0,0,16,0"/></Style>
+    <Style TargetType="RadioButton"><Setter Property="Foreground" Value="#1F2933"/><Setter Property="Margin" Value="0,0,16,0"/></Style>
     <Style TargetType="Button">
-      <Setter Property="Background" Value="#C67A1F"/><Setter Property="Foreground" Value="#1A1A1A"/>
+      <Setter Property="Background" Value="#2563EB"/><Setter Property="Foreground" Value="#FFFFFF"/>
       <Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="16,6"/><Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6"
+                    Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
   </Window.Resources>
   <Grid Margin="20">
@@ -149,14 +181,14 @@ function Show-AddCredentialDialog {
         </Grid>
         <TextBlock Text="Delegated-admin email (a Super Admin)"/>
         <TextBox x:Name="tb_AdminEmail"/>
-        <TextBlock Text="The service account needs domain-wide delegation configured in the Google Admin Console." Foreground="#8B8B7A" TextWrapping="Wrap" Margin="0,8,0,0"/>
+        <TextBlock Text="The service account needs domain-wide delegation configured in the Google Admin Console." Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,8,0,0"/>
       </StackPanel>
     </Grid>
 
-    <TextBlock x:Name="tb_Error" Grid.Row="3" Foreground="#E06C5A" TextWrapping="Wrap" Margin="0,8,0,0"/>
+    <TextBlock x:Name="tb_Error" Grid.Row="3" Foreground="#DC2626" TextWrapping="Wrap" Margin="0,8,0,0"/>
 
     <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-      <Button x:Name="btn_Cancel" Content="Cancel" Background="#3A3833" Foreground="#F5F0E6" Margin="0,0,8,0"/>
+      <Button x:Name="btn_Cancel" Content="Cancel" Background="#FFFFFF" Foreground="#1F2933" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,8,0"/>
       <Button x:Name="btn_Save" Content="Save credential"/>
     </StackPanel>
   </Grid>

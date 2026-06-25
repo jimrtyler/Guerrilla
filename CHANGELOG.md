@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.32.0] - 2026-06-25
+
+_Operations Console redesign + console-hide._
+
+### Changed
+- **`Show-Guerrilla` GUI restyled to a light, modern, clean enterprise theme** — white cards, a blue accent (`#2563EB`), rounded corners, Segoe UI typography, subtle borders, and corrected ComboBox/DataGrid contrast (the dropdown/grid text now stays readable on light surfaces). Colors are centralized in `Get-GuerrillaGuiTheme.ps1`; layout, control names, and event logic are unchanged.
+
+### Added
+- **Console-hide:** the host PowerShell console is hidden while the GUI is open and restored when it closes. New `-KeepConsole` switch on `Show-Guerrilla` keeps the terminal visible (useful for debugging). Windows-only; the CLI is unchanged.
+
 ## [2.31.0] - 2026-06-24
 
 _Three AD collectors that turn previously Not-Assessed checks into real verdicts on a domain controller. Each degrades to Not Assessed when its data/rights/module are unavailable — never a false pass._

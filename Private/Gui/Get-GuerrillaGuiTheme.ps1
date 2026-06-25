@@ -18,19 +18,22 @@ function Get-GuerrillaGuiTheme {
 
     Add-Type -AssemblyName PresentationCore -ErrorAction SilentlyContinue
 
+    # Light, modern, clean enterprise palette. Keys keep their original names so the
+    # XAML code-behind (status lines, banners, dynamically-built checkboxes) keeps
+    # working unchanged — only the underlying hex moved from the dark scheme to light.
     $rgb = @{
-        Amber      = @(0xC6, 0x7A, 0x1F)  # accent, primary buttons
-        Khaki      = @(0xB8, 0xA9, 0x7E)  # secondary text
-        Gray       = @(0x8B, 0x8B, 0x7A)  # muted text
-        Sage       = @(0x6B, 0x8E, 0x6B)  # success / PASS
-        Parchment  = @(0xF5, 0xF0, 0xE6)  # primary text on dark surfaces
-        Gold       = @(0xD4, 0xA8, 0x43)  # warnings / highlights
-        Red        = @(0xCC, 0x55, 0x55)  # failures / critical
+        Amber      = @(0x25, 0x63, 0xEB)  # accent, primary buttons (now blue)
+        Khaki      = @(0x64, 0x74, 0x8B)  # secondary text
+        Gray       = @(0x94, 0xA3, 0xB8)  # muted / disabled text
+        Sage       = @(0x16, 0xA3, 0x4A)  # success / PASS
+        Parchment  = @(0x1F, 0x29, 0x33)  # primary text on light surfaces
+        Gold       = @(0xD9, 0x77, 0x06)  # warnings / highlights
+        Red        = @(0xDC, 0x26, 0x26)  # failures / critical
         # Surface colors (not in the console palette — needed for a window UI)
-        Background = @(0x1A, 0x1A, 0x1A)  # window background
-        Panel      = @(0x25, 0x24, 0x20)  # nav rail / card surfaces
-        Border     = @(0x55, 0x52, 0x4A)  # subtle separators
-        Hover      = @(0x33, 0x32, 0x2C)  # button hover state
+        Background = @(0xF4, 0xF6, 0xF8)  # app / window background
+        Panel      = @(0xFF, 0xFF, 0xFF)  # nav rail / card surfaces
+        Border     = @(0xE2, 0xE8, 0xF0)  # subtle separators
+        Hover      = @(0xED, 0xF1, 0xF6)  # button hover / raised surface
     }
 
     $colors  = @{}
