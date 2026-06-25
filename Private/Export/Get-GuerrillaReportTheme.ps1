@@ -13,7 +13,7 @@ function Get-GuerrillaReportTheme {
     [CmdletBinding()]
     param(
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$Style = 'Guerrilla'
+        [string]$Style = 'Professional'
     )
 
     $mono = "'Fira Code', 'JetBrains Mono', Consolas, 'Courier New', monospace"
@@ -85,7 +85,7 @@ function Get-GuerrillaReportThemeStyleBlock {
     [CmdletBinding()]
     param(
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$Style = 'Guerrilla'
+        [string]$Style = 'Professional'
     )
 
     $theme = Get-GuerrillaReportTheme -Style $Style
@@ -118,7 +118,7 @@ function Resolve-GuerrillaReportScoreLabel {
     param(
         [Parameter(Mandatory)][int]$Score,
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$Style = 'Guerrilla',
+        [string]$Style = 'Professional',
         [string]$Fallback = ''
     )
 

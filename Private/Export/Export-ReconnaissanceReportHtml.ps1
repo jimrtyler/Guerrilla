@@ -23,7 +23,7 @@ function Export-ReconnaissanceReportHtml {
         [string]$FilePath,
 
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$Style = 'Guerrilla',
+        [string]$Style = 'Professional',
 
         [hashtable]$Branding,
 
@@ -188,6 +188,17 @@ $themeStyle
     font-size: 0.85em; margin: 1px 2px; background: rgba(168, 181, 139, 0.1);
     border: 1px solid var(--border);
   }
+  /* Affected entities (bulleted detail row beneath a FAIL/WARN finding) */
+  tr.finding-extra td {
+    background: rgba(199, 92, 46, 0.06); border-left: 3px solid var(--amber);
+    padding: 4px 10px 12px 14px;
+  }
+  tr.finding-extra:hover td { background: rgba(199, 92, 46, 0.06); }
+  .affected { margin-top: 4px; font-size: 0.85em; }
+  .affected-label { color: var(--amber); font-weight: 600; }
+  .affected-items { color: var(--text); margin: 4px 0 0 0; padding-left: 20px; }
+  .affected-items li { word-break: break-word; margin: 1px 0; }
+  .affected-items li.more { list-style: none; margin-left: -20px; font-style: italic; opacity: .7; color: var(--dim); }
   .delta-section {
     background: var(--surface-alt); border: 1px solid var(--border); border-left: 4px solid var(--gold);
     border-radius: 0 4px 4px 0; padding: 16px 20px; margin-bottom: 24px;
@@ -391,6 +402,12 @@ $($brand.Header)
       <td><small>$(& $esc $remediation)</small></td>
     </tr>
 "@)
+            if ($f.Status -in @('FAIL', 'WARN')) {
+                $affectedHtml = Get-GuerrillaReportAffectedHtml -Details $f.Details
+                if ($affectedHtml) {
+                    [void]$html.Append("<tr class=`"gg-row finding-extra`" data-status=`"$(& $esc $f.Status)`" data-sev=`"$(& $esc $f.Severity)`" data-text=`"$rowText`"><td colspan=`"7`">$affectedHtml</td></tr>")
+                }
+            }
         }
         [void]$html.Append('</tbody></table>')
     }
@@ -430,6 +447,12 @@ $($brand.Header)
           <td><small>$(& $esc $f.RemediationSteps)</small></td>
         </tr>
 "@)
+            if ($f.Status -in @('FAIL', 'WARN')) {
+                $affectedHtml = Get-GuerrillaReportAffectedHtml -Details $f.Details
+                if ($affectedHtml) {
+                    [void]$html.Append("<tr class=`"gg-row finding-extra`" data-status=`"$(& $esc $f.Status)`" data-sev=`"$(& $esc $f.Severity)`" data-text=`"$rowText`"><td colspan=`"7`">$affectedHtml</td></tr>")
+                }
+            }
         }
         [void]$html.Append('</tbody></table></div></details>')
     }

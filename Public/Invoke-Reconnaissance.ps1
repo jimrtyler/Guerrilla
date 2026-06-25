@@ -28,7 +28,7 @@ function Invoke-Reconnaissance {
         [int]$PasswordAgeDays = 365,
 
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$ReportStyle = 'Guerrilla',
+        [string]$ReportStyle = 'Professional',
 
         [switch]$TestMode,
 

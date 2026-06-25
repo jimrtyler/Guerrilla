@@ -354,6 +354,59 @@ function Get-GuerrillaIndicatorsOfExposureHtml {
     return $sb.ToString()
 }
 
+# Renders a finding's affected accounts/objects (from its Details hashtable) as one or more
+# labeled BULLETED lists. Prefers the explicit AffectedItems/AffectedLabel convention; otherwise
+# auto-detects any Details entry that is a non-empty array of scalars (strings/valuetypes) — e.g.
+# ActiveSuperAdmins, StaleAdmins — and labels it by splitting the camelCase key. Caps each list at
+# 25 items, appending a "+N more" bullet beyond that. HTML-encodes every item. Returns '' when there
+# is nothing to render. Shared so the AD / Entra / GWS / Campaign reports all surface affected entities
+# the same way.
+function Get-GuerrillaReportAffectedHtml {
+    param([hashtable]$Details)
+    if (-not $Details -or $Details.Count -eq 0) { return '' }
+
+    $pairs = [System.Collections.Generic.List[object]]::new()
+    if ($Details.ContainsKey('AffectedItems')) {
+        $lbl = if ($Details.AffectedLabel) { [string]$Details.AffectedLabel } else { 'Affected items' }
+        $pairs.Add(@{ Label = $lbl; Items = @($Details.AffectedItems) })
+    } else {
+        foreach ($k in $Details.Keys) {
+            if ($k -in @('AffectedItems', 'AffectedLabel')) { continue }
+            $v = $Details[$k]
+            if ($v -is [string] -or $v -is [valuetype]) { continue }
+            if ($v -is [System.Collections.IEnumerable]) {
+                $arr = @($v)
+                if ($arr.Count -eq 0) { continue }
+                $scalar = $true
+                foreach ($el in $arr) {
+                    if (-not ($el -is [string] -or $el -is [valuetype])) { $scalar = $false; break }
+                }
+                if (-not $scalar) { continue }
+                $label = ($k -creplace '([a-z0-9])([A-Z])', '$1 $2')
+                $pairs.Add(@{ Label = $label; Items = $arr })
+            }
+        }
+    }
+
+    $out = [System.Text.StringBuilder]::new()
+    foreach ($p in $pairs) {
+        $items = @($p.Items)
+        if ($items.Count -eq 0) { continue }
+        $cap = 25
+        $shown = @($items | Select-Object -First $cap)
+        $lbl = [System.Web.HttpUtility]::HtmlEncode([string]$p.Label)
+        [void]$out.Append("<div class=`"affected`"><span class=`"affected-label`">$lbl ($($items.Count)):</span><ul class=`"affected-items`">")
+        foreach ($it in $shown) {
+            [void]$out.Append("<li>$([System.Web.HttpUtility]::HtmlEncode([string]$it))</li>")
+        }
+        if ($items.Count -gt $cap) {
+            [void]$out.Append("<li class=`"more`">+$($items.Count - $cap) more</li>")
+        }
+        [void]$out.Append('</ul></div>')
+    }
+    return $out.ToString()
+}
+
 # Interactive findings filter — a live filter bar (status + severity buttons + text search)
 # plus the client-side script that shows/hides any <tr class="gg-row" data-status data-sev data-text>.
 # Returns the bar + <style> + <script>; the host report tags its finding rows with those attributes.

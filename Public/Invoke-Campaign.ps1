@@ -98,7 +98,7 @@ function Invoke-Campaign {
         [string]$VaultName = 'PSGuerrilla',
 
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$ReportStyle = 'Guerrilla',
+        [string]$ReportStyle = 'Professional',
 
         [switch]$TestMode
     )

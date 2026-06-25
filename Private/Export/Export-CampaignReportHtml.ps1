@@ -11,7 +11,7 @@ function Export-CampaignReportHtml {
         [string]$OutputPath,
 
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$Style = 'Guerrilla',
+        [string]$Style = 'Professional',
 
         [hashtable]$Branding
     )
@@ -284,6 +284,13 @@ $themeStyle
   }
   .finding-detail-content .fd-value { font-size: 0.9em; }
   .finding-detail-content .fd-full { grid-column: 1 / -1; }
+
+  /* Affected entities (bulleted) */
+  .affected { margin-top: 4px; }
+  .affected-label { color: var(--amber); font-weight: 600; }
+  .affected-items { margin: 4px 0 0 0; padding-left: 20px; }
+  .affected-items li { word-break: break-word; margin: 1px 0; }
+  .affected-items li.more { list-style: none; margin-left: -20px; font-style: italic; opacity: .7; color: var(--dim); }
 
   /* Filter bar */
   .filter-bar {
@@ -636,6 +643,21 @@ $($brand.Header)
             [void]$compHtml.Append('&mdash;')
         }
 
+        # Affected entities (FAIL/WARN only) — bulleted list of impacted accounts/objects.
+        $affectedBlock = ''
+        if ($f.Status -in @('FAIL', 'WARN')) {
+            $affectedHtml = Get-GuerrillaReportAffectedHtml -Details $f.Details
+            if ($affectedHtml) {
+                $affectedBlock = @"
+
+        <div class="fd-block fd-full">
+          <div class="fd-label">Affected Entities</div>
+          <div class="fd-value">$affectedHtml</div>
+        </div>
+"@
+            }
+        }
+
         [void]$html.Append(@"
   <tr class="finding-detail-row" data-detail-idx="$findingIdx">
     <td colspan="7">
@@ -643,7 +665,7 @@ $($brand.Header)
         <div class="fd-block fd-full">
           <div class="fd-label">Description</div>
           <div class="fd-value">$descHtml</div>
-        </div>
+        </div>$affectedBlock
         <div class="fd-block">
           <div class="fd-label">Current Value</div>
           <div class="fd-value">$curValHtml</div>

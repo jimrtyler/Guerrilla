@@ -13,7 +13,7 @@ function Export-InfiltrationReportHtml {
         [PSCustomObject[]]$PreviousFindings,
 
         [ValidateSet('Guerrilla', 'Professional', 'Slate')]
-        [string]$Style = 'Guerrilla',
+        [string]$Style = 'Professional',
 
         [hashtable]$Branding
     )
@@ -103,6 +103,12 @@ function Export-InfiltrationReportHtml {
     [void]$html.AppendLine('.detail-content{display:none;padding:.5rem;background:rgba(0,0,0,.2);border-radius:4px;margin-top:.5rem;font-size:.8rem;white-space:pre-wrap}')
     [void]$html.AppendLine('.remediation-link{color:var(--sage);text-decoration:none;font-size:.8rem}')
     [void]$html.AppendLine('.remediation-link:hover{text-decoration:underline}')
+    [void]$html.AppendLine('tr.finding-extra td{background:rgba(199,92,46,.06);border-left:3px solid var(--amber)}')
+    [void]$html.AppendLine('.affected{margin-top:4px;font-size:.85rem}')
+    [void]$html.AppendLine('.affected-label{color:var(--amber);font-weight:600}')
+    [void]$html.AppendLine('.affected-items{color:var(--text);margin:4px 0 0 0;padding-left:20px}')
+    [void]$html.AppendLine('.affected-items li{word-break:break-word;margin:1px 0}')
+    [void]$html.AppendLine('.affected-items li.more{list-style:none;margin-left:-20px;font-style:italic;opacity:.7;color:var(--dim)}')
     [void]$html.AppendLine('.footer{text-align:center;color:var(--dim);margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.85rem}')
     [void]$html.AppendLine('.delta{padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin:1rem 0}')
     [void]$html.AppendLine('.delta .improved{color:var(--sage)}.delta .regressed{color:var(--deep-orange)}.delta .new{color:var(--amber)}')
@@ -250,6 +256,13 @@ function Export-InfiltrationReportHtml {
         }
         [void]$html.AppendLine("<td>$remCell</td>")
         [void]$html.AppendLine('</tr>')
+
+        if ($f.Status -in @('FAIL', 'WARN')) {
+            $affectedHtml = Get-GuerrillaReportAffectedHtml -Details $f.Details
+            if ($affectedHtml) {
+                [void]$html.AppendLine("<tr class=`"finding-extra`" data-status=`"$statusLabel`" data-severity=`"$($f.Severity)`"><td colspan=`"7`">$affectedHtml</td></tr>")
+            }
+        }
     }
 
     [void]$html.AppendLine('</tbody></table></div>')

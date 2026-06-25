@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.33.0] - 2026-06-25
+
+### Changed
+- **Professional is now the default report style** for all HTML reports (`Invoke-Campaign` / `Invoke-Reconnaissance` / `Invoke-Infiltration` / `Invoke-Fortification` and the `Export-*ReportHtml` builders). Pass `-ReportStyle Guerrilla` (or `Slate`) to opt out.
+- **Findings list their affected entities as a bulleted list** (`<ul><li>`) instead of a comma-separated paragraph. A new shared `Get-GuerrillaReportAffectedHtml` renderer is wired into all four theater reports (it surfaces the `AffectedItems`/`AffectedLabel` convention and auto-detected scalar arrays from a finding's `Details`, capped at 25 with a "+N more" bullet).
+
 ## [2.32.2] - 2026-06-25
 
 ### Fixed
