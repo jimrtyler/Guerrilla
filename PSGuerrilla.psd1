@@ -61,7 +61,6 @@
     CmdletsToExport   = @()
     VariablesToExport  = @()
     AliasesToExport    = @(
-        # PSRecon -> PSGuerrilla rename aliases
         'Invoke-GoogleRecon'
         'Get-ReconAlerts'
         'Send-ReconAlert'
@@ -73,7 +72,6 @@
         'Register-ReconScheduledTask'
         'Unregister-ReconScheduledTask'
         'Get-ReconScheduledTask'
-        # Theater-disambiguating aliases
         'Invoke-WorkspaceRecon'
         'Invoke-ADRecon'
         'Invoke-CloudRecon'
