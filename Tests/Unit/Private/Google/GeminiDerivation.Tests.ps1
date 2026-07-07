@@ -53,6 +53,32 @@ Describe 'ConvertTo-GeminiDerivedSettings' {
         $r.ContainsKey('AlphaFeatures') | Should -BeFalse
     }
 
+    It 'matches Google''s real gen_ai_* naming under CHANGE_CHROME_OS_USER_SETTING (live 2026-07-07)' {
+        # Live finding: gen-AI settings use SETTING_NAME=gen_ai_* (no "gemini"/"generative"
+        # substring) and can fire under CHANGE_CHROME_OS_USER_SETTING. The derivation must
+        # still catch a targeted setting under that naming/event.
+        $r = InModuleScope PSGuerrilla {
+            $e = @( @{ EventName='CHANGE_CHROME_OS_USER_SETTING'; Timestamp='2026-05-01T10:00:00.000Z'; Params=@{ SETTING_NAME='gen_ai_alpha_features'; NEW_VALUE='false' } } )
+            ConvertTo-GeminiDerivedSettings -Events $e
+        }
+        $r['AlphaFeatures'].Value | Should -Be 'off'
+    }
+
+    It 'does NOT fabricate a verdict from gen_ai settings that match no target sub-pattern (no overfit)' {
+        # The real observed gen_ai wallpaper/image settings must NOT map to any of the
+        # four GWS-GEMINI checks — the app-scope broadening stays safe because the
+        # per-setting sub-pattern still gates.
+        $r = InModuleScope PSGuerrilla {
+            $e = @(
+                @{ EventName='CHANGE_CHROME_OS_USER_SETTING'; Timestamp='2026-05-01T10:00:00.000Z'; Params=@{ SETTING_NAME='gen_ai_wallpaper_settings';    NEW_VALUE='true' } }
+                @{ EventName='CHANGE_CHROME_OS_USER_SETTING'; Timestamp='2026-05-01T10:00:00.000Z'; Params=@{ SETTING_NAME='gen_ai_inline_image_settings'; NEW_VALUE='true' } }
+                @{ EventName='CHANGE_CHROME_OS_USER_SETTING'; Timestamp='2026-05-01T10:00:00.000Z'; Params=@{ SETTING_NAME='gen_ai_default_settings';      NEW_VALUE='true' } }
+            )
+            ConvertTo-GeminiDerivedSettings -Events $e
+        }
+        $r.Keys.Count | Should -Be 0
+    }
+
     It 'ignores non-Gemini application setting changes' {
         $r = InModuleScope PSGuerrilla {
             $e = @( @{ EventName='CHANGE_APPLICATION_SETTING'; Timestamp='2026-05-01T10:00:00.000Z'; Params=@{ APPLICATION_NAME='Drive and Docs'; SETTING_NAME='Drive sharing'; NEW_VALUE='true' } } )

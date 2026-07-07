@@ -38,8 +38,20 @@ function ConvertTo-GeminiDerivedSettings {
         [object[]]$Events = @()
     )
 
-    # Setting-change event names in the Google Admin audit log.
-    $changeEvents = @('CHANGE_APPLICATION_SETTING', 'CREATE_APPLICATION_SETTING')
+    # A setting-change event in the Google Admin audit log. Observed on a live
+    # tenant (2026-07-07): generative-AI settings can fire under
+    # CHANGE_CHROME_OS_USER_SETTING, not only *_APPLICATION_SETTING. Match ANY
+    # create/change event whose name ends in _SETTING rather than a fixed list, so
+    # the Workspace-Gemini event name (still unconfirmed) is caught whatever its
+    # exact prefix. Over-matching here is harmless — the gen-AI scope AND the
+    # per-setting sub-pattern below both still have to pass.
+    $isSettingChange = { param($n) "$n" -match '(?i)(change|create).*_setting$' }
+
+    # Scope to generative-AI settings. CRITICAL live finding (2026-07-07): Google
+    # abbreviates the family as `gen_ai_*` (e.g. gen_ai_default_settings), which
+    # contains NEITHER "gemini" NOR "generative" as a substring — the original
+    # pattern silently matched nothing. Match gen_ai / genai / gemini / generative.
+    $genAiScope = '(?i)gen.?ai|gemini|generative'
 
     # Value normalizers. Return $null to mean "recognized setting, but the value
     # is not interpretable" — the caller then treats the key as absent (SKIP).
@@ -69,9 +81,9 @@ function ConvertTo-GeminiDerivedSettings {
 
     # Setting-change events whose application OR setting name is Gemini/Gen-AI.
     $geminiEvents = @($Events | Where-Object {
-        $_ -and ($_.EventName -in $changeEvents) -and $_.Params -and (
-            ("$($_.Params['APPLICATION_NAME'])" -match '(?i)gemini|generative') -or
-            ("$($_.Params['SETTING_NAME'])"     -match '(?i)gemini|generative')
+        $_ -and $_.Params -and (& $isSettingChange $_.EventName) -and (
+            ("$($_.Params['APPLICATION_NAME'])" -match $genAiScope) -or
+            ("$($_.Params['SETTING_NAME'])"     -match $genAiScope)
         )
     })
 
