@@ -1,0 +1,37 @@
+{
+  "checkId": "AIAGENT-002",
+  "theater": "Infiltration",
+  "scenario": "noauth",
+  "expectedStatus": "FAIL",
+  "description": "An agent has no auth",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {},
+      "Agents": [
+        {
+          "AIAgentName": "A",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        },
+        {
+          "AIAgentName": "B",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "None",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        }
+      ]
+    }
+  }
+}

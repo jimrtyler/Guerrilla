@@ -65,7 +65,7 @@ function Invoke-Infiltration {
     [CmdletBinding()]
     param(
         [ValidateSet('All', 'ConditionalAccess', 'AuthenticationMethods', 'PIM', 'Applications',
-                     'Federation', 'TenantConfig', 'AzureIAM', 'Intune', 'M365Services', 'Eidsca', 'Governance')]
+                     'Federation', 'TenantConfig', 'AzureIAM', 'Intune', 'M365Services', 'Eidsca', 'Governance', 'AIAgent')]
         [string[]]$Categories = @('All'),
 
         # Representative user object ID (GUID) for live Conditional Access what-if simulation (EIDCA-015).
@@ -242,7 +242,7 @@ function Invoke-Infiltration {
     $armToken = $null
     $categoriesToRun = if ($Categories -contains 'All') {
         @('ConditionalAccess', 'AuthenticationMethods', 'PIM', 'Applications',
-          'Federation', 'TenantConfig', 'AzureIAM', 'Intune', 'M365Services', 'Eidsca', 'Governance')
+          'Federation', 'TenantConfig', 'AzureIAM', 'Intune', 'M365Services', 'Eidsca', 'Governance', 'AIAgent')
     } else { $Categories }
 
     if ('AzureIAM' -in $categoriesToRun) {
@@ -294,6 +294,7 @@ function Invoke-Infiltration {
         TenantConfig          = 'Invoke-EntraTenantChecks'
         Eidsca                = 'Invoke-EntraEidscaChecks'
         Governance            = 'Invoke-EntraGovernanceChecks'
+        AIAgent               = 'Invoke-EntraAIAgentChecks'
         AzureIAM              = 'Invoke-AzureIAMChecks'
         Intune                = 'Invoke-IntuneChecks'
         M365Services          = @(

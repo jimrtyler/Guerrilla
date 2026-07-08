@@ -1,0 +1,24 @@
+{
+  "checkId": "AIAGENT-004",
+  "theater": "Infiltration",
+  "scenario": "unscoped",
+  "expectedStatus": "WARN",
+  "description": "Authenticated agent open to all",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {},
+      "Agents": [
+        {
+          "AIAgentName": "A",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        }
+      ]
+    }
+  }
+}

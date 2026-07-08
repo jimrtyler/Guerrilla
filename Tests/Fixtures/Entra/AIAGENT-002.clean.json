@@ -1,0 +1,26 @@
+{
+  "checkId": "AIAGENT-002",
+  "theater": "Infiltration",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "All authenticated+enforced",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {},
+      "Agents": [
+        {
+          "AIAgentName": "A",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        }
+      ]
+    }
+  }
+}

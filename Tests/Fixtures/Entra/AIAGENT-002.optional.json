@@ -1,0 +1,26 @@
+{
+  "checkId": "AIAGENT-002",
+  "theater": "Infiltration",
+  "scenario": "optional",
+  "expectedStatus": "WARN",
+  "description": "Auth optional (As Needed)",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {},
+      "Agents": [
+        {
+          "AIAgentName": "A",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "As Needed",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        }
+      ]
+    }
+  }
+}

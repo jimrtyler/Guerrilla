@@ -1,0 +1,26 @@
+{
+  "checkId": "AIAGENT-003",
+  "theater": "Infiltration",
+  "scenario": "dormant",
+  "expectedStatus": "WARN",
+  "description": "Published but modified 2020",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {},
+      "Agents": [
+        {
+          "AIAgentName": "A",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2020-01-01",
+          "LastModifiedTime": "2020-01-01"
+        }
+      ]
+    }
+  }
+}

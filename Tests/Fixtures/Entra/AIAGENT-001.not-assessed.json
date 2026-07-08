@@ -1,0 +1,16 @@
+{
+  "checkId": "AIAGENT-001",
+  "theater": "Infiltration",
+  "scenario": "not-assessed",
+  "expectedStatus": "SKIP",
+  "description": "Dataverse not collected",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {
+        "Agents": "Dataverse auth context not provided; Copilot Studio agents not collected."
+      },
+      "Agents": []
+    }
+  }
+}

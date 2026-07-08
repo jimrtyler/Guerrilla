@@ -9,6 +9,12 @@ function Get-InfiltrationData {
 
         [string]$ArmAccessToken,
 
+        # Copilot Studio agents live in Dataverse (per-environment audience). Discovery
+        # token + a per-environment token factory; absent = agents Not Assessed (SKIP).
+        [string]$DataverseGlobalToken,
+
+        [scriptblock]$DataverseTokenFactory,
+
         [string[]]$Categories = @('All'),
 
         [hashtable]$ModuleAvailability,
@@ -27,6 +33,7 @@ function Get-InfiltrationData {
         Applications          = @('Applications')
         Federation            = @('Federation')
         Governance            = @('Governance')
+        AIAgent               = @('AIAgents')
         TenantConfig          = @('TenantConfig')
         Eidsca                = @('AuthMethods', 'TenantConfig')
         AzureIAM              = @('AzureIAM')
@@ -63,6 +70,7 @@ function Get-InfiltrationData {
         Applications      = $null
         Federation        = $null
         Governance        = $null
+        AIAgents          = $null
         TenantConfig      = $null
         AzureIAM          = $null
         Intune            = $null
@@ -183,6 +191,17 @@ function Get-InfiltrationData {
         } catch {
             $data.Errors['Governance'] = $_.Exception.Message
             $data.Governance = @{ AccessPackages = @(); Catalogs = @(); AssignmentPolicies = @(); Errors = @{} }
+        }
+    }
+
+    # ── 6c. Copilot Studio AI agents (Dataverse) ────────────────────────
+    if (& $needsSource 'AIAgents') {
+        try {
+            $data.AIAgents = Get-PowerPlatformData `
+                -GlobalDiscoToken $DataverseGlobalToken -TokenFactory $DataverseTokenFactory -Quiet:$Quiet
+        } catch {
+            $data.Errors['AIAgents'] = $_.Exception.Message
+            $data.AIAgents = @{ Agents = @(); Environments = @(); Errors = @{} }
         }
     }
 

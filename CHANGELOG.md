@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.43.0] - 2026-07-08
+
+### Added
+- **Copilot Studio AI-agent governance (new category, 4 checks).** Copilot Studio agents front organizational data and tools yet are a fast-growing, rarely-governed surface. A new `AIAgent` category collects agents from Dataverse (the `bots` table per Power Platform environment) and grades them: **AIAGENT-001** FAILs agents whose access control is `Any` / `Any multitenant` (interactable by anyone, even cross-tenant); **AIAGENT-002** FAILs agents that accept anonymous interaction and WARNs those whose authentication is only triggered "as needed"; **AIAGENT-003** WARNs published agents left unmodified past a dormancy threshold; **AIAGENT-004** WARNs authenticated agents not scoped to security groups. Verdict logic is fixture-proven (15 golden fixtures); the Dataverse collector (Global Discovery Service → per-environment `bots` query) is contract-tested for its endpoints. **Collection requires live validation on a Power Platform tenant** (the per-environment Dataverse auth flow and the authentication-mode field mapping have not yet been exercised live); until then, and whenever agent data is not collected, the checks report Not Assessed rather than a fabricated verdict. First tranche — agent topic/tool inspection (hard-coded credentials, connector consent) is deferred to a later tranche.
+
 ## [2.42.0] - 2026-07-08
 
 ### Added

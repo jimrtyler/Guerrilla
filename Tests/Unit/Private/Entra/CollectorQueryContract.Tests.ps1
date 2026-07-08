@@ -124,4 +124,40 @@ Describe 'Collector query contracts' {
             }
         }
     }
+
+    Context 'Get-PowerPlatformData — Copilot Studio agents (Dataverse)' {
+        BeforeAll {
+            # Mock the two Dataverse stages: global discovery, then per-env bots query.
+            Mock -ModuleName PSGuerrilla Invoke-RestMethod {
+                if ($Uri -like '*globaldisco*discovery/v2.0/Instances*') {
+                    return [pscustomobject]@{ value = @([pscustomobject]@{ ApiUrl = 'https://org1.api.crm.dynamics.com'; FriendlyName = 'Env1'; State = 0 }) }
+                }
+                if ($Uri -like '*/api/data/v9.2/bots*') {
+                    return [pscustomobject]@{ value = @([pscustomobject]@{ botid = 'b1'; name = 'Agent'; accesscontrolpolicy = 'Team'; authenticationmode = 'Entra'; ismanaged = $false }) }
+                }
+                return [pscustomobject]@{ value = @() }
+            }
+            $script:pp = InModuleScope PSGuerrilla {
+                Get-PowerPlatformData -GlobalDiscoToken 'gds' -TokenFactory { param($u) 'envtok' } -Quiet
+            }
+        }
+
+        It 'discovers environments via the Global Discovery Service (State eq 0)' {
+            Should -Invoke -ModuleName PSGuerrilla -Scope Context Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like '*globaldisco.crm.dynamics.com/api/discovery/v2.0/Instances*' -and $Uri -like '*State eq 0*'
+            }
+        }
+
+        It 'queries the per-environment bots table for unmanaged agents' {
+            Should -Invoke -ModuleName PSGuerrilla -Scope Context Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like 'https://org1.api.crm.dynamics.com/api/data/v9.2/bots*' -and $Uri -like '*ismanaged eq false*'
+            }
+        }
+
+        It 'returns Not-Assessed (empty + Errors) when no auth context is supplied' {
+            $r = InModuleScope PSGuerrilla { Get-PowerPlatformData }
+            $r.Agents.Count | Should -Be 0
+            $r.Errors['Agents'] | Should -Not -BeNullOrEmpty
+        }
+    }
 }

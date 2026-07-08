@@ -1,0 +1,37 @@
+{
+  "checkId": "AIAGENT-001",
+  "theater": "Infiltration",
+  "scenario": "broad",
+  "expectedStatus": "FAIL",
+  "description": "An agent allows Any access",
+  "auditData": {
+    "Errors": {},
+    "AIAgents": {
+      "Errors": {},
+      "Agents": [
+        {
+          "AIAgentName": "A",
+          "AccessControlPolicy": "Team",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        },
+        {
+          "AIAgentName": "B",
+          "AccessControlPolicy": "Any",
+          "UserAuthenticationType": "Entra",
+          "AuthenticationTrigger": "Always",
+          "AuthorizedSecurityGroupIds": [
+            "g1"
+          ],
+          "LastPublishedTime": "2026-07-01",
+          "LastModifiedTime": "2026-07-01"
+        }
+      ]
+    }
+  }
+}

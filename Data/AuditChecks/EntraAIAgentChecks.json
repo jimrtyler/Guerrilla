@@ -1,0 +1,63 @@
+{
+  "categoryId": "aiagent",
+  "categoryName": "Copilot Studio AI Agent Governance",
+  "categoryDescription": "Governance of Copilot Studio agents (bots) across Power Platform environments: who can interact with an agent, whether it requires authentication, whether access is scoped to security groups, and whether published agents are maintained. Agents handle organizational data (in schools, student data) and are a fast-growing, rarely-governed surface. Data source is Dataverse (the bots table per environment); when it is not collected the checks are Not Assessed, never a false pass.",
+  "checks": [
+    {
+      "id": "AIAGENT-001",
+      "name": "Copilot agents restrict who can interact (no broad access)",
+      "description": "A Copilot Studio agent whose access-control policy is 'Any' or 'Any multitenant' can be interacted with by any user in the tenant, or by users from any tenant, without restriction. For an agent wired to organizational data and tools, that is an unauthenticated data-access and prompt-injection path. This check flags agents whose access control is set to Any / Any multitenant. When agent data is not collected the result is Not Assessed; a tenant with no agents passes (nothing to govern).",
+      "severity": "High",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 3,
+      "subcategory": "AI Agent Governance",
+      "recommendedValue": "No published agent uses 'Any' or 'Any multitenant' access control; access is restricted to specific authenticated users or security groups",
+      "remediationSteps": "In Copilot Studio, open each flagged agent's Security > Authentication and access settings and change the access control away from 'Any' / 'Any multitenant' to authenticated access restricted to your organization (and ideally to specific security groups). Re-publish the agent after tightening access.",
+      "compliance": {
+        "nistSp80053": ["AC-3", "AC-6", "SC-7"]
+      }
+    },
+    {
+      "id": "AIAGENT-002",
+      "name": "Copilot agents require authentication",
+      "description": "A Copilot Studio agent with user-authentication type 'None' accepts anonymous interaction; an agent that authenticates only 'As Needed' leaves authentication optional. Either lets unauthenticated users reach an agent that can surface organizational data or invoke tools, enabling abuse, data exfiltration, and prompt-injection. This check FAILs agents with no authentication and WARNs agents whose authentication is only triggered as-needed.",
+      "severity": "High",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 3,
+      "subcategory": "AI Agent Governance",
+      "recommendedValue": "Every published agent requires authentication (user-authentication type is not 'None' and authentication is always enforced, not 'As Needed')",
+      "remediationSteps": "In Copilot Studio, set each agent's authentication to require sign-in (Microsoft Entra ID authentication) rather than 'No authentication', and ensure authentication is always enforced rather than triggered only as needed. Re-publish after the change.",
+      "compliance": {
+        "nistSp80053": ["IA-2", "AC-3", "AC-14"]
+      }
+    },
+    {
+      "id": "AIAGENT-003",
+      "name": "Published Copilot agents are maintained (not dormant)",
+      "description": "A published Copilot Studio agent that has not been modified in a long time continues to expose functionality and access while nobody is maintaining its configuration, permissions, or connected tools. Dormant published agents accumulate risk silently. This check flags published agents whose last modification is older than the dormancy threshold (default 90 days) for review or retirement.",
+      "severity": "Low",
+      "zeroTrustPillar": "Governance",
+      "zeroTrustWeight": 1,
+      "subcategory": "AI Agent Governance",
+      "recommendedValue": "Published agents are actively maintained; stale published agents are reviewed or retired",
+      "remediationSteps": "Review each dormant published agent. Retire agents that are no longer needed (unpublish and delete), and for agents still in use, confirm their access controls, authentication, and connected tools are still appropriate, then update them to reset the maintenance clock.",
+      "compliance": {
+        "nistSp80053": ["CM-8", "SA-9"]
+      }
+    },
+    {
+      "id": "AIAGENT-004",
+      "name": "Copilot agent access is scoped to security groups",
+      "description": "An authenticated Copilot Studio agent with no authorized security groups is reachable by any authenticated user in the tenant. Scoping an agent to specific security groups limits its audience to those with a business need, applying least privilege to who can invoke an agent and the data it fronts. This check flags authenticated agents that have no authorized security groups configured.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 2,
+      "subcategory": "AI Agent Governance",
+      "recommendedValue": "Authenticated agents that front sensitive data are scoped to specific authorized security groups rather than all authenticated users",
+      "remediationSteps": "For agents that front sensitive data, configure authorized security groups in the agent's access settings so only members of those groups can interact with the agent. Leave tenant-wide access only for agents deliberately intended for all staff.",
+      "compliance": {
+        "nistSp80053": ["AC-2", "AC-3", "AC-6"]
+      }
+    }
+  ]
+}
