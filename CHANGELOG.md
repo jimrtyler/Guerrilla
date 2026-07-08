@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.46.0] - 2026-07-08
+
+### Added
+- **Five Google Workspace tail SCuBA controls (Chat / Meet / Groups).** **COLLAB-013** (GWS.CHAT.2.1) FAILs when Chat external file sharing is enabled (a data-exfiltration path); **COLLAB-014** (GWS.CHAT.3.1) WARNs when Chat space history is not always-on; **COLLAB-015** (GWS.MEET.2.1) FAILs when meeting join is not restricted to the organization (external parties joining student-present sessions); **COLLAB-016** (GWS.MEET.5.2) WARNs when Meet automatic transcription is on by default (data minimization); **GROUP-005** (GWS.GROUPS.3.1) WARNs when the default group-conversation visibility is broader than members. All read Cloud Identity Policy settings, weakest-OU-wins, absent policy = Not Assessed. 15 golden fixtures. This closes the mission-relevant remainder of the Google Workspace SCuBA baseline; the residual controls with no configuration API (Gemini-in-Meet, hide-from-directory, content-reporting, calendar interop/payments) are honestly out of automated scope.
+
 ## [2.45.0] - 2026-07-08
 
 ### Added

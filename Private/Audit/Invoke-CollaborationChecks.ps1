@@ -478,3 +478,99 @@ function Test-FortificationGROUP004 {
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
         -CurrentValue "Group creation is restricted to administrators in all $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
 }
+
+# ── GROUP-005: GWS.GROUPS.3.1 — Conversation visibility defaults to members ─
+function Test-FortificationGROUP005 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $r = Get-GroupSharingValues -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath -Field 'viewTopicsDefaultAccessLevel'
+    if ($r.Na) { return $r.Na }
+    # Secure = GROUP_MEMBERS. Broader default exposes conversation archives.
+    $broad = @($r.Vals | Where-Object { "$_" -ne 'GROUP_MEMBERS' })
+    if ($broad.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Default conversation visibility is broader than group members in $($broad.Count) of $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Default conversation visibility is limited to group members in all $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}
+
+# Shared resolver for the Chat/Meet tail checks (single field, weakest-OU-wins).
+function Get-CollabPolicyValues {
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath, [string]$Type, [string]$Field, [string]$Subject)
+    $na = Get-NotAssessedFinding -CheckDefinition $CheckDefinition -ErrorMap $AuditData.Errors `
+        -SourceKey @('CloudIdentityPolicies', 'OrgUnits') -Subject $Subject
+    if ($na) { return @{ Na = $na } }
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return @{ Na = (New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' -OrgUnitPath $OrgUnitPath) }
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type $Type -Field $Field)
+    if ($vals.Count -eq 0) {
+        return @{ Na = (New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue "No $Type policy returned for this tenant" -OrgUnitPath $OrgUnitPath) }
+    }
+    return @{ Vals = $vals }
+}
+
+# ── COLLAB-013: GWS.CHAT.2.1 — External file sharing disabled ──────────────
+function Test-FortificationCOLLAB013 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $r = Get-CollabPolicyValues -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath -Type 'chat.chat_file_sharing' -Field 'externalFileSharing' -Subject 'Chat external file-sharing policy'
+    if ($r.Na) { return $r.Na }
+    $open = @($r.Vals | Where-Object { "$_" -ne 'NO_FILES' })
+    if ($open.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Chat external file sharing is enabled in $($open.Count) of $($r.Vals.Count) targeted policy/policies — a data-exfiltration path" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Chat external file sharing is disabled (NO_FILES) in all $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}
+
+# ── COLLAB-014: GWS.CHAT.3.1 — Space history on ───────────────────────────
+function Test-FortificationCOLLAB014 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $r = Get-CollabPolicyValues -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath -Type 'chat.space_history' -Field 'historyState' -Subject 'Chat space history policy'
+    if ($r.Na) { return $r.Na }
+    $off = @($r.Vals | Where-Object { "$_" -ne 'HISTORY_ALWAYS_ON' })
+    if ($off.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Chat space history is not always-on in $($off.Count) of $($r.Vals.Count) targeted policy/policies — conversations may not be retained for oversight" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Chat space history is always on in all $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}
+
+# ── COLLAB-015: GWS.MEET.2.1 — Meeting join restricted to the org ──────────
+function Test-FortificationCOLLAB015 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $r = Get-CollabPolicyValues -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath -Type 'meet.safety_access' -Field 'meetingsAllowedToJoin' -Subject 'Meet meeting-access policy'
+    if ($r.Na) { return $r.Na }
+    $secure = @('SAME_ORGANIZATION_ONLY', 'ANY_WORKSPACE_ORGANIZATION')
+    $open = @($r.Vals | Where-Object { "$_" -notin $secure })
+    if ($open.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Meeting access is not restricted to the organization in $($open.Count) of $($r.Vals.Count) targeted policy/policies — external/unauthenticated parties can join" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Meeting access is restricted to the organization in all $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}
+
+# ── COLLAB-016: GWS.MEET.5.2 — Automatic transcription off by default ──────
+function Test-FortificationCOLLAB016 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $r = Get-CollabPolicyValues -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath -Type 'meet.automatic_transcription' -Field 'enabled' -Subject 'Meet automatic-transcription policy'
+    if ($r.Na) { return $r.Na }
+    $on = @($r.Vals | Where-Object { $_ -eq $true })
+    if ($on.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Automatic transcription is on by default in $($on.Count) of $($r.Vals.Count) targeted policy/policies — meeting content is captured without a deliberate decision" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "Automatic transcription is off by default in all $($r.Vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}

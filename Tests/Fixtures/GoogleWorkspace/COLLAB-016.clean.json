@@ -1,0 +1,24 @@
+{
+  "checkId": "COLLAB-016",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "off",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "meet.automatic_transcription": [
+          {
+            "setting": {
+              "value": {
+                "enabled": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

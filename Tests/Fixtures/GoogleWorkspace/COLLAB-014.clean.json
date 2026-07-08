@@ -1,0 +1,24 @@
+{
+  "checkId": "COLLAB-014",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "always on",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "chat.space_history": [
+          {
+            "setting": {
+              "value": {
+                "historyState": "HISTORY_ALWAYS_ON"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

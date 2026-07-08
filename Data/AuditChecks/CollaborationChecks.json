@@ -399,6 +399,107 @@
           "PM-10"
         ]
       }
+    },
+    {
+      "id": "GROUP-005",
+      "name": "Group conversation visibility defaults to members (GWS.GROUPS.3.1)",
+      "description": "SCuBA GWS.GROUPS.3.1 requires that the default permission for viewing group conversations be restricted to group members rather than the whole domain or the public. Overly-open conversation visibility exposes discussion archives — which can contain sensitive student and staff information. This check reads viewTopicsDefaultAccessLevel from the groups_for_business.groups_sharing policy and warns where the default is broader than group members.",
+      "severity": "Low",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 2,
+      "subcategory": "Group Sharing",
+      "recommendedValue": "Default conversation view access set to GROUP_MEMBERS",
+      "remediationSteps": "In Groups for Business settings, set the default 'who can view conversations' permission to group members.",
+      "compliance": {
+        "scuba": [
+          "GWS.GROUPS.3.1v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "AC-22"
+        ]
+      }
+    },
+    {
+      "id": "COLLAB-013",
+      "name": "Chat external file sharing disabled (GWS.CHAT.2.1)",
+      "description": "SCuBA GWS.CHAT.2.1 requires that external file sharing in Google Chat be disabled (set to no files). Allowing files to be shared with external users through Chat is a direct data-exfiltration path. This check reads chat.chat_file_sharing and fails any organizational unit where external file sharing is not set to NO_FILES.",
+      "severity": "High",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 3,
+      "subcategory": "Chat Security",
+      "recommendedValue": "External file sharing in Chat set to NO_FILES",
+      "remediationSteps": "In the Admin console under Apps > Google Workspace > Google Chat > External file sharing, set external file sharing to 'No files' so files cannot be shared to people outside the organization via Chat.",
+      "compliance": {
+        "scuba": [
+          "GWS.CHAT.2.1v1"
+        ],
+        "nistSp80053": [
+          "AC-4",
+          "SC-7"
+        ]
+      }
+    },
+    {
+      "id": "COLLAB-014",
+      "name": "Chat space history is on (GWS.CHAT.3.1)",
+      "description": "SCuBA GWS.CHAT.3.1 requires that history for Chat spaces be always on so conversations are retained for oversight, investigation, and eDiscovery. This check reads chat.space_history and warns any organizational unit where space history is not set to HISTORY_ALWAYS_ON.",
+      "severity": "Low",
+      "zeroTrustPillar": "Visibility & Analytics",
+      "zeroTrustWeight": 1,
+      "subcategory": "Chat Security",
+      "recommendedValue": "Chat space history set to HISTORY_ALWAYS_ON",
+      "remediationSteps": "In Google Chat settings, set space history to always on so conversations are retained and available for oversight and eDiscovery.",
+      "compliance": {
+        "scuba": [
+          "GWS.CHAT.3.1v1"
+        ],
+        "nistSp80053": [
+          "AU-11",
+          "AU-12"
+        ]
+      }
+    },
+    {
+      "id": "COLLAB-015",
+      "name": "Meeting join restricted to the organization (GWS.MEET.2.1)",
+      "description": "SCuBA GWS.MEET.2.1 requires that access to meetings be restricted so only users in the organization (or trusted Workspace organizations) can join. Leaving meetings open to anyone lets external and unauthenticated parties into sessions that may involve students. This check reads meet.safety_access and fails any organizational unit where meetingsAllowedToJoin is broader than SAME_ORGANIZATION_ONLY / ANY_WORKSPACE_ORGANIZATION.",
+      "severity": "High",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 3,
+      "subcategory": "Meet Safety",
+      "recommendedValue": "meetingsAllowedToJoin set to SAME_ORGANIZATION_ONLY (or ANY_WORKSPACE_ORGANIZATION)",
+      "remediationSteps": "In Google Meet safety settings, restrict who can join meetings to users in your organization, so external/unauthenticated participants cannot join by default.",
+      "compliance": {
+        "scuba": [
+          "GWS.MEET.2.1v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "AC-14",
+          "SC-7"
+        ]
+      }
+    },
+    {
+      "id": "COLLAB-016",
+      "name": "Meet automatic transcription off by default (GWS.MEET.5.2)",
+      "description": "SCuBA GWS.MEET.5.2 recommends that automatic transcription in Google Meet be off by default. Auto-transcribing meetings captures and stores conversation content — sensitive when students are present — without a deliberate decision. This check reads meet.automatic_transcription and warns any organizational unit where it is enabled by default.",
+      "severity": "Low",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 1,
+      "subcategory": "Meet Safety",
+      "recommendedValue": "Automatic transcription disabled by default",
+      "remediationSteps": "In Google Meet settings, disable automatic transcription by default so meeting content is captured only when a host deliberately enables it.",
+      "compliance": {
+        "scuba": [
+          "GWS.MEET.5.2v1"
+        ],
+        "nistSp80053": [
+          "SI-12",
+          "SC-28"
+        ]
+      }
     }
   ]
 }

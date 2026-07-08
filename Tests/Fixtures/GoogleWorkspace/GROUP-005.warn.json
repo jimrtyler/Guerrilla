@@ -1,0 +1,24 @@
+{
+  "checkId": "GROUP-005",
+  "theater": "Fortification",
+  "scenario": "warn",
+  "expectedStatus": "WARN",
+  "description": "domain-wide",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "groups_for_business.groups_sharing": [
+          {
+            "setting": {
+              "value": {
+                "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "checkId": "COLLAB-015",
+  "theater": "Fortification",
+  "scenario": "known-bad",
+  "expectedStatus": "FAIL",
+  "description": "anyone",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "meet.safety_access": [
+          {
+            "setting": {
+              "value": {
+                "meetingsAllowedToJoin": "ALL"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

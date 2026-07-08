@@ -1,0 +1,24 @@
+{
+  "checkId": "COLLAB-013",
+  "theater": "Fortification",
+  "scenario": "known-bad",
+  "expectedStatus": "FAIL",
+  "description": "all files",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "chat.chat_file_sharing": [
+          {
+            "setting": {
+              "value": {
+                "externalFileSharing": "ALL_FILES"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
