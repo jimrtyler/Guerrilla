@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.1] - 2026-07-08
+
+Consolidated PSGallery release carrying everything accumulated since 2.40.1 — the SCuBA EXO + CIS reconciliation closes, Entra ID Governance entitlement-management hygiene, Copilot Studio AI-agent governance, and the full Google Workspace SCuBA baseline closes (Gmail, Groups, Chat, Meet) with provable `GWS.*` crosswalk tagging.
+
+### Changed
+- **Release process: publishing now tags and creates a GitHub release.** `Publish-Release.ps1`, on a real publish, creates an annotated `v<version>` tag, pushes it, and opens a matching GitHub release (idempotent — skips if the tag exists). This reconciles the repository with the PSGallery, which had diverged (git tags had frozen at v2.9.x and releases at v2.39.0 while the Gallery advanced), and was surfaced by live validation.
+
 ## [2.46.0] - 2026-07-08
 
 ### Added
