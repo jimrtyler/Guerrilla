@@ -908,3 +908,105 @@ function Test-FortificationEMAIL024 {
         -CurrentValue "Security Sandbox enabled in all $($vals.Count) targeted policy/policies" `
         -OrgUnitPath $OrgUnitPath
 }
+
+# Shared single-boolean Cloud Identity policy check used by the GWS SCuBA config
+# closes across Gmail/Drive/Admin. $SecureValue is the compliant boolean; any OU whose
+# value differs (weakest-OU-wins) yields $Status. Absent policy => Not Assessed.
+function Test-GwsPolicyBoolean {
+    param(
+        [hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath,
+        [string]$Type, [string]$Field, [bool]$SecureValue, [string]$Status, [string]$BadMsg, [string]$GoodMsg
+    )
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type $Type -Field $Field)
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue "No $Type policy returned for this tenant" -OrgUnitPath $OrgUnitPath
+    }
+    $bad = @($vals | Where-Object { $_ -ne $SecureValue })
+    if ($bad.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status $Status `
+            -CurrentValue "$BadMsg in $($bad.Count) of $($vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "$GoodMsg in all $($vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}
+
+# ── EMAIL-025: GWS.GMAIL.1.1 — Mail delegation disabled ────────────────────
+function Test-FortificationEMAIL025 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'gmail.mail_delegation' -Field 'enableMailDelegation' -SecureValue $false -Status 'WARN' `
+        -BadMsg 'Mail delegation is enabled' -GoodMsg 'Mail delegation is disabled'
+}
+
+# ── EMAIL-026: GWS.GMAIL.9.1 — POP and IMAP access disabled ────────────────
+function Test-FortificationEMAIL026 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available' -OrgUnitPath $OrgUnitPath
+    }
+    $imap = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.imap_access' -Field 'enableImapAccess')
+    $pop  = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.pop_access' -Field 'enablePopAccess')
+    if ($imap.Count -eq 0 -and $pop.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail POP/IMAP access policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    $imapOn = @($imap | Where-Object { $_ -eq $true }); $popOn = @($pop | Where-Object { $_ -eq $true })
+    if ($imapOn.Count -gt 0 -or $popOn.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'FAIL' `
+            -CurrentValue "Legacy mail access enabled (IMAP on in $($imapOn.Count), POP on in $($popOn.Count) targeted policy/policies) — a modern-auth / MFA bypass" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue 'POP and IMAP access are disabled' -OrgUnitPath $OrgUnitPath
+}
+
+# ── EMAIL-027: GWS.GMAIL.8.1 — User email/contacts import disabled ─────────
+function Test-FortificationEMAIL027 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'gmail.user_email_uploads' -Field 'enableMailAndContactsImport' -SecureValue $false -Status 'WARN' `
+        -BadMsg 'User email/contacts import is enabled' -GoodMsg 'User email/contacts import is disabled'
+}
+
+# ── EMAIL-028: GWS.GMAIL.10.1 — Workspace Sync for Outlook disabled ────────
+function Test-FortificationEMAIL028 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'gmail.workspace_sync_for_outlook' -Field 'enableGoogleWorkspaceSyncForMicrosoftOutlook' -SecureValue $false -Status 'WARN' `
+        -BadMsg 'Google Workspace Sync for Microsoft Outlook is enabled' -GoodMsg 'Google Workspace Sync for Microsoft Outlook is disabled'
+}
+
+# ── EMAIL-029: GWS.GMAIL.18.1 — Spam-override sender lists reviewed ────────
+function Test-FortificationEMAIL029 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available' -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'gmail.spam_override_lists' -Field 'senderDomainsFound')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No gmail.spam_override_lists policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    # senderDomainsFound truthy => approved-sender/override domains configured (spam bypass to review).
+    $present = @($vals | Where-Object { $_ -eq $true })
+    if ($present.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "Spam-override sender lists are configured in $($present.Count) of $($vals.Count) targeted policy/policies — review that trusted-domain mail is not blanket-exempted from spam filtering" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue 'No spam-override sender lists configured' -OrgUnitPath $OrgUnitPath
+}

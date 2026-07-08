@@ -1,0 +1,24 @@
+{
+  "checkId": "EMAIL-027",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "secure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.user_email_uploads": [
+          {
+            "setting": {
+              "value": {
+                "enableMailAndContactsImport": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

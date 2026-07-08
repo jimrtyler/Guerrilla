@@ -631,6 +631,107 @@
           "SC-44"
         ]
       }
+    },
+    {
+      "id": "EMAIL-025",
+      "name": "Gmail mail delegation disabled (GWS.GMAIL.1.1)",
+      "description": "SCuBA GWS.GMAIL.1.1: mail delegation lets a user grant another account read/send access to their mailbox, a standing data-access path that outlives the delegation's purpose. Reads gmail.mail_delegation; warns where enableMailDelegation is on.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 2,
+      "subcategory": "Mail Access",
+      "recommendedValue": "Mail delegation disabled unless deliberately required",
+      "remediationSteps": "In Gmail settings > User settings, disable mail delegation unless a reviewed business need exists.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.1.1v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "AC-6"
+        ]
+      }
+    },
+    {
+      "id": "EMAIL-026",
+      "name": "Gmail POP and IMAP access disabled (GWS.GMAIL.9.1)",
+      "description": "SCuBA GWS.GMAIL.9.1: legacy POP and IMAP protocols bypass modern authentication and are a credential-stuffing / MFA-bypass vector. Reads gmail.imap_access and gmail.pop_access; fails where either is enabled.",
+      "severity": "High",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 3,
+      "subcategory": "Legacy Protocols",
+      "recommendedValue": "POP and IMAP access disabled",
+      "remediationSteps": "In Gmail settings > End User Access, disable POP and IMAP so mail clients must use modern authenticated protocols.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.9.1v1"
+        ],
+        "nistSp80053": [
+          "IA-2",
+          "AC-17",
+          "AC-14"
+        ]
+      }
+    },
+    {
+      "id": "EMAIL-027",
+      "name": "Gmail user email/contacts import disabled (GWS.GMAIL.8.1)",
+      "description": "SCuBA GWS.GMAIL.8.1: user email uploads (importing mail and contacts from external accounts) pulls outside data into the tenant and can exfiltrate in reverse. Reads gmail.user_email_uploads; warns where enableMailAndContactsImport is on.",
+      "severity": "Low",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 1,
+      "subcategory": "Mail Access",
+      "recommendedValue": "User email/contacts import disabled",
+      "remediationSteps": "In Gmail settings, disable the ability for users to import mail and contacts from other accounts unless required.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.8.1v1"
+        ],
+        "nistSp80053": [
+          "AC-4",
+          "SC-7"
+        ]
+      }
+    },
+    {
+      "id": "EMAIL-028",
+      "name": "Google Workspace Sync for Outlook disabled (GWS.GMAIL.10.1)",
+      "description": "SCuBA GWS.GMAIL.10.1: Google Workspace Sync for Microsoft Outlook (GWSMO) bridges mailbox data to an Outlook client, expanding the data surface and bypassing some web protections. Reads gmail.workspace_sync_for_outlook; warns where it is enabled.",
+      "severity": "Low",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 1,
+      "subcategory": "Mail Access",
+      "recommendedValue": "GWSMO disabled unless required",
+      "remediationSteps": "In Gmail end-user access settings, disable Google Workspace Sync for Microsoft Outlook unless a reviewed need exists.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.10.1v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "CM-7"
+        ]
+      }
+    },
+    {
+      "id": "EMAIL-029",
+      "name": "Gmail spam-override sender lists reviewed (GWS.GMAIL.18.1)",
+      "description": "SCuBA GWS.GMAIL.18.1: approved-sender / spam-override lists cause mail from listed domains to bypass spam filtering, a phishing bypass if over-broad. Reads gmail.spam_override_lists; warns where override sender domains are configured.",
+      "severity": "Low",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 1,
+      "subcategory": "Spam Filtering",
+      "recommendedValue": "Spam-override sender lists absent or minimal and reviewed",
+      "remediationSteps": "In Gmail spam settings, review and minimize approved-sender / bypass lists so trusted-domain mail is not blanket-exempted from spam filtering.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.18.1v1"
+        ],
+        "nistSp80053": [
+          "SI-8",
+          "SC-7"
+        ]
+      }
     }
   ]
 }

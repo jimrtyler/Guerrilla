@@ -1,0 +1,24 @@
+{
+  "checkId": "DRIVE-014",
+  "theater": "Fortification",
+  "scenario": "bad",
+  "expectedStatus": "FAIL",
+  "description": "insecure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "drive_and_docs.drive_sdk": [
+          {
+            "setting": {
+              "value": {
+                "enableDriveSdkApiAccess": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

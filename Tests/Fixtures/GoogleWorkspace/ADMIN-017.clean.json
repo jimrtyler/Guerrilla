@@ -1,0 +1,24 @@
+{
+  "checkId": "ADMIN-017",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "secure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "api_controls.internal_apps": [
+          {
+            "setting": {
+              "value": {
+                "trustInternalApps": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

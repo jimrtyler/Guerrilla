@@ -648,3 +648,36 @@ function Test-FortificationADMIN016 {
         -CurrentValue "Data processing limited to the storage region in all $($vals.Count) targeted policy/policies" `
         -OrgUnitPath $OrgUnitPath
 }
+
+# ── ADMIN-017: GWS.COMMONCONTROLS.10.3 — Internal apps not auto-trusted ─────
+function Test-FortificationADMIN017 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'api_controls.internal_apps' -Field 'trustInternalApps' -SecureValue $false -Status 'WARN' `
+        -BadMsg 'Internal apps are automatically trusted (granted access without review)' -GoodMsg 'Internal apps are not automatically trusted'
+}
+
+# ── ADMIN-018: GWS.COMMONCONTROLS.15.1 — Data at-rest region configured ────
+function Test-FortificationADMIN018 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available' -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type 'data_regions.data_at_rest_region' -Field 'region')
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'No data_regions.data_at_rest_region policy returned for this tenant' -OrgUnitPath $OrgUnitPath
+    }
+    # No region preference set = data may be stored anywhere (no residency control).
+    $unset = @($vals | Where-Object { "$_" -in @('NO_PREFERENCE', '', 'REGION_UNSPECIFIED') -or $null -eq $_ })
+    if ($unset.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'WARN' `
+            -CurrentValue "No data-at-rest region preference is set in $($unset.Count) of $($vals.Count) targeted policy/policies — confirm this matches your residency policy" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "A data-at-rest region is configured in all $($vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}

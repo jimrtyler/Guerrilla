@@ -1,0 +1,24 @@
+{
+  "checkId": "DRIVE-016",
+  "theater": "Fortification",
+  "scenario": "bad",
+  "expectedStatus": "WARN",
+  "description": "insecure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "drive_and_docs.file_security_update": [
+          {
+            "setting": {
+              "value": {
+                "allowUsersToManageUpdate": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

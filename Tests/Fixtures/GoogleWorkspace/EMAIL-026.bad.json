@@ -1,0 +1,33 @@
+{
+  "checkId": "EMAIL-026",
+  "theater": "Fortification",
+  "scenario": "bad",
+  "expectedStatus": "FAIL",
+  "description": "imap on",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.imap_access": [
+          {
+            "setting": {
+              "value": {
+                "enableImapAccess": true
+              }
+            }
+          }
+        ],
+        "gmail.pop_access": [
+          {
+            "setting": {
+              "value": {
+                "enablePopAccess": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "checkId": "DRIVE-015",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "secure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "drive_and_docs.external_file_warning": [
+          {
+            "setting": {
+              "value": {
+                "highlightingEnabled": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

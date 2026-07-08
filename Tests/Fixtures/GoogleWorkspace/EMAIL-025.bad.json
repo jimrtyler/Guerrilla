@@ -1,0 +1,24 @@
+{
+  "checkId": "EMAIL-025",
+  "theater": "Fortification",
+  "scenario": "bad",
+  "expectedStatus": "WARN",
+  "description": "insecure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.mail_delegation": [
+          {
+            "setting": {
+              "value": {
+                "enableMailDelegation": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

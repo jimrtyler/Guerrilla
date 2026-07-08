@@ -402,3 +402,30 @@ function Test-FortificationDRIVE013 {
         -OrgUnitPath $OrgUnitPath `
         -Details @{ Note = 'Offline access caches files locally and should be disabled on shared or unmanaged devices' }
 }
+
+# ── DRIVE-014: GWS.DRIVEDOCS.4.1 — Drive SDK API access disabled ───────────
+function Test-FortificationDRIVE014 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'drive_and_docs.drive_sdk' -Field 'enableDriveSdkApiAccess' -SecureValue $false -Status 'FAIL' `
+        -BadMsg 'Drive SDK API access is enabled (third-party API read/write to Drive)' -GoodMsg 'Drive SDK API access is disabled'
+}
+
+# ── DRIVE-015: GWS.DRIVEDOCS.1.9 — External-file sharing warning enabled ───
+function Test-FortificationDRIVE015 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'drive_and_docs.external_file_warning' -Field 'highlightingEnabled' -SecureValue $true -Status 'WARN' `
+        -BadMsg 'External-file sharing warning is off' -GoodMsg 'External-file sharing warning is on'
+}
+
+# ── DRIVE-016: GWS.DRIVEDOCS.3.1 — File security update enforced ───────────
+function Test-FortificationDRIVE016 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'drive_and_docs.file_security_update' -Field 'allowUsersToManageUpdate' -SecureValue $false -Status 'WARN' `
+        -BadMsg 'Users are allowed to remove the file security update' -GoodMsg 'Users cannot remove the file security update'
+}

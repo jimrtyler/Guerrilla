@@ -1,0 +1,24 @@
+{
+  "checkId": "EMAIL-028",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "secure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.workspace_sync_for_outlook": [
+          {
+            "setting": {
+              "value": {
+                "enableGoogleWorkspaceSyncForMicrosoftOutlook": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

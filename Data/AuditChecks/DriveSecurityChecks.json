@@ -330,6 +330,67 @@
           "2.13"
         ]
       }
+    },
+    {
+      "id": "DRIVE-014",
+      "name": "Drive SDK API access disabled (GWS.DRIVEDOCS.4.1)",
+      "description": "SCuBA GWS.DRIVEDOCS.4.1: the Drive SDK lets third-party apps read and write Drive content via API, a direct data-exfiltration channel when broadly enabled. Reads drive_and_docs.drive_sdk; fails where enableDriveSdkApiAccess is on.",
+      "severity": "High",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 3,
+      "subcategory": "Drive API",
+      "recommendedValue": "Drive SDK API access disabled",
+      "remediationSteps": "In Admin console > Apps > Google Workspace > Drive and Docs > Features and Applications, disable Drive SDK unless specific reviewed integrations require it.",
+      "compliance": {
+        "scuba": [
+          "GWS.DRIVEDOCS.4.1v1"
+        ],
+        "nistSp80053": [
+          "AC-4",
+          "AC-3",
+          "SC-7"
+        ]
+      }
+    },
+    {
+      "id": "DRIVE-015",
+      "name": "Drive external-file warning enabled (GWS.DRIVEDOCS.1.9)",
+      "description": "SCuBA GWS.DRIVEDOCS.1.9: warning users when they share files externally is a low-friction data-loss control. Reads drive_and_docs.external_file_warning; warns where highlightingEnabled is off.",
+      "severity": "Low",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 1,
+      "subcategory": "Drive Sharing",
+      "recommendedValue": "External-file sharing warning enabled",
+      "remediationSteps": "In Drive sharing settings, enable warnings when users share files with people outside the organization.",
+      "compliance": {
+        "scuba": [
+          "GWS.DRIVEDOCS.1.9v1"
+        ],
+        "nistSp80053": [
+          "AC-22",
+          "SI-10"
+        ]
+      }
+    },
+    {
+      "id": "DRIVE-016",
+      "name": "Drive file security update enforced (GWS.DRIVEDOCS.3.1)",
+      "description": "SCuBA GWS.DRIVEDOCS.3.1: the file security update tightens link-sharing on affected files; letting users remove it re-opens access. Reads drive_and_docs.file_security_update; warns where users are allowed to remove/manage the security update.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 2,
+      "subcategory": "Drive Sharing",
+      "recommendedValue": "Security update applied and users cannot remove it",
+      "remediationSteps": "In Drive settings, apply the file security update and do not allow users to remove it from files they own.",
+      "compliance": {
+        "scuba": [
+          "GWS.DRIVEDOCS.3.1v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "CM-6"
+        ]
+      }
     }
   ]
 }

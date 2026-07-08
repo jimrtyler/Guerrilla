@@ -395,6 +395,47 @@
         ],
         "cisBenchmark": []
       }
+    },
+    {
+      "id": "ADMIN-017",
+      "name": "Internal apps not auto-trusted (GWS.COMMONCONTROLS.10.3)",
+      "description": "SCuBA GWS.COMMONCONTROLS.10.3: automatically trusting internal (domain-owned) OAuth apps grants them access without review, an insider/lateral data-access path. Reads api_controls.internal_apps; warns where trustInternalApps is on.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 2,
+      "subcategory": "API Controls",
+      "recommendedValue": "Internal apps are not automatically trusted",
+      "remediationSteps": "In Admin console > Security > API controls, disable automatic trust of internal apps so they undergo the same review as third-party apps.",
+      "compliance": {
+        "scuba": [
+          "GWS.COMMONCONTROLS.10.3v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "AC-6",
+          "CM-7"
+        ]
+      }
+    },
+    {
+      "id": "ADMIN-018",
+      "name": "Data at-rest region configured (GWS.COMMONCONTROLS.15.1)",
+      "description": "SCuBA GWS.COMMONCONTROLS.15.1: setting a data-at-rest region enforces where organizational data is stored (residency/compliance). Reads data_regions.data_at_rest_region; warns where no region preference is set.",
+      "severity": "Low",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 1,
+      "subcategory": "Data Residency",
+      "recommendedValue": "A specific data-at-rest region is configured per organizational policy",
+      "remediationSteps": "In Admin console > Data > Data regions, set the data-at-rest region required by your organization's residency policy rather than leaving it unset.",
+      "compliance": {
+        "scuba": [
+          "GWS.COMMONCONTROLS.15.1v1"
+        ],
+        "nistSp80053": [
+          "SC-28",
+          "AC-3"
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "checkId": "DRIVE-016",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "secure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "drive_and_docs.file_security_update": [
+          {
+            "setting": {
+              "value": {
+                "allowUsersToManageUpdate": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

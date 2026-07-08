@@ -1,0 +1,24 @@
+{
+  "checkId": "ADMIN-018",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "region set",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "data_regions.data_at_rest_region": [
+          {
+            "setting": {
+              "value": {
+                "region": "UNITED_STATES"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

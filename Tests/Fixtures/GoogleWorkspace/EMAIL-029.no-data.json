@@ -1,0 +1,11 @@
+{
+  "checkId": "EMAIL-029",
+  "theater": "Fortification",
+  "scenario": "no-data",
+  "expectedStatus": "SKIP",
+  "description": "no api",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {}
+  }
+}

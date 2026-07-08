@@ -1,0 +1,24 @@
+{
+  "checkId": "EMAIL-029",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "secure",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.spam_override_lists": [
+          {
+            "setting": {
+              "value": {
+                "senderDomainsFound": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

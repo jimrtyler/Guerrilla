@@ -1,0 +1,33 @@
+{
+  "checkId": "EMAIL-026",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "pop/imap off",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.imap_access": [
+          {
+            "setting": {
+              "value": {
+                "enableImapAccess": false
+              }
+            }
+          }
+        ],
+        "gmail.pop_access": [
+          {
+            "setting": {
+              "value": {
+                "enablePopAccess": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

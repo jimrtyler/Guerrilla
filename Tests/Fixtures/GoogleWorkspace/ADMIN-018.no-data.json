@@ -1,0 +1,11 @@
+{
+  "checkId": "ADMIN-018",
+  "theater": "Fortification",
+  "scenario": "no-data",
+  "expectedStatus": "SKIP",
+  "description": "no api",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {}
+  }
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.46.3] - 2026-07-08
+
+### Added
+- **Ten Google Workspace SCuBA controls closing the last config-automated gaps — verified zero concessions.** A rigorous setting-level diff against ScubaGoggles' Rego (every configuration setting it reads vs every one PSGuerrilla reads) surfaced real gaps the earlier family-level pass missed. Now closed: **EMAIL-025** (GMAIL.1.1 mail delegation), **EMAIL-026** (GMAIL.9.1 POP/IMAP access — a modern-auth/MFA bypass), **EMAIL-027** (GMAIL.8.1 user email/contacts import), **EMAIL-028** (GMAIL.10.1 Workspace Sync for Outlook), **EMAIL-029** (GMAIL.18.1 spam-override sender lists), **DRIVE-014** (DRIVEDOCS.4.1 Drive SDK API access — a data-exfil channel), **DRIVE-015** (DRIVEDOCS.1.9 external-file sharing warning), **DRIVE-016** (DRIVEDOCS.3.1 file security update), **ADMIN-017** (COMMONCONTROLS.10.3 internal apps auto-trust), **ADMIN-018** (COMMONCONTROLS.15.1 data-at-rest region). All read Cloud Identity Policy settings, weakest-OU-wins, absent policy = Not Assessed, tagged with GWS.* IDs. 30 golden fixtures. After this, PSGuerrilla reads every configuration setting ScubaGoggles reads (or assesses the same control via a more thorough mechanism — e.g., per-user forwarding enumeration); the only unautomated controls are ones ScubaGoggles does not automate from configuration either.
+
 ## [2.46.2] - 2026-07-08
 
 ### Added
