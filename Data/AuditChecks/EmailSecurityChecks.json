@@ -848,6 +848,54 @@
       "source_url": null,
       "source_read_date": null,
       "official_id": null
+    },
+    {
+      "id": "EMAIL-030",
+      "name": "Automatic email forwarding disabled (GWS.GMAIL.11.1)",
+      "description": "SCuBA GWS.GMAIL.11.1 recommends disabling automatic email forwarding, especially to external domains. Auto-forwarding is a common data-exfiltration channel and a persistence mechanism after account takeover, because it silently copies inbound mail to an attacker-controlled address. This check reads the gmail.auto_forwarding Cloud Identity policy and flags any organizational unit where automatic forwarding is enabled.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 2,
+      "subcategory": "Mail Access",
+      "recommendedValue": "Automatic email forwarding disabled (enableAutoForwarding = false) in all organizational units.",
+      "remediationSteps": "In the Google Admin console, under Apps > Google Workspace > Gmail > End User Access, disable 'Allow users to automatically forward incoming email to another address', prioritizing external destinations. Review existing forwarding rules for unexpected external recipients.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.11.1v1"
+        ],
+        "nistSp80053": [
+          "AC-4",
+          "SC-7"
+        ]
+      },
+      "provenance": "baseline",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null
+    },
+    {
+      "id": "EMAIL-031",
+      "name": "Enhanced pre-delivery message scanning enabled (GWS.GMAIL.15.1)",
+      "description": "SCuBA GWS.GMAIL.15.1 requires enhanced pre-delivery message scanning, which improves detection of suspicious and phishing content before a message reaches the inbox. This check reads the gmail.enhanced_pre_delivery_message_scanning Cloud Identity policy and flags any organizational unit where improved suspicious-content detection is not enabled.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 2,
+      "subcategory": "Advanced Threat Protection",
+      "recommendedValue": "Enhanced pre-delivery message scanning enabled (enableImprovedSuspiciousContentDetection = true) in all organizational units.",
+      "remediationSteps": "In the Google Admin console, under Apps > Google Workspace > Gmail > Spam, Phishing, and Malware, enable enhanced pre-delivery message scanning so Gmail performs additional analysis of suspicious content before delivery.",
+      "compliance": {
+        "scuba": [
+          "GWS.GMAIL.15.1v1"
+        ],
+        "nistSp80053": [
+          "SI-3",
+          "SI-8"
+        ]
+      },
+      "provenance": "baseline",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null
     }
   ]
 }

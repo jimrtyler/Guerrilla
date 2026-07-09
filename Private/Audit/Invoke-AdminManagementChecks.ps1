@@ -681,3 +681,12 @@ function Test-FortificationADMIN018 {
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
         -CurrentValue "A data-at-rest region is configured in all $($vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
 }
+
+# ── ADMIN-019: Data processing restricted to storage region (GWS.COMMONCONTROLS.15.2) ──
+function Test-FortificationADMIN019 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'data_regions.data_processing_region' -Field 'limitToStorageRegion' -SecureValue $true -Status 'FAIL' `
+        -BadMsg 'Data processing is not limited to the storage region' -GoodMsg 'Data processing is limited to the storage region'
+}

@@ -1,0 +1,24 @@
+{
+  "checkId": "EMAIL-031",
+  "theater": "Fortification",
+  "scenario": "known-bad",
+  "expectedStatus": "FAIL",
+  "description": "Non-compliant: enableImprovedSuspiciousContentDetection=False",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.enhanced_pre_delivery_message_scanning": [
+          {
+            "setting": {
+              "value": {
+                "enableImprovedSuspiciousContentDetection": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

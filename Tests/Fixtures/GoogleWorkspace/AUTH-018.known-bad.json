@@ -1,0 +1,24 @@
+{
+  "checkId": "AUTH-018",
+  "theater": "Fortification",
+  "scenario": "known-bad",
+  "expectedStatus": "FAIL",
+  "description": "Non-compliant: enableAccountRecovery=True",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "security.user_account_recovery": [
+          {
+            "setting": {
+              "value": {
+                "enableAccountRecovery": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

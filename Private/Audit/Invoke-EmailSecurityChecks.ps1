@@ -1010,3 +1010,46 @@ function Test-FortificationEMAIL029 {
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
         -CurrentValue 'No spam-override sender lists configured' -OrgUnitPath $OrgUnitPath
 }
+
+# ── Test-GwsPolicyEnum: shared scalar-enum policy check (mirrors Test-GwsPolicyBoolean) ──
+function Test-GwsPolicyEnum {
+    param(
+        [hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath,
+        [string]$Type, [string]$Field, [string[]]$CompliantValues, [string]$Status, [string]$BadMsg, [string]$GoodMsg
+    )
+    $pol = $AuditData.CloudIdentityPolicies
+    if (-not $pol) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Cloud Identity Policy API not available (cloud-identity.policies.readonly not delegated, or API disabled)' -OrgUnitPath $OrgUnitPath
+    }
+    $vals = @(Resolve-GooglePolicyValue -Policies $pol -Type $Type -Field $Field)
+    if ($vals.Count -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue "No $Type policy returned for this tenant" -OrgUnitPath $OrgUnitPath
+    }
+    $bad = @($vals | Where-Object { $_ -notin $CompliantValues })
+    if ($bad.Count -gt 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status $Status `
+            -CurrentValue "$BadMsg in $($bad.Count) of $($vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+    }
+    return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
+        -CurrentValue "$GoodMsg in all $($vals.Count) targeted policy/policies" -OrgUnitPath $OrgUnitPath
+}
+
+# ── EMAIL-030: Automatic email forwarding disabled (GWS.GMAIL.11.1) ──
+function Test-FortificationEMAIL030 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'gmail.auto_forwarding' -Field 'enableAutoForwarding' -SecureValue $false -Status 'WARN' `
+        -BadMsg 'Automatic email forwarding is enabled' -GoodMsg 'Automatic email forwarding is disabled'
+}
+
+# ── EMAIL-031: Enhanced pre-delivery message scanning enabled (GWS.GMAIL.15.1) ──
+function Test-FortificationEMAIL031 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'gmail.enhanced_pre_delivery_message_scanning' -Field 'enableImprovedSuspiciousContentDetection' -SecureValue $true -Status 'FAIL' `
+        -BadMsg 'Enhanced pre-delivery message scanning is not enabled' -GoodMsg 'Enhanced pre-delivery message scanning is enabled'
+}

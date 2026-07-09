@@ -429,3 +429,12 @@ function Test-FortificationDRIVE016 {
         -Type 'drive_and_docs.file_security_update' -Field 'allowUsersToManageUpdate' -SecureValue $false -Status 'WARN' `
         -BadMsg 'Users are allowed to remove the file security update' -GoodMsg 'Users cannot remove the file security update'
 }
+
+# ── DRIVE-017: Default file access set to private to owner (GWS.DRIVEDOCS.1.8) ──
+function Test-FortificationDRIVE017 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyEnum -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'drive_and_docs.general_access_default' -Field 'defaultFileAccess' -CompliantValues @('PRIVATE_TO_OWNER') -Status 'FAIL' `
+        -BadMsg 'Default file access is not private to owner' -GoodMsg 'Default file access is private to owner'
+}

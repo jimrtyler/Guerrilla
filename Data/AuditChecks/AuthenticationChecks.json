@@ -552,6 +552,30 @@
       "source_url": null,
       "source_read_date": null,
       "official_id": null
+    },
+    {
+      "id": "AUTH-018",
+      "name": "Account self-recovery disabled for users and non-super admins (GWS.COMMONCONTROLS.8.2)",
+      "description": "SCuBA GWS.COMMONCONTROLS.8.2 requires that account self-recovery be disabled for users and non-super-admin accounts. Self-service recovery is an account-takeover vector: an attacker who controls a recovery channel can seize the account without the help desk. This check reads the security.user_account_recovery Cloud Identity policy and flags any organizational unit where self-recovery is enabled.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 2,
+      "subcategory": "Account Security",
+      "recommendedValue": "Account self-recovery disabled (enableAccountRecovery = false) for users and non-super admins in all organizational units.",
+      "remediationSteps": "In the Google Admin console, under Security > Account recovery, disable self-recovery for users (and non-super admins), so account recovery is handled through an administrator or help-desk process rather than a user-controlled channel.",
+      "compliance": {
+        "scuba": [
+          "GWS.COMMONCONTROLS.8.2v1"
+        ],
+        "nistSp80053": [
+          "IA-5",
+          "AC-2"
+        ]
+      },
+      "provenance": "baseline",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null
     }
   ]
 }

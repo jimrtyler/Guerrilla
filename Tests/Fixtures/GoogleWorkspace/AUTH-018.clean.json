@@ -1,0 +1,24 @@
+{
+  "checkId": "AUTH-018",
+  "theater": "Fortification",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "Compliant: enableAccountRecovery=False",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "security.user_account_recovery": [
+          {
+            "setting": {
+              "value": {
+                "enableAccountRecovery": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

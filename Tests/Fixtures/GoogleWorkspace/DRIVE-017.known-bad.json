@@ -1,0 +1,24 @@
+{
+  "checkId": "DRIVE-017",
+  "theater": "Fortification",
+  "scenario": "known-bad",
+  "expectedStatus": "FAIL",
+  "description": "Non-compliant: defaultFileAccess=ANYONE_WITH_LINK",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "drive_and_docs.general_access_default": [
+          {
+            "setting": {
+              "value": {
+                "defaultFileAccess": "ANYONE_WITH_LINK"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

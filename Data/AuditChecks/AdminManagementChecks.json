@@ -508,6 +508,30 @@
       "source_url": null,
       "source_read_date": null,
       "official_id": null
+    },
+    {
+      "id": "ADMIN-019",
+      "name": "Data processing restricted to storage region (GWS.COMMONCONTROLS.15.2)",
+      "description": "SCuBA GWS.COMMONCONTROLS.15.2 requires that data be processed in the same region selected for data at rest, so processing does not move covered data outside the chosen jurisdiction. This check reads the data_regions.data_processing_region Cloud Identity policy and flags any organizational unit where processing is not limited to the storage region.",
+      "severity": "Low",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 1,
+      "subcategory": "Data Residency",
+      "recommendedValue": "Data processing limited to the storage region (limitToStorageRegion = true) in all organizational units.",
+      "remediationSteps": "In the Google Admin console, under Account > Data regions, enable 'Process data only in the selected region' so processing stays within the region chosen for data at rest.",
+      "compliance": {
+        "scuba": [
+          "GWS.COMMONCONTROLS.15.2v1"
+        ],
+        "nistSp80053": [
+          "SA-9",
+          "AC-4"
+        ]
+      },
+      "provenance": "baseline",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null
     }
   ]
 }

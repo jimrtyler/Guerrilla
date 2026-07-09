@@ -1,0 +1,13 @@
+{
+  "checkId": "AUTH-018",
+  "theater": "Fortification",
+  "scenario": "not-assessed",
+  "expectedStatus": "SKIP",
+  "description": "Cloud Identity Policy API unavailable",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {
+      "CloudIdentityPolicies": "Policy API 403"
+    }
+  }
+}

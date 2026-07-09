@@ -455,6 +455,30 @@
       "source_url": null,
       "source_read_date": null,
       "official_id": null
+    },
+    {
+      "id": "DRIVE-017",
+      "name": "Default file access set to private to owner (GWS.DRIVEDOCS.1.8)",
+      "description": "SCuBA GWS.DRIVEDOCS.1.8 requires that 'Private to owner' be the default access level for newly created Drive items, so files are not shared more broadly than intended at creation time. This check reads the drive_and_docs.general_access_default Cloud Identity policy and flags any organizational unit where the default file access is not PRIVATE_TO_OWNER.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 2,
+      "subcategory": "Drive Sharing",
+      "recommendedValue": "Default access level for new files set to PRIVATE_TO_OWNER (defaultFileAccess) in all organizational units.",
+      "remediationSteps": "In the Google Admin console, under Apps > Google Workspace > Drive and Docs > Sharing settings > General access default, set the default to 'Private to owner' so newly created files start private and are shared only by deliberate action.",
+      "compliance": {
+        "scuba": [
+          "GWS.DRIVEDOCS.1.8v1"
+        ],
+        "nistSp80053": [
+          "AC-3",
+          "AC-6"
+        ]
+      },
+      "provenance": "baseline",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null
     }
   ]
 }

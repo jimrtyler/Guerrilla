@@ -524,3 +524,12 @@ function Test-FortificationAUTH017 {
     return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'PASS' `
         -CurrentValue 'Super admin self-recovery disabled' -OrgUnitPath $OrgUnitPath
 }
+
+# ── AUTH-018: Account self-recovery disabled for users and non-super admins (GWS.COMMONCONTROLS.8.2) ──
+function Test-FortificationAUTH018 {
+    [CmdletBinding()]
+    param([hashtable]$AuditData, [hashtable]$CheckDefinition, [string]$OrgUnitPath = '/')
+    Test-GwsPolicyBoolean -AuditData $AuditData -CheckDefinition $CheckDefinition -OrgUnitPath $OrgUnitPath `
+        -Type 'security.user_account_recovery' -Field 'enableAccountRecovery' -SecureValue $false -Status 'FAIL' `
+        -BadMsg 'Account self-recovery is enabled' -GoodMsg 'Account self-recovery is disabled'
+}

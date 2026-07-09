@@ -1,0 +1,24 @@
+{
+  "checkId": "EMAIL-030",
+  "theater": "Fortification",
+  "scenario": "known-bad",
+  "expectedStatus": "WARN",
+  "description": "Non-compliant: enableAutoForwarding=True",
+  "objectShape": true,
+  "auditData": {
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "ByType": {
+        "gmail.auto_forwarding": [
+          {
+            "setting": {
+              "value": {
+                "enableAutoForwarding": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
