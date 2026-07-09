@@ -106,12 +106,27 @@ if ([string]::IsNullOrWhiteSpace($ApiKey)) {
     }
     if ([string]::IsNullOrWhiteSpace($ApiKey)) { Fail 'no ApiKey. Set $env:PSGALLERY_KEY or paste at the prompt — never commit it or put it in chat.' }
 }
-Import-Module Microsoft.PowerShell.PSResourceGet -MinimumVersion 1.1.0 -Force
-# PSResourceGet's Write-Progress rendering can deadlock the publish on macOS/Linux
-# (it stalls at "Removed N of M files … 0.0 MB/s" indefinitely). Silencing progress
-# for this process avoids the hang without affecting the upload.
 $ProgressPreference = 'SilentlyContinue'
-Publish-PSResource -Path $pkg -Repository $Repository -ApiKey $ApiKey -ErrorAction Stop
+# Run the push in a bounded job. If the API key's glob scope doesn't cover this
+# package name (e.g. a key scoped to 'PSGuerrilla' pushing 'Guerrilla'), PSResourceGet
+# stalls indefinitely at "Removed N of M files … 0.0 MB/s" instead of surfacing the
+# 403 — so we time out and say what's almost certainly wrong rather than hang forever.
+$pubJob = Start-Job {
+    param($p, $repo, $key)
+    $ProgressPreference = 'SilentlyContinue'
+    Import-Module Microsoft.PowerShell.PSResourceGet -MinimumVersion 1.1.0 -Force
+    Publish-PSResource -Path $p -Repository $repo -ApiKey $key -ErrorAction Stop
+} -ArgumentList $pkg, $Repository, $ApiKey
+if (Wait-Job $pubJob -Timeout 240) {
+    Receive-Job $pubJob   # re-throws any publish error (bad key surfaces here)
+    Remove-Job $pubJob -Force
+} else {
+    Stop-Job $pubJob; Remove-Job $pubJob -Force
+    Fail ("publish did not complete within 240s. The module packs cleanly, so this is the PSGallery push. " +
+          "Most likely the API key's glob scope does not cover the package name '" + (Split-Path $pkg -Leaf) + "'. " +
+          "Create a key at https://www.powershellgallery.com/account/apikeys with 'Push new packages and package versions' " +
+          "and glob '*' (or 'Guerrilla*'), then re-run.")
+}
 Write-Host "PUBLISHED Guerrilla $version to $Repository." -ForegroundColor Green
 
 # ── Tag + GitHub release so the repo and the Gallery don't diverge ──────────
