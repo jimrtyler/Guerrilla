@@ -85,7 +85,7 @@ $tar = Join-Path $stage 'head.tar'
 & git -C $root archive --format=tar -o $tar HEAD
 & tar -xf $tar -C $pkg
 Remove-Item $tar -Force -ErrorAction SilentlyContinue
-foreach ($ex in 'Tests', '.github', '.PSScriptAnalyzerSettings.psd1', 'Publish-Release.ps1', '.gitignore', '.gitattributes') {
+foreach ($ex in 'Tests', '.github', '.PSScriptAnalyzerSettings.psd1', 'Publish-Release.ps1', '.gitignore', '.gitattributes', 'Samples') {
     Remove-Item (Join-Path $pkg $ex) -Recurse -Force -ErrorAction SilentlyContinue
 }
 $null = Test-ModuleManifest (Join-Path $pkg 'Guerrilla.psd1')
@@ -107,6 +107,10 @@ if ([string]::IsNullOrWhiteSpace($ApiKey)) {
     if ([string]::IsNullOrWhiteSpace($ApiKey)) { Fail 'no ApiKey. Set $env:PSGALLERY_KEY or paste at the prompt — never commit it or put it in chat.' }
 }
 Import-Module Microsoft.PowerShell.PSResourceGet -MinimumVersion 1.1.0 -Force
+# PSResourceGet's Write-Progress rendering can deadlock the publish on macOS/Linux
+# (it stalls at "Removed N of M files … 0.0 MB/s" indefinitely). Silencing progress
+# for this process avoids the hang without affecting the upload.
+$ProgressPreference = 'SilentlyContinue'
 Publish-PSResource -Path $pkg -Repository $Repository -ApiKey $ApiKey -ErrorAction Stop
 Write-Host "PUBLISHED Guerrilla $version to $Repository." -ForegroundColor Green
 
