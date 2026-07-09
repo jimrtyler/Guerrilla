@@ -107,25 +107,31 @@ if ([string]::IsNullOrWhiteSpace($ApiKey)) {
     if ([string]::IsNullOrWhiteSpace($ApiKey)) { Fail 'no ApiKey. Set $env:PSGALLERY_KEY or paste at the prompt — never commit it or put it in chat.' }
 }
 $ProgressPreference = 'SilentlyContinue'
-# Run the push in a bounded job. If the API key's glob scope doesn't cover this
-# package name (e.g. a key scoped to 'PSGuerrilla' pushing 'Guerrilla'), PSResourceGet
-# stalls indefinitely at "Removed N of M files … 0.0 MB/s" instead of surfacing the
-# 403 — so we time out and say what's almost certainly wrong rather than hang forever.
-$pubJob = Start-Job {
-    param($p, $repo, $key)
-    $ProgressPreference = 'SilentlyContinue'
-    Import-Module Microsoft.PowerShell.PSResourceGet -MinimumVersion 1.1.0 -Force
-    Publish-PSResource -Path $p -Repository $repo -ApiKey $key -ErrorAction Stop
-} -ArgumentList $pkg, $Repository, $ApiKey
-if (Wait-Job $pubJob -Timeout 240) {
-    Receive-Job $pubJob   # re-throws any publish error (bad key surfaces here)
-    Remove-Job $pubJob -Force
-} else {
-    Stop-Job $pubJob; Remove-Job $pubJob -Force
-    Fail ("publish did not complete within 240s. The module packs cleanly, so this is the PSGallery push. " +
-          "Most likely the API key's glob scope does not cover the package name '" + (Split-Path $pkg -Leaf) + "'. " +
-          "Create a key at https://www.powershellgallery.com/account/apikeys with 'Push new packages and package versions' " +
-          "and glob '*' (or 'Guerrilla*'), then re-run.")
+# Publish in two reliable steps instead of Publish-PSResource's push, which stalls
+# indefinitely on macOS ("Removed N of M files … 0.0 MB/s") when the API key's glob
+# scope doesn't cover the package name (it never surfaces the 403). Step 1 PACKS the
+# module into a local .nupkg (the part PSResourceGet does fine). Step 2 PUSHES that
+# .nupkg with `dotnet nuget push`, which is fast and returns a clear 403 on a bad key.
+$packDir = Join-Path $stage 'nupkg'
+New-Item -ItemType Directory -Path $packDir -Force | Out-Null
+Import-Module Microsoft.PowerShell.PSResourceGet -MinimumVersion 1.1.0 -Force
+Register-PSResourceRepository -Name 'guerrilla-pack' -Uri $packDir -Trusted -Force -ErrorAction SilentlyContinue
+try   { Publish-PSResource -Path $pkg -Repository 'guerrilla-pack' -SkipDependenciesCheck -ErrorAction Stop }
+finally { Unregister-PSResourceRepository -Name 'guerrilla-pack' -ErrorAction SilentlyContinue }
+$nupkg = Get-ChildItem $packDir -Filter '*.nupkg' | Select-Object -First 1
+if (-not $nupkg) { Fail 'packing produced no .nupkg.' }
+Ok "packed $($nupkg.Name)"
+
+$dotnet = if (Get-Command dotnet -ErrorAction SilentlyContinue) { 'dotnet' }
+          elseif (Test-Path "$HOME/.dotnet/dotnet") { "$HOME/.dotnet/dotnet" }
+          else { $null }
+if (-not $dotnet) { Fail 'dotnet SDK not found (needed to push). Install it, or add ~/.dotnet to PATH.' }
+
+$pushUri = 'https://www.powershellgallery.com/api/v2/package'
+& $dotnet nuget push $nupkg.FullName --api-key $ApiKey --source $pushUri --skip-duplicate
+if ($LASTEXITCODE -ne 0) {
+    Fail ("push failed (exit $LASTEXITCODE). A 403 means the API key's glob scope does not cover 'Guerrilla' — " +
+          "mint a key at https://www.powershellgallery.com/account/apikeys with 'Push new packages and package versions' and glob '*'.")
 }
 Write-Host "PUBLISHED Guerrilla $version to $Repository." -ForegroundColor Green
 
