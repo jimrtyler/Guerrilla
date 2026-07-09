@@ -5,8 +5,9 @@ function Write-GuerrillaBanner {
     [CmdletBinding()]
     param()
 
-    # Respect quiet/no-color env vars
-    if ($env:PSGUERRILLA_QUIET) { return }
+    # Respect quiet/no-color env vars. GUERRILLA_QUIET is the current name;
+    # PSGUERRILLA_QUIET is honored as a back-compat fallback (pre-rename name).
+    if ($env:GUERRILLA_QUIET -or $env:PSGUERRILLA_QUIET) { return }
 
     # Skip the banner in non-interactive contexts (scheduled tasks, CI, piped
     # invocation) — printing a 5-line ASCII banner there is just noise that

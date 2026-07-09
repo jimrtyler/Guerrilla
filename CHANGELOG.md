@@ -1,5 +1,7 @@
 # Changelog
 
+> **Project rename.** This module was published as `PSGuerrilla` through version 2.46.1 and is now `Guerrilla`, effective **v2.46.3** (2026-07-08). The repository and the PowerShell Gallery package are both `Guerrilla`; the old `PSGuerrilla` package remains on the Gallery frozen at its last version. Existing installs migrate automatically (per-user data and safehouse credentials carry forward transparently, see v2.46.3 below). Changelog entries for versions published as `PSGuerrilla` are left exactly as they were at the time; history is not rewritten.
+
 ## [2.46.3] - 2026-07-08
 
 ### Changed

@@ -2,63 +2,83 @@
 
 **By [Jim Tyler](https://github.com/jimrtyler), Microsoft MVP**
 
-Security assessment, threat detection, and continuous monitoring for Google Workspace, Active Directory, Entra ID, Azure, Intune, and Microsoft 365. PowerShell 7.0+.
+Guerrilla is an agentless, read-only security assessment platform for PowerShell 7. It audits three theaters from one tool: on-premises Active Directory, the Entra ID / Azure / Microsoft 365 / Intune identity plane, and Google Workspace. It runs 618 checks, every verdict is backed by a golden-fixture test, and it never installs an agent or writes to the systems it assesses.
 
 [![GitHub](https://img.shields.io/badge/GitHub-jimrtyler-181717?logo=github)](https://github.com/jimrtyler) [![LinkedIn](https://img.shields.io/badge/LinkedIn-jamestyler-0A66C2?logo=linkedin)](https://linkedin.com/in/jamestyler) [![YouTube](https://img.shields.io/badge/YouTube-PowerShellEngineer-FF0000?logo=youtube)](https://youtube.com/@powershellengineer)
+
+```powershell
+Install-Module Guerrilla -Scope CurrentUser
+Import-Module Guerrilla
+```
+
+Full reference, the browsable check catalog, and the fixture framework live at **[guerrilla.army](https://guerrilla.army)**.
 
 > **[View a sample report](./Guerrilla-Sample-Report.html)** to see the scope of what Guerrilla evaluates.
 
 ---
 
-## Coverage
+## What Guerrilla is
 
-| Theater | Capability | Checks |
-|---------|-----------|--------|
-| Google Workspace | Compromise assessment, 23 detection signals, 10 audit categories — adversary tradecraft + CISA SCuBA baselines (Gmail, Drive, Chat, Meet, Calendar, Sites, Classroom, Gemini, Assured Controls) | 125 |
-| Active Directory | 15-category security reconnaissance incl. transitive attack-path analysis + NT-hash password quality (DSInternals), replication health, and DC user-rights | 211 |
-| Entra ID / Azure / Intune / M365 | Infiltration audit across 15 categories — full 44-control EIDSCA, CISA SCuBA (Entra ID + Exchange Online depth), and Entra Connect version currency | 244 |
-| All theaters | Continuous monitoring with baseline drift detection | Real-time |
+Guerrilla assesses identity security posture across three theaters in a single tool. It is agentless and read-only: it authenticates with the access you already grant it, reads configuration and directory state, and reports. It does not remediate, install software, or change the tenant.
 
-**Total: 580 security checks** across authentication, email security (full SCuBA Exchange Online), drive/SharePoint, OAuth, admin management, conditional access, PIM, Kerberos, certificate services (ESC1–ESC16), group policy, Intune endpoint compliance, NTLM-relay preconditions, Tier-0 hygiene, hybrid-identity (Entra Connect / Seamless SSO), shadow-credential and dMSA-escalation detection, NT-hash password quality, logging/telemetry posture, adversary-tradecraft indicators (GPP cpassword, DCShadow, BitLocker hygiene, RODC PRP), and more — mapped to NIST 800-53, MITRE ATT&CK, CIS, ANSSI, CISA SCuBA, and EIDSCA.
+| Theater | Scope | Checks |
+|---------|-------|--------|
+| **Reconnaissance** | On-premises Active Directory: privileged groups, delegation and ACLs, Kerberos, certificate services (ESC1 through ESC16), trusts, group policy, NTLM-relay preconditions, Tier-0 hygiene, logging posture, and adversary tradecraft indicators | 211 |
+| **Infiltration** | Entra ID, the Azure identity plane, Microsoft 365, and Intune: the full 44-control EIDSCA baseline, conditional access, PIM, application and OAuth governance, Exchange Online, SharePoint, Teams, Defender, hybrid identity, and endpoint compliance | 257 |
+| **Fortification** | Google Workspace: Gmail, Drive, Chat, Meet, Calendar, Sites, Classroom, Groups, and admin controls, aligned to the CISA SCuBA secure configuration baselines | 150 |
 
-> Checks that cannot collect their data (missing module, scope, license, or dataset) report **Not Assessed** — never a passing score on an unchecked control.
+**Total: 618 checks.** Each check maps to the standards it implements, where applicable, across NIST 800-53, MITRE ATT&CK, CIS Benchmarks, EIDSCA, and the CISA SCuBA baselines. Each carries a CISA Zero Trust Maturity Model pillar and weight, and each produces a `PASS`, `FAIL`, `WARN`, or an honest `Not Assessed`.
+
+> A check that cannot collect its data (missing module, scope, license, or dataset) reports **Not Assessed**. Guerrilla never scores an uncollected control as a pass. Absence of evidence is not compliance.
+
+## Every verdict is tested
+
+The property that distinguishes Guerrilla is that its verdict logic is proven, not asserted. Every check that can be fixtured is validated by a golden fixture: a synthetic tenant state driven through the real check function, asserting the verdict the check must return.
+
+Every fixtured check is held to three assertions:
+
+- Clean input yields **PASS**.
+- Known-bad input yields **FAIL** (or `WARN` where the control warns).
+- Uncollectable input yields **Not Assessed**.
+
+The suite currently stands at **1,730 golden fixtures across 618 checks, with 0 failures.** CI runs the fixtures, the collector query-contract tests, and the Zero Trust schema test before any release. A red suite blocks publish. The fixture framework, and a walkthrough of how to write one, is documented at [guerrilla.army/tests](https://guerrilla.army/tests).
 
 ## Requirements
 
-- **PowerShell 7.0+** ([Install guide](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell))
-- **Operating System**: Windows (recommended — DPAPI encryption), Linux, or macOS
-- [PwshSpectreConsole](https://github.com/ShaunLawrie/PwshSpectreConsole) (optional, for rich terminal output — Guerrilla falls back gracefully)
+- **PowerShell 7.0+** ([install guide](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell))
+- **Operating system**: Windows (recommended, for DPAPI credential encryption), Linux, or macOS
+- [PwshSpectreConsole](https://github.com/ShaunLawrie/PwshSpectreConsole) (optional, for rich terminal output; Guerrilla falls back gracefully without it)
 
-### Per-Environment Requirements
+### Per-theater access
 
-| Environment | What You Need |
-|-------------|---------------|
-| **Google Workspace** | Service account with domain-wide delegation + admin email |
-| **Active Directory** | Domain-joined machine or RSAT tools with domain credentials |
-| **Entra ID / Azure / M365** | App registration with appropriate Microsoft Graph API permissions |
-| **Intune** | Same app registration — DeviceManagementConfiguration.Read.All scope |
+| Theater | What you need |
+|---------|---------------|
+| **Active Directory** | Domain-joined machine or RSAT tools with domain read credentials |
+| **Entra ID / Azure / M365** | App registration with read-only Microsoft Graph permissions |
+| **Intune** | The same app registration with `DeviceManagementConfiguration.Read.All` |
+| **Google Workspace** | Service account with domain-wide delegation plus an admin email |
 
-> ### ⚠️ Endpoint protection (Microsoft Defender / EDR) may block the module
+> ### Endpoint protection (Microsoft Defender / EDR) may block the module
 >
-> Guerrilla is an offensive-capable security tool: several of its AD attack-detection files reference DCSync replication GUIDs, `GenericAll`/`WriteDacl`, shadow-admin and Tier-0 patterns. Antivirus heuristics — **Microsoft Defender real-time protection in particular** — can flag these as suspicious and **block read access to the files**, which makes `Import-Module Guerrilla` fail (often on a different AD file each attempt) with:
+> Guerrilla is a security tool: several of its AD attack-detection files reference DCSync replication GUIDs, `GenericAll` / `WriteDacl`, and Tier-0 patterns. Antivirus heuristics, Microsoft Defender real-time protection in particular, can flag these as suspicious and block read access to the files, which makes `Import-Module Guerrilla` fail (often on a different AD file each attempt) with:
 >
 > ```
 > Access to the path '…\Invoke-ADAclDelegationChecks.ps1' is denied
 > ```
 >
-> This is a **false positive** — the files are inert PowerShell, not malware — but it stops the module from loading. Fix it by adding a path exclusion for the module from an **elevated** PowerShell:
+> This is a false positive. The files are inert PowerShell, not malware, but the block stops the module from loading. Fix it by adding a path exclusion from an **elevated** PowerShell:
 >
 > ```powershell
 > Add-MpPreference -ExclusionPath "$HOME\Documents\PowerShell\Modules\Guerrilla"
 > ```
 >
-> Alternatively, in **Windows Security → Virus & threat protection → Protection history**, choose **Allow** on the blocked item. On managed/EDR hosts, ask your security team to allowlist the module path. More detail under [Troubleshooting](#troubleshooting).
+> Alternatively, in **Windows Security > Virus and threat protection > Protection history**, choose **Allow** on the blocked item. On managed or EDR hosts, ask your security team to allowlist the module path. More detail under [Troubleshooting](#troubleshooting).
 
 ---
 
-## Setup Guide
+## Setup
 
-### Step 1: Install the Module
+### Step 1: Install the module
 
 ```powershell
 # From the PowerShell Gallery (recommended)
@@ -70,46 +90,38 @@ git clone https://github.com/jimrtyler/Guerrilla.git
 Import-Module ./Guerrilla/Guerrilla.psd1
 ```
 
-### Step 2: Generate Your Configuration (Recommended)
+### Step 2: Open the Operations Console
 
-Visit **[guerrilla.army](https://guerrilla.army)** to use the interactive configuration builder. It walks you through selecting:
-- Which environments to audit (Google Workspace, AD, Entra/Azure/M365, Intune)
-- Mission mode (reporting only, or reporting + monitoring)
-- Report formats and compliance frameworks
-- Alerting channels (Teams, Slack, email, PagerDuty, etc.)
-
-Download the generated `guerrilla-config.json` when finished.
-
-> **Alternatively**, you can skip the config file entirely. Guerrilla will prompt you for credentials interactively and use sensible defaults.
-
-### Step 3: Establish Your Safehouse (Credential Vault)
-
-`Set-Safehouse` is the core setup command. It creates an encrypted vault using Microsoft's SecretManagement framework and walks you through storing each credential.
+`Show-Guerrilla` is the driver's seat. It opens a five-tab WPF window that runs the whole platform: Operations (run scans), Safehouse (manage credentials), Patrol (continuous monitoring), Reports (browse and convert to PDF), and Settings (runtime config). Configure everything locally, in the module, from here.
 
 ```powershell
-# With a config file from guerrilla.army
-Set-Safehouse -ConfigFile './guerrilla-config.json'
+Show-Guerrilla
+```
 
-# Or without a config file (interactive, uses defaults)
+The console is Windows-only. On Linux and macOS the CLI cmdlets below do everything the console does.
+
+### Step 3: Establish your Safehouse (credential vault)
+
+`Set-Safehouse` creates an encrypted vault using Microsoft's SecretManagement framework and walks you through storing each credential.
+
+```powershell
 Set-Safehouse
 ```
 
 **What happens during setup:**
 
-1. **Dependency check** — Installs `Microsoft.PowerShell.SecretManagement` and `Microsoft.PowerShell.SecretStore` if missing (prompts for approval, or use `-Force` to auto-install)
-2. **Vault creation** — Creates an encrypted vault named `Guerrilla` with no-password configuration applied up front (no contradictory "enter a password / password not needed" prompts)
-   - **Windows**: Uses DPAPI (encrypted with your Windows login — no extra password needed)
-   - **Linux/macOS**: Uses an encrypted file
-3. **Credential prompts** — Walks you through each credential your config requires:
-   - **Google Workspace**: Paste your service account JSON key + admin email
-   - **Entra ID / M365**: Tenant ID, Client ID, Client Secret (with GUID format validation)
-   - **Active Directory**: Uses your current Kerberos session by default (no credential storage needed, no prompts shown)
-   - **Alerting providers**: Webhook URLs, API keys, etc. for any configured alert channels
-4. **Confirmation** — Displays a summary of stored credentials and your next command
+1. **Dependency check** installs `Microsoft.PowerShell.SecretManagement` and `Microsoft.PowerShell.SecretStore` if missing (prompts for approval, or use `-Force` to auto-install).
+2. **Vault creation** creates an encrypted vault named `Guerrilla` with no-password configuration applied up front.
+   - **Windows**: DPAPI, encrypted with your Windows login, no extra password needed.
+   - **Linux / macOS**: an encrypted file.
+3. **Credential prompts** walk you through only the theaters you choose:
+   - **Google Workspace**: paste your service account JSON key plus admin email.
+   - **Entra ID / M365**: Tenant ID, Client ID, Client Secret (with GUID validation).
+   - **Active Directory**: uses your current Kerberos session by default, so no credential is stored and no prompt is shown.
+   - **Alerting providers**: webhook URLs and API keys for any alert channels you configure.
+4. **Confirmation** displays a summary of stored credentials and your next command.
 
-**Without `-ConfigFile` (fully interactive):**
-
-If you run `Set-Safehouse` without a config file, the first question is which environments you want to set up:
+When you run `Set-Safehouse` without arguments, the first question is which theaters to set up. Pick only the ones you have. An Entra-only shop is never marched through Google Workspace prompts, and AD never asks for a stored credential.
 
 ```
   Which environments do you want to set up credentials for?
@@ -120,60 +132,31 @@ If you run `Set-Safehouse` without a config file, the first question is which en
   Selection (comma-separated, default: A):
 ```
 
-Pick only the ones you need. You won't be marched through Google Workspace prompts if you're an Entra-only shop, and AD never asks for stored credentials.
+### Step 4: Verify connectivity
 
-**Example output:**
-```
-╔══════════════════════════════════════════════╗
-║         SAFEHOUSE ESTABLISHED                ║
-╠══════════════════════════════════════════════╣
-║  Vault: Guerrilla                          ║
-║  Protection: DPAPI (User Scope)              ║
-║  Credentials Stored: 5                       ║
-╚══════════════════════════════════════════════╝
-
-Next: Invoke-Campaign -ConfigFile './guerrilla-config.json'
-```
-
-### Step 4: Verify Connectivity
-
-Before running your first scan, test that all credentials are working:
+Before your first scan, test that every credential works:
 
 ```powershell
-# Test all configured environments
 Set-Safehouse -Test
-
-# Or with a config file
-Set-Safehouse -Test -ConfigFile './guerrilla-config.json'
 ```
 
-This makes live API calls to each environment and reports back with actionable guidance if anything fails (wrong scopes, expired secrets, missing permissions, etc.).
+This makes live read-only API calls to each theater and reports back with actionable guidance if anything fails (wrong scopes, expired secrets, missing permissions).
 
-### Optional: Open the Operations Console GUI
-
-If you'd rather drive everything from a window than a prompt:
+### Step 5: Run your first scan
 
 ```powershell
-Show-Guerrilla
-```
-
-Opens a five-tab WPF window: Operations (run scans), Safehouse (manage credentials), Patrol (continuous monitoring), Reports (browse / convert to PDF), Settings (runtime config). Windows-only — the CLI cmdlets below keep working everywhere else.
-
-### Step 5: Run Your First Scan
-
-```powershell
-# Full campaign across all theaters
-Invoke-Campaign -ConfigFile './guerrilla-config.json'
+# Full campaign across all three theaters
+Invoke-Campaign
 
 # Or run individual theaters
-Invoke-Fortification                    # Google Workspace audit (125 checks)
 Invoke-Reconnaissance                   # Active Directory audit (211 checks)
-Invoke-Infiltration                     # Entra/Azure/Intune/M365 audit (244 checks)
+Invoke-Infiltration                     # Entra / Azure / Intune / M365 audit (257 checks)
+Invoke-Fortification                    # Google Workspace audit (150 checks)
 ```
 
-Results are automatically saved to `$env:APPDATA/Guerrilla/` (Windows) for report generation and trend tracking.
+Results are saved to `$env:APPDATA/Guerrilla/` (Windows) or the equivalent per-user data directory on Linux and macOS, for report generation and trend tracking.
 
-### Step 6: Generate Reports
+### Step 6: Generate reports
 
 ```powershell
 # Board-ready one-pager
@@ -188,21 +171,15 @@ Export-RemediationPlaybook
 # Auto-generated PowerShell fix scripts
 Export-RemediationScripts
 
-# Budget justification for leadership
-Export-BudgetJustification
-
 # Convert any HTML report to PDF
 Export-ReportPdf -HtmlPath './Guerrilla-Technical-Report.html'
 ```
 
-### Step 7: Set Up Continuous Monitoring (Optional)
+### Step 7: Set up continuous monitoring (optional)
 
 ```powershell
 # Register a scheduled task that scans every 60 minutes and sends alerts
-Register-Patrol -ConfigFile './guerrilla-config.json' `
-    -Theaters Workspace, Entra, AD `
-    -IntervalMinutes 60 `
-    -SendAlerts
+Register-Patrol -Theaters Workspace, Entra, AD -IntervalMinutes 60 -SendAlerts
 
 # View patrol status
 Get-Patrol
@@ -213,9 +190,7 @@ Unregister-Patrol -TaskName 'Guerrilla-Patrol'
 
 ---
 
-## Managing Your Safehouse
-
-### View Vault Status
+## Managing your Safehouse
 
 ```powershell
 # See what's stored (secrets are masked)
@@ -223,49 +198,29 @@ Get-Safehouse
 
 # Detailed status with credential inventory
 Set-Safehouse -Status
-```
 
-### Rotate Credentials
-
-```powershell
-# Rotate specific environment credentials
+# Rotate specific credentials
 Set-Safehouse -Rotate googleWorkspace
 Set-Safehouse -Rotate microsoftGraph
-```
 
-### Remove Credentials
-
-```powershell
+# Remove credentials
 Set-Safehouse -Remove googleWorkspace
-```
 
-### Update Runtime Settings
-
-```powershell
-# Change output directory
+# Change output directory or scoring profile
 Set-Safehouse -OutputDirectory 'D:\Reports\Guerrilla'
-
-# Switch scoring profile
 Set-Safehouse -Profile K12
 
 # Set minimum alert threshold
 Set-Safehouse -MinimumAlertLevel HIGH
-```
 
-### Export Metadata (for Backup/Documentation)
-
-```powershell
-# Exports credential metadata (NOT secrets) to JSON
+# Export credential metadata (NOT secrets) to JSON
 Set-Safehouse -ExportMetadata
 ```
 
----
-
-## Set-Safehouse Quick Reference
+### Set-Safehouse quick reference
 
 | Usage | Command |
 |-------|---------|
-| Initial setup with config | `Set-Safehouse -ConfigFile './guerrilla-config.json'` |
 | Initial setup (interactive) | `Set-Safehouse` |
 | Auto-install dependencies | `Set-Safehouse -Force` |
 | Test all connections | `Set-Safehouse -Test` |
@@ -280,14 +235,41 @@ Set-Safehouse -ExportMetadata
 
 ---
 
-## Preparing Your Environments
+## Preparing your theaters
 
-### Google Workspace Setup
+### Active Directory
 
-1. **Create a GCP project** at [console.cloud.google.com](https://console.cloud.google.com)
-2. **Enable APIs**: Admin SDK, Gmail API, Drive API, Groups Settings API
-3. **Create a service account** with domain-wide delegation
-4. **Grant scopes** in the Google Admin Console:
+Guerrilla uses your current Kerberos session by default, so no stored credential is needed when you run from a domain-joined machine with a domain admin (or delegated read) account.
+
+**Requirements:**
+- Domain-joined machine, or RSAT tools installed
+- Read access to AD objects (Domain Admins or delegated read permissions)
+- For certificate services checks: Enterprise Admin or CA Admin access
+
+### Microsoft Entra ID / Azure / M365
+
+1. **Register an app** in the [Entra admin center](https://entra.microsoft.com) under App registrations > New registration.
+2. **Add API permissions** (Application type, not Delegated), all read-only:
+   - `Directory.Read.All`
+   - `Policy.Read.All`
+   - `AuditLog.Read.All`
+   - `RoleManagement.Read.All`
+   - `Application.Read.All`
+   - `SecurityEvents.Read.All`
+   - `DeviceManagementConfiguration.Read.All` (Intune)
+   - `Mail.Read` (Exchange checks)
+   - `Sites.Read.All` (SharePoint checks)
+   - `AppCatalog.Read.All` (Teams app-catalog checks)
+3. **Grant admin consent** for the permissions.
+4. **Create a client secret** and note the expiration date.
+5. During `Set-Safehouse`, provide the Tenant ID, Client ID, and Client Secret value.
+
+### Google Workspace
+
+1. **Create a GCP project** at [console.cloud.google.com](https://console.cloud.google.com).
+2. **Enable APIs**: Admin SDK, Gmail API, Drive API, Groups Settings API.
+3. **Create a service account** with domain-wide delegation.
+4. **Grant read-only scopes** in the Google Admin Console:
    - `https://www.googleapis.com/auth/admin.directory.user.readonly`
    - `https://www.googleapis.com/auth/admin.directory.domain.readonly`
    - `https://www.googleapis.com/auth/admin.directory.group.readonly`
@@ -296,105 +278,45 @@ Set-Safehouse -ExportMetadata
    - `https://www.googleapis.com/auth/apps.groups.settings`
    - `https://www.googleapis.com/auth/admin.directory.device.mobile.readonly`
    - `https://www.googleapis.com/auth/admin.directory.device.chromeos.readonly`
-5. **Download the service account JSON key**
-6. During `Set-Safehouse`, paste the full JSON content when prompted and provide the admin email address
-
-### Microsoft Entra ID / Azure / M365 Setup
-
-1. **Register an app** in [Entra admin center](https://entra.microsoft.com) > App registrations > New registration
-2. **Add API permissions** (Application type, not Delegated):
-   - `Directory.Read.All`
-   - `Policy.Read.All`
-   - `AuditLog.Read.All`
-   - `RoleManagement.Read.All`
-   - `Application.Read.All`
-   - `SecurityEvents.Read.All`
-   - `DeviceManagementConfiguration.Read.All` (for Intune)
-   - `Mail.Read` (for Exchange checks)
-   - `Sites.Read.All` (for SharePoint checks)
-   - `AppCatalog.Read.All` (for Teams app-catalog checks)
-3. **Grant admin consent** for the permissions
-4. **Create a client secret** (note the expiration date)
-5. During `Set-Safehouse`, provide:
-   - **Tenant ID**: Found in Entra admin center > Overview
-   - **Client ID**: Found in your app registration
-   - **Client Secret**: The secret value (not the secret ID)
-
-### Active Directory Setup
-
-Guerrilla uses your **current Kerberos session** by default — no stored credentials needed if you're running from a domain-joined machine with a domain admin (or delegated read) account.
-
-For environments where you need a service account:
-```powershell
-# Set-Safehouse will prompt for AD service account credentials if configured
-Set-Safehouse -ConfigFile './guerrilla-config.json'
-```
-
-**Requirements:**
-- Domain-joined machine, or RSAT tools installed
-- Read access to AD objects (Domain Admins or delegated Read permissions)
-- For certificate services checks: Enterprise Admin or CA Admin access
+5. **Download the service account JSON key.**
+6. During `Set-Safehouse`, paste the full JSON content when prompted and provide the admin email.
 
 ---
 
-## Troubleshooting
-
-### `Import-Module` fails with "Access to the path '…Invoke-ADAclDelegationChecks.ps1' is denied"
-
-Your endpoint protection is blocking Guerrilla's AD attack-detection files (a false positive — see the **Endpoint protection (Microsoft Defender / EDR)** callout in [Requirements](#requirements)). Tell-tale signs it's antivirus, not a permissions problem: your account has FullControl on the file, yet even **copying** it is denied, and a *different* AD file is blocked on each import attempt. Fix:
-
-```powershell
-# Elevated PowerShell — exclude the module path, then re-import
-Add-MpPreference -ExclusionPath "$HOME\Documents\PowerShell\Modules\Guerrilla"
-Import-Module Guerrilla -Force
-```
-
-If you installed the module somewhere else, exclude that path instead (`(Get-Module Guerrilla -ListAvailable).ModuleBase`). On EDR-managed hosts, your security team adds the allowlist entry.
-
-### A scan reports "No accessible Azure subscriptions"
-
-The Entra app has no Azure Resource Manager access. Grant it the **Reader** role at the root management group to enable the `AZIAM-*` Azure resource checks (they SKIP cleanly without it).
-
-### Teams checks log a 403 for `/appCatalogs/teamsApps`
-
-Add the **`AppCatalog.Read.All`** application permission to the app registration (and grant admin consent). The scan continues without it; the Teams app-catalog portion just stays empty.
-
----
-
-## Core Functions
+## Core functions
 
 ### Assessments
 
 | Function | Alias | Description |
 |----------|-------|-------------|
+| `Invoke-Reconnaissance` | `Invoke-ADRecon` | Active Directory security audit (211 checks) |
+| `Invoke-Infiltration` | `Invoke-CloudRecon` | Entra ID, Azure, Intune, and M365 audit (257 checks) |
+| `Invoke-Fortification` | (none) | Google Workspace security configuration audit (150 checks) |
 | `Invoke-Recon` | `Invoke-WorkspaceRecon` | Google Workspace compromise assessment with 23 behavioral detection signals |
-| `Invoke-Fortification` | — | Google Workspace security configuration audit (10 categories, 125 checks) |
-| `Invoke-Reconnaissance` | `Invoke-ADRecon` | Active Directory security audit across 15 categories (211 checks) |
-| `Invoke-Infiltration` | `Invoke-CloudRecon` | Entra ID, Azure, Intune, and M365 security assessment (244 checks) |
-| `Invoke-Campaign` | — | Unified audit across all theaters in a single run |
+| `Invoke-Campaign` | (none) | Unified audit across all three theaters in a single run |
 
-> The theater-named aliases (`Invoke-WorkspaceRecon` / `Invoke-ADRecon` / `Invoke-CloudRecon`) are interchangeable with the canonical names — use whichever makes the intent clearer at the call site. `Invoke-Recon` (Workspace user behavior) and `Invoke-Reconnaissance` (AD configuration audit) look nearly identical but cover different theaters.
+> `Invoke-Recon` (Workspace user behavior) and `Invoke-Reconnaissance` (AD configuration audit) look nearly identical but cover different theaters. The theater-named aliases exist to make the intent clear at the call site.
 
-### Continuous Monitoring
+### Continuous monitoring
 
 | Function | Description |
 |----------|-------------|
-| `Invoke-Surveillance` | Entra ID sign-in risk and directory change monitoring via Graph API |
+| `Invoke-Surveillance` | Entra ID sign-in risk and directory change monitoring via Graph |
 | `Invoke-Watchtower` | Active Directory baseline monitoring with drift detection |
 | `Invoke-Wiretap` | M365 audit log monitoring (Exchange, SharePoint, Teams, Defender, Power Platform) |
-| `Invoke-Lookout` | Google Workspace posture monitoring with configuration-drift detection (read-only; baselines the Fortification audit and reports newly-failing / resolved controls) |
+| `Invoke-Lookout` | Google Workspace posture monitoring with configuration-drift detection |
 
-### Credential & Configuration Management
+### Credential and configuration
 
 | Function | Description |
 |----------|-------------|
-| `Set-Safehouse` | Manage encrypted vault, credentials, rotation, and module configuration |
+| `Set-Safehouse` | Manage the encrypted vault, credentials, rotation, and module configuration |
 | `Get-Safehouse` | View vault status, stored credentials, and current configuration |
-| `Show-Guerrilla` | Open the WPF Operations Console — credentials, scans, reports, patrols, settings (Windows only) |
+| `Show-Guerrilla` | Open the WPF Operations Console (Windows only) |
 
 ### Alerting
 
-Dispatch alerts through 10 providers. Each has a dedicated function or use `Send-Signal` to route automatically.
+Dispatch alerts through 10 providers. Each has a dedicated function, or use `Send-Signal` to route automatically.
 
 | Function | Provider |
 |----------|----------|
@@ -406,20 +328,21 @@ Dispatch alerts through 10 providers. Each has a dedicated function or use `Send
 | `Send-SignalSlack` | Slack (Block Kit) |
 | `Send-SignalWebhook` | Generic webhook / SIEM ingestion |
 | `Send-SignalPagerDuty` | PagerDuty with severity mapping |
-| `Send-SignalPushover` | Pushover mobile push notifications |
+| `Send-SignalPushover` | Pushover mobile push |
 | `Send-SignalSyslog` | Syslog in CEF or LEEF format |
 | `Send-SignalEventLog` | Windows Event Log |
-| `Send-SignalDigest` | Aggregated daily/weekly digest |
+| `Send-SignalDigest` | Aggregated daily or weekly digest |
 
-### Scoring & Analysis
+### Scoring and analysis
 
 | Function | Description |
 |----------|-------------|
-| `Get-GuerrillaScore` | Composite security score (0-100) with tier labels |
-| `Get-QuickWins` | Highest impact, lowest effort fixes ranked by ROI |
-| `Get-ComplianceCrosswalk` | Map findings to FERPA, COPPA, CIPA, NIST 800-171, state ed-tech |
+| `Get-GuerrillaScore` | Composite security score (0 to 100) with tier labels |
+| `Get-ZeroTrustScore` | Zero Trust posture scored by CISA ZTMM pillar |
+| `Get-QuickWins` | Highest impact, lowest effort fixes ranked by return |
+| `Get-ComplianceCrosswalk` | Map findings to compliance frameworks |
 | `Set-RiskAcceptance` | Accept risk on specific checks with justification and expiry |
-| `Get-RiskAcceptance` | List active/expired risk acceptances |
+| `Get-RiskAcceptance` | List active and expired risk acceptances |
 | `Get-TrendReport` | Score-over-time trend analysis from scan history |
 
 ### Reports
@@ -430,9 +353,9 @@ Dispatch alerts through 10 providers. Each has a dedicated function or use `Send
 | `Export-TechnicalReport` | Full findings with current vs recommended values and remediation |
 | `Export-RemediationPlaybook` | Step-by-step guide organized by phase and priority |
 | `Export-RemediationScripts` | Generate runnable PowerShell fix scripts from findings |
-| `Export-BudgetJustification` | Cost justification document for leadership |
 | `Export-Dashboard` | Unified HTML dashboard across all theaters |
-| `Export-ReportPdf` | Convert HTML reports to PDF via Edge/Chrome headless |
+| `Export-ReportPdf` | Convert HTML reports to PDF via Edge or Chrome headless |
+| `Export-BloodHoundData` | Export AD attack-path data for BloodHound ingestion |
 
 ### Scheduling
 
@@ -444,220 +367,128 @@ Dispatch alerts through 10 providers. Each has a dedicated function or use `Send
 
 ---
 
-## Security Score Tiers
+## Security score tiers
 
 The Guerrilla Score is a weighted composite of four components:
 
-| Component | Weight | What It Measures |
-|-----------|--------|-----------------|
+| Component | Weight | What it measures |
+|-----------|--------|------------------|
 | Posture | 40% | Audit findings weighted by severity |
 | Threats | 30% | Active threat detections from monitoring |
 | Coverage | 15% | Percentage of theaters actively scanned |
-| Trend | 15% | Score change from previous scan |
+| Trend | 15% | Score change from the previous scan |
 
 | Score | Tier | Meaning |
 |-------|------|---------|
-| 90-100 | FORTRESS | Excellent posture — maintain monitoring |
-| 75-89 | DEFENDED POSITION | Strong foundation — address remaining gaps |
-| 60-74 | CONTESTED GROUND | Needs improvement — prioritize action |
-| 40-59 | EXPOSED FLANK | Significant gaps — immediate attention |
-| 20-39 | UNDER SIEGE | Critical weaknesses — urgent remediation |
-| 0-19 | OVERRUN | Severe compromise risk — emergency response |
+| 90 to 100 | FORTRESS | Excellent posture, maintain monitoring |
+| 75 to 89 | DEFENDED POSITION | Strong foundation, address remaining gaps |
+| 60 to 74 | CONTESTED GROUND | Needs improvement, prioritize action |
+| 40 to 59 | EXPOSED FLANK | Significant gaps, immediate attention |
+| 20 to 39 | UNDER SIEGE | Critical weaknesses, urgent remediation |
+| 0 to 19 | OVERRUN | Severe compromise risk, emergency response |
 
 ---
 
-## Common Workflows
+## AD reconnaissance categories
 
-### Quick Assessment (No Config File)
-
-```powershell
-Import-Module ./Guerrilla.psd1
-Set-Safehouse                # pick the environments you actually have when prompted
-Invoke-Campaign
-Export-TechnicalReport -OrganizationName 'Contoso'
-```
-
-### Full Mission with Reporting
-
-```powershell
-Import-Module ./Guerrilla.psd1
-Set-Safehouse -ConfigFile './guerrilla-config.json'
-Set-Safehouse -Test
-Invoke-Campaign -ConfigFile './guerrilla-config.json'
-
-Export-ExecutiveSummary -OrganizationName 'Springfield USD'
-Export-TechnicalReport -OrganizationName 'Springfield USD'
-Export-RemediationPlaybook
-Export-RemediationScripts
-Export-ReportPdf -HtmlPath './Guerrilla-Executive-Summary.html'
-```
-
-### Review High-Priority Findings
-
-```powershell
-$results = Invoke-Campaign -ConfigFile './guerrilla-config.json'
-$results | Get-DeadDrop -MinimumThreatLevel HIGH
-Get-QuickWins -Top 10
-Get-ComplianceCrosswalk -FailOnly
-```
-
-### Ongoing Monitoring with Alerts
-
-```powershell
-Register-Patrol -ConfigFile './guerrilla-config.json' `
-    -Theaters Workspace, Entra, AD, M365 `
-    -IntervalMinutes 60 `
-    -SendAlerts
-
-# View results
-Get-Patrol
-Get-TrendReport
-```
-
----
-
-## Configuration
-
-Guerrilla uses a JSON config file generated by the [Guerrilla Configuration Website](https://guerrilla.army) or manually created. The config controls which environments to audit, monitoring intervals, report formats, alerting channels, and compliance framework mappings.
-
-```powershell
-# All public functions accept -ConfigFile
-Invoke-Campaign -ConfigFile './guerrilla-config.json'
-Invoke-Reconnaissance -ConfigFile './guerrilla-config.json' -Categories PrivilegedAccounts, Kerberos, Network
-```
-
-### AD Reconnaissance categories
-
-`Invoke-Reconnaissance -Categories <name(s)>` selects which AD categories run. Default is `All`.
+`Invoke-Reconnaissance -Categories <name(s)>` selects which AD categories run. The default is `All`.
 
 | Category | What it audits |
 |---|---|
-| `DomainForest` | Domain/forest info, functional levels, FSMO holders, sites |
+| `DomainForest` | Domain and forest info, functional levels, FSMO holders, sites |
 | `Trusts` | External and forest trusts, SID filtering, transitivity |
-| `PrivilegedAccounts` | Domain/Enterprise/Schema Admins, krbtgt, AdminSDHolder, DCSync rights |
-| `PasswordPolicy` | Default Domain Password Policy + Fine-Grained Password Policies, LAPS, and NT-hash quality (blank/duplicate-password detection via DSInternals when run on a DC with replication rights; HIBP/dictionary report Not Assessed unless a dataset is supplied) |
+| `PrivilegedAccounts` | Domain / Enterprise / Schema Admins, krbtgt, AdminSDHolder, DCSync rights |
+| `PasswordPolicy` | Default and fine-grained password policies, LAPS, and NT-hash quality via DSInternals when run on a DC with replication rights |
 | `Kerberos` | Kerberoasting, AS-REP roasting, all delegation types, encryption types |
 | `ACLDelegation` | Dangerous ACEs on critical objects, OU delegation, MachineAccountQuota |
 | `GroupPolicy` | GPO inventory, link analysis, sensitive GPO permissions |
 | `LogonScripts` | NETLOGON share contents, embedded credentials, dangerous patterns |
-| `CertificateServices` | ESC1–ESC9, ESC11, ESC13, ESC15 (EKUwu), and ESC16 certificate template misconfigurations |
-| `StaleObjects` | Inactive users/computers, password-age outliers |
-| `Network` | NTLM-relay preconditions: LDAP/SMB signing, LLMNR/NetBIOS/WPAD, IPv6 (mitm6), Spooler/WebClient — the settings that turn an ESC8 finding from theoretical into one-shot domain compromise |
-| `TierZero` | Tier-bleed scanning by service-account name pattern (Veeam / vCenter / SCCM / SQL in DA/EA/SA), plus the Azure AD Connect MSOL_ account audit (an account most enumeration tools never surface because it gets DCSync via ACL, not group membership) |
-| `Logging` | Telemetry posture: Advanced Audit Policy adoption, PowerShell Script Block / Module Logging, Process Creation cmdline auditing, Defender Tamper Protection guidance, WEF SubscriptionManager, Sysmon deployment indicator — the events investigators need to actually catch the things the other categories warn about |
-| `Tradecraft` | Adversary indicators that fall outside the standard category buckets: GPP cpassword leftovers in SYSVOL (still the #1 red-team find), DCShadow surface (rogue server objects in CN=Sites,CN=Configuration), stale BitLocker recovery keys, RODC Password Replication Policy hygiene, shadow credentials (`msDS-KeyCredentialLink`), delegated-MSA escalation (BadSuccessor), Seamless SSO (`AZUREADSSOACC`) key rotation, Enterprise/Key Admins and Cert Publishers membership, and gMSA password exposure |
-
-Runtime configuration (detection thresholds, business hours, alert suppression, etc.) is managed separately:
-
-```powershell
-# Stored at $env:APPDATA/Guerrilla/config.json
-Set-Safehouse -ConfigPath './my-runtime-config.json'
-```
+| `CertificateServices` | ESC1 through ESC9, ESC11, ESC13, ESC15, and ESC16 template misconfigurations |
+| `StaleObjects` | Inactive users and computers, password-age outliers |
+| `Network` | NTLM-relay preconditions: LDAP / SMB signing, LLMNR / NetBIOS / WPAD, IPv6 (mitm6), Spooler / WebClient |
+| `TierZero` | Tier-bleed scanning by service-account name pattern, plus the Entra Connect MSOL_ account audit |
+| `Logging` | Telemetry posture: Advanced Audit Policy, PowerShell script-block and module logging, process-creation auditing, WEF, Sysmon indicators |
+| `Tradecraft` | Adversary indicators: GPP cpassword in SYSVOL, DCShadow surface, stale BitLocker keys, RODC PRP, shadow credentials, delegated-MSA escalation, Seamless SSO key rotation, gMSA exposure |
 
 ---
 
-## Module Structure
-
-```
-Guerrilla/
-  Guerrilla.psd1              # Module manifest (49 exported functions)
-  Guerrilla.psm1              # Root module (loader)
-  Guerrilla.format.ps1xml     # Custom table formatters
-  Config/                        # JSON schema and defaults
-  Data/                          # Threat intel, audit check definitions, compliance crosswalks
-    AuditChecks/                 # 40 JSON files defining all 580 security checks
-    Profiles/                    # Scoring profiles (Default, K12)
-  Public/                        # 49 exported functions
-  Private/                       # 258 internal function files
-    AD/                          # Active Directory collection and checks
-    ADMonitor/                   # AD continuous monitoring and detections
-    Audit/                       # Shared audit framework
-    Console/                     # Themed terminal output and Spectre integration
-    Core/                        # Detection engine, IP classification, state management
-    Entra/                       # Entra ID / Azure / Intune / M365 checks
-    EntraMonitor/                # Entra ID continuous monitoring
-    Export/                      # Report generation (HTML, CSV, JSON)
-    Google/                      # Google Workspace API integration
-    Graph/                       # Microsoft Graph API integration
-    Gui/                         # Show-Guerrilla WPF Operations Console
-    M365Monitor/                 # M365 audit log monitoring
-    Vault/                       # SecretManagement vault integration
-  Tests/                         # Pester 5 unit and integration tests
-```
-
----
-
-## Aliases & Migration
+## Aliases and migration
 
 ### Theater-named aliases
 
-For readability at the call site — `Invoke-Recon` and `Invoke-Reconnaissance` look near-identical but cover different theaters. Use whichever name you prefer:
-
 | Alias | Resolves to | Theater |
 |-------|-------------|---------|
-| `Invoke-WorkspaceRecon` | `Invoke-Recon` | Google Workspace user-behavior assessment |
 | `Invoke-ADRecon` | `Invoke-Reconnaissance` | Active Directory configuration audit |
 | `Invoke-CloudRecon` | `Invoke-Infiltration` | Entra ID / Azure / Intune / M365 audit |
+| `Invoke-WorkspaceRecon` | `Invoke-Recon` | Google Workspace user-behavior assessment |
 
-### Migration from PSRecon
+### Migrating from an earlier install
 
-Guerrilla automatically migrates your PSRecon configuration on first load. All old command names (`Invoke-GoogleRecon`, `Get-ReconAlerts`, `Send-ReconAlert`, `Set-ReconConfig`, etc.) continue to work as aliases.
+If you previously installed the module under its former name, Guerrilla migrates your data automatically and transparently on first load. The per-user data directory (reports, config, patrol state) is carried forward one time, and safehouse credential resolution falls back to the legacy vault when the new `Guerrilla` vault has no value. No manual re-registration is required. See the [CHANGELOG](./CHANGELOG.md) for the version this took effect.
 
 ### Non-interactive imports
 
-The startup banner is suppressed automatically when the module is imported from a scheduled task, CI runner, or any non-interactive session (when `[Environment]::UserInteractive` is false or stdout is redirected). You can also force-quiet it with `$env:PSGUERRILLA_QUIET = 1`.
+The startup banner is suppressed automatically when the module is imported from a scheduled task, CI runner, or any non-interactive session. You can also force-quiet it by setting `$env:GUERRILLA_QUIET = 1`.
 
 ---
 
 ## Troubleshooting
 
-### "No audit findings available"
+### `Import-Module` fails with "Access to the path '…Invoke-ADAclDelegationChecks.ps1' is denied"
 
-Run a scan first before generating reports:
-```powershell
-Invoke-Campaign -ConfigFile './guerrilla-config.json'
-Export-TechnicalReport
-```
-
-### SecretManagement module won't install
+Your endpoint protection is blocking Guerrilla's AD attack-detection files (a false positive, see the endpoint-protection callout under [Requirements](#requirements)). Tell-tale signs it is antivirus and not a permissions problem: your account has FullControl on the file yet even copying it is denied, and a different AD file is blocked on each import attempt.
 
 ```powershell
-# Try installing manually
-Install-Module Microsoft.PowerShell.SecretManagement -Scope CurrentUser
-Install-Module Microsoft.PowerShell.SecretStore -Scope CurrentUser
-
-# Then re-run setup
-Set-Safehouse -ConfigFile './guerrilla-config.json'
+# Elevated PowerShell: exclude the module path, then re-import
+Add-MpPreference -ExclusionPath "$HOME\Documents\PowerShell\Modules\Guerrilla"
+Import-Module Guerrilla -Force
 ```
+
+If you installed the module elsewhere, exclude that path instead (`(Get-Module Guerrilla -ListAvailable).ModuleBase`). On EDR-managed hosts, your security team adds the allowlist entry.
+
+### A scan reports "No accessible Azure subscriptions"
+
+The Entra app has no Azure Resource Manager access. Grant it the **Reader** role at the root management group to enable the `AZIAM-*` Azure resource checks. They report Not Assessed cleanly without it.
+
+### Teams checks log a 403 for `/appCatalogs/teamsApps`
+
+Add the `AppCatalog.Read.All` application permission to the app registration and grant admin consent. The scan continues without it; the Teams app-catalog portion stays empty.
 
 ### Google API returns 403
 
-- Verify domain-wide delegation is configured in Admin Console > Security > API Controls > Domain-wide Delegation
-- Confirm the correct scopes are granted to the service account client ID
-- Check that the admin email has Super Admin privileges
+- Verify domain-wide delegation in Admin Console > Security > API Controls > Domain-wide Delegation.
+- Confirm the correct scopes are granted to the service account client ID.
+- Check that the admin email has Super Admin privileges.
 
-### Graph API returns 401/403
+### Graph API returns 401 or 403
 
-- Verify admin consent was granted for the app permissions
-- Check the client secret hasn't expired: `Set-Safehouse -Status`
-- Rotate if needed: `Set-Safehouse -Rotate microsoftGraph`
+- Verify admin consent was granted for the app permissions.
+- Check the client secret has not expired: `Set-Safehouse -Status`.
+- Rotate if needed: `Set-Safehouse -Rotate microsoftGraph`.
 
-### PowerShell 5.1 Compatibility
+### PowerShell 5.1
 
-Guerrilla requires PowerShell 7.0+. If you're on Windows PowerShell 5.1:
+Guerrilla requires PowerShell 7.0+. On Windows PowerShell 5.1:
+
 ```powershell
-# Install PowerShell 7
 winget install Microsoft.PowerShell
-# Then run from pwsh
 pwsh
 Import-Module ./Guerrilla.psd1
 ```
 
 ---
 
+## Contributing
+
+Guerrilla is an open, community-facing project, and its contributors are often practitioners who will never open a pull request. Reporting a wrong verdict, proposing a check with the incident that motivated it, and contributing fixture data from an unusual real tenant shape are all first-class contributions, and every rung is credited in release notes. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the ladder, and [guerrilla.army/tests](https://guerrilla.army/tests) for how to write a fixture.
+
+Every contributed check ships with fixtures. That requirement is what lets a maintainer accept a check from someone they have never met: the fixture proves the verdict logic is correct.
+
+---
+
 ## Author
 
-**Jim Tyler** — Microsoft MVP
+**Jim Tyler**, Microsoft MVP
 
 - GitHub: [github.com/jimrtyler](https://github.com/jimrtyler)
 - LinkedIn: [linkedin.com/in/jamestyler](https://linkedin.com/in/jamestyler)
@@ -666,4 +497,6 @@ Import-Module ./Guerrilla.psd1
 
 ## License
 
-[CC BY 4.0](LICENSE) — Attribution required. Commercial use allowed.
+[CC BY 4.0](LICENSE). Attribution required. Commercial use allowed.
+</content>
+</invoke>
