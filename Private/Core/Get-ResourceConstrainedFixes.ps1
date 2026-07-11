@@ -27,7 +27,7 @@ function Get-ResourceConstrainedFixes {
     )
 
     if (-not $RemediationData) {
-        $remPath = Join-Path $PSScriptRoot '../../Data/RemediationCosts.json'
+        $remPath = Join-Path $script:ModuleRoot 'Data/RemediationCosts.json'
         if (Test-Path $remPath) {
             $RemediationData = Get-Content -Path $remPath -Raw | ConvertFrom-Json -AsHashtable
         } else {

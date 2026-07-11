@@ -70,7 +70,7 @@ function Get-QuickWins {
     }
 
     # Load remediation cost data
-    $remPath = Join-Path $PSScriptRoot '../Data/RemediationCosts.json'
+    $remPath = Join-Path $script:ModuleRoot 'Data/RemediationCosts.json'
     $remData = $null
     if (Test-Path $remPath) {
         $remData = Get-Content -Path $remPath -Raw | ConvertFrom-Json -AsHashtable

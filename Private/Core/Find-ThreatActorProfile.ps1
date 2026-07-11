@@ -22,7 +22,7 @@ function Find-ThreatActorProfile {
     )
 
     if (-not $ActorProfiles) {
-        $profilePath = Join-Path $PSScriptRoot '../../Data/ThreatActorProfiles.json'
+        $profilePath = Join-Path $script:ModuleRoot 'Data/ThreatActorProfiles.json'
         if (Test-Path $profilePath) {
             $ActorProfiles = Get-Content -Path $profilePath -Raw | ConvertFrom-Json -AsHashtable
         } else {

@@ -1,4 +1,4 @@
-$ModuleRoot = $PSScriptRoot
+$script:ModuleRoot = $PSScriptRoot
 
 function Get-GuerrillaDataRoot {
     <#

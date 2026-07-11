@@ -7,7 +7,7 @@ function Update-ThreatIntelData {
         [switch]$Force
     )
 
-    $dataDir = Join-Path $PSScriptRoot '../../Data'
+    $dataDir = Join-Path $script:ModuleRoot 'Data'
     $ipRangesPath = Join-Path $dataDir 'CloudIpRanges.json'
     $currentData = Get-Content -Path $ipRangesPath -Raw | ConvertFrom-Json -AsHashtable
 

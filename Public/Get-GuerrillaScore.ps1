@@ -64,7 +64,7 @@ function Get-GuerrillaScore {
         default   { 'Default-Baseline.json' }
     }
 
-    $profilePath = Join-Path $PSScriptRoot '../Data/Profiles' $profileFile
+    $profilePath = Join-Path $script:ModuleRoot 'Data/Profiles' $profileFile
     $profile = $null
     if (Test-Path $profilePath) {
         $profile = Get-Content -Path $profilePath -Raw | ConvertFrom-Json -AsHashtable

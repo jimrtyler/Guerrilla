@@ -15,7 +15,7 @@ function Invoke-EntraEidscaChecks {
         [hashtable]$AuditData
     )
 
-    $catalogPath = Join-Path $PSScriptRoot '../../../Data/AuditChecks/EidscaChecks.json'
+    $catalogPath = Join-Path $script:ModuleRoot 'Data/AuditChecks/EidscaChecks.json'
     if (-not (Test-Path $catalogPath)) {
         Write-Warning "EIDSCA catalog not found at $catalogPath"
         return @()

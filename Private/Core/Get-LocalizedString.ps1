@@ -24,9 +24,9 @@ function Get-LocalizedString {
     # Load string table if not cached
     if (-not $script:LocalizationStrings) {
         $language = $script:ReportLanguage ?? 'en-US'
-        $locPath = Join-Path $PSScriptRoot '../../Data/Localization' "$language.json"
+        $locPath = Join-Path $script:ModuleRoot 'Data/Localization' "$language.json"
         if (-not (Test-Path $locPath)) {
-            $locPath = Join-Path $PSScriptRoot '../../Data/Localization/en-US.json'
+            $locPath = Join-Path $script:ModuleRoot 'Data/Localization/en-US.json'
         }
         if (Test-Path $locPath) {
             $script:LocalizationStrings = Get-Content -Path $locPath -Raw | ConvertFrom-Json -AsHashtable

@@ -48,7 +48,7 @@ function Export-RemediationPlaybook {
     }
 
     # Load remediation costs
-    $remPath = Join-Path $PSScriptRoot '../Data/RemediationCosts.json'
+    $remPath = Join-Path $script:ModuleRoot 'Data/RemediationCosts.json'
     $remData = $null
     if (Test-Path $remPath) {
         $remData = Get-Content -Path $remPath -Raw | ConvertFrom-Json -AsHashtable

@@ -13,7 +13,7 @@ function Test-HighRiskOAuthApp {
 
     # Load high-risk app data
     $highRiskData = $null
-    $dataPath = Join-Path $PSScriptRoot '../../Data/HighRiskOAuthApps.json'
+    $dataPath = Join-Path $script:ModuleRoot 'Data/HighRiskOAuthApps.json'
     if (Test-Path $dataPath) {
         $highRiskData = Get-Content -Path $dataPath -Raw | ConvertFrom-Json
     }

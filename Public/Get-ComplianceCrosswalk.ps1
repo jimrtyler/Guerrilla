@@ -65,7 +65,7 @@ function Get-ComplianceCrosswalk {
     }
 
     # Load crosswalk data
-    $crosswalkPath = Join-Path $PSScriptRoot '../Data/ComplianceCrosswalk.json'
+    $crosswalkPath = Join-Path $script:ModuleRoot 'Data/ComplianceCrosswalk.json'
     if (-not (Test-Path $crosswalkPath)) {
         Write-Warning "ComplianceCrosswalk.json not found at $crosswalkPath"
         return @()
