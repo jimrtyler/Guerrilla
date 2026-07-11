@@ -113,6 +113,8 @@ function Register-Patrol {
     # Write the patrol script to a file so the scheduled task is a clean -File invocation
     # (avoids quoting/escaping nightmares with -Command and nested braces)
     $scriptDir = $cfgPath | Split-Path -Parent
+    # A fresh install has no data root yet; Set-Content does not create parents.
+    if (-not (Test-Path $scriptDir)) { New-Item -Path $scriptDir -ItemType Directory -Force | Out-Null }
     $scriptPath = Join-Path $scriptDir 'patrol-runner.ps1'
     $logPath = Join-Path $scriptDir 'scheduled-scan.log'
 

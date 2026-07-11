@@ -38,6 +38,13 @@ Describe 'Register-Patrol' {
         Mock Get-Command { [PSCustomObject]@{ Source = 'C:\Program Files\PowerShell\7\pwsh.exe' } } -ModuleName Guerrilla -ParameterFilter { $Name -eq 'pwsh' }
     }
 
+    BeforeEach {
+        # Isolate the config dir: Register-Patrol writes patrol-runner.ps1 next to the
+        # config file, and without this the test writes into the user's REAL data root
+        # (and fails on a fresh CI runner where that directory does not exist).
+        & (Get-Module Guerrilla) { $script:ConfigPath = $args[0] } (Join-Path $TestDrive 'config.json')
+    }
+
     Context 'Default parameters' {
         It 'uses Guerrilla-Patrol as default task name' {
             $result = Register-Patrol -Force
