@@ -18,6 +18,12 @@
     SQLite file to publish to. Defaults to the migrated local copy under
     ~/Documents/Guerrilla-Data/ (see Tests/Local/Publish-GuerrillaTestResultsSqlite.ps1).
 
+.PARAMETER PoisonSelfTest
+    Flip one fixture's expected verdict in memory and run the suite, which must then
+    exit non-zero. Used by Tests/Invoke-GatePoisonSelfTests.ps1 to prove the gate can
+    fail. Refuses to combine with -EmitSummary or -Publish: a poisoned run must never
+    produce an artifact or a history row.
+
 .EXAMPLE
     pwsh Tests/Invoke-FixtureTests.ps1
 
@@ -31,7 +37,8 @@ param(
     # Write a machine-readable test-summary.json. This is the single artifact the
     # website renders every count from, so a public number can never be stale: the
     # only way it updates is a green run of this suite.
-    [string]$EmitSummary
+    [string]$EmitSummary,
+    [switch]$PoisonSelfTest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -43,6 +50,17 @@ Import-Guerrilla
 $platformByFamily = @{ AD = 'AD'; Entra = 'Entra'; Eidsca = 'Entra'; GoogleWorkspace = 'GWS' }
 
 $cases = Get-GuerrillaFixtureCases
+
+if ($PoisonSelfTest) {
+    if ($EmitSummary -or $Publish) {
+        Write-Host 'FATAL: -PoisonSelfTest cannot be combined with -EmitSummary or -Publish (a poisoned run must never produce an artifact).' -ForegroundColor Red
+        exit 3
+    }
+    # One deliberately-impossible expectation: if the suite still exits 0 with this in
+    # play, the gate has lost the ability to fail and cannot be trusted.
+    $cases[0].ExpectedStatus = 'POISON-IMPOSSIBLE-STATUS'
+    Write-Host ("POISON SELF-TEST: expected status of {0} [{1}] flipped to an impossible value; this run MUST exit non-zero." -f $cases[0].CheckId, $cases[0].Scenario) -ForegroundColor Yellow
+}
 $sw = [System.Diagnostics.Stopwatch]::StartNew()
 
 $results = foreach ($c in $cases) {

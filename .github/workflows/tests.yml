@@ -56,3 +56,10 @@ jobs:
           # off Windows and are reported as skipped, never silently green.
           "unit: $($r.PassedCount) passed, $($r.FailedCount) failed, $($r.SkippedCount) skipped"
           if ($r.FailedCount -gt 0) { exit 1 }
+
+      - name: Gate poison self-tests (each gate must prove it can fail)
+        shell: pwsh
+        run: |
+          # Injected failures must exit non-zero through the same invocation shapes
+          # the gates use. A gate that cannot demonstrate red proves nothing when green.
+          ./Tests/Invoke-GatePoisonSelfTests.ps1

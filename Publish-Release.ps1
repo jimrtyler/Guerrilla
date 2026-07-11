@@ -44,6 +44,14 @@ Write-Host "== Publish-Release: Guerrilla $version ($([string](& git -C $root re
 if (& git -C $root status --porcelain) { Fail 'working tree is dirty. Commit or stash before releasing.' }
 Ok 'working tree clean'
 
+# 0b) GATE SELF-TESTS — before trusting four green gates, prove each can go red:
+#     an injected failure must surface as a non-zero exit through the same invocation
+#     shape each gate uses (gate C's poison self-test lives inside its own test file).
+Write-Host "-- gate self-tests: injected failure must exit non-zero --"
+& pwsh -NoProfile -File (Join-Path $root 'Tests' 'Invoke-GatePoisonSelfTests.ps1') | Out-Host
+if ($LASTEXITCODE -ne 0) { Fail "gate poison self-test RED (exit $LASTEXITCODE) — a gate cannot prove it fails; its green is meaningless. Release blocked." }
+Ok 'gates A, B, D proved they can fail (C self-tests in-file)'
+
 # 1) GATE A — golden-fixture detection suite (verdict logic). Child process so its exit() can't kill us.
 Write-Host "-- gate A: golden-fixture detection suite --"
 & pwsh -NoProfile -File (Join-Path $root 'Tests' 'Invoke-FixtureTests.ps1') | Select-Object -Last 3 | Out-Host
@@ -53,11 +61,12 @@ Ok 'golden-fixture suite green'
 # 2) GATE B — collector query-contract tests (endpoint/param drift).
 Write-Host "-- gate B: collector query-contract tests --"
 $contract = Join-Path $root 'Tests' 'Unit' 'Private' 'Entra' 'CollectorQueryContract.Tests.ps1'
-if (Test-Path $contract) {
-    & pwsh -NoProfile -c "`$r = Invoke-Pester -Path '$contract' -Output None -PassThru; 'contract: '+`$r.PassedCount+' passed, '+`$r.FailedCount+' failed'; exit `$r.FailedCount" | Out-Host
-    if ($LASTEXITCODE -ne 0) { Fail "collector contract tests RED (exit $LASTEXITCODE) — release blocked." }
-    Ok 'collector contract tests green'
-} else { Write-Host "  [warn] contract tests not found at $contract — skipping gate B" -ForegroundColor Yellow }
+# A gate whose test file has vanished must abort, not warn-and-skip: a silently
+# absent gate reads exactly like a green one.
+if (-not (Test-Path $contract)) { Fail "contract tests not found at $contract — gate B cannot run. Release blocked." }
+& pwsh -NoProfile -c "`$r = Invoke-Pester -Path '$contract' -Output None -PassThru; 'contract: '+`$r.PassedCount+' passed, '+`$r.FailedCount+' failed'; exit `$r.FailedCount" | Out-Host
+if ($LASTEXITCODE -ne 0) { Fail "collector contract tests RED (exit $LASTEXITCODE) — release blocked." }
+Ok 'collector contract tests green'
 
 # 2c) GATE C — Zero Trust schema (every check must declare pillar + weight).
 Write-Host "-- gate C: Zero Trust check-definition schema --"
@@ -69,7 +78,7 @@ Ok 'Zero Trust schema green (all checks declare pillar + weight)'
 # 2d) GATE D — full unit suite. Red anywhere blocks publish: a suite the release
 # routes around stops meaning anything (Windows-only surfaces self-skip off Windows).
 Write-Host "-- gate D: full unit suite --"
-& pwsh -NoProfile -c "`$r = Invoke-Pester -Path (Join-Path '$PWD' 'Tests' 'Unit') -Output None -PassThru; 'unit: '+`$r.PassedCount+' passed, '+`$r.FailedCount+' failed, '+`$r.SkippedCount+' skipped'; exit `$r.FailedCount" | Out-Host
+& pwsh -NoProfile -c "`$r = Invoke-Pester -Path (Join-Path '$root' 'Tests' 'Unit') -Output None -PassThru; 'unit: '+`$r.PassedCount+' passed, '+`$r.FailedCount+' failed, '+`$r.SkippedCount+' skipped'; exit `$r.FailedCount" | Out-Host
 if ($LASTEXITCODE -ne 0) { Fail "unit suite RED (exit $LASTEXITCODE) — release blocked." }
 Ok 'unit suite green'
 
