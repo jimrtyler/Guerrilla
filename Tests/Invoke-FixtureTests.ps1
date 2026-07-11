@@ -109,7 +109,7 @@ if ($branchGaps.Count -gt 0) {
 if ($EmitSummary) {
     # Universe of checks = the schema-tested definitions, counted here (not stored).
     $defIds = New-Object System.Collections.Generic.HashSet[string]
-    foreach ($jf in Get-ChildItem (Join-Path $root '..' 'Data' 'AuditChecks' '*.json')) {
+    foreach ($jf in Get-ChildItem (Join-Path $root '..' 'source' 'Data' 'AuditChecks' '*.json')) {
         foreach ($c in (Get-Content $jf.FullName -Raw | ConvertFrom-Json).checks) { [void]$defIds.Add($c.id) }
     }
     # Fixtures on disk vs fixtures the run actually executed. Divergence means an
@@ -148,7 +148,7 @@ if ($EmitSummary) {
         schemaVersion      = 1
         suite              = 'golden-fixtures'
         generatedAt        = (Get-Date).ToUniversalTime().ToString('o')
-        moduleVersion      = "$((Import-PowerShellDataFile (Join-Path $root '..' 'Guerrilla.psd1')).ModuleVersion)"
+        moduleVersion      = "$((Import-PowerShellDataFile (Join-Path $root '..' 'source' 'Guerrilla.psd1')).ModuleVersion)"
         gitSha             = "$(git rev-parse --short HEAD 2>$null)"
         gitBranch          = "$(git rev-parse --abbrev-ref HEAD 2>$null)"
         checkDefinitions   = $defIds.Count          # the universe (618)
@@ -180,7 +180,7 @@ if ($Publish) {
         passed         = $passed
         failed         = $failed
         duration_ms    = [int]$sw.ElapsedMilliseconds
-        module_version = "$((Import-PowerShellDataFile (Join-Path $root '..' 'Guerrilla.psd1')).ModuleVersion)"
+        module_version = "$((Import-PowerShellDataFile (Join-Path $root '..' 'source' 'Guerrilla.psd1')).ModuleVersion)"
     }
     $publishArgs = @{ Summary = $summary; Results = $results }
     if ($DbPath) { $publishArgs.DbPath = $DbPath }

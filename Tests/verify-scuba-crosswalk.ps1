@@ -10,7 +10,7 @@
 $ErrorActionPreference = 'Stop'
 $env:PSGUERRILLA_QUIET = '1'
 $root = Split-Path $PSScriptRoot -Parent
-Import-Module (Join-Path $root 'Guerrilla.psd1') -Force
+Import-Module (Join-Path $root 'source' 'Guerrilla.psd1') -Force
 $mod = Get-Module Guerrilla
 $dataDir = Join-Path $root 'Data/AuditChecks'
 

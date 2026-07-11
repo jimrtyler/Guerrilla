@@ -137,13 +137,18 @@ foreach ($entry in $script:KnownAttackerIps.ips) {
 # Config path
 $script:ConfigPath = Join-Path (Get-GuerrillaDataRoot) 'config.json'
 
-# Dot-source private functions (recursive to pick up subdirectories)
-foreach ($file in Get-ChildItem -Path (Join-Path $ModuleRoot 'Private') -Filter '*.ps1' -Recurse -ErrorAction SilentlyContinue) {
-    . $file.FullName
+# Dot-source internal engine helpers and the theater checks (recursive over the
+# source tree). internal/ holds the collectors and engine; checks/ holds the
+# per-theater Invoke-*Checks files. Both are loaded before public so the exported
+# cmdlets can call them.
+foreach ($dir in 'internal', 'checks') {
+    foreach ($file in Get-ChildItem -Path (Join-Path $ModuleRoot $dir) -Filter '*.ps1' -Recurse -ErrorAction SilentlyContinue) {
+        . $file.FullName
+    }
 }
 
-# Dot-source public functions
-foreach ($file in Get-ChildItem -Path (Join-Path $ModuleRoot 'Public') -Filter '*.ps1' -ErrorAction SilentlyContinue) {
+# Dot-source public functions (the exported cmdlets)
+foreach ($file in Get-ChildItem -Path (Join-Path $ModuleRoot 'public') -Filter '*.ps1' -Recurse -ErrorAction SilentlyContinue) {
     . $file.FullName
 }
 

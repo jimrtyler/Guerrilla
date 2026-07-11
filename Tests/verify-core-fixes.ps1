@@ -10,7 +10,7 @@
 
 $ErrorActionPreference = 'Stop'
 $env:PSGUERRILLA_QUIET = '1'
-Import-Module (Join-Path $PSScriptRoot '..' 'Guerrilla.psd1') -Force
+Import-Module (Join-Path $PSScriptRoot '..' 'source' 'Guerrilla.psd1') -Force
 
 # Gather everything inside module scope (private functions + $script: caches), then
 # assert in script scope where the test helper is visible.

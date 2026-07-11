@@ -12,7 +12,7 @@
 #       fail-on: High               # Critical | High | Medium | Low | Any | None
 #   - uses: mikepenz/action-junit-report@v4
 #     if: always()
-#     with: { report_paths: psguerrilla-results.xml }
+#     with: { report_paths: guerrilla-results.xml }
 
 name: 'Guerrilla Security Audit'
 description: 'Run a Guerrilla security audit, publish JUnit results, and fail the build on findings (security config as code).'
@@ -33,7 +33,7 @@ inputs:
   output:
     description: 'JUnit XML output path'
     required: false
-    default: 'psguerrilla-results.xml'
+    default: 'guerrilla-results.xml'
   fail-on:
     description: 'Fail the build on FAIL findings at this severity-or-higher: Critical | High | Medium | Low | Any | None'
     required: false

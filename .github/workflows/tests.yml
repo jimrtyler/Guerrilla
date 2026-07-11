@@ -13,12 +13,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'Private/**'
-      - 'Public/**'
-      - 'Data/**'
+      - 'source/**'
       - 'Tests/**'
-      - 'Guerrilla.psd1'
-      - 'Guerrilla.psm1'
       - '.github/workflows/tests.yml'
   pull_request:
     branches: [main]

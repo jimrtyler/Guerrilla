@@ -37,7 +37,7 @@ $root = $PSScriptRoot
 function Fail($m) { Write-Host "ABORT: $m" -ForegroundColor Red; exit 1 }
 function Ok($m)   { Write-Host "  [ok] $m" -ForegroundColor Green }
 
-$version = (Import-PowerShellDataFile (Join-Path $root 'Guerrilla.psd1')).ModuleVersion
+$version = (Import-PowerShellDataFile (Join-Path $root 'source' 'Guerrilla.psd1')).ModuleVersion
 Write-Host "== Publish-Release: Guerrilla $version ($([string](& git -C $root rev-parse --short HEAD))) ==" -ForegroundColor Cyan
 
 # 0) Clean, committed tree — a release ships a known SHA, not a working copy.
@@ -67,8 +67,8 @@ if ($LASTEXITCODE -ne 0) { Fail "Zero Trust schema RED — a check is missing pi
 Ok 'Zero Trust schema green (all checks declare pillar + weight)'
 
 # 3) Manifest validity + ReleaseNotes length.
-$null = Test-ModuleManifest (Join-Path $root 'Guerrilla.psd1')
-$rn = (Import-PowerShellDataFile (Join-Path $root 'Guerrilla.psd1')).PrivateData.PSData.ReleaseNotes
+$null = Test-ModuleManifest (Join-Path $root 'source' 'Guerrilla.psd1')
+$rn = (Import-PowerShellDataFile (Join-Path $root 'source' 'Guerrilla.psd1')).PrivateData.PSData.ReleaseNotes
 if ($rn.Length -ge 10000) { Fail "ReleaseNotes is $($rn.Length) chars (PSGallery limit 10000)." }
 Ok "manifest valid; ReleaseNotes $($rn.Length) chars"
 
@@ -79,14 +79,19 @@ $stage = Join-Path ([System.IO.Path]::GetTempPath()) "psg-release-$version"
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 $pkg = Join-Path $stage 'Guerrilla'
 New-Item -ItemType Directory -Path $pkg -Force | Out-Null
+# The distributable module IS the source/ subtree: manifest, public/, internal/,
+# checks/, Data/, format file. Archive that subtree as the package root, so repo-only
+# artifacts (Tests/, Samples/, Config/, docs/, .github/, action.yml) never ship.
 # Write the archive to a file first — piping `git archive | tar` through the PowerShell
 # pipeline corrupts the binary tar stream. -o avoids the pipe entirely.
 $tar = Join-Path $stage 'head.tar'
-& git -C $root archive --format=tar -o $tar HEAD
+& git -C $root archive --format=tar -o $tar HEAD:source
 & tar -xf $tar -C $pkg
 Remove-Item $tar -Force -ErrorAction SilentlyContinue
-foreach ($ex in 'Tests', '.github', '.PSScriptAnalyzerSettings.psd1', 'Publish-Release.ps1', '.gitignore', '.gitattributes', 'Samples') {
-    Remove-Item (Join-Path $pkg $ex) -Recurse -Force -ErrorAction SilentlyContinue
+# The standard docs live at the repo root, not in source/; copy them into the package.
+foreach ($doc in 'README.md', 'LICENSE', 'CHANGELOG.md') {
+    $src = Join-Path $root $doc
+    if (Test-Path $src) { Copy-Item $src (Join-Path $pkg $doc) -Force }
 }
 $null = Test-ModuleManifest (Join-Path $pkg 'Guerrilla.psd1')
 Ok "staged clean package at $pkg"
@@ -99,7 +104,7 @@ $ProgressPreference = 'SilentlyContinue'
 # has no progress/cleanup stage to hang on. Then PUSH with `dotnet nuget push`,
 # which is fast and returns a clear 403 on a bad key.
 Add-Type -AssemblyName System.IO.Packaging
-$man  = Import-PowerShellDataFile (Join-Path $root 'Guerrilla.psd1')
+$man  = Import-PowerShellDataFile (Join-Path $root 'source' 'Guerrilla.psd1')
 $ps   = $man.PrivateData.PSData
 $tags = (@('PSModule', 'PSEdition_Core') + @($ps.Tags)) -join ' '
 $xe   = { param($s) [System.Security.SecurityElement]::Escape([string]$s) }
@@ -190,7 +195,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "tagged $tag and pushed" -ForegroundColor Green
     if (Get-Command gh -ErrorAction SilentlyContinue) {
         # This version's release-notes paragraph becomes the GitHub release body.
-        $notes = (Import-PowerShellDataFile (Join-Path $root 'Guerrilla.psd1')).PrivateData.PSData.ReleaseNotes
+        $notes = (Import-PowerShellDataFile (Join-Path $root 'source' 'Guerrilla.psd1')).PrivateData.PSData.ReleaseNotes
         $body = ($notes -split '(?=v\d+\.\d+\.\d+:)' | Where-Object { $_ -like "v$version*" } | Select-Object -First 1)
         if ([string]::IsNullOrWhiteSpace($body)) { $body = "Guerrilla $version — see CHANGELOG.md." }
         Push-Location $root

@@ -2,7 +2,7 @@
 # --- Module import helper ---
 
 function Import-Guerrilla {
-    $modulePath = (Resolve-Path (Join-Path $PSScriptRoot '../../Guerrilla.psm1')).Path
+    $modulePath = (Resolve-Path (Join-Path $PSScriptRoot '../../source/Guerrilla.psm1')).Path
     $env:PSGUERRILLA_QUIET = '1'
     $env:PSGUERRILLA_TEST = '1'
     Import-Module $modulePath -Force -DisableNameChecking -Global
@@ -339,7 +339,7 @@ function New-MockCheckDefinition {
 function Get-GuerrillaFixtureCases {
     $repoRoot    = (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path
     $fixtureRoot = Join-Path $repoRoot 'Tests' 'Fixtures'
-    $dataDir     = Join-Path $repoRoot 'Data' 'AuditChecks'
+    $dataDir     = Join-Path $repoRoot 'source' 'Data' 'AuditChecks'
 
     $defIndex = @{}
     foreach ($file in Get-ChildItem -Path $dataDir -Filter *.json) {

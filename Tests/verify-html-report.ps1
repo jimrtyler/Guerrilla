@@ -29,7 +29,7 @@
 $ErrorActionPreference = 'Stop'
 
 # ── Import module ──────────────────────────────────────────────────────────────
-$modulePath = Join-Path $PSScriptRoot '..' 'Guerrilla.psd1'
+$modulePath = Join-Path $PSScriptRoot '..' 'source' 'Guerrilla.psd1'
 Import-Module $modulePath -Force
 
 # ── Run everything inside module scope so we can call the private function ─────

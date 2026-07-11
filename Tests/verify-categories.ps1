@@ -35,7 +35,7 @@
 $ErrorActionPreference = 'Stop'
 
 # ── Import the module ────────────────────────────────────────────────────────
-$modulePath = Join-Path $PSScriptRoot '..' 'Guerrilla.psd1'
+$modulePath = Join-Path $PSScriptRoot '..' 'source' 'Guerrilla.psd1'
 $modulePath = (Resolve-Path $modulePath).Path
 Write-Host "`n=== Importing Guerrilla from $modulePath ===" -ForegroundColor Cyan
 Import-Module $modulePath -Force -ErrorAction Stop
