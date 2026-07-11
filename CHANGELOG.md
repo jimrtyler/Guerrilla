@@ -2,6 +2,19 @@
 
 > **Project rename.** This module was published as `PSGuerrilla` through version 2.46.1 and is now `Guerrilla`, effective **v2.46.3** (2026-07-08). The repository and the PowerShell Gallery package are both `Guerrilla`; the old `PSGuerrilla` package remains on the Gallery frozen at its last version. Existing installs migrate automatically (per-user data and safehouse credentials carry forward transparently, see v2.46.3 below). Changelog entries for versions published as `PSGuerrilla` are left exactly as they were at the time; history is not rewritten.
 
+## [2.46.5] - 2026-07-11
+
+### Added
+- **Eight Google Workspace SCuBA configuration controls**, each verified against the CISA ScubaGoggles Rego assessment logic before it was written (not from baseline prose, which is misleading for the inverted-semantics controls).
+  - `EMAIL-030` (GWS.GMAIL.11.1) warns on automatic email forwarding; `EMAIL-031` (GMAIL.15.1) on enhanced pre-delivery message scanning disabled.
+  - `DRIVE-017` (DRIVEDOCS.1.8) on default file access not set to private-to-owner.
+  - `ADMIN-019` (COMMONCONTROLS.15.2) on data processing outside the storage region; `AUTH-018` (COMMONCONTROLS.8.2) on account self-recovery for users and non-super-admins.
+  - `ADMIN-020` (COMMONCONTROLS.10.4) fails when access to unconfigured third-party apps is not blocked (compliant value `BLOCK_ALL_SCOPES`).
+  - `ADMIN-021` (COMMONCONTROLS.16.1) warns when additional Google services without an individual control are not restricted. Google models this with inverted semantics: `serviceState = ENABLED` means the restriction is on, which is the compliant "services off" outcome. Confirmed against the Rego and commented in-code so it is not mistakenly reversed later.
+  - `ADMIN-022` (COMMONCONTROLS.16.2) warns when Early Access applications are enabled.
+  - All read Cloud Identity Policy settings, weakest-OU-wins, absent policy = Not Assessed. GWS SCuBA controls assessed rose from 87 to 95.
+- **Branch-coverage gate on verdict logic.** A check may declare its verdict paths (`verdictPaths`); `Invoke-FixtureTests.ps1` fails unless a fixture exercises each declared path. A multi-field check must now prove every branch, not merely that one fixture passed. `Test-GwsPolicyEnum` gained a `-NonCompliantValues` (bad-list) mode so a control that fails on one specific value, and passes everything else, is mirrored exactly rather than approximated by an allow-list.
+
 ## [2.46.4] - 2026-07-09
 
 ### Added
