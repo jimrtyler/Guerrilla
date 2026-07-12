@@ -1,0 +1,25 @@
+{
+  "checkId": "AZIAM-007",
+  "platform": "Entra",
+  "scenario": "no-parsed-results",
+  "expectedStatus": "SKIP",
+  "description": "Policy summaries present but zero parsed results — 0 of 0 is not compliance",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1"
+        }
+      ],
+      "Errors": {},
+      "PolicyStates": [
+        {
+          "SubscriptionId": "sub-1",
+          "Summary": {
+            "odata.context": "https://management.azure.com/..."
+          }
+        }
+      ]
+    }
+  }
+}

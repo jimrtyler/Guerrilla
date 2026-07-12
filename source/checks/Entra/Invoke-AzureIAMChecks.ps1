@@ -34,10 +34,26 @@ function Invoke-AzureIAMChecks {
 # When Azure ARM is unreachable or NO subscription is accessible, every resource check
 # should SKIP with one clear, actionable message — not emit a misleading
 # "No X found in scanned subscriptions" WARN that implies a scan happened and found none.
-# Returns a SKIP finding in that case, or $null when the IAM data is usable (>=1 sub).
+# The collector also records GRANULAR failures per subscription/resource type (keys
+# like 'Storage_<subId>', 'RoleAssignments_<subId>', 'Policy_<subId>'). A check that
+# consumes that resource type must not PASS on the shrunken remainder: a subscription
+# denied or throttled on one resource type contributed zero resources, and absence of
+# evidence is not compliance. Callers name the error-key prefix(es) for the data they
+# read; any matching key trips a Not Assessed SKIP.
+# Returns a SKIP finding in those cases, or $null when the IAM data is fully usable.
 function Get-AzureIAMUnavailableFinding {
     [CmdletBinding()]
-    param($IamData, [hashtable]$CheckDefinition)
+    param(
+        $IamData,
+        [hashtable]$CheckDefinition,
+
+        # Per-subscription error-key prefix(es) for the resource type(s) this check
+        # consumes, e.g. 'Storage_' matches the collector's "Storage_$subId" keys.
+        [string[]]$ResourceKeyPrefix = @(),
+
+        # Exact error key(s) for tenant-wide collections (e.g. 'ManagementGroups').
+        [string[]]$ResourceKey = @()
+    )
 
     if (-not $IamData) {
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
@@ -51,6 +67,36 @@ function Get-AzureIAMUnavailableFinding {
         return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
             -CurrentValue 'No accessible Azure subscriptions — grant the app the Reader role at the root management group to audit Azure resources.'
     }
+
+    # Granular per-resource-type failures: collection partially failed, so the
+    # evidence this check depends on is incomplete — Not Assessed, never PASS.
+    if ($IamData.Errors -is [System.Collections.IDictionary]) {
+        foreach ($key in $ResourceKey) {
+            if ($IamData.Errors.Contains($key)) {
+                return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+                    -CurrentValue "Not Assessed — collection failed for '$key' ($($IamData.Errors[$key])). This control was not evaluated; absence of evidence is not compliance." `
+                    -Details @{
+                        NotAssessed  = $true
+                        FailedSource = $key
+                    }
+            }
+        }
+        foreach ($prefix in $ResourceKeyPrefix) {
+            $failedKeys = @($IamData.Errors.Keys | Where-Object {
+                "$_".StartsWith($prefix, [System.StringComparison]::OrdinalIgnoreCase)
+            })
+            if ($failedKeys.Count -gt 0) {
+                $first = $failedKeys[0]
+                return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+                    -CurrentValue "Not Assessed — collection failed for $($failedKeys.Count) subscription(s) ($first`: $($IamData.Errors[$first])). This control was not evaluated; absence of evidence is not compliance." `
+                    -Details @{
+                        NotAssessed   = $true
+                        FailedSources = @($failedKeys | ForEach-Object { "$_" })
+                    }
+            }
+        }
+    }
+
     return $null
 }
 
@@ -60,7 +106,8 @@ function Test-AZIAM001 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'RoleAssignments_'
     if ($unavailable) { return $unavailable }
 
     $assignments = $iamData.RoleAssignments
@@ -92,7 +139,8 @@ function Test-AZIAM002 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'RoleAssignments_'
     if ($unavailable) { return $unavailable }
 
     $assignments = $iamData.RoleAssignments
@@ -140,7 +188,8 @@ function Test-AZIAM003 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'RoleAssignments_'
     if ($unavailable) { return $unavailable }
 
     $assignments = $iamData.RoleAssignments
@@ -176,7 +225,8 @@ function Test-AZIAM004 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'KeyVaults_'
     if ($unavailable) { return $unavailable }
 
     $vaults = $iamData.KeyVaults
@@ -220,7 +270,8 @@ function Test-AZIAM005 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'Storage_'
     if ($unavailable) { return $unavailable }
 
     $storageAccounts = $iamData.StorageAccounts
@@ -274,7 +325,8 @@ function Test-AZIAM006 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'NSGs_'
     if ($unavailable) { return $unavailable }
 
     $nsgs = $iamData.NetworkSecurityGroups
@@ -339,7 +391,8 @@ function Test-AZIAM007 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'Policy_'
     if ($unavailable) { return $unavailable }
 
     $policyStates = $iamData.PolicyStates
@@ -368,6 +421,18 @@ function Test-AZIAM007 {
         }
     }
 
+    # Summaries were present but none yielded a parsable result set. "0 non-compliant
+    # out of 0" is not evidence of compliance — nothing was actually evaluated.
+    if ($totalResources -eq 0 -and $totalNonCompliant -eq 0) {
+        return New-AuditFinding -CheckDefinition $CheckDefinition -Status 'SKIP' `
+            -CurrentValue 'Not Assessed — no policy compliance data could be parsed from the policy state summaries. This control was not evaluated; absence of evidence is not compliance.' `
+            -Details @{
+                NotAssessed    = $true
+                TotalResources = 0
+                SummaryCount   = $policyStates.Count
+            }
+    }
+
     $percentage = if ($totalResources -gt 0) { [Math]::Round(($totalNonCompliant / $totalResources) * 100, 1) } else { 0 }
 
     $status = if ($totalNonCompliant -eq 0) { 'PASS' }
@@ -390,7 +455,8 @@ function Test-AZIAM008 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKey 'ManagementGroups'
     if ($unavailable) { return $unavailable }
 
     $mgGroups = $iamData.ManagementGroups
@@ -421,7 +487,8 @@ function Test-AZIAM009 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'RoleDefinitions_'
     if ($unavailable) { return $unavailable }
 
     $customRoles = $iamData.RoleDefinitions
@@ -462,7 +529,8 @@ function Test-AZIAM010 {
     param([hashtable]$AuditData, [hashtable]$CheckDefinition)
 
     $iamData = $AuditData.AzureIAM
-    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition
+    $unavailable = Get-AzureIAMUnavailableFinding -IamData $iamData -CheckDefinition $CheckDefinition `
+        -ResourceKeyPrefix 'Locks_'
     if ($unavailable) { return $unavailable }
 
     $locks = $iamData.ResourceLocks

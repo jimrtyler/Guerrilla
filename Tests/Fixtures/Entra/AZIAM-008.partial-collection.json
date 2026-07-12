@@ -1,0 +1,20 @@
+{
+  "checkId": "AZIAM-008",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "Management group listing failed — must not WARN as if none exist",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1"
+        }
+      ],
+      "Errors": {
+        "ManagementGroups": "AuthorizationFailed — The client does not have authorization to perform action"
+      },
+      "ManagementGroups": []
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "checkId": "AZIAM-001",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "Role assignment listing failed for a subscription — must not PASS on the remainder",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1",
+          "displayName": "Prod"
+        },
+        {
+          "subscriptionId": "sub-2",
+          "displayName": "Dev"
+        }
+      ],
+      "Errors": {
+        "RoleAssignments_sub-2": "AuthorizationFailed — The client does not have authorization to perform action"
+      },
+      "RoleAssignments": [
+        {
+          "_subscriptionId": "sub-1",
+          "properties": {
+            "principalId": "p1",
+            "roleDefinitionId": "rd1",
+            "scope": "/subscriptions/sub-1"
+          }
+        }
+      ]
+    }
+  }
+}

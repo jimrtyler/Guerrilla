@@ -1,0 +1,23 @@
+{
+  "checkId": "AZIAM-009",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "Custom role definition listing failed for a subscription — must not PASS on the remainder",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1"
+        },
+        {
+          "subscriptionId": "sub-2"
+        }
+      ],
+      "Errors": {
+        "RoleDefinitions_sub-2": "429 — too many requests"
+      },
+      "RoleDefinitions": []
+    }
+  }
+}

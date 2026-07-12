@@ -1,0 +1,32 @@
+{
+  "checkId": "AZIAM-005",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "Storage listing failed for a subscription — must not PASS on the remainder",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1"
+        },
+        {
+          "subscriptionId": "sub-2"
+        }
+      ],
+      "Errors": {
+        "Storage_sub-2": "AuthorizationFailed — The client does not have authorization to perform action"
+      },
+      "StorageAccounts": [
+        {
+          "name": "st1",
+          "properties": {
+            "minimumTlsVersion": "TLS1_2",
+            "supportsHttpsTrafficOnly": true,
+            "allowBlobPublicAccess": false
+          }
+        }
+      ]
+    }
+  }
+}

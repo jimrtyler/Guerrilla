@@ -1,0 +1,42 @@
+{
+  "checkId": "EIDPIM-004",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "Shrunken PrivilegedUsers list from partial principal lookups must not PASS",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {},
+    "PIM": {
+      "Errors": {
+        "PrivilegedUsers": "6 of 10 privileged principal lookups failed: p1 (Graph API failed after 3 retries for /users/p1: 429)"
+      },
+      "PrivilegedUsers": [
+        {
+          "onPremisesSyncEnabled": false,
+          "userPrincipalName": "alice@contoso.com",
+          "displayName": "alice@contoso.com",
+          "signInActivity": {
+            "lastSignInDateTime": "2026-06-01T00:00:00Z"
+          },
+          "createdDateTime": "2020-01-01T00:00:00Z",
+          "id": "u1",
+          "accountEnabled": true,
+          "userType": "Member"
+        },
+        {
+          "onPremisesSyncEnabled": false,
+          "userPrincipalName": "bob@contoso.com",
+          "displayName": "bob@contoso.com",
+          "signInActivity": {
+            "lastSignInDateTime": "2026-06-01T00:00:00Z"
+          },
+          "createdDateTime": "2020-01-01T00:00:00Z",
+          "id": "u2",
+          "accountEnabled": true,
+          "userType": "Member"
+        }
+      ]
+    }
+  }
+}

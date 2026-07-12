@@ -1,0 +1,23 @@
+{
+  "checkId": "AZIAM-010",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "Resource lock listing failed for a subscription — must not WARN/PASS on the remainder",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1"
+        },
+        {
+          "subscriptionId": "sub-2"
+        }
+      ],
+      "Errors": {
+        "Locks_sub-2": "AuthorizationFailed — The client does not have authorization to perform action"
+      },
+      "ResourceLocks": []
+    }
+  }
+}

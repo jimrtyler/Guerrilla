@@ -137,6 +137,7 @@ function Get-EntraPIMData {
     }
 
     $privilegedUsers = [System.Collections.Generic.List[PSCustomObject]]::new()
+    $failedLookups = [System.Collections.Generic.List[string]]::new()
     foreach ($principalId in $privilegedPrincipalIds) {
         try {
             $user = Invoke-GraphApi -AccessToken $AccessToken `
@@ -147,12 +148,23 @@ function Get-EntraPIMData {
             if ($user) {
                 $privilegedUsers.Add($user)
             }
+            # $null without an exception is a Graph 404: the principal is a group
+            # or service principal, not a user — expected and benign, skip it.
         } catch {
-            # Principal might be a service principal or group, not a user
-            Write-Verbose "Could not fetch user details for principal $principalId"
+            # Invoke-GraphApi returns $null on 404, so an exception here is a REAL
+            # collection failure (throttling retries exhausted, 403, 5xx, network).
+            # A silently shrunken PrivilegedUsers list must not score as a clean
+            # tenant — record the failure so dependent checks go Not Assessed.
+            $failedLookups.Add("$principalId ($($_.Exception.Message))")
+            Write-Verbose "Failed to fetch user details for principal ${principalId}: $_"
         }
     }
     $data.PrivilegedUsers = @($privilegedUsers)
+    if ($failedLookups.Count -gt 0) {
+        $data.Errors['PrivilegedUsers'] = ('{0} of {1} privileged principal lookups failed: {2}' -f `
+            $failedLookups.Count, $privilegedPrincipalIds.Count,
+            (@($failedLookups | Select-Object -First 3) -join '; '))
+    }
 
     if (-not $Quiet) {
         Write-ProgressLine -Phase ENTRA -Message "Found $($data.GlobalAdmins.Count) Global Admins, $($data.RoleAssignments.Count) role assignments"

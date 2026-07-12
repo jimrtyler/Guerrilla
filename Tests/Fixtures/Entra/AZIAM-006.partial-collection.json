@@ -1,0 +1,30 @@
+{
+  "checkId": "AZIAM-006",
+  "platform": "Entra",
+  "scenario": "partial-collection",
+  "expectedStatus": "SKIP",
+  "description": "NSG listing failed for a subscription — must not PASS on the remainder",
+  "auditData": {
+    "AzureIAM": {
+      "Subscriptions": [
+        {
+          "subscriptionId": "sub-1"
+        },
+        {
+          "subscriptionId": "sub-2"
+        }
+      ],
+      "Errors": {
+        "NSGs_sub-2": "GatewayTimeout — the request timed out"
+      },
+      "NetworkSecurityGroups": [
+        {
+          "name": "nsg1",
+          "properties": {
+            "securityRules": []
+          }
+        }
+      ]
+    }
+  }
+}

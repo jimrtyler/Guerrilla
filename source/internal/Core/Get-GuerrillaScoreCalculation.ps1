@@ -38,7 +38,9 @@ function Get-GuerrillaScoreCalculation {
     }
 
     # --- Component 1: Posture Score (0-100) ---
-    $postureScore = 100
+    # Default 0, not 100: an empty finding set means nothing was assessed, and
+    # "not assessed" must never render as a perfect posture.
+    $postureScore = 0
     if ($AuditFindings -and $AuditFindings.Count -gt 0) {
         $postureResult = Get-AuditPostureScore -Findings $AuditFindings
         $postureScore = [Math]::Max(0, [Math]::Min(100, $postureResult.OverallScore))
@@ -47,6 +49,10 @@ function Get-GuerrillaScoreCalculation {
     # --- Component 2: Coverage Score (0-100) over the three assessment platforms ---
     # Prefix note: GWS's ADMIN-* collides with a bare ^AD match, so the AD
     # pattern enumerates the real AD families instead.
+    # A platform counts as active only if at least one of its findings was actually
+    # ASSESSED (PASS/FAIL/WARN). An all-SKIP platform contributed no evidence and
+    # must not earn Coverage credit — absence of evidence is not coverage.
+    $assessedStatuses = @('PASS', 'FAIL', 'WARN')
     $activePlatforms = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
     if ($AuditFindings -and $AuditFindings.Count -gt 0) {
         $platformPatterns = @{
@@ -55,7 +61,10 @@ function Get-GuerrillaScoreCalculation {
             'Google Workspace' = '^(AUTH|ADMIN|COLLAB|DEVICE|DRIVE|EMAIL|GROUP|GTRADE|GWS|LOG|OAUTH)-'
         }
         foreach ($name in $platformPatterns.Keys) {
-            if (@($AuditFindings | Where-Object { $_.CheckId -match $platformPatterns[$name] }).Count -gt 0) {
+            $assessed = @($AuditFindings | Where-Object {
+                $_.CheckId -match $platformPatterns[$name] -and $_.Status -in $assessedStatuses
+            })
+            if ($assessed.Count -gt 0) {
                 $activePlatforms.Add($name) | Out-Null
             }
         }
