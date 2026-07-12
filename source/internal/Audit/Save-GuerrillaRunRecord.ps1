@@ -70,6 +70,8 @@ function New-GuerrillaRunIndexEntry {
         schemaVersion = $Record.schemaVersion
         targetHash    = "$($Record.scope.targetHash)"
         platforms     = @($Record.scope.platforms | Sort-Object | ForEach-Object { "$_" })
+        ouScope       = Get-GuerrillaOuScopeString -TargetOu "$($Record.scope.targetOu)" `
+            -StudentOu @($Record.scope.studentOus | ForEach-Object { "$_" })
     }
 }
 
@@ -196,7 +198,10 @@ function Save-GuerrillaRunRecord {
     # --- Retention: prune each series to the most recent MaxRunsPerSeries. ---
     $bySeries = @{}
     foreach ($e in $runsList) {
-        $seriesKey = "$($e.targetHash)|$(@($e.platforms | Sort-Object) -join ',')"
+        # Old index entries carry no ouScope; that reads as the whole-tenant
+        # default, which is what those runs were.
+        $entryOuScope = if ($null -ne $e.ouScope) { "$($e.ouScope)" } else { Get-GuerrillaOuScopeString }
+        $seriesKey = "$($e.targetHash)|$(@($e.platforms | Sort-Object) -join ',')|$entryOuScope"
         if (-not $bySeries.ContainsKey($seriesKey)) {
             $bySeries[$seriesKey] = [System.Collections.Generic.List[object]]::new()
         }
@@ -238,12 +243,19 @@ function Get-GuerrillaPreviousRun {
     .SYNOPSIS
         The newest recorded run comparable to the one about to be recorded.
     .DESCRIPTION
-        Comparable means: same schema, same target (privacy-preserving hash)
-        and the same platform set. An AD-only run is never diffed against a
-        full campaign; the checks that "vanished" would be scope, not drift.
-        Returns $null when no comparable baseline exists (first run ever, or
-        first run at this scope): the caller reports that plainly and
-        fabricates nothing.
+        Comparable means: same schema, same target (privacy-preserving hash),
+        the same platform set, and the same OU scope (collection TargetOU plus
+        the student-OU designation). An AD-only run is never diffed against a
+        full campaign, and a student-scoped run is never diffed against a
+        whole-tenant run; the checks that "vanished" or "drifted" would be
+        scope, not drift. Returns $null when no comparable baseline exists
+        (first run ever, or first run at this scope): the caller reports that
+        plainly and fabricates nothing.
+
+        Records and index entries written before OU scope existed carry no
+        scope fields; they read as the whole-tenant default ('/', no student
+        OUs), which is what those runs were, so pre-scope whole-tenant history
+        keeps matching whole-tenant runs.
 
         Uses the index as a locator (newest matching entry first) so a lookup
         does not parse every record in the history; the chosen record is
@@ -260,13 +272,21 @@ function Get-GuerrillaPreviousRun {
     param(
         [Parameter(Mandatory)][string[]]$Platforms,
         [Parameter(Mandatory)][string]$TargetHash,
-        [string]$DataRoot
+        [string]$DataRoot,
+        [string]$TargetOu = '/',
+        [AllowNull()][AllowEmptyCollection()][string[]]$StudentOu = @()
     )
 
     $root = Get-GuerrillaRunHistoryRoot -DataRoot $DataRoot
     if (-not (Test-Path $root)) { return $null }
 
     $wanted = @($Platforms | Sort-Object) -join ','
+    $wantedOuScope = Get-GuerrillaOuScopeString -TargetOu $TargetOu -StudentOu $StudentOu
+    $recordOuScope = {
+        param($scope)
+        Get-GuerrillaOuScopeString -TargetOu "$($scope.targetOu)" `
+            -StudentOu @($scope.studentOus | ForEach-Object { "$_" })
+    }
     $indexPath = Join-Path $root 'index.json'
 
     $warnSchemaSkips = {
@@ -285,8 +305,10 @@ function Get-GuerrillaPreviousRun {
         $onDiskCount = @(Get-ChildItem -Path $root -Filter 'run-*.json' -File -ErrorAction SilentlyContinue).Count
         if ($entries.Count -eq $onDiskCount) {
             $matching = @($entries | Where-Object {
+                $entryOuScope = if ($null -ne $_.ouScope) { "$($_.ouScope)" } else { Get-GuerrillaOuScopeString }
                 "$($_.targetHash)" -eq $TargetHash -and
-                ((@($_.platforms | Sort-Object) -join ',') -eq $wanted)
+                ((@($_.platforms | Sort-Object) -join ',') -eq $wanted) -and
+                ($entryOuScope -eq $wantedOuScope)
             })
             $schemaSkips = @($matching | Where-Object { $_.schemaVersion -ne 1 }).Count
             $ordered = @($matching | Where-Object { $_.schemaVersion -eq 1 } |
@@ -304,6 +326,7 @@ function Get-GuerrillaPreviousRun {
                 if ($rec.schemaVersion -ne 1) { continue }
                 if ("$($rec.scope.targetHash)" -ne $TargetHash) { continue }
                 if ((@($rec.scope.platforms | Sort-Object) -join ',') -ne $wanted) { continue }
+                if ((& $recordOuScope $rec.scope) -ne $wantedOuScope) { continue }
                 & $warnSchemaSkips $schemaSkips
                 return $rec
             }
@@ -325,6 +348,7 @@ function Get-GuerrillaPreviousRun {
         }
         if ("$($rec.scope.targetHash)" -ne $TargetHash) { continue }
         if ((@($rec.scope.platforms | Sort-Object) -join ',') -ne $wanted) { continue }
+        if ((& $recordOuScope $rec.scope) -ne $wantedOuScope) { continue }
         if ($rec.schemaVersion -ne 1) { $schemaSkips++; continue }
         if ($null -eq $best -or ([datetime]$rec.generatedAt) -gt ([datetime]$best.generatedAt)) { $best = $rec }
     }

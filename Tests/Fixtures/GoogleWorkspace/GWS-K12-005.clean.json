@@ -1,0 +1,64 @@
+{
+  "checkId": "GWS-K12-005",
+  "platform": "GWS",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "Delegated user-management role is OU-scoped",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {},
+    "Roles": [
+      {
+        "roleId": "1",
+        "roleName": "_SEED_ADMIN_ROLE",
+        "isSuperAdminRole": true,
+        "rolePrivileges": [
+          {
+            "privilegeName": "SUPER_ADMIN"
+          }
+        ]
+      },
+      {
+        "roleId": "2",
+        "roleName": "Building Secretary",
+        "isSuperAdminRole": false,
+        "rolePrivileges": [
+          {
+            "privilegeName": "USERS_UPDATE"
+          },
+          {
+            "privilegeName": "USERS_RETRIEVE"
+          }
+        ]
+      },
+      {
+        "roleId": "3",
+        "roleName": "Help Desk Lite",
+        "isSuperAdminRole": false,
+        "rolePrivileges": [
+          {
+            "privilegeName": "REPORTS_ACCESS"
+          }
+        ]
+      }
+    ],
+    "RoleAssignments": [
+      {
+        "roleId": "1",
+        "assignedTo": "it-admin",
+        "scopeType": "CUSTOMER"
+      },
+      {
+        "roleId": "2",
+        "assignedTo": "secretary-1",
+        "scopeType": "ORG_UNIT",
+        "orgUnitId": "stuou123"
+      },
+      {
+        "roleId": "3",
+        "assignedTo": "aide-1",
+        "scopeType": "CUSTOMER"
+      }
+    ]
+  }
+}

@@ -99,7 +99,14 @@ function New-GuerrillaRunRecord {
         [Parameter(Mandatory)][string[]]$Platforms,
         [Parameter(Mandatory)][string[]]$TargetId,
         [Parameter(Mandatory)][string]$ScanId,
-        [AllowNull()][Nullable[int]]$OverallScore
+        [AllowNull()][Nullable[int]]$OverallScore,
+
+        # OU scope is part of the run's comparison-series identity: a run scoped
+        # to an OU (collection scope) or carrying a student-OU designation is
+        # never comparable to a whole-tenant run — the differences would surface
+        # as false drift. Defaults mirror what pre-scope records implied.
+        [string]$TargetOu = '/',
+        [AllowNull()][AllowEmptyCollection()][string[]]$StudentOu = @()
     )
 
     $moduleVersion = "$($ExecutionContext.SessionState.Module.Version)"
@@ -142,6 +149,8 @@ function New-GuerrillaRunRecord {
         scope            = [ordered]@{
             platforms  = @($Platforms | Sort-Object)
             targetHash = Get-GuerrillaTargetHash -TargetId $TargetId
+            targetOu   = ("$TargetOu".Trim() ? "$TargetOu".Trim() : '/')
+            studentOus = @(ConvertTo-GuerrillaStudentOuList -StudentOu $StudentOu)
         }
         overallScore     = $OverallScore
         pillarScores     = $pillarScores

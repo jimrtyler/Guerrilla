@@ -1,0 +1,49 @@
+{
+  "checkId": "GWS-K12-005",
+  "platform": "GWS",
+  "scenario": "not-assessed",
+  "expectedStatus": "SKIP",
+  "description": "Role assignments failed to collect",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {
+      "RoleAssignments": "HTTP 500"
+    },
+    "Roles": [
+      {
+        "roleId": "1",
+        "roleName": "_SEED_ADMIN_ROLE",
+        "isSuperAdminRole": true,
+        "rolePrivileges": [
+          {
+            "privilegeName": "SUPER_ADMIN"
+          }
+        ]
+      },
+      {
+        "roleId": "2",
+        "roleName": "Building Secretary",
+        "isSuperAdminRole": false,
+        "rolePrivileges": [
+          {
+            "privilegeName": "USERS_UPDATE"
+          },
+          {
+            "privilegeName": "USERS_RETRIEVE"
+          }
+        ]
+      },
+      {
+        "roleId": "3",
+        "roleName": "Help Desk Lite",
+        "isSuperAdminRole": false,
+        "rolePrivileges": [
+          {
+            "privilegeName": "REPORTS_ACCESS"
+          }
+        ]
+      }
+    ],
+    "RoleAssignments": []
+  }
+}

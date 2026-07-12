@@ -1,0 +1,29 @@
+{
+  "checkId": "GWS-K12-004",
+  "platform": "GWS",
+  "scenario": "known-bad",
+  "expectedStatus": "WARN",
+  "description": "Vendor grant with mail and Drive scopes needs review",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {},
+    "DomainWideDelegation": [
+      {
+        "clientId": "222",
+        "displayText": "Legacy SIS Sync",
+        "scopes": [
+          "https://www.googleapis.com/auth/gmail.readonly",
+          "https://www.googleapis.com/auth/drive",
+          "https://www.googleapis.com/auth/admin.directory.user.readonly"
+        ]
+      },
+      {
+        "clientId": "111",
+        "displayText": "Signage Screens",
+        "scopes": [
+          "https://www.googleapis.com/auth/userinfo.email"
+        ]
+      }
+    ]
+  }
+}

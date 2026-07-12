@@ -1,0 +1,65 @@
+{
+  "checkId": "GWS-K12-003",
+  "platform": "GWS",
+  "scenario": "no-scope",
+  "expectedStatus": "SKIP",
+  "description": "No student OU scope provided",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [],
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "All": [
+        {
+          "setting": {
+            "type": "settings/api_controls.unconfigured_third_party_apps",
+            "value": {
+              "accessLevel": "BLOCK_ALL_SCOPES"
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "ByType": {
+        "api_controls.unconfigured_third_party_apps": [
+          {
+            "setting": {
+              "type": "settings/api_controls.unconfigured_third_party_apps",
+              "value": {
+                "accessLevel": "BLOCK_ALL_SCOPES"
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ]
+      },
+      "Count": 1
+    }
+  }
+}

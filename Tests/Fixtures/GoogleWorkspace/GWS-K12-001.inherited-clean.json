@@ -1,0 +1,67 @@
+{
+  "checkId": "GWS-K12-001",
+  "platform": "GWS",
+  "scenario": "inherited-clean",
+  "expectedStatus": "PASS",
+  "description": "Inherited value is DISALLOWED, which is safe to inherit",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Students"
+    ],
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "All": [
+        {
+          "setting": {
+            "type": "settings/drive_and_docs.external_sharing",
+            "value": {
+              "externalSharingMode": "DISALLOWED"
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/rootou000"
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "ByType": {
+        "drive_and_docs.external_sharing": [
+          {
+            "setting": {
+              "type": "settings/drive_and_docs.external_sharing",
+              "value": {
+                "externalSharingMode": "DISALLOWED"
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/rootou000"
+            },
+            "type": "ADMIN"
+          }
+        ]
+      },
+      "Count": 1
+    }
+  }
+}

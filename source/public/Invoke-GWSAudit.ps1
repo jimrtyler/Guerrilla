@@ -34,6 +34,18 @@ function Invoke-GWSAudit {
     .PARAMETER TargetOU
         Organizational unit path to audit. Default '/' (the whole tenant).
 
+    .PARAMETER StudentOU
+        Organizational unit path(s) that contain student accounts, e.g.
+        '/Students' or '/Students/HighSchool'. This is a designation, not a
+        collection filter: collection stays tenant-wide (so staff and student
+        posture can be compared), but the K12 checks that assess student
+        posture evaluate these OU subtrees specifically. Distinct from
+        TargetOU, which narrows what is collected. When omitted, OU-scoped K12
+        checks report Not Assessed rather than assessing the whole tenant as
+        if it were the student population. The OU scope is part of the run's
+        comparison identity: a student-scoped run is never diffed against a
+        whole-tenant run.
+
     .PARAMETER UserSampleSize
         Maximum users sampled for per-user checks. Default 500.
 
@@ -87,11 +99,12 @@ function Invoke-GWSAudit {
 
         [ValidateSet('All', 'Authentication', 'EmailSecurity', 'DriveSecurity', 'OAuthSecurity',
                      'AdminManagement', 'Collaboration', 'DeviceManagement', 'LoggingAlerting',
-                     'GwsService')]
+                     'GwsService', 'K12')]
         [string[]]$Categories = @('All'),
 
         [switch]$IncludeChildOUs,
         [string]$TargetOU = '/',
+        [string[]]$StudentOU = @(),
         [int]$UserSampleSize = 500,
         [string]$OutputDirectory,
         [switch]$NoReports,
@@ -205,12 +218,16 @@ function Invoke-GWSAudit {
 
         # Validate required parameters
         # --- Test mode: synthesize an all-FAIL report without touching a real tenant ---
+        # Normalize the student-OU designation once; it flows into the data bag
+        # (checks), the run record, and the baseline lookup (series identity).
+        $studentOus = @(ConvertTo-GuerrillaStudentOuList -StudentOu $StudentOU -EnsureLeadingSlash)
+
         if ($TestMode) {
             if (-not $Quiet) {
                 Write-OperationHeader -Operation 'GWS AUDIT (TEST MODE)' -Mode 'Simulation' -Target 'testmode.local' -DaysBack 0
             }
             $admin = 'admin@testmode.local'
-            $auditData = @{ Tenant = @{ Domain = 'testmode.local' }; Errors = @{} }
+            $auditData = @{ Tenant = @{ Domain = 'testmode.local' }; Errors = @{}; StudentOUs = $studentOus }
             $allFindings = Get-GuerrillaSimulatedFindings -Platform GoogleWorkspace
         }
         else {
@@ -238,8 +255,10 @@ function Invoke-GWSAudit {
             -Categories $Categories `
             -UserSampleSize $UserSampleSize `
             -TargetOU $TargetOU `
+            -StudentOU $studentOus `
             -Quick:$Quick `
             -Quiet:$Quiet
+        $auditData.StudentOUs = $studentOus
 
         # Report collection errors
         if ($auditData.Errors.Count -gt 0 -and -not $Quiet) {
@@ -264,6 +283,7 @@ function Invoke-GWSAudit {
             LoggingAlerting  = 'Invoke-LoggingAlertingChecks'
             GwsService       = 'Invoke-GwsServiceChecks'
             Tradecraft       = 'Invoke-GoogleTradecraftChecks'
+            K12              = 'Invoke-K12Checks'
         }
 
         $categoriesToRun = if ($Categories -contains 'All') { $categoryMap.Keys } else { $Categories }
@@ -314,8 +334,10 @@ function Invoke-GWSAudit {
             if (-not $Quiet) { Write-ProgressLine -Phase GWS -Message 'Comparing against previous run' }
             try {
                 $runRecord = New-GuerrillaRunRecord -Findings @($allFindings) -Platforms @('GWS') `
-                    -TargetId @($tenantDomain) -ScanId $scanId -OverallScore $overallScore
-                $previousRun = Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $runRecord.scope.targetHash
+                    -TargetId @($tenantDomain) -ScanId $scanId -OverallScore $overallScore `
+                    -TargetOu $TargetOU -StudentOu $studentOus
+                $previousRun = Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $runRecord.scope.targetHash `
+                    -TargetOu $TargetOU -StudentOu $studentOus
                 $runDiff = Compare-GuerrillaRun -Previous $previousRun -Current $runRecord
             } catch {
                 Write-Warning "Run comparison unavailable: $_"
@@ -502,6 +524,18 @@ function Get-GWSScopes {
         # tenants that haven't delegated it still authenticate (the checks then SKIP).
         GwsService       = @(
             'https://www.googleapis.com/auth/admin.directory.customer.readonly'
+        )
+        # K12 baseline checks read OU-targeted policies (isolated policy token, see
+        # above), plus users/roles/delegation/devices from the shared token.
+        K12              = @(
+            'https://www.googleapis.com/auth/admin.directory.user.readonly'
+            'https://www.googleapis.com/auth/admin.directory.orgunit.readonly'
+            'https://www.googleapis.com/auth/admin.directory.customer.readonly'
+            'https://www.googleapis.com/auth/admin.directory.rolemanagement.readonly'
+            'https://www.googleapis.com/auth/admin.directory.domain.readonly'
+            'https://www.googleapis.com/auth/admin.reports.audit.readonly'
+            'https://www.googleapis.com/auth/admin.directory.device.chromeos.readonly'
+            'https://www.googleapis.com/auth/chrome.management.policy.readonly'
         )
     }
 

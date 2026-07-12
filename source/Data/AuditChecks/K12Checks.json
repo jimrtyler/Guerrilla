@@ -1,0 +1,414 @@
+{
+  "categoryId": "k12",
+  "categoryName": "K12 Baseline",
+  "categoryDescription": "Checks assessing the Guerrilla K12 Secure Configuration Baseline, a candidate community baseline for school districts authored by Guerrilla, openly published and open for comment. It is not a consensus standard. OU-scoped checks require the -StudentOU input and report Not Assessed without it.",
+  "checks": [
+    {
+      "id": "GWS-K12-001",
+      "name": "Student OU Sharing Not Inherited From Staff",
+      "description": "Districts commonly configure Drive external sharing for staff needs and let student OUs inherit that configuration. Inheritance is invisible in day-to-day administration: the student OU shows a value, but nobody chose it for students. External-sharing configuration on student OUs should be an explicit local decision, or an inherited value that is fully disabled.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 1,
+      "subcategory": "Data Protection",
+      "recommendedValue": "Drive external-sharing configuration is applied locally on each student OU, or the inherited value is DISALLOWED",
+      "remediationUrl": "https://admin.google.com/ac/appsettings/55656082996/sharing",
+      "remediationSteps": "Admin Console > Apps > Google Workspace > Drive and Docs > Sharing settings. Select the student organizational unit in the left panel and set 'Sharing outside of your organization' explicitly for that OU (the setting shows 'Locally applied' when it is a local decision, 'Inherited' otherwise).",
+      "compliance": {
+        "nistSp80053": [
+          "CM-6"
+        ],
+        "mitreAttack": [
+          "T1567"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-DATA-001",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "inherited-clean",
+        "inherited-warn",
+        "known-bad",
+        "no-policy",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-002",
+      "name": "Student External Drive Sharing Restricted",
+      "description": "Whatever the staff posture, student OUs should not permit unrestricted silent sharing outside the organization. Defensible student postures range from fully disabled to allowlisted domains; sharing that is on with a warning prompt is the weakest acceptable floor and should be a deliberate district decision for the age band.",
+      "severity": "High",
+      "zeroTrustPillar": "Data",
+      "zeroTrustWeight": 2,
+      "subcategory": "Data Protection",
+      "recommendedValue": "Student OU external Drive sharing is DISALLOWED or restricted to allowlisted domains; if ALLOWED, the external-sharing warning is enabled and the choice is documented",
+      "remediationUrl": "https://admin.google.com/ac/appsettings/55656082996/sharing",
+      "remediationSteps": "Admin Console > Apps > Google Workspace > Drive and Docs > Sharing settings. Select the student organizational unit and set 'Sharing outside of your organization' to Off or Allowlisted domains. If the district deliberately permits external sharing for a student OU, enable 'Warn when files owned by users in your organization are shared outside' at minimum.",
+      "compliance": {
+        "nistSp80053": [
+          "AC-3",
+          "AC-4"
+        ],
+        "mitreAttack": [
+          "T1567",
+          "T1537"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-DATA-002",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "allowlisted",
+        "warn-on-external",
+        "known-bad",
+        "no-policy",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-003",
+      "name": "Students Cannot Authorize Third-Party Apps",
+      "description": "A student clicking 'Sign in with Google' on an arbitrary website can grant that site access to their school account data unless the district restricts third-party API access for student OUs. Students should have no unconfigured third-party app access, or a district-curated allowlist only. This is one of the highest-leverage single settings in a school tenant.",
+      "severity": "High",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 2,
+      "subcategory": "Third-Party Access",
+      "recommendedValue": "Unconfigured third-party apps blocked (BLOCK_ALL_SCOPES) for student OUs; district-reviewed apps allowlisted individually",
+      "remediationUrl": "https://admin.google.com/ac/owl",
+      "remediationSteps": "Admin Console > Security > Access and data control > API controls > App access control > Manage Third-Party App Access. Select the student organizational unit, set unconfigured third-party apps to 'Block all third-party API access', and allowlist the specific apps the district has reviewed.",
+      "compliance": {
+        "nistSp80053": [
+          "AC-3",
+          "CM-7"
+        ],
+        "mitreAttack": [
+          "T1528"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-IDENT-001",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "uber-block",
+        "signin-only",
+        "known-bad",
+        "no-policy",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-004",
+      "name": "Vendor Delegated Access Review",
+      "description": "Domain-wide delegation grants give a vendor's service account standing access to user data across the tenant, including student data. SIS platforms, rostering tools, and EdTech vendors accumulate these grants over years and stale grants rarely get removed. Every grant with sensitive scopes should map to a current vendor contract and the narrowest workable scope set.",
+      "severity": "High",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 2,
+      "subcategory": "Third-Party Access",
+      "recommendedValue": "Every domain-wide delegation grant maps to a current vendor and carries only the scopes that vendor needs",
+      "remediationUrl": "https://admin.google.com/ac/owl/domainwidedelegation",
+      "remediationSteps": "Admin Console > Security > Access and data control > API controls > Domain-wide delegation. For each client ID, confirm which vendor owns it and that the contract is current; remove grants for departed vendors; reduce scope sets that exceed the vendor's function (mail, Drive, directory, and contacts scopes deserve particular scrutiny).",
+      "compliance": {
+        "nistSp80053": [
+          "AC-6",
+          "AC-20"
+        ],
+        "mitreAttack": [
+          "T1098.001",
+          "T1550"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": false,
+      "guerrillaBaseline": {
+        "baselineId": "K12-IDENT-002",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "known-bad",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-005",
+      "name": "Delegated Admin Least Privilege",
+      "description": "Districts routinely give counselors, secretaries, and building administrators delegated admin roles for legitimate tasks using roles far broader than the task. A delegated role that carries user-management or security privileges across the whole domain reaches every student account; scoping the same role to an organizational unit contains it. This check surfaces domain-wide delegated assignments for review; whether each holder needs that reach is the district's determination.",
+      "severity": "High",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 2,
+      "subcategory": "Admin Roles",
+      "recommendedValue": "Delegated admin roles with user-management or security privileges are scoped to the organizational units the holder supports, not the whole domain",
+      "remediationUrl": "https://admin.google.com/ac/roles",
+      "remediationSteps": "Admin Console > Account > Admin roles. For each custom or prebuilt role assignment flagged in the evidence, either narrow the assignment to the relevant organizational unit (edit the assignment's scope) or replace the role with one carrying only the privileges the holder's duties need.",
+      "compliance": {
+        "nistSp80053": [
+          "AC-6",
+          "AC-5"
+        ],
+        "mitreAttack": [
+          "T1078.004"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": false,
+      "guerrillaBaseline": {
+        "baselineId": "K12-IDENT-003",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "known-bad",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-006",
+      "name": "Student Communication Boundaries",
+      "description": "Chat and Meet each have independent settings governing whether accounts can communicate with people outside the organization. For student OUs these settings are a safety boundary: they determine whether an account outside the district can initiate contact with a student through district-provided tools. A FAIL here means a setting permits a class of external contact the district has not affirmatively decided to permit; it does not mean such contact has occurred. Gmail external-mail restrictions live in routing rules this check cannot read and are noted for manual review.",
+      "severity": "High",
+      "zeroTrustPillar": "Applications & Workloads",
+      "zeroTrustWeight": 2,
+      "subcategory": "Child Safety",
+      "recommendedValue": "Student OU external chat off or restricted to trusted domains; students join district-hosted meetings only",
+      "remediationUrl": "https://admin.google.com/ac/appslist/core",
+      "remediationSteps": "Chat: Admin Console > Apps > Google Workspace > Google Chat > External chat settings; select the student OU and turn external chat off or restrict to allowlisted domains. Meet: Admin Console > Apps > Google Workspace > Google Meet > Meet safety settings; select the student OU and limit which meetings users can join to your organization. Gmail: review any student external-mail restrictions under Apps > Google Workspace > Gmail > Routing.",
+      "compliance": {
+        "nistSp80053": [
+          "AC-4"
+        ],
+        "mitreAttack": [],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-SAFE-001",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "restricted-warn",
+        "known-bad",
+        "no-policy",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-007",
+      "name": "Guardian Access Integrity",
+      "description": "Guardian email summaries exist so parents see their own student's activity. The integrity property that is machine-assessable is who can register and remove guardians: domain admins only is the narrow surface; verified teachers widen it and require a documented identity-check procedure. How the district verifies a guardian's identity before inviting them is a policy review item this check cannot read. Findings describe configuration posture, not incidents.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 1,
+      "subcategory": "Child Safety",
+      "recommendedValue": "If guardian access is enabled, guardian management is restricted to domain admins, or a documented teacher-side verification procedure exists",
+      "remediationUrl": "https://admin.google.com/ac/appslist/core",
+      "remediationSteps": "Admin Console > Apps > Google Workspace > Classroom > Guardian access. Select the student organizational unit. If guardian summaries are in use, set 'Who can manage guardians' to domain admins only, or document the verification procedure teachers must follow before inviting a guardian.",
+      "compliance": {
+        "nistSp80053": [
+          "AC-2"
+        ],
+        "mitreAttack": [],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-SAFE-002",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "disabled",
+        "teacher-managed",
+        "no-policy",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-008",
+      "name": "Managed Student Chromebook Posture",
+      "description": "Student Chromebooks are the district's largest fleet and its most boundary-tested. The posture that keeps the fleet managed: wiped devices re-enroll automatically (students cannot escape management by wiping), extensions install from a district allowlist rather than an open store with a blocklist, and sideloaded extensions from outside the Web Store are blocked.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Devices",
+      "zeroTrustWeight": 2,
+      "subcategory": "Device Management",
+      "recommendedValue": "Forced re-enrollment automatic after wipe; extension installs allowlist-only; external (sideloaded) extensions blocked on student OUs",
+      "remediationUrl": "https://admin.google.com/ac/chrome/settings/user",
+      "remediationSteps": "Devices > Chrome > Settings. Select the student organizational unit. Under Device settings > Enrollment and access, set Forced re-enrollment to 'Force device to automatically re-enroll after wiping'. Under Users and browsers > Apps and extensions, set the Chrome Web Store install policy to block all apps with an admin-managed allowlist, and block external extensions.",
+      "compliance": {
+        "nistSp80053": [
+          "CM-7",
+          "CM-2"
+        ],
+        "mitreAttack": [
+          "T1176"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-DEVICE-001",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "blocklist-warn",
+        "known-bad",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-009",
+      "name": "Departed Student Account Disposition",
+      "description": "Graduation and withdrawal produce accounts nobody owns. An active account belonging to a departed student is an unwatched identity that still receives mail and still holds data. This check surfaces accounts in the student OUs that are active but have not signed in for a year or more, and reminds the district that suspended accounts still hold Drive data whose ownership should be resolved before deletion.",
+      "severity": "Medium",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 2,
+      "subcategory": "Lifecycle",
+      "recommendedValue": "Departed students are suspended or archived on departure; no student account stays active with a year of no sign-ins",
+      "remediationUrl": "https://admin.google.com/ac/users",
+      "remediationSteps": "Admin Console > Directory > Users. Filter to the student organizational unit and sort by Last sign-in. Suspend or archive accounts belonging to withdrawn or graduated students. Before deleting suspended accounts, transfer Drive ownership (Admin Console > Directory > Users > select user > Delete > transfer content) or export via Takeout/Vault as your retention policy requires.",
+      "compliance": {
+        "nistSp80053": [
+          "AC-2"
+        ],
+        "mitreAttack": [
+          "T1078.004"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-LIFE-001",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "known-bad",
+        "ou-absent",
+        "no-scope",
+        "not-assessed"
+      ]
+    },
+    {
+      "id": "GWS-K12-010",
+      "name": "Student Account Security Floor",
+      "description": "An honest student security floor is age-banded: strong password policy and district-controlled recovery everywhere; 2-Step Verification enforced for OUs serving students old enough to hold a second factor. Student-controlled account self-recovery is an account-takeover path at any age and fails this check; a missing 2SV enforcement is reported as context for the district's age-band decision, never as a blind failure of an elementary OU.",
+      "severity": "High",
+      "zeroTrustPillar": "Identity",
+      "zeroTrustWeight": 2,
+      "subcategory": "Account Hygiene",
+      "recommendedValue": "Self-recovery disabled for student OUs; STRONG password policy with minimum length 12+; 2SV enforced where the age band supports it, with documented exceptions elsewhere",
+      "remediationUrl": "https://admin.google.com/ac/security",
+      "remediationSteps": "Admin Console > Security > Authentication. Select the student organizational unit. Under Account recovery, turn user account self-recovery off for student OUs (recovery runs through the district help desk). Under Password management, enforce strong passwords with minimum length 12 or higher. Under 2-step verification, enforce 2SV for age bands that can hold a second factor and document the exception for younger OUs.",
+      "compliance": {
+        "nistSp80053": [
+          "IA-5",
+          "AC-2"
+        ],
+        "mitreAttack": [
+          "T1098",
+          "T1110"
+        ],
+        "cisBenchmark": [],
+        "scuba": []
+      },
+      "provenance": "original",
+      "source_url": null,
+      "source_read_date": null,
+      "official_id": null,
+      "ouScoped": true,
+      "guerrillaBaseline": {
+        "baselineId": "K12-ACCT-001",
+        "baselineVersion": "0.1.0",
+        "status": "candidate"
+      },
+      "verdictPaths": [
+        "clean",
+        "weak-floor",
+        "known-bad",
+        "no-policy",
+        "no-scope",
+        "ou-absent",
+        "not-assessed"
+      ]
+    }
+  ]
+}

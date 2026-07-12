@@ -19,6 +19,11 @@ function Get-GWSAuditData {
 
         [string]$TargetOU = '/',
 
+        # Student-OU designation: when provided, Chrome policies are additionally
+        # resolved per student OU (the root-OU resolution alone cannot answer
+        # "what applies to students"). See Invoke-GWSAudit -StudentOU.
+        [AllowEmptyCollection()][string[]]$StudentOU = @(),
+
         [switch]$Quiet,
 
         # Skip the per-user Gmail-settings crawl (the slow part — ~1.4s/user serial).
@@ -44,6 +49,11 @@ function Get-GWSAuditData {
         # (GWS-GEMINI-002/003/004/005) — the same source ScubaGoggles derives them from.
         GwsService       = @('Customer', 'GeminiAuditSettings')
         Tradecraft       = @('DomainWideDelegation', 'Users', 'Roles', 'OAuthApps', 'Groups', 'GroupSettings')
+        # K12 baseline checks: OU-targeted policy resolution (CloudIdentityPolicies is
+        # collected unconditionally below), plus the identity/role/delegation/device
+        # surfaces the tenant-wide K12 checks read.
+        K12              = @('Users', 'OrgUnits', 'Roles', 'RoleAssignments', 'DomainWideDelegation',
+                             'OAuthApps', 'ChromeDevices', 'ChromePolicies')
     }
 
     # Resolve which data sources are required
@@ -89,6 +99,7 @@ function Get-GWSAuditData {
         OrgUnitPolicies     = @{ '/' = @{} }
         AlertRules          = @()
         ChromePolicies      = @()
+        ChromePoliciesByOu  = @{}
         OAuthApps           = @()
         DomainWideDelegation = @()
         CloudIdentityPolicies = $null
@@ -572,6 +583,49 @@ function Get-GWSAuditData {
                     -Quiet:$Quiet
 
                 $data.ChromePolicies = @($chromeResult ?? @())
+
+                # Per-student-OU resolution: the root-OU answer cannot say what
+                # applies to students. Each OU resolves user-app policies and
+                # device policies separately (the API filters by schema
+                # namespace). A per-OU failure is recorded under its own error
+                # key ('ChromePolicies:<path>') so the dependent check goes Not
+                # Assessed for that OU without darkening the others.
+                if (@($StudentOU).Count -gt 0) {
+                    $pathToId = @{}
+                    foreach ($ou in @($data.Tenant.OrgUnits)) {
+                        $bare = "$($ou.orgUnitId)" -replace '^id:', ''
+                        if ($bare) { $pathToId["$($ou.orgUnitPath)"] = $bare }
+                    }
+                    foreach ($stuOu in $StudentOU) {
+                        $ouId = if ($stuOu -eq '/') { $rootOuId } else { $pathToId[$stuOu] }
+                        if (-not $ouId) {
+                            # Path not in the collected tree: the OU-absent branch of the
+                            # checks handles this; nothing to resolve.
+                            continue
+                        }
+                        try {
+                            $ouPolicies = [System.Collections.Generic.List[object]]::new()
+                            foreach ($schemaFilter in 'chrome.users.*', 'chrome.devices.*') {
+                                $resolved = Invoke-GoogleAdminApi `
+                                    -AccessToken $chromeToken `
+                                    -Uri 'https://chromepolicy.googleapis.com/v1/customers/my_customer/policies:resolve' `
+                                    -Method Post `
+                                    -Body @{
+                                        policyTargetKey    = @{ targetResource = "orgunits/$ouId" }
+                                        policySchemaFilter = $schemaFilter
+                                        pageSize           = 1000
+                                    } `
+                                    -Paginate `
+                                    -ItemsProperty 'resolvedPolicies' `
+                                    -Quiet:$Quiet
+                                foreach ($p in @($resolved)) { if ($null -ne $p) { $ouPolicies.Add($p) } }
+                            }
+                            $data.ChromePoliciesByOu[$stuOu] = @($ouPolicies)
+                        } catch {
+                            $data.Errors["ChromePolicies:$stuOu"] = $_.Exception.Message
+                        }
+                    }
+                }
             }
         } catch {
             $data.Errors['ChromePolicies'] = $_.Exception.Message

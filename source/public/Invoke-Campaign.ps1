@@ -26,6 +26,15 @@ function Invoke-Campaign {
     .PARAMETER AdminEmail
         Google Workspace admin email (enables Workspace platform).
 
+    .PARAMETER StudentOU
+        Organizational unit(s) containing student accounts, routed by shape:
+        '/'-prefixed Workspace OU paths (e.g. '/Students') go to the GWS audit,
+        'OU=' distinguished names (e.g. 'OU=Students,DC=district,DC=org') go to
+        the AD audit. A designation for the OU-scoped K12 checks, not a
+        collection filter; when omitted those checks report Not Assessed. Part
+        of the run's comparison identity, so a student-scoped campaign is never
+        diffed against a whole-tenant campaign.
+
     .PARAMETER Server
         AD domain controller (enables AD platform). Omit to use current domain.
 
@@ -79,6 +88,11 @@ function Invoke-Campaign {
         [string]$ServiceAccountKeyPath,
         [string]$AdminEmail,
         [string]$TargetOU,
+
+        # Student-OU designation, routed by shape: '/'-prefixed Workspace OU
+        # paths go to the GWS audit, 'OU=' distinguished names go to the AD
+        # audit. Part of the run's comparison identity on every platform.
+        [AllowEmptyCollection()][string[]]$StudentOU = @(),
 
         # ── Active Directory ──
         [string]$Server,
@@ -262,6 +276,16 @@ function Invoke-Campaign {
         $platformResults = @{}
         $allFindings = [System.Collections.Generic.List[PSCustomObject]]::new()
 
+        # Route the student-OU designation by shape: Workspace OU paths vs AD DNs.
+        # An entry matching neither shape is a mistake worth stopping for, not guessing.
+        $gwsStudentOus = @(ConvertTo-GuerrillaStudentOuList -StudentOu @($StudentOU | Where-Object { "$_".Trim().StartsWith('/') }) -EnsureLeadingSlash)
+        $adStudentOus = @(ConvertTo-GuerrillaStudentOuList -StudentOu @($StudentOU | Where-Object { "$_".Trim() -match '^(?i)OU=' }))
+        $unroutable = @($StudentOU | Where-Object { $s = "$_".Trim(); $s -and -not $s.StartsWith('/') -and $s -notmatch '^(?i)OU=' })
+        if ($unroutable.Count) {
+            throw ("-StudentOU entries could not be routed to a platform (expected a '/'-prefixed " +
+                "Workspace OU path or an 'OU=' distinguished name): $($unroutable -join ', ')")
+        }
+
         # ── Workspace Platform ──────────────────────────────────────────────
         if ('Workspace' -in $Platforms) {
             if (-not $TestMode -and (-not $ServiceAccountKeyPath -or -not $AdminEmail)) {
@@ -282,6 +306,7 @@ function Invoke-Campaign {
             if ($ConfigPath) { $fortParams['ConfigPath'] = $ConfigPath }
             if ($ConfigFile) { $fortParams['ConfigFile'] = $ConfigFile }
             if ($TargetOU) { $fortParams['TargetOU'] = $TargetOU }
+            if ($gwsStudentOus.Count) { $fortParams['StudentOU'] = $gwsStudentOus }
             if ($TestMode) { $fortParams['TestMode'] = $true }
 
             try {
@@ -317,6 +342,7 @@ function Invoke-Campaign {
             if ($Credential) { $reconParams['Credential'] = $Credential }
             if ($ConfigPath) { $reconParams['ConfigPath'] = $ConfigPath }
             if ($ConfigFile) { $reconParams['ConfigFile'] = $ConfigFile }
+            if ($adStudentOus.Count) { $reconParams['StudentOU'] = $adStudentOus }
             if ($TestMode) { $reconParams['TestMode'] = $true }
 
             try {
@@ -470,9 +496,12 @@ function Invoke-Campaign {
                 }
 
                 if ($recordPlatforms.Count -gt 0 -and $targetIds.Count -gt 0) {
+                    $campaignStudentOus = @($gwsStudentOus) + @($adStudentOus)
                     $runRecord = New-GuerrillaRunRecord -Findings @($recordFindings) -Platforms $recordPlatforms `
-                        -TargetId $targetIds -ScanId $scanId -OverallScore $overallScore
-                    $previousRun = Get-GuerrillaPreviousRun -Platforms $recordPlatforms -TargetHash $runRecord.scope.targetHash
+                        -TargetId $targetIds -ScanId $scanId -OverallScore $overallScore `
+                        -TargetOu ($TargetOU ? $TargetOU : '/') -StudentOu $campaignStudentOus
+                    $previousRun = Get-GuerrillaPreviousRun -Platforms $recordPlatforms -TargetHash $runRecord.scope.targetHash `
+                        -TargetOu ($TargetOU ? $TargetOU : '/') -StudentOu $campaignStudentOus
                     $runDiff = Compare-GuerrillaRun -Previous $previousRun -Current $runRecord
                 }
             } catch {

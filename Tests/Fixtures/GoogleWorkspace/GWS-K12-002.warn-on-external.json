@@ -1,0 +1,69 @@
+{
+  "checkId": "GWS-K12-002",
+  "platform": "GWS",
+  "scenario": "warn-on-external",
+  "expectedStatus": "WARN",
+  "description": "Sharing allowed but warn prompt enabled: weakest acceptable floor",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Students"
+    ],
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "All": [
+        {
+          "setting": {
+            "type": "settings/drive_and_docs.external_sharing",
+            "value": {
+              "externalSharingMode": "ALLOWED",
+              "warnForExternalSharing": true
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "ByType": {
+        "drive_and_docs.external_sharing": [
+          {
+            "setting": {
+              "type": "settings/drive_and_docs.external_sharing",
+              "value": {
+                "externalSharingMode": "ALLOWED",
+                "warnForExternalSharing": true
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ]
+      },
+      "Count": 1
+    }
+  }
+}

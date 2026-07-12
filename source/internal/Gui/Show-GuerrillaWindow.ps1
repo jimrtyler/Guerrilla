@@ -293,6 +293,7 @@ function Show-GuerrillaWindow {
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -338,7 +339,19 @@ function Show-GuerrillaWindow {
           </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="5" Margin="0,0,0,12">
+        <Grid Grid.Row="5" x:Name="ops_StudentOuRow" Margin="0,0,0,12">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Grid.Column="0" Text="Student OUs:" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,12,0"/>
+          <TextBox   Grid.Column="1" x:Name="ops_StudentOU"
+                     AutomationProperties.Name="Student organizational units"
+                     AutomationProperties.HelpText="Comma-separated OU paths that contain student accounts, e.g. /Students. K12 checks that assess student posture require this; without it they report Not Assessed."
+                     ToolTip="Comma-separated OU path(s) containing student accounts, e.g. /Students or OU=Students,DC=district,DC=org. Required by the OU-scoped K12 checks; leave empty to skip them (they report Not Assessed)."/>
+        </Grid>
+
+        <Grid Grid.Row="6" Margin="0,0,0,12">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -349,7 +362,7 @@ function Show-GuerrillaWindow {
           <Button    Grid.Column="2" x:Name="ops_BrowseOutput" Content="Browse..." Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
         </Grid>
 
-        <Grid Grid.Row="6" Margin="0,12,0,0">
+        <Grid Grid.Row="7" Margin="0,12,0,0">
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -371,7 +384,7 @@ function Show-GuerrillaWindow {
           </Border>
         </Grid>
 
-        <Border Grid.Row="7" x:Name="ops_ResultBanner" Background="#ECFDF5" BorderBrush="#16A34A" BorderThickness="1"
+        <Border Grid.Row="8" x:Name="ops_ResultBanner" Background="#ECFDF5" BorderBrush="#16A34A" BorderThickness="1"
                 Padding="12,8" Margin="0,8,0,0" Visibility="Collapsed">
           <Grid>
             <Grid.ColumnDefinitions>
@@ -671,7 +684,7 @@ function Show-GuerrillaWindow {
               'GroupPolicy','LogonScripts','CertificateServices','StaleObjects','Network','TierZero','Logging','Tradecraft','AttackPath')
         } elseif ($session.Controls['ops_PlatformWorkspace'].IsChecked) {
             @('Authentication','EmailSecurity','DriveSecurity','OAuthSecurity','AdminManagement',
-              'Collaboration','DeviceManagement','LoggingAlerting')
+              'Collaboration','DeviceManagement','LoggingAlerting','K12')
         } elseif ($session.Controls['ops_PlatformCloud'].IsChecked) {
             @('ConditionalAccess','AuthenticationMethods','PIM','Applications','Federation',
               'TenantConfig','AzureIAM','Intune','M365Services')
@@ -764,6 +777,8 @@ function Show-GuerrillaWindow {
         $reportStyle  = "$($session.Controls['ops_ReportStyle'].SelectedItem.Content)"
         $testMode     = [bool]$session.Controls['ops_TestMode'].IsChecked
         $selectedCats = & $getSelectedCategories
+        $studentOus   = @("$($session.Controls['ops_StudentOU'].Text)" -split '[,;]' |
+            ForEach-Object { $_.Trim() } | Where-Object { $_ })
 
         $cmdletName = if ($session.Controls['ops_PlatformAD'].IsChecked)        { 'Invoke-ADAudit' }
                       elseif ($session.Controls['ops_PlatformWorkspace'].IsChecked) { 'Invoke-GWSAudit' }
@@ -777,7 +792,7 @@ function Show-GuerrillaWindow {
         $action = {
             param([string]$CmdletName, [string]$OutputDir, [string]$Mode,
                   [bool]$NoReports, [bool]$NoDelta, [string[]]$Categories, [string]$VaultName,
-                  [string]$ReportStyle, [bool]$TestMode)
+                  [string]$ReportStyle, [bool]$TestMode, [string[]]$StudentOU)
             # Only pass parameters the target cmdlet actually declares. The four
             # platform cmdlets have different surfaces (e.g. Invoke-Campaign has no
             # -Categories/-NoReports; none take -ScanMode), so gating on the real
@@ -796,9 +811,10 @@ function Show-GuerrillaWindow {
             if ($Mode               -and $params.ContainsKey('ScanMode'))       { $invokeArgs.ScanMode = $Mode }
             if ($ReportStyle        -and $params.ContainsKey('ReportStyle'))    { $invokeArgs.ReportStyle = $ReportStyle }
             if ($TestMode           -and $params.ContainsKey('TestMode'))       { $invokeArgs.TestMode = $true }
+            if ($StudentOU.Count -gt 0 -and $params.ContainsKey('StudentOU'))  { $invokeArgs.StudentOU = $StudentOU }
             & $CmdletName @invokeArgs
         }
-        $actionArgs = @($cmdletName, $outDir, $mode, [bool]$noReports, [bool]$noDelta, @($selectedCats), $session.VaultName, $reportStyle, $testMode)
+        $actionArgs = @($cmdletName, $outDir, $mode, [bool]$noReports, [bool]$noDelta, @($selectedCats), $session.VaultName, $reportStyle, $testMode, @($studentOus))
 
         # Invoke-GuerrillaGuiAsync fires these callbacks from its own DispatcherTimer
         # scope, so they must carry everything they need by closure. GetNewClosure()

@@ -1,0 +1,95 @@
+{
+  "checkId": "GWS-K12-006",
+  "platform": "GWS",
+  "scenario": "restricted-warn",
+  "expectedStatus": "WARN",
+  "description": "External chat limited to trusted domains",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Students"
+    ],
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "All": [
+        {
+          "setting": {
+            "type": "settings/chat.external_chat_restriction",
+            "value": {
+              "allowExternalChat": true,
+              "externalChatRestriction": "TRUSTED_DOMAINS"
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        },
+        {
+          "setting": {
+            "type": "settings/meet.safety_access",
+            "value": {
+              "meetingsAllowedToJoin": "SAME_ORGANIZATION_ONLY"
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "ByType": {
+        "chat.external_chat_restriction": [
+          {
+            "setting": {
+              "type": "settings/chat.external_chat_restriction",
+              "value": {
+                "allowExternalChat": true,
+                "externalChatRestriction": "TRUSTED_DOMAINS"
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ],
+        "meet.safety_access": [
+          {
+            "setting": {
+              "type": "settings/meet.safety_access",
+              "value": {
+                "meetingsAllowedToJoin": "SAME_ORGANIZATION_ONLY"
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ]
+      },
+      "Count": 2
+    }
+  }
+}

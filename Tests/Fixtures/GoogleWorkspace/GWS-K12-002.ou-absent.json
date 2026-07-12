@@ -1,0 +1,67 @@
+{
+  "checkId": "GWS-K12-002",
+  "platform": "GWS",
+  "scenario": "ou-absent",
+  "expectedStatus": "SKIP",
+  "description": "Named student OU absent from tree",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Studnets"
+    ],
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "All": [
+        {
+          "setting": {
+            "type": "settings/drive_and_docs.external_sharing",
+            "value": {
+              "externalSharingMode": "DISALLOWED"
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "ByType": {
+        "drive_and_docs.external_sharing": [
+          {
+            "setting": {
+              "type": "settings/drive_and_docs.external_sharing",
+              "value": {
+                "externalSharingMode": "DISALLOWED"
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ]
+      },
+      "Count": 1
+    }
+  }
+}

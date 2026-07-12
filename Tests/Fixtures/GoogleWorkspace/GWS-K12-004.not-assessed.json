@@ -1,0 +1,14 @@
+{
+  "checkId": "GWS-K12-004",
+  "platform": "GWS",
+  "scenario": "not-assessed",
+  "expectedStatus": "SKIP",
+  "description": "Delegation list failed to collect",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {
+      "DomainWideDelegation": "HTTP 403"
+    },
+    "DomainWideDelegation": []
+  }
+}

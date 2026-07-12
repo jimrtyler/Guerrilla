@@ -80,6 +80,12 @@ function Invoke-EntraAudit {
         [securestring]$ClientSecret,
         [switch]$DeviceCode,
 
+        # Student-scope designation, reserved for the planned Entra K12 checks
+        # (administrative-unit object IDs or display names). Accepted now so
+        # scoped runs start their own comparison series from the first release
+        # that records scope; no current Entra check consumes it.
+        [AllowEmptyCollection()][string[]]$StudentOU = @(),
+
         [string]$OutputDirectory,
         [switch]$NoReports,
         [switch]$NoDelta,
@@ -367,9 +373,12 @@ function Invoke-EntraAudit {
     if (-not $NoDelta -and -not $TestMode) {
         if (-not $Quiet) { Write-ProgressLine -Phase ENTRA -Message 'Comparing against previous run' }
         try {
+            $entraStudentOus = @(ConvertTo-GuerrillaStudentOuList -StudentOu $StudentOU)
             $runRecord = New-GuerrillaRunRecord -Findings @($allFindings) -Platforms @('Entra') `
-                -TargetId @($TenantId) -ScanId $scanId -OverallScore $score.OverallScore
-            $previousRun = Get-GuerrillaPreviousRun -Platforms @('Entra') -TargetHash $runRecord.scope.targetHash
+                -TargetId @($TenantId) -ScanId $scanId -OverallScore $score.OverallScore `
+                -StudentOu $entraStudentOus
+            $previousRun = Get-GuerrillaPreviousRun -Platforms @('Entra') -TargetHash $runRecord.scope.targetHash `
+                -StudentOu $entraStudentOus
             $runDiff = Compare-GuerrillaRun -Previous $previousRun -Current $runRecord
         } catch {
             Write-Warning "Run comparison unavailable: $_"

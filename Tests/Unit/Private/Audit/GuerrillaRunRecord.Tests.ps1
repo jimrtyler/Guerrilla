@@ -296,3 +296,109 @@ Describe 'Save-GuerrillaRunRecord / Get-GuerrillaPreviousRun' {
         }
     }
 }
+
+Describe 'OU scope in the comparison-series identity' {
+    BeforeEach {
+        $script:root = Join-Path $TestDrive ("rh-" + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    }
+
+    It 'normalizes the student-OU list: trims, deduplicates, sorts, adds the leading slash' {
+        InModuleScope Guerrilla {
+            $out = ConvertTo-GuerrillaStudentOuList -StudentOu @(' /Students ', 'Students', '/Alumni/', '', $null) -EnsureLeadingSlash
+            $out | Should -Be @('/Alumni', '/Students')
+            (Get-GuerrillaOuScopeString -TargetOu '' -StudentOu @()) |
+                Should -Be (Get-GuerrillaOuScopeString -TargetOu '/' -StudentOu $null) `
+                -Because 'absent scope fields on old records must read as the whole-tenant default'
+        }
+    }
+
+    It 'a student-scoped run is never diffed against a whole-tenant run, in either direction' {
+        InModuleScope Guerrilla -Parameters @{ root = $script:root } {
+            $mk = {
+                param($scanId, $when, $studentOus)
+                $rec = New-GuerrillaRunRecord -Findings @((New-MockAuditFinding -CheckId 'A-1' -Status 'PASS')) `
+                    -Platforms @('GWS') -TargetId @('district.example.org') -ScanId $scanId -OverallScore 80 `
+                    -StudentOu $studentOus
+                $rec.generatedAt = $when
+                Save-GuerrillaRunRecord -Record $rec -DataRoot $root | Out-Null
+            }
+            & $mk 'tenantwide' '2026-07-01T10:00:00Z' @()
+            & $mk 'scoped'     '2026-07-02T10:00:00Z' @('/Students')
+
+            $target = Get-GuerrillaTargetHash -TargetId @('district.example.org')
+
+            # Whole-tenant lookup must find the whole-tenant run, not the newer scoped one.
+            (Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root).runId |
+                Should -Be 'tenantwide'
+
+            # Scoped lookup must find the scoped run, not the whole-tenant one.
+            (Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root `
+                -StudentOu @('/Students')).runId | Should -Be 'scoped'
+
+            # A different student-OU set is a different series: null, not a guess.
+            Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root `
+                -StudentOu @('/HighSchool') | Should -BeNullOrEmpty
+        }
+    }
+
+    It 'scope matching holds on the full-scan fallback path too (no index)' {
+        InModuleScope Guerrilla -Parameters @{ root = $script:root } {
+            $mk = {
+                param($scanId, $when, $studentOus)
+                $rec = New-GuerrillaRunRecord -Findings @((New-MockAuditFinding -CheckId 'A-1' -Status 'PASS')) `
+                    -Platforms @('GWS') -TargetId @('district.example.org') -ScanId $scanId -OverallScore 80 `
+                    -StudentOu $studentOus
+                $rec.generatedAt = $when
+                Save-GuerrillaRunRecord -Record $rec -DataRoot $root | Out-Null
+            }
+            & $mk 'tenantwide' '2026-07-01T10:00:00Z' @()
+            & $mk 'scoped'     '2026-07-02T10:00:00Z' @('/Students')
+            Remove-Item (Join-Path $root 'RunHistory' 'index.json') -Force
+
+            $target = Get-GuerrillaTargetHash -TargetId @('district.example.org')
+            (Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root).runId |
+                Should -Be 'tenantwide'
+            (Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root `
+                -StudentOu @('/Students')).runId | Should -Be 'scoped'
+        }
+    }
+
+    It 'TargetOu (collection scope) separates series: an OU-narrowed run never baselines a whole-tenant run' {
+        InModuleScope Guerrilla -Parameters @{ root = $script:root } {
+            $rec = New-GuerrillaRunRecord -Findings @((New-MockAuditFinding -CheckId 'A-1' -Status 'PASS')) `
+                -Platforms @('GWS') -TargetId @('district.example.org') -ScanId 'narrowed' -OverallScore 80 `
+                -TargetOu '/Engineering'
+            Save-GuerrillaRunRecord -Record $rec -DataRoot $root | Out-Null
+
+            $target = Get-GuerrillaTargetHash -TargetId @('district.example.org')
+            Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root |
+                Should -BeNullOrEmpty -Because 'a -TargetOU run must not become the whole-tenant baseline'
+            (Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root `
+                -TargetOu '/Engineering').runId | Should -Be 'narrowed'
+        }
+    }
+
+    It 'pre-scope records (no scope fields) keep matching whole-tenant lookups' {
+        InModuleScope Guerrilla -Parameters @{ root = $script:root } {
+            $rec = New-GuerrillaRunRecord -Findings @((New-MockAuditFinding -CheckId 'A-1' -Status 'PASS')) `
+                -Platforms @('GWS') -TargetId @('district.example.org') -ScanId 'legacy' -OverallScore 80
+            Save-GuerrillaRunRecord -Record $rec -DataRoot $root | Out-Null
+
+            # Strip the scope fields from the persisted record and index entry to
+            # simulate a record written before OU scope existed.
+            $rhRoot = Join-Path $root 'RunHistory'
+            $file = Get-ChildItem $rhRoot -Filter 'run-*.json' | Select-Object -First 1
+            $legacy = Get-Content $file.FullName -Raw | ConvertFrom-Json
+            $legacy.scope.PSObject.Properties.Remove('targetOu')
+            $legacy.scope.PSObject.Properties.Remove('studentOus')
+            $legacy | ConvertTo-Json -Depth 8 | Set-Content $file.FullName -Encoding utf8
+            Remove-Item (Join-Path $rhRoot 'index.json') -Force
+
+            $target = Get-GuerrillaTargetHash -TargetId @('district.example.org')
+            (Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root).runId |
+                Should -Be 'legacy' -Because 'a schema addition must not silently reset whole-tenant baselines'
+            Get-GuerrillaPreviousRun -Platforms @('GWS') -TargetHash $target -DataRoot $root `
+                -StudentOu @('/Students') | Should -BeNullOrEmpty
+        }
+    }
+}

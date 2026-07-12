@@ -96,6 +96,14 @@ function Invoke-ADAudit {
         [string]$Server,
         [pscredential]$Credential,
 
+        # Student-OU designation: distinguished name(s) of the OU subtree(s) that
+        # contain student accounts, e.g. 'OU=Students,DC=district,DC=org'. A
+        # designation for OU-scoped K12 checks, not a collection filter; part of
+        # the run's comparison identity (a student-scoped run is never diffed
+        # against a whole-domain run). Stored in the audit data for the AD K12
+        # checks; when omitted, those checks report Not Assessed.
+        [AllowEmptyCollection()][string[]]$StudentOU = @(),
+
         [string]$OutputDirectory,
         [switch]$NoReports,
         [switch]$NoDelta,
@@ -209,6 +217,7 @@ function Invoke-ADAudit {
         -WeakPasswordList $WeakPasswordList `
         -FullDomainAcl:$FullDomainAcl `
         -Quiet:$Quiet
+    $auditData.StudentOUs = @(ConvertTo-GuerrillaStudentOuList -StudentOu $StudentOU)
 
     # Report collection errors
     if ($auditData.Errors.Count -gt 0 -and -not $Quiet) {
@@ -286,9 +295,12 @@ function Invoke-ADAudit {
     if (-not $NoDelta -and -not $TestMode) {
         if (-not $Quiet) { Write-ProgressLine -Phase RECON -Message 'Comparing against previous run' }
         try {
+            $adStudentOus = @(ConvertTo-GuerrillaStudentOuList -StudentOu $StudentOU)
             $runRecord = New-GuerrillaRunRecord -Findings @($allFindings) -Platforms @('AD') `
-                -TargetId @($domainName) -ScanId $scanId -OverallScore $overallScore
-            $previousRun = Get-GuerrillaPreviousRun -Platforms @('AD') -TargetHash $runRecord.scope.targetHash
+                -TargetId @($domainName) -ScanId $scanId -OverallScore $overallScore `
+                -StudentOu $adStudentOus
+            $previousRun = Get-GuerrillaPreviousRun -Platforms @('AD') -TargetHash $runRecord.scope.targetHash `
+                -StudentOu $adStudentOus
             $runDiff = Compare-GuerrillaRun -Previous $previousRun -Current $runRecord
         } catch {
             Write-Warning "Run comparison unavailable: $_"

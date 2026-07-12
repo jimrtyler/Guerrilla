@@ -1,0 +1,60 @@
+{
+  "checkId": "GWS-K12-009",
+  "platform": "GWS",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "Students active recently; one suspended departed account",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {},
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Students"
+    ],
+    "Users": [
+      {
+        "primaryEmail": "s1@d.org",
+        "orgUnitPath": "/Students",
+        "lastLoginTime": "2098-01-01T00:00:00Z",
+        "suspended": false
+      },
+      {
+        "primaryEmail": "s2@d.org",
+        "orgUnitPath": "/Students/HighSchool",
+        "lastLoginTime": "2098-01-01T00:00:00Z",
+        "suspended": false
+      },
+      {
+        "primaryEmail": "grad@d.org",
+        "orgUnitPath": "/Students",
+        "lastLoginTime": "2001-06-01T00:00:00Z",
+        "suspended": true
+      },
+      {
+        "primaryEmail": "staff@d.org",
+        "orgUnitPath": "/Staff",
+        "lastLoginTime": "2001-06-01T00:00:00Z",
+        "suspended": false
+      }
+    ]
+  }
+}

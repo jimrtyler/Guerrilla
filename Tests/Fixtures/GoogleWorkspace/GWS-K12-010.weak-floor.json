@@ -1,0 +1,95 @@
+{
+  "checkId": "GWS-K12-010",
+  "platform": "GWS",
+  "scenario": "weak-floor",
+  "expectedStatus": "WARN",
+  "description": "Password floor below the baseline minimum",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Students"
+    ],
+    "Errors": {},
+    "CloudIdentityPolicies": {
+      "All": [
+        {
+          "setting": {
+            "type": "settings/security.user_account_recovery",
+            "value": {
+              "enableAccountRecovery": false
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        },
+        {
+          "setting": {
+            "type": "settings/security.password",
+            "value": {
+              "minimumLength": 8,
+              "allowedStrength": "STRONG"
+            }
+          },
+          "policyQuery": {
+            "orgUnit": "orgUnits/stuou123"
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "ByType": {
+        "security.user_account_recovery": [
+          {
+            "setting": {
+              "type": "settings/security.user_account_recovery",
+              "value": {
+                "enableAccountRecovery": false
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ],
+        "security.password": [
+          {
+            "setting": {
+              "type": "settings/security.password",
+              "value": {
+                "minimumLength": 8,
+                "allowedStrength": "STRONG"
+              }
+            },
+            "policyQuery": {
+              "orgUnit": "orgUnits/stuou123"
+            },
+            "type": "ADMIN"
+          }
+        ]
+      },
+      "Count": 2
+    }
+  }
+}

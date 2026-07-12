@@ -1,0 +1,20 @@
+{
+  "checkId": "GWS-K12-004",
+  "platform": "GWS",
+  "scenario": "clean",
+  "expectedStatus": "PASS",
+  "description": "Only a narrow-scope delegation grant exists",
+  "objectShape": false,
+  "auditData": {
+    "Errors": {},
+    "DomainWideDelegation": [
+      {
+        "clientId": "111",
+        "displayText": "Signage Screens",
+        "scopes": [
+          "https://www.googleapis.com/auth/userinfo.email"
+        ]
+      }
+    ]
+  }
+}

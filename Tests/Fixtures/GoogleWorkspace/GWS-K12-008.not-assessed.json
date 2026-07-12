@@ -1,0 +1,37 @@
+{
+  "checkId": "GWS-K12-008",
+  "platform": "GWS",
+  "scenario": "not-assessed",
+  "expectedStatus": "SKIP",
+  "description": "Per-OU Chrome policy resolution failed",
+  "objectShape": true,
+  "auditData": {
+    "Tenant": {
+      "Domain": "district.example.org",
+      "OrgUnits": [
+        {
+          "orgUnitPath": "/Students",
+          "orgUnitId": "id:stuou123",
+          "parentOrgUnitPath": "/"
+        },
+        {
+          "orgUnitPath": "/Students/HighSchool",
+          "orgUnitId": "id:stuhs789",
+          "parentOrgUnitPath": "/Students"
+        },
+        {
+          "orgUnitPath": "/Staff",
+          "orgUnitId": "id:staffou456",
+          "parentOrgUnitPath": "/"
+        }
+      ]
+    },
+    "StudentOUs": [
+      "/Students"
+    ],
+    "Errors": {
+      "ChromePolicies:/Students": "HTTP 403"
+    },
+    "ChromePoliciesByOu": {}
+  }
+}
