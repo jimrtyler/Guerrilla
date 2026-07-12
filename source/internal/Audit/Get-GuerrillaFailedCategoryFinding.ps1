@@ -133,7 +133,7 @@ function Get-GuerrillaPlatformCheckFunction {
             @('Invoke-AuthenticationChecks', 'Invoke-EmailSecurityChecks', 'Invoke-DriveSecurityChecks',
               'Invoke-OAuthSecurityChecks', 'Invoke-AdminManagementChecks', 'Invoke-CollaborationChecks',
               'Invoke-DeviceManagementChecks', 'Invoke-LoggingAlertingChecks', 'Invoke-GwsServiceChecks',
-              'Invoke-GoogleTradecraftChecks')
+              'Invoke-GoogleTradecraftChecks', 'Invoke-K12Checks')
         }
     }
 }
