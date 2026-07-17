@@ -1,0 +1,39 @@
+{
+  "_family": "GoogleTradecraftChecks.json",
+  "GTRADE-001": {
+    "name": { "value": "Risiko der Organisationsübernahme durch domänenweite Delegierung", "status": "machine-draft" },
+    "description": { "value": "Die domänenweite Delegierung bindet die Identitätsübernahme an die OAuth-Client-ID eines Dienstkontos, nicht an dessen Schlüssel; wer also auf einem delegierten Dienstkonto mit weitreichenden Scopes einen Schlüssel erstellen kann, erlangt eine organisationsweite Identitätsübernahme ohne Super-Admin-Rechte (die DeleFriend-Technik). Delegierte Berechtigungen mit vollständigen Gmail-/Drive-/Directory-/Cloud-Platform-Scopes sind die Voraussetzung für die Übernahme.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kein Dienstkonto mit delegierten Scopes zur organisationsweiten Identitätsübernahme (vollständige Gmail-/Drive-/Directory-/Cloud-Platform-Scopes); nur eng gefasste, schreibgeschützte Scopes", "status": "machine-draft" },
+    "remediationSteps": { "value": "Sicherheit > API-Steuerung > Domänenweite Delegierung: Entfernen Sie jede Berechtigung mit vollständigen mail.google.com-, vollständigen drive-, admin.directory- oder cloud-platform-Scopes oder grenzen Sie sie ein; beschränken Sie sie auf die minimal erforderlichen schreibgeschützten Scopes. Verweigern Sie in GCP die Schlüsselerstellung für delegierte Dienstkonten (iam.disableServiceAccountKeyCreation).", "status": "machine-draft" }
+  },
+  "GTRADE-002": {
+    "name": { "value": "Im Internet lesbare Google Groups", "status": "machine-draft" },
+    "description": { "value": "Gruppen, deren Themen für „jeden im Internet“ sichtbar sind, geben ihren gesamten Nachrichtenverlauf unbemerkt preis, eine Kategorie, die den internen Mailverkehr Tausender Organisationen offengelegt hat (Finanzdaten, Anmeldeinformationen, personenbezogene Daten). Google bietet für diese Offenlegung keine native Benachrichtigung.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Keine Gruppe für jeden im Internet sichtbar (whoCanViewGroup nicht ANYONE_CAN_VIEW)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Apps > Google Workspace > Groups for Business > Freigabeeinstellungen sowie Zugriffseinstellungen je Gruppe: Stellen Sie „Wer kann Unterhaltungen ansehen“ von „Jeder im Internet“ auf nur Mitglieder/Organisation um.", "status": "machine-draft" }
+  },
+  "GTRADE-003": {
+    "name": { "value": "Gruppen mit offenem Beitritt / externen Mitgliedern", "status": "machine-draft" },
+    "description": { "value": "Gruppen, denen jeder (oder jeder in der Domäne) beitreten kann oder die externe Mitglieder zulassen, weiten die Vertrauensgrenze aus und ermöglichen einen Self-Service-Zugriff; wenn eine solche Gruppe zudem Ressourcen- oder IAM-Zugriff besitzt, erbt der Beitritt diesen Zugriff (ein Weg zur Rechteausweitung, den Google als beabsichtigtes Verhalten einstuft).", "status": "machine-draft" },
+    "recommendedValue": { "value": "Gruppen auf eingeladene Mitglieder beschränkt; kein Beitritt für jeden und keine externen Mitglieder, sofern nicht ausdrücklich erforderlich", "status": "machine-draft" },
+    "remediationSteps": { "value": "Apps > Google Workspace > Groups for Business: Setzen Sie die Standardeinstellung „Wer kann beitreten“ auf „Nur eingeladene Nutzer“ und deaktivieren Sie „Externe Mitglieder zulassen“, sofern eine Gruppe sie nicht ausdrücklich benötigt; überprüfen Sie Gruppen, die Ressourcen-/IAM-Zugriff gewähren.", "status": "machine-draft" }
+  },
+  "GTRADE-004": {
+    "name": { "value": "Wildwuchs bei Super-Admins", "status": "machine-draft" },
+    "description": { "value": "Super-Administratoren umgehen SSO und die meisten Kontrollen; eine große Zahl von Super-Admins vergrößert die wertvollste Angriffsfläche der Organisation. Google empfiehlt, die Anzahl klein zu halten (weniger als fünf) und die tägliche Arbeit mit Rollen nach dem Least-Privilege-Prinzip zu erledigen.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Weniger als 5 aktive Super-Administratoren", "status": "machine-draft" },
+    "remediationSteps": { "value": "Konto > Administratorrollen > Super Admin: Reduzieren Sie die Mitgliedschaft auf das minimale Break-Glass-Set; verlagern Sie Routineaufgaben auf benutzerdefinierte/vordefinierte Rollen nach dem Least-Privilege-Prinzip; erzwingen Sie phishing-resistente 2SV für alle verbleibenden Super-Admins.", "status": "machine-draft" }
+  },
+  "GTRADE-005": {
+    "name": { "value": "Super-Admin-äquivalente benutzerdefinierte Rollen", "status": "machine-draft" },
+    "description": { "value": "Benutzerdefinierte Administratorrollen mit hochprivilegierten Berechtigungen (Nutzerverwaltung, Sicherheitseinstellungen, Rollenverwaltung, Datenexport/Takeout) können die Super-Admin-Fähigkeit annähern und dabei einer einfachen Zählung der Super-Admins entgehen, ein stiller Vektor zur Rechtekonzentration und Persistenz.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Keine benutzerdefinierte Rolle mit Super-Admin-äquivalenten Berechtigungen (Nutzer-/Sicherheits-/Rollenverwaltung oder Datenexport) außerhalb der Break-Glass-Nutzung", "status": "machine-draft" },
+    "remediationSteps": { "value": "Konto > Administratorrollen: Überprüfen Sie benutzerdefinierte Rollen mit Berechtigungen für Nutzerverwaltung, Sicherheitseinstellungen, Rollenverwaltung oder Datenexport/Takeout; teilen Sie sie in eng gefasste Rollen auf und begrenzen Sie die Zuweisungen.", "status": "machine-draft" }
+  },
+  "GTRADE-006": {
+    "name": { "value": "Persistente / überberechtigte OAuth-Berechtigungen", "status": "machine-draft" },
+    "description": { "value": "OAuth-Berechtigungen von Drittanbietern mit vollständigen Gmail-/Drive-/Admin-Scopes umgehen MFA und überstehen ein Zurücksetzen des Kennworts (Apps Script, App-Passwörter und IMAP-OAuth-Sitzungen werden durch ein Zurücksetzen nicht widerrufen), ein dauerhafter Persistenzkanal. Google protokolliert Berechtigungen, liefert jedoch standardmäßig keinen Klassifikator für schädliche Berechtigungen.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Keine OAuth-App eines Drittanbieters mit vollständigen Mail-/Drive-/Admin-Scopes; persistente Berechtigungen überprüft und ausdrücklich widerrufen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Sicherheit > API-Steuerung > App-Zugriffssteuerung: Überprüfen Sie Apps mit vollständigen Gmail-/Drive-/Directory-Scopes, beschränken Sie auf zugelassene Apps und widerrufen Sie nicht benötigte Berechtigungen ausdrücklich (ein bloßes Zurücksetzen des Kennworts widerruft OAuth-, App-Passwort- oder Apps-Script-Zugriff NICHT).", "status": "machine-draft" }
+  }
+}

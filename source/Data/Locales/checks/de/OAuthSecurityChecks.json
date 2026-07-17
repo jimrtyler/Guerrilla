@@ -1,0 +1,63 @@
+{
+  "_family": "OAuthSecurityChecks.json",
+  "OAUTH-001": {
+    "name": { "value": "OAuth-App-Zulassungsliste/Sperrliste", "status": "machine-draft" },
+    "description": { "value": "Der Zugriff von OAuth-Apps sollte über eine Zulassungs- oder Sperrliste geregelt werden, um zu verhindern, dass unautorisierte Anwendungen auf Organisationsdaten zugreifen", "status": "machine-draft" },
+    "recommendedValue": { "value": "OAuth-App-Zulassungsliste konfiguriert, mit ausschließlich genehmigten Anwendungen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > App-Zugriffssteuerung > Zugriff auf Drittanbieter-Apps verwalten > Konfigurieren Sie vertrauenswürdige/blockierte Apps", "status": "machine-draft" }
+  },
+  "OAUTH-002": {
+    "name": { "value": "Inventar der installierten OAuth-Apps", "status": "machine-draft" },
+    "description": { "value": "Alle von Nutzern installierten OAuth-Anwendungen sollten inventarisiert und überprüft werden, um unautorisierte oder riskante Anwendungen zu identifizieren, die auf Organisationsdaten zugreifen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle installierten OAuth-Apps vom Sicherheitsteam überprüft und genehmigt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > App-Zugriffssteuerung > Überprüfen Sie installierte Apps und widerrufen Sie den Zugriff für unautorisierte Anwendungen", "status": "machine-draft" }
+  },
+  "OAUTH-003": {
+    "name": { "value": "Analyse der OAuth-Scopes", "status": "machine-draft" },
+    "description": { "value": "OAuth-Anwendungen mit risikoreichen Scopes (Gmail, Drive, Admin) bergen ein erhebliches Risiko der Datenexfiltration und müssen überprüft und eingeschränkt werden", "status": "machine-draft" },
+    "recommendedValue": { "value": "Keine unautorisierten Apps mit risikoreichen Scopes (gmail, drive, admin)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > App-Zugriffssteuerung > Überprüfen Sie Apps mit sensiblen Scopes > Widerrufen oder beschränken Sie sie nach Bedarf", "status": "machine-draft" }
+  },
+  "OAUTH-004": {
+    "name": { "value": "Risikobewertung von OAuth-Apps", "status": "machine-draft" },
+    "description": { "value": "OAuth-Anwendungen sollten anhand ihrer gewährten Scopes und der Vertrauenswürdigkeit des Herausgebers risikobewertet werden, um die Sicherheitsprüfung zu priorisieren", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle risikoreichen Apps überprüft und genehmigt; keine ungeprüften Apps mit weitreichenden Scopes", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > App-Zugriffssteuerung > Überprüfen Sie nach Scope-Umfang sortierte Apps > Bearbeiten Sie risikoreiche Anwendungen", "status": "machine-draft" }
+  },
+  "OAUTH-005": {
+    "name": { "value": "Zugriffsrichtlinie für nicht verifizierte Apps", "status": "machine-draft" },
+    "description": { "value": "Der Zugriff auf nicht verifizierte Drittanbieter-Apps sollte eingeschränkt werden, um zu verhindern, dass Nutzer potenziell schädlichen Anwendungen Berechtigungen erteilen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Zugriff auf nicht verifizierte Apps für alle Nutzer blockiert", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > App-Zugriffssteuerung > Einstellungen > Nicht verifizierte Apps blockieren", "status": "machine-draft" }
+  },
+  "OAUTH-006": {
+    "name": { "value": "API-Zugriffssteuerung", "status": "machine-draft" },
+    "description": { "value": "Der API-Zugriff sollte mit angemessenem Scoping und Beschränkungen gesteuert werden, um unautorisierten programmatischen Zugriff auf Organisationsdaten zu verhindern", "status": "machine-draft" },
+    "recommendedValue": { "value": "API-Zugriff auf genehmigte Anwendungen und Scopes beschränkt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > Google-Dienste verwalten > Beschränken Sie den API-Zugriff auf ausschließlich vertrauenswürdige Apps", "status": "machine-draft" }
+  },
+  "OAUTH-007": {
+    "name": { "value": "Beschränkungen für die Installation von Marketplace-Apps", "status": "machine-draft" },
+    "description": { "value": "Die Installation von Apps aus dem Google Workspace Marketplace sollte eingeschränkt werden, um zu verhindern, dass Nutzer unautorisierte Anwendungen installieren", "status": "machine-draft" },
+    "recommendedValue": { "value": "Installation von Marketplace-Apps auf von Administratoren genehmigte oder auf der Zulassungsliste stehende Apps beschränkt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Google Workspace Marketplace-Apps > Einstellungen > Beschränken Sie die Installation von Marketplace-Apps", "status": "machine-draft" }
+  },
+  "OAUTH-008": {
+    "name": { "value": "Audit der domänenweiten Delegierungsberechtigungen", "status": "machine-draft" },
+    "description": { "value": "Die domänenweite Delegierung ermöglicht es Dienstkonten, die Identität jedes Nutzers anzunehmen und auf dessen Daten zuzugreifen. Unautorisierte oder zu freizügige Berechtigungen stellen ein kritisches Sicherheitsrisiko dar", "status": "machine-draft" },
+    "recommendedValue": { "value": "Minimale domänenweite Delegierungsberechtigungen mit eng gefassten Berechtigungen; alle Berechtigungen überprüft und genehmigt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > Domänenweite Delegierung > Überprüfen Sie alle Berechtigungen, entfernen Sie unnötige und beschränken Sie die Scopes auf das erforderliche Minimum", "status": "machine-draft" }
+  },
+  "OAUTH-009": {
+    "name": { "value": "Enumeration der Dienstkontoschlüssel", "status": "machine-draft" },
+    "description": { "value": "Dienstkontoschlüssel sollten inventarisiert und regelmäßig rotiert werden. Kompromittierte oder veraltete Schlüssel ermöglichen dauerhaften unautorisierten Zugriff", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle Dienstkontoschlüssel inventarisiert, innerhalb von 90 Tagen rotiert und ungenutzte Schlüssel entfernt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Cloud Console > IAM & Verwaltung > Dienstkonten > Überprüfen und rotieren Sie Schlüssel > Entfernen Sie ungenutzte Dienstkontoschlüssel", "status": "machine-draft" }
+  },
+  "OAUTH-010": {
+    "name": { "value": "Verbundene Apps mit sensiblen Scopes", "status": "machine-draft" },
+    "description": { "value": "Anwendungen mit Zugriff auf Drive-, Gmail- oder Kalenderdaten sollten inventarisiert und validiert werden, um Datenexfiltration über verbundene Apps zu verhindern", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle Apps mit sensiblen Scopes (Drive, Gmail, Kalender) überprüft und genehmigt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > App-Zugriffssteuerung > Nach Scope filtern (Drive, Gmail, Kalender) > Überprüfen und beschränken Sie unautorisierte Apps", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "_family": "GwsServiceChecks.json",
+  "GWS-SITES-001": {
+    "name": { "value": "Sites-Dienst deaktiviert", "status": "machine-draft" },
+    "description": { "value": "Der Google Sites-Dienst sollte für alle Nutzer deaktiviert werden, um die Angriffsfläche zu verringern, im Einklang mit dem Least-Privilege-Prinzip. Sites kann bei dokumentiertem Bedarf selektiv je Organisationseinheit oder Gruppe aktiviert werden.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Sites-Dienst für alle deaktiviert (bei Bedarf selektiv je OU/Gruppe aktivieren)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Google Workspace > Sites > Dienststatus > Für alle auf AUS setzen. Aktivieren Sie den Dienst selektiv je Organisationseinheit oder Gruppe nur dort, wo ein dokumentierter geschäftlicher Bedarf besteht.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-001": {
+    "name": { "value": "Classroom-Mitgliedschaft: Wer kann Kursen beitreten", "status": "machine-draft" },
+    "description": { "value": "Wer in Ihrer Domäne Kursen beitreten darf, sollte auf Nutzer nur in Ihrer Domäne beschränkt werden, um zu verhindern, dass externe Konten internen Kursen beitreten.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Wer kann Kursen beitreten auf „Nutzer nur in Ihrer Domäne“ gesetzt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Classroom > Kurseinstellungen > Kursmitgliedschaft > Wer kann Kursen in Ihrer Domäne beitreten > Auf „Nutzer nur in Ihrer Domäne“ setzen.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-002": {
+    "name": { "value": "Classroom-Mitgliedschaft: Welchen Kursen Nutzer beitreten können", "status": "machine-draft" },
+    "description": { "value": "Welchen Kursen Nutzer in Ihrer Domäne beitreten dürfen, sollte auf Kurse nur in Ihrer Domäne beschränkt werden, um zu verhindern, dass interne Nutzer externen Kursen beitreten, über die Daten exfiltriert werden könnten.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Welchen Kursen Nutzer beitreten können auf „Kurse nur in Ihrer Domäne“ gesetzt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Classroom > Kurseinstellungen > Kursmitgliedschaft > Welchen Kursen Nutzer in Ihrer Domäne beitreten können > Auf „Kurse nur in Ihrer Domäne“ setzen.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-003": {
+    "name": { "value": "Classroom-API-Datenzugriff eingeschränkt", "status": "machine-draft" },
+    "description": { "value": "Nutzer sollten Drittanbieter-Apps nicht autorisieren können, auf ihre Google Classroom-Daten zuzugreifen, um unkontrollierten Datenzugriff durch externe Integrationen zu verhindern.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Nutzer können keine Apps zum Zugriff auf Classroom-Daten autorisieren (API-Datenzugriff deaktiviert)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Classroom > Datenzugriff > Deaktivieren Sie das Kästchen „Nutzer können Apps zum Zugriff auf ihre Google Classroom-Daten autorisieren“.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-004": {
+    "name": { "value": "Classroom-Namenslistenimport deaktiviert", "status": "machine-draft" },
+    "description": { "value": "Der Namenslistenimport über Drittanbieter-Integrationen sollte deaktiviert werden, damit Kursnamenslisten nicht ohne ausdrückliche Governance aus externen Systemen synchronisiert werden.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Namenslistenimport AUS", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Classroom > Namenslistenimport > AUS auswählen.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-005": {
+    "name": { "value": "Classroom-Abmeldung von Schülern eingeschränkt", "status": "machine-draft" },
+    "description": { "value": "Nur Lehrkräfte sollten Schüler von Kursen abmelden dürfen, um zu verhindern, dass Schüler sich selbst oder andere entfernen und die Integrität der Kursmitgliedschaft stören.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Abmeldung von Schülern auf Lehrkräfte beschränkt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Classroom > Abmeldung von Schülern > „Nur Lehrkräfte“ auswählen.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-006": {
+    "name": { "value": "Kurserstellung auf verifizierte Lehrkräfte beschränkt", "status": "machine-draft" },
+    "description": { "value": "Die Kurserstellung sollte auf verifizierte Lehrkräfte beschränkt werden, um zu verhindern, dass unautorisierte Nutzer Kurse erstellen und Mitglieder sammeln.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kurserstellung auf verifizierte Lehrkräfte beschränkt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Classroom > Allgemeine Einstellungen > Lehrkraftberechtigungen > „Nur verifizierte Lehrkräfte“ auswählen.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-001": {
+    "name": { "value": "Gemini-App-Zugriff auf lizenzierte Nutzer beschränkt", "status": "machine-draft" },
+    "description": { "value": "Der Nutzerzugriff auf die Gemini-App sollte für alle Nutzer ohne Lizenz auf AUS gesetzt werden, damit der Zugriff auf generative KI durch die Lizenzzuweisung geregelt und nicht für alle Nutzer offen ist.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Gemini-App-Zugriff für Nutzer ohne Lizenz AUS", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Generative KI > Gemini-App > Nutzerzugriff > Deaktivieren Sie das Kästchen „Allen Nutzern den Zugriff auf die Gemini-App unabhängig von der Lizenz erlauben“.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-002": {
+    "name": { "value": "Gemini-Alpha-Funktionen deaktiviert", "status": "machine-draft" },
+    "description": { "value": "Gemini-Alpha-Funktionen sollten deaktiviert werden. Vorabversionen von Funktionen haben die Sicherheitsprüfung möglicherweise nicht abgeschlossen und können Organisationsdaten einer ungeprüften Verarbeitung aussetzen.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Zugriff auf Alpha-Funktionen in Gemini for Workspace deaktiviert", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Generative KI > Gemini for Workspace > Alpha-Funktionen > „Zugriff auf Alpha-Funktionen in Gemini for Google Workspace deaktivieren“ auswählen.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-003": {
+    "name": { "value": "Gemini-Unterhaltungsverlauf aktiviert", "status": "machine-draft" },
+    "description": { "value": "Der Gemini-Unterhaltungsverlauf sollte aktiviert werden, damit KI-Interaktionen zu Audit- und Compliance-Zwecken aufbewahrt werden. Ein deaktivierter Verlauf kann den Umgang mit Daten verschleiern.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Gemini-Unterhaltungsverlauf aktiviert", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Generative KI > Gemini-App > Gemini-Unterhaltungsverlauf > Stellen Sie sicher, dass der Unterhaltungsverlauf aktiviert ist.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-004": {
+    "name": { "value": "Gemini-Unterhaltungsaufbewahrung mindestens 18 Monate", "status": "machine-draft" },
+    "description": { "value": "Die Aufbewahrung von Gemini-Unterhaltungen sollte auf mindestens 18 Monate festgelegt werden, um Anforderungen an Audit, gesetzliche Aufbewahrungspflicht und Incident-Untersuchung zu erfüllen.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Unterhaltungsaufbewahrung auf mindestens 18 Monate festgelegt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Generative KI > Gemini-App > Gemini-Unterhaltungsverlauf > Legen Sie den Aufbewahrungszeitraum auf mindestens 18 Monate fest.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-005": {
+    "name": { "value": "Gemini-Unterhaltungsfreigabe deaktiviert", "status": "machine-draft" },
+    "description": { "value": "Die Freigabe von Gemini-Unterhaltungen per Link sollte auf AUS gesetzt werden, um zu verhindern, dass KI-Unterhaltungsinhalte, die sensible Prompts und Ausgaben enthalten können, außerhalb der vorgesehenen Empfänger freigegeben werden.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Unterhaltungsfreigabe per Link AUS", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Generative KI > Gemini-App > Freigabe > „Unterhaltungsfreigabe per Link zulassen“ auf AUS setzen.", "status": "machine-draft" }
+  }
+}

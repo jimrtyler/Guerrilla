@@ -1,0 +1,39 @@
+{
+  "_family": "LoggingAlertingChecks.json",
+  "LOG-001": {
+    "name": { "value": "Einstellungen zur Aufbewahrung von Audit-Protokollen", "status": "machine-draft" },
+    "description": { "value": "Audit-Protokolle sollten über einen angemessenen Zeitraum aufbewahrt werden, um Incident-Untersuchungen und Compliance-Anforderungen zu unterstützen. Die Standardaufbewahrung variiert je nach Workspace-Edition", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aufbewahrung von Audit-Protokollen von 12 Monaten oder länger; für die Langzeitaufbewahrung über BigQuery-Export erweitert", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Berichte > Audit und Untersuchung > Überprüfen Sie die Verfügbarkeit der Protokolle. Konfigurieren Sie den BigQuery-Export über Google Admin-Konsole > Berichte > BigQuery-Export für die Langzeitaufbewahrung", "status": "machine-draft" }
+  },
+  "LOG-002": {
+    "name": { "value": "Inventar der Regeln im Benachrichtigungscenter", "status": "machine-draft" },
+    "description": { "value": "Regeln im Benachrichtigungscenter sollten so konfiguriert werden, dass sie sicherheitsrelevante Ereignisse einschließlich verdächtiger Anmeldungen, Datenexfiltration und Richtlinienverstöße erkennen und darüber benachrichtigen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Benachrichtigungsregeln für wichtige Sicherheitsereignisse konfiguriert (verdächtige Anmeldung, Datenexfiltration, Rechteänderungen)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > Benachrichtigungscenter > Überprüfen Sie bestehende Regeln > Erstellen Sie Regeln für fehlende Kategorien von Sicherheitsereignissen", "status": "machine-draft" }
+  },
+  "LOG-003": {
+    "name": { "value": "Analyse der Abdeckung durch Aktivitätsregeln", "status": "machine-draft" },
+    "description": { "value": "Aktivitätsregeln sollten eine angemessene Abdeckung über Sicherheitsbereiche hinweg bieten, einschließlich Anmelde-, Drive-, Admin- und E-Mail-Ereignissen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aktivitätsregeln, die Anmeldung, Drive-Freigabe, Admin-Änderungen, E-Mail-Weiterleitung und OAuth-Ereignisse abdecken", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > Benachrichtigungscenter > Regeln > Überprüfen Sie die Abdeckung über Ereigniskategorien hinweg > Fügen Sie Regeln für nicht abgedeckte Sicherheitsbereiche hinzu", "status": "machine-draft" }
+  },
+  "LOG-004": {
+    "name": { "value": "Einstellungen für den Datenexport", "status": "machine-draft" },
+    "description": { "value": "Google Takeout (Datenexport) sollte gesteuert werden, um zu verhindern, dass Nutzer Organisationsdaten in großem Umfang außerhalb der Domäne exportieren", "status": "machine-draft" },
+    "recommendedValue": { "value": "Google Takeout für die meisten Nutzer deaktiviert oder eingeschränkt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Apps > Weitere Google-Dienste > Google Takeout > Für betroffene OUs deaktivieren oder einschränken", "status": "machine-draft" }
+  },
+  "LOG-005": {
+    "name": { "value": "Konfiguration der E-Mail-Benachrichtigungen für Administratoren", "status": "machine-draft" },
+    "description": { "value": "E-Mail-Benachrichtigungen sollten für kritische Administratoraktionen konfiguriert werden, einschließlich Super-Admin-Änderungen, Änderungen von Sicherheitseinstellungen und Massenvorgängen", "status": "machine-draft" },
+    "recommendedValue": { "value": "E-Mail-Benachrichtigungen für kritische Administratoraktionen und Sicherheitsereignisse aktiviert", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > Benachrichtigungscenter > Konfigurieren Sie die Empfänger von E-Mail-Benachrichtigungen für kritische Benachrichtigungstypen", "status": "machine-draft" }
+  },
+  "LOG-006": {
+    "name": { "value": "Zugriff auf die Reporting-API", "status": "machine-draft" },
+    "description": { "value": "Der Zugriff auf die Reports API sollte überprüft werden, um sicherzustellen, dass nur autorisierte Dienstkonten und Anwendungen Audit- und Nutzungsdaten abrufen können", "status": "machine-draft" },
+    "recommendedValue": { "value": "Zugriff auf die Reports API auf ausschließlich autorisierte Dienstkonten beschränkt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Admin-Konsole > Sicherheit > API-Steuerung > Domänenweite Delegierung > Überprüfen Sie Berechtigungen mit Reports-API-Scopes > Entfernen Sie unautorisierten Zugriff", "status": "machine-draft" }
+  }
+}
