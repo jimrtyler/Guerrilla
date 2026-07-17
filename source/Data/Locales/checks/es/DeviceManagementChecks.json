@@ -1,0 +1,201 @@
+{
+  "_family": "DeviceManagementChecks.json",
+  "DEVICE-001": {
+    "name": {
+      "value": "Auditoría de políticas de MDM",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los dispositivos móviles que acceden a datos de la organización deben gestionarse mediante políticas de MDM para aplicar controles de seguridad",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Todos los dispositivos móviles bajo gestión de MDM con políticas de seguridad aplicadas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles > Revise el estado de gestión de dispositivos > Habilite la gestión avanzada de MDM para los dispositivos no gestionados",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-002": {
+    "name": {
+      "value": "Requisitos de aprobación de dispositivos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los dispositivos móviles deben requerir la aprobación del administrador antes de acceder a los datos de la organización para evitar el acceso no autorizado de dispositivos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Aprobación de dispositivos requerida antes de acceder a los datos de la organización",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles y endpoints > Configuración > General > Exija la aprobación del administrador para el acceso de dispositivos",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-003": {
+    "name": {
+      "value": "Aplicación del bloqueo de pantalla",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El bloqueo de pantalla debe aplicarse en todos los dispositivos móviles para evitar el acceso físico no autorizado a los datos de la organización",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Bloqueo de pantalla aplicado con requisitos mínimos de PIN o contraseña",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles y endpoints > Configuración > Configuración universal > Bloqueo de pantalla > Aplique el bloqueo de pantalla con una complejidad mínima",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-004": {
+    "name": {
+      "value": "Requisitos de cifrado de dispositivos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El cifrado de dispositivos debe exigirse en todos los dispositivos móviles para proteger los datos en reposo frente al robo o la pérdida física",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Cifrado requerido en todos los dispositivos gestionados",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles y endpoints > Configuración > Configuración universal > Cifrado > Exija el cifrado de dispositivos",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-005": {
+    "name": {
+      "value": "Bloqueo de dispositivos comprometidos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los dispositivos comprometidos deben bloquearse automáticamente para que no accedan a los datos de la organización, con el fin de evitar la exposición de datos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Detección y bloqueo de dispositivos comprometidos habilitados",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles y endpoints > Configuración > Configuración universal > Dispositivos comprometidos > Bloquee el acceso a los datos de los dispositivos comprometidos",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-006": {
+    "name": {
+      "value": "Política de dispositivos con jailbreak o rooteados",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los dispositivos con jailbreak (iOS) o rooteados (Android) omiten los controles de seguridad a nivel del sistema operativo y debe bloquearse su acceso a los datos de la organización",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Dispositivos con jailbreak o rooteados con acceso bloqueado a los datos de la organización",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles y endpoints > Configuración > Configuración universal > Dispositivos comprometidos > Bloquee los dispositivos con jailbreak o rooteados",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-007": {
+    "name": {
+      "value": "Gestión del navegador Chrome",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los navegadores Chrome que se usan para acceder a los datos de la organización deben inscribirse en Chrome Browser Cloud Management para la aplicación de políticas",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Navegadores Chrome inscritos en Cloud Management con políticas aplicadas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Chrome > Configuración > Revise y configure las políticas del navegador Chrome para los navegadores gestionados",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-008": {
+    "name": {
+      "value": "Lista de permitidos/bloqueados de extensiones de Chrome",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las extensiones de Chrome deben gestionarse mediante una lista de permitidos o de bloqueados para evitar que extensiones maliciosas accedan a los datos de la organización",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Instalación de extensiones restringida a las extensiones aprobadas por el administrador mediante una lista de permitidos",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Chrome > Aplicaciones y extensiones > Configure la lista de permitidos y de bloqueados de extensiones",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-009": {
+    "name": {
+      "value": "Políticas de dispositivos Chrome OS",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los dispositivos Chrome OS deben tener aplicadas las políticas adecuadas, incluidas la actualización automática, las restricciones de inicio de sesión y la configuración de seguridad",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Dispositivos Chrome OS gestionados con políticas aplicadas para actualizaciones, inicio de sesión y seguridad",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Chrome > Configuración > Configuración de dispositivos > Configure la actualización automática, las restricciones de inicio de sesión y las políticas de seguridad",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-010": {
+    "name": {
+      "value": "Configuración de la verificación de endpoints",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La verificación de endpoints proporciona señales de confianza del dispositivo para las políticas de acceso contextual y debe habilitarse",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Verificación de endpoints habilitada para el acceso contextual",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles y endpoints > Configuración > General > Habilite la verificación de endpoints para las políticas de acceso contextual",
+      "status": "machine-draft"
+    }
+  },
+  "DEVICE-011": {
+    "name": {
+      "value": "Inventario de dispositivos propiedad de la empresa",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los dispositivos propiedad de la empresa deben inventariarse para mantener la visibilidad sobre los activos de la organización que acceden a los datos corporativos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Inventario completo de todos los dispositivos propiedad de la empresa mantenido",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Dispositivos > Dispositivos móviles > Revise el inventario de dispositivos > Asegúrese de que todos los dispositivos propiedad de la empresa estén registrados y contabilizados",
+      "status": "machine-draft"
+    }
+  }
+}

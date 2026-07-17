@@ -1,0 +1,453 @@
+{
+  "_family": "CollaborationChecks.json",
+  "COLLAB-001": {
+    "name": {
+      "value": "Configuración de grabación de Meet",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La configuración de grabación de reuniones debe controlarse para evitar la captura no autorizada de conversaciones sensibles",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Grabación restringida a los organizadores de la reunión o deshabilitada para las OU sensibles",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Meet > Configuración de vídeo de Meet > Grabación > Configure los permisos de grabación",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-002": {
+    "name": {
+      "value": "Configuración de participantes externos de Meet",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El acceso de participantes externos a las reuniones debe controlarse para evitar la asistencia no autorizada y la divulgación de información",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Los participantes externos requieren aprobación o solicitud de acceso (llamar a la puerta) para unirse",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Meet > Configuración de vídeo de Meet > Participantes > Exija aprobación para los participantes externos",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-003": {
+    "name": {
+      "value": "Configuración de acceso anónimo a Meet",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los usuarios anónimos (sin cuentas de Google) no deben poder unirse a las reuniones sin la aprobación explícita del organizador",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Acceso anónimo deshabilitado o que requiere la aprobación del organizador",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Meet > Configuración de vídeo de Meet > Participantes > Deshabilite el acceso anónimo o exija la solicitud de acceso",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-004": {
+    "name": {
+      "value": "Comunicación externa de Chat",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La comunicación externa de Chat debe restringirse para evitar la fuga de datos a través de mensajes directos con usuarios externos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Chat externo restringido o deshabilitado para la mayoría de los usuarios",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Chat > Configuración de Chat > Chat externo > Restrinja el chat externo a OU específicas",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-005": {
+    "name": {
+      "value": "Configuración del historial de Chat",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El historial de Chat debe habilitarse y conservarse con fines de cumplimiento y auditoría. Deshabilitar el historial puede ocultar comunicaciones maliciosas",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Historial de Chat habilitado y conservado según la política de retención",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Chat > Configuración de Chat > Historial > Habilite el historial y configure la retención",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-006": {
+    "name": {
+      "value": "Acceso externo a los espacios de Chat",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los espacios de Chat (salas) que permiten miembros externos pueden exponer comunicaciones internas y archivos compartidos a terceros no autorizados",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Acceso externo a los espacios de Chat restringido o deshabilitado",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Chat > Configuración de Chat > Espacios > Restrinja el acceso externo a los espacios",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-007": {
+    "name": {
+      "value": "Configuración de instalación de aplicaciones de Chat",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La instalación de aplicaciones de Chat (bots) debe controlarse para evitar que integraciones no autorizadas accedan a los datos de las conversaciones",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Instalación de aplicaciones de Chat restringida a las aplicaciones aprobadas por el administrador",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Google Chat > Configuración de Chat > Aplicaciones > Restrinja la instalación de aplicaciones a las aplicaciones aprobadas",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-008": {
+    "name": {
+      "value": "Uso compartido externo de Calendar",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El uso compartido de Calendar con usuarios externos debe limitarse a la información de disponibilidad (libre/ocupado) para evitar la exposición de los detalles de las reuniones y de los asistentes",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Uso compartido externo del calendario limitado únicamente a la información de disponibilidad (libre/ocupado)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Calendar > Configuración de uso compartido > Opciones de uso compartido externo > Establezca en 'Solo información de disponibilidad (libre/ocupado)'",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-009": {
+    "name": {
+      "value": "Invitaciones externas de Calendar",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Debe advertirse o restringirse a los usuarios cuando envíen invitaciones de calendario a destinatarios externos para evitar la divulgación accidental de información",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Advertencias de invitación externa habilitadas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Calendar > Configuración de uso compartido > Habilite las advertencias de invitación externa",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-010": {
+    "name": {
+      "value": "Visibilidad externa de las franjas de citas de Calendar",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La visibilidad de las franjas de citas de Calendar debe controlarse para limitar la exposición externa de la disponibilidad y de los detalles de programación",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Visibilidad externa de las franjas de citas restringida",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Aplicaciones > Google Workspace > Calendar > Configuración de uso compartido > Revise la configuración de visibilidad de las franjas de citas",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-011": {
+    "name": {
+      "value": "Etiquetado de participantes externos de Meet",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los participantes externos en las reuniones deben etiquetarse de forma visible para que los organizadores y asistentes puedan identificar fácilmente a las personas ajenas y evitar divulgar información sensible",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Etiquetado de participantes externos habilitado",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Aplicaciones > Google Workspace > Google Meet > Configuración de seguridad de Meet > Participantes externos > Habilite el etiquetado de los participantes externos",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-012": {
+    "name": {
+      "value": "Gestión de organizadores de Meet",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La gestión de organizadores debe habilitarse para que los organizadores de la reunión conserven controles de moderación como silenciar, expulsar y bloquear, con el fin de evitar el secuestro y la interrupción de las reuniones",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Gestión de organizadores habilitada",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Aplicaciones > Google Workspace > Google Meet > Configuración de seguridad de Meet > Gestión de organizadores > Habilite los controles de gestión de organizadores",
+      "status": "machine-draft"
+    }
+  },
+  "GROUP-001": {
+    "name": {
+      "value": "Acceso externo a los grupos de Google restringido (GWS.GROUPS.1.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GROUPS.1.1 exige que el uso compartido de Grupos de empresa se limite de modo que los grupos no sean accesibles para personas ajenas a la organización. Cuando la capacidad de colaboración de uso compartido del grupo no está establecida en solo-usuarios-del-dominio, el contenido del grupo, que en un centro educativo puede incluir datos de estudiantes y personal, queda al alcance de terceros externos. Esta comprobación lee la política groups_for_business.groups_sharing de la Cloud Identity Policy API y señala cualquier unidad organizativa cuya capacidad de colaboración no sea DOMAIN_USERS_ONLY.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Capacidad de colaboración de uso compartido de grupos establecida en DOMAIN_USERS_ONLY para todas las unidades organizativas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la consola de administración de Google, en Aplicaciones > Google Workspace > Grupos de empresa > Configuración de uso compartido, establezca el acceso a los grupos limitado a los usuarios de la organización (no 'Cualquier persona en Internet'), de modo que los terceros externos no puedan acceder al contenido de los grupos.",
+      "status": "machine-draft"
+    }
+  },
+  "GROUP-002": {
+    "name": {
+      "value": "Los propietarios de grupos no pueden añadir miembros externos (GWS.GROUPS.1.2)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GROUPS.1.2 exige que no se permita a los propietarios de grupos añadir miembros de fuera de la organización. Los miembros externos obtienen acceso a todo lo que se comparte con el grupo. Esta comprobación señala las unidades organizativas donde los propietarios pueden permitir miembros externos (ownersCanAllowExternalMembers está habilitado).",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Los propietarios de grupos no pueden permitir miembros externos (ownersCanAllowExternalMembers deshabilitado)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de uso compartido de Grupos de empresa, deshabilite la opción que permite a los propietarios de grupos añadir miembros de fuera de la organización, de modo que la pertenencia externa requiera una acción administrativa.",
+      "status": "machine-draft"
+    }
+  },
+  "GROUP-003": {
+    "name": {
+      "value": "Los grupos no pueden recibir correo de fuera de la organización (GWS.GROUPS.1.3)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GROUPS.1.3 exige que no se permita a los propietarios de grupos aceptar correo entrante de fuera de la organización. Permitir el correo entrante público a los grupos es un vector de phishing y spam entrante. Esta comprobación señala las unidades organizativas donde los propietarios pueden permitir el correo entrante del público (ownersCanAllowIncomingMailFromPublic está habilitado).",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Los propietarios de grupos no pueden permitir el correo entrante del público (ownersCanAllowIncomingMailFromPublic deshabilitado)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de uso compartido de Grupos de empresa, deshabilite la opción que permite a los propietarios de grupos aceptar correo entrante de fuera de la organización, restringiendo el correo de los grupos a remitentes internos salvo que se configure explícitamente.",
+      "status": "machine-draft"
+    }
+  },
+  "GROUP-004": {
+    "name": {
+      "value": "Creación de grupos restringida a administradores (GWS.GROUPS.2.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GROUPS.2.1 recomienda restringir a los administradores quién puede crear grupos en Grupos de empresa. Cuando cualquier usuario puede crear grupos, la proliferación de grupos supera la gobernanza y pueden aplicarse valores predeterminados de uso compartido externo sin revisión. Esta comprobación señala las unidades organizativas donde el nivel de acceso para crear grupos no es ADMIN_ONLY.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Nivel de acceso para la creación de grupos establecido en ADMIN_ONLY",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de Grupos de empresa, establezca 'quién puede crear grupos' únicamente en administradores, de modo que los grupos nuevos se creen de forma deliberada y hereden una configuración de uso compartido revisada.",
+      "status": "machine-draft"
+    }
+  },
+  "GROUP-005": {
+    "name": {
+      "value": "La visibilidad de las conversaciones del grupo se limita de forma predeterminada a los miembros (GWS.GROUPS.3.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GROUPS.3.1 exige que el permiso predeterminado para ver las conversaciones del grupo se limite a los miembros del grupo en lugar de a todo el dominio o al público. Una visibilidad de las conversaciones demasiado abierta expone los archivos de discusión, que pueden contener información sensible de estudiantes y personal. Esta comprobación lee viewTopicsDefaultAccessLevel de la política groups_for_business.groups_sharing y advierte cuando el valor predeterminado es más amplio que los miembros del grupo.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Acceso de visualización de conversaciones predeterminado establecido en GROUP_MEMBERS",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de Grupos de empresa, establezca el permiso predeterminado 'quién puede ver las conversaciones' en los miembros del grupo.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-013": {
+    "name": {
+      "value": "Uso compartido externo de archivos en Chat deshabilitado (GWS.CHAT.2.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.CHAT.2.1 exige que el uso compartido externo de archivos en Google Chat esté deshabilitado (establecido en ningún archivo). Permitir que se compartan archivos con usuarios externos a través de Chat es una vía directa de exfiltración de datos. Esta comprobación lee chat.chat_file_sharing y falla en cualquier unidad organizativa donde el uso compartido externo de archivos no esté establecido en NO_FILES.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Uso compartido externo de archivos en Chat establecido en NO_FILES",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la consola de administración, en Aplicaciones > Google Workspace > Google Chat > Uso compartido externo de archivos, establezca el uso compartido externo de archivos en 'Ningún archivo' para que no se puedan compartir archivos con personas ajenas a la organización a través de Chat.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-014": {
+    "name": {
+      "value": "El historial de los espacios de Chat está activado (GWS.CHAT.3.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.CHAT.3.1 exige que el historial de los espacios de Chat esté siempre activado para que las conversaciones se conserven para su supervisión, investigación y eDiscovery. Esta comprobación lee chat.space_history y advierte en cualquier unidad organizativa donde el historial de los espacios no esté establecido en HISTORY_ALWAYS_ON.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Historial de los espacios de Chat establecido en HISTORY_ALWAYS_ON",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de Google Chat, establezca el historial de los espacios en siempre activado para que las conversaciones se conserven y estén disponibles para su supervisión y eDiscovery.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-015": {
+    "name": {
+      "value": "Acceso a las reuniones restringido a la organización (GWS.MEET.2.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.MEET.2.1 exige que el acceso a las reuniones se restrinja de modo que solo puedan unirse los usuarios de la organización (o de organizaciones de Workspace de confianza). Dejar las reuniones abiertas a cualquier persona permite que terceros externos y sin autenticar accedan a sesiones que pueden incluir estudiantes. Esta comprobación lee meet.safety_access y falla en cualquier unidad organizativa donde meetingsAllowedToJoin sea más amplio que SAME_ORGANIZATION_ONLY / ANY_WORKSPACE_ORGANIZATION.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "meetingsAllowedToJoin establecido en SAME_ORGANIZATION_ONLY (o ANY_WORKSPACE_ORGANIZATION)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de seguridad de Google Meet, restrinja quién puede unirse a las reuniones a los usuarios de su organización, de modo que los participantes externos o sin autenticar no puedan unirse de forma predeterminada.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-016": {
+    "name": {
+      "value": "Transcripción automática de Meet desactivada de forma predeterminada (GWS.MEET.5.2)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.MEET.5.2 recomienda que la transcripción automática en Google Meet esté desactivada de forma predeterminada. Transcribir automáticamente las reuniones captura y almacena el contenido de las conversaciones, sensible cuando hay estudiantes presentes, sin una decisión deliberada. Esta comprobación lee meet.automatic_transcription y advierte en cualquier unidad organizativa donde esté habilitada de forma predeterminada.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Transcripción automática deshabilitada de forma predeterminada",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de Google Meet, deshabilite la transcripción automática de forma predeterminada para que el contenido de las reuniones se capture solo cuando un organizador la habilite de forma deliberada.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-017": {
+    "name": {
+      "value": "Interoperabilidad externa de Calendar gestionada (GWS.CALENDAR.3.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.CALENDAR.3.1 exige que Calendar Interop (el uso compartido de la disponibilidad libre/ocupado y de los datos del calendario con un sistema externo como Microsoft Exchange) esté desactivado salvo que se gestione de forma deliberada. Interop conecta los datos del calendario con una plataforma externa. Esta comprobación lee calendar.interoperability y advierte en cualquier unidad organizativa donde enableInteroperability esté activado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Interoperabilidad de Calendar deshabilitada salvo que se gestione de forma deliberada",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la consola de administración, en Aplicaciones > Google Workspace > Calendar > Gestión de Calendar Interop, deshabilite la interoperabilidad salvo que una integración revisada la requiera.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-018": {
+    "name": {
+      "value": "Pagos de citas de Calendar deshabilitados (GWS.CALENDAR.4.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.CALENDAR.4.1 recomienda que los horarios de citas de pago estén deshabilitados. Esta comprobación lee calendar.appointment_schedules y advierte en cualquier unidad organizativa donde enablePayments esté activado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Horarios de citas de pago deshabilitados",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de horarios de citas de Google Calendar, deshabilite los pagos salvo que la organización utilice de forma deliberada las citas de pago.",
+      "status": "machine-draft"
+    }
+  },
+  "COLLAB-019": {
+    "name": {
+      "value": "Grabación automática de Meet desactivada de forma predeterminada (GWS.MEET.5.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.MEET.5.1 recomienda que la grabación automática en Google Meet esté desactivada de forma predeterminada. La grabación automática captura y almacena el vídeo y el audio de las reuniones, sensible cuando hay estudiantes presentes, sin una decisión deliberada. Esta comprobación lee meet.automatic_recording y advierte en cualquier unidad organizativa donde esté habilitada de forma predeterminada.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Grabación automática deshabilitada de forma predeterminada",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de Google Meet, deshabilite la grabación automática de forma predeterminada para que las reuniones se graben solo cuando un organizador inicie una grabación de forma deliberada.",
+      "status": "machine-draft"
+    }
+  },
+  "GROUP-006": {
+    "name": {
+      "value": "Los grupos son visibles en el directorio (GWS.GROUPS.4.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GROUPS.4.1 exige que los grupos no puedan ocultarse del directorio; los grupos ocultos socavan la transparencia y la supervisión de con quién se puede contactar y qué acceso existe. Esta comprobación lee la política groups_for_business.groups_sharing y advierte en cualquier unidad organizativa donde los propietarios puedan ocultar grupos (ownersCanHideGroups) o los grupos nuevos estén ocultos de forma predeterminada (newGroupsAreHidden).",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Los propietarios no pueden ocultar grupos y los grupos nuevos no están ocultos de forma predeterminada",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la configuración de Grupos de empresa, impida que los propietarios de grupos oculten grupos del directorio y asegúrese de que los grupos nuevos no estén ocultos de forma predeterminada, preservando la transparencia del directorio.",
+      "status": "machine-draft"
+    }
+  }
+}

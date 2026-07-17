@@ -1,0 +1,327 @@
+{
+  "_family": "AuthenticationChecks.json",
+  "AUTH-001": {
+    "name": {
+      "value": "Aplicación obligatoria de 2SV",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La verificación en dos pasos (2SV/MFA) debe aplicarse de forma obligatoria a todos los usuarios para evitar la apropiación de cuentas mediante credenciales robadas",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Aplicada de forma obligatoria en todas las unidades organizativas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Verificación en dos pasos > Establezca la aplicación en 'Activada'",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-002": {
+    "name": {
+      "value": "Tasa de inscripción en 2SV",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Todos los usuarios activos deben tener 2SV inscrita. Las tasas de inscripción bajas dejan las cuentas vulnerables a ataques basados en credenciales",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Inscripción del 95 % o superior entre los usuarios activos",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Informes > Informes de usuario > Seguridad > Revise los usuarios sin 2SV. Establezca una fecha límite de inscripción en Seguridad > Verificación en dos pasos",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-003": {
+    "name": {
+      "value": "Robustez del método de 2SV",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las llaves de seguridad deben ser el método principal de 2SV. La 2SV basada en SMS y voz es vulnerable al intercambio de SIM (SIM swapping) y a ataques de interceptación",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Llaves de seguridad aplicadas como método principal",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Verificación en dos pasos > Establezca los métodos permitidos en 'Solo llave de seguridad'",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-004": {
+    "name": {
+      "value": "Longitud mínima de la contraseña",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La longitud mínima de la contraseña debe ser de al menos 12 caracteres para resistir los ataques de fuerza bruta y de diccionario",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Mínimo de 12 caracteres",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Gestión de contraseñas > Establezca la longitud mínima en 12 o más",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-005": {
+    "name": {
+      "value": "Restricción de reutilización de contraseñas",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los usuarios no deben poder reutilizar contraseñas recientes, lo que evita los ataques de rotación de credenciales",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Reutilización de contraseñas no permitida",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Gestión de contraseñas > Habilite 'Aplicar la política de contraseñas en el próximo inicio de sesión' y restrinja la reutilización",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-006": {
+    "name": {
+      "value": "Duración de la sesión",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La duración de la sesión web debe limitarse para reducir la ventana de secuestro de sesión y de acceso no autorizado desde dispositivos compartidos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Duración de la sesión de 12 horas o menos",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Control de sesión de Google > Establezca la duración de la sesión web",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-007": {
+    "name": {
+      "value": "Configuración de SSO",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Si SSO está configurado, debe usar protocolos seguros y proveedores de identidad de confianza",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "SSO SAML correctamente configurado con un IdP de confianza",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > SSO con IdP de terceros > Verifique la configuración",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-008": {
+    "name": {
+      "value": "Acceso de aplicaciones menos seguras",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las aplicaciones menos seguras (aplicaciones que no admiten la autenticación moderna) deben bloquearse para evitar la exposición de credenciales",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Deshabilitado para todos los usuarios",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Aplicaciones menos seguras > Establezca en 'Deshabilitar el acceso a aplicaciones menos seguras'",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-009": {
+    "name": {
+      "value": "Política de contraseñas de aplicación",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las contraseñas específicas de aplicación omiten la 2SV y deben controlarse. Si se permiten, deben requerir primero la inscripción en 2SV",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Contraseñas de aplicación restringidas o deshabilitadas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Verificación en dos pasos > Revise la configuración de las contraseñas de aplicación",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-010": {
+    "name": {
+      "value": "Configuración de las opciones de recuperación",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La recuperación de autoservicio de los usuarios debe configurarse de forma adecuada. Los superadministradores no deben tener opciones de recuperación personales para evitar la ingeniería social",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Superadministradores: sin recuperación personal. Usuarios normales: opciones de recuperación permitidas con anulación por parte del administrador",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Recuperación de cuentas > Deshabilite la recuperación personal para la OU de superadministradores",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-011": {
+    "name": {
+      "value": "Configuración de los desafíos de inicio de sesión",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los desafíos de inicio de sesión deben habilitarse para proporcionar verificación adicional cuando se detecten intentos de inicio de sesión sospechosos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Desafíos de inicio de sesión habilitados con identificación de empleado u otra verificación",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Seguridad > Autenticación > Desafíos de inicio de sesión > Habilite",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-012": {
+    "name": {
+      "value": "Inscripción en 2SV de los superadministradores",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Todas las cuentas de superadministrador deben tener 2SV inscrita. Los superadministradores tienen acceso sin restricciones a toda la configuración y los datos",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "100 % de los superadministradores inscritos en 2SV",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Informes > Informes de usuario > Seguridad > Filtre por estado de administrador > Asegúrese de que todos los superadministradores tengan 2SV inscrita",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-013": {
+    "name": {
+      "value": "Cuentas de superadministrador obsoletas",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las cuentas de superadministrador que no han iniciado sesión recientemente pueden estar huérfanas y en riesgo de compromiso. Todas las cuentas de superadministrador deben gestionarse de forma activa",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ninguna cuenta de superadministrador inactiva durante más de 90 días",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Consola de administración > Directorio > Usuarios > Filtrar por rol de administrador > Revise y elimine o suspenda las cuentas de superadministrador inactivas",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-014": {
+    "name": {
+      "value": "Inscripción en 2SV permitida",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Debe permitirse a los usuarios inscribirse en la verificación en dos pasos. Deshabilitar la inscripción en 2SV impide la adopción de MFA y deja las cuentas protegidas únicamente por contraseñas",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Inscripción en 2SV permitida en todas las unidades organizativas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Seguridad > Autenticación > Verificación en dos pasos > Establezca 'Permitir a los usuarios activar la verificación en dos pasos' en Activado para todas las unidades organizativas",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-015": {
+    "name": {
+      "value": "Periodo de gracia para la inscripción en 2SV",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El periodo de gracia antes de que los usuarios recién añadidos deban inscribirse en 2SV debe ser corto. Un periodo de gracia largo deja las cuentas sin la protección de MFA durante una ventana prolongada tras su creación",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Periodo de gracia de 7 días (168 horas) o menos",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Seguridad > Autenticación > Verificación en dos pasos > Establezca el periodo de gracia de inscripción de nuevos usuarios en 7 días o menos",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-016": {
+    "name": {
+      "value": "Autoinscripción en Protección Avanzada",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Permitir la autoinscripción en el Programa de Protección Avanzada permite que los usuarios de alto riesgo adopten las protecciones de cuenta más robustas disponibles sin intervención del administrador",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Autoinscripción en Protección Avanzada permitida en todas las unidades organizativas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Seguridad > Autenticación > Programa de Protección Avanzada > Permita que los usuarios se autoinscriban en Protección Avanzada",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-017": {
+    "name": {
+      "value": "Autorrecuperación de la cuenta de superadministrador",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La recuperación de cuenta de autoservicio para los superadministradores es una vía de apropiación de cuentas mediante ingeniería social y debe desactivarse. Los superadministradores solo deben ser recuperados por otro administrador",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Autorrecuperación de superadministradores deshabilitada en todas las unidades organizativas",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Seguridad > Autenticación > Recuperación de cuentas > Desactive 'Permitir que los superadministradores recuperen su cuenta' para todas las unidades organizativas",
+      "status": "machine-draft"
+    }
+  },
+  "AUTH-018": {
+    "name": {
+      "value": "Autorrecuperación de cuenta deshabilitada para usuarios y administradores no superadministradores (GWS.COMMONCONTROLS.8.2)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.COMMONCONTROLS.8.2 exige que la autorrecuperación de cuentas esté deshabilitada para los usuarios y las cuentas que no sean de superadministrador. La recuperación de autoservicio es un vector de apropiación de cuentas: un atacante que controle un canal de recuperación puede apoderarse de la cuenta sin recurrir al servicio de asistencia. Esta comprobación lee la política de Cloud Identity security.user_account_recovery y señala cualquier unidad organizativa donde la autorrecuperación esté habilitada.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Autorrecuperación de cuentas deshabilitada (enableAccountRecovery = false) para los usuarios y los administradores no superadministradores en todas las unidades organizativas.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En la consola de administración de Google, en Seguridad > Recuperación de cuentas, deshabilite la autorrecuperación para los usuarios (y los administradores no superadministradores), de modo que la recuperación de cuentas se gestione mediante un administrador o un proceso del servicio de asistencia en lugar de un canal controlado por el usuario.",
+      "status": "machine-draft"
+    }
+  }
+}
