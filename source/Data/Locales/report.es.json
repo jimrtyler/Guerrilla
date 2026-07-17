@@ -1,0 +1,3 @@
+{ "_language": { "code": "es", "name": "Español" },
+  "ad": { "title": { "value": "Informe de Active Directory", "status": "machine-draft" } },
+  "ioe": { "affected": { "value": "{0} afectados", "status": "machine-draft" } } }

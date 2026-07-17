@@ -1,0 +1,69 @@
+{
+  "_family": "ADTrustChecks.json",
+  "ADTRUST-001": {
+    "name": { "value": "Enumeración de relaciones de confianza", "status": "machine-draft" },
+    "description": { "value": "Se deben inventariar todas las relaciones de confianza para establecer una imagen completa del límite de autenticación. Las relaciones de confianza no documentadas amplían la superficie de ataque al permitir que usuarios de dominios externos accedan a los recursos", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas las relaciones de confianza documentadas con justificación de negocio, dirección, tipo y responsable", "status": "machine-draft" },
+    "remediationSteps": { "value": "Ejecute Get-ADTrust -Filter * para enumerar todas las relaciones de confianza. Documente cada relación de confianza con su dirección, tipo (bosque, externa, de acceso directo, de dominio Kerberos), transitividad y justificación de negocio. Revise y elimine cualquier relación de confianza que ya no responda a una necesidad de negocio", "status": "machine-draft" }
+  },
+  "ADTRUST-002": {
+    "name": { "value": "Análisis de la dirección de la confianza", "status": "machine-draft" },
+    "description": { "value": "Las relaciones de confianza entrantes permiten que usuarios de dominios externos se autentiquen en su dominio. Cada relación de confianza entrante o bidireccional debe revisarse para asegurar que el dominio de confianza mantiene controles de seguridad adecuados. Un dominio de confianza comprometido puede utilizarse para atacar su entorno", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas las direcciones de confianza justificadas y documentadas. Las relaciones de confianza bidireccionales convertidas en unidireccionales siempre que sea posible para reducir la superficie de ataque", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revise la dirección de cada relación de confianza con Get-ADTrust -Filter *. En las relaciones de confianza bidireccionales, evalúe si ambas direcciones son necesarias. Conviértalas en relaciones de confianza unidireccionales cuando la necesidad de negocio solo requiera una dirección. Documente la justificación de todas las rutas de confianza entrantes", "status": "machine-draft" }
+  },
+  "ADTRUST-003": {
+    "name": { "value": "Análisis de la transitividad de la confianza", "status": "machine-draft" },
+    "description": { "value": "Las relaciones de confianza transitivas extienden las rutas de autenticación más allá de los socios de confianza directos, lo que puede crear rutas de acceso no deseadas a través de cadenas de dominios de confianza. Cada relación de confianza transitiva debe evaluarse por la superficie de ataque ampliada que crea", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas las relaciones de confianza transitivas documentadas con un análisis completo de la ruta de transitividad. Las relaciones de confianza externas son preferibles a las de bosque cuando la transitividad no es necesaria", "status": "machine-draft" },
+    "remediationSteps": { "value": "Trace todas las rutas de confianza transitivas para identificar rutas de autenticación indirectas. En las relaciones de confianza de bosque, tenga en cuenta que todos los dominios secundarios son de confianza de forma transitiva. Considere el uso de relaciones de confianza externas (no transitivas) cuando solo se necesite acceso a un dominio específico", "status": "machine-draft" }
+  },
+  "ADTRUST-004": {
+    "name": { "value": "Estado del filtrado de SID", "status": "machine-draft" },
+    "description": { "value": "El filtrado de SID elimina los SID de dominios externos en los tokens de autenticación, lo que evita los ataques de inyección de historial de SID. Sin el filtrado de SID, un atacante que comprometa un dominio de confianza puede crear tickets que contengan SID privilegiados (como Enterprise Admins) de su dominio, logrando un compromiso total", "status": "machine-draft" },
+    "recommendedValue": { "value": "Filtrado de SID (cuarentena) habilitado en todas las relaciones de confianza externas y de bosque", "status": "machine-draft" },
+    "remediationSteps": { "value": "Verifique el estado del filtrado de SID con 'netdom trust /domain:trusted.domain /Quarantine'. Habilite el filtrado de SID con 'netdom trust /domain:trusted.domain /Quarantine:Yes'. Nota: el filtrado de SID está habilitado de forma predeterminada en las relaciones de confianza externas, pero debe verificarse en las relaciones de confianza de bosque, donde puede haberse deshabilitado deliberadamente", "status": "machine-draft" }
+  },
+  "ADTRUST-005": {
+    "name": { "value": "Detección de abuso del historial de SID", "status": "machine-draft" },
+    "description": { "value": "El historial de SID está pensado para las migraciones de dominio, pero puede utilizarse de forma abusiva para inyectar SID privilegiados en los tokens de usuario a través de los límites de confianza. Los atacantes que comprometen un dominio de confianza pueden añadir SID de Enterprise Admins o Domain Admins al historial de SID de cualquier cuenta que controlen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ninguna cuenta con valores de historial de SID que hagan referencia a grupos privilegiados. Historial de SID depurado tras completar todas las migraciones", "status": "machine-draft" },
+    "remediationSteps": { "value": "Busque cuentas con historial de SID mediante Get-ADUser -Filter {SIDHistory -like '*'} -Properties SIDHistory. Identifique cualquier entrada de historial de SID que haga referencia a grupos privilegiados (Domain Admins, Enterprise Admins, etc.). Depure el historial de SID tras la migración con Remove-ADUser y el parámetro SIDHistory. Habilite el filtrado de SID en las relaciones de confianza", "status": "machine-draft" }
+  },
+  "ADTRUST-006": {
+    "name": { "value": "Estado de la autenticación selectiva", "status": "machine-draft" },
+    "description": { "value": "La autenticación selectiva restringe qué usuarios de un dominio de confianza pueden autenticarse en los recursos de su dominio al exigir permisos explícitos en cada recurso. Sin ella, todos los usuarios autenticados del dominio de confianza pueden acceder a cualquier recurso sobre el que tengan permisos, lo que amplía significativamente la superficie de ataque", "status": "machine-draft" },
+    "recommendedValue": { "value": "Autenticación selectiva habilitada en todas las relaciones de confianza de bosque. Permisos de autenticación permitida concedidos únicamente en los recursos necesarios", "status": "machine-draft" },
+    "remediationSteps": { "value": "Habilite la autenticación selectiva en las relaciones de confianza de bosque mediante Dominios y confianzas de Active Directory > Propiedades de la relación de confianza > pestaña Autenticación > Seleccione 'Autenticación selectiva'. A continuación, conceda el permiso 'Autenticación permitida' en los objetos de equipo concretos a los que los usuarios externos necesitan acceder", "status": "machine-draft" }
+  },
+  "ADTRUST-007": {
+    "name": { "value": "Seguridad de la confianza híbrida con Azure AD", "status": "machine-draft" },
+    "description": { "value": "Las configuraciones de identidad híbrida que conectan Active Directory local con Azure AD crean rutas de ataque adicionales. Azure AD Connect, los agentes de autenticación de paso a través y los servicios de federación pueden ser objetivo de ataques para pivotar entre los entornos de nube y locales", "status": "machine-draft" },
+    "recommendedValue": { "value": "Azure AD Connect ejecutando la última versión en un servidor dedicado y reforzado. PHS preferible a PTA o federación. SSO transparente deshabilitado si no es necesario. Cuentas de emergencia solo en la nube configuradas", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revise la configuración de Azure AD Connect y asegúrese de que se ejecuta en un servidor reforzado de Tier Zero. Evalúe cambiar de la federación o PTA a la sincronización de hash de contraseñas (PHS) para reducir la superficie de ataque. Si utiliza SSO transparente, asegúrese de que la contraseña de la cuenta de equipo AZUREADSSOACC se rota. Verifique que existen cuentas de acceso de emergencia solo en la nube", "status": "machine-draft" }
+  },
+  "ADTRUST-008": {
+    "name": { "value": "Enumeración de relaciones de confianza con dominios externos", "status": "machine-draft" },
+    "description": { "value": "Las relaciones de confianza con dominios externos a la organización extienden el límite de seguridad a entidades con estándares de seguridad potencialmente diferentes. Las relaciones de confianza con dominios externos deben recibir un escrutinio adicional, ya que la organización que confía no puede controlar la postura de seguridad del dominio externo", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas las relaciones de confianza con dominios externos documentadas con evaluación de seguridad externa, requisitos de seguridad contractuales y revisión anual", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifique las relaciones de confianza con dominios externos a la organización mediante Get-ADTrust -Filter *. Para cada relación de confianza externa, verifique que existe un acuerdo de seguridad, que el filtrado de SID está habilitado, que la autenticación selectiva está configurada y que la relación de confianza se revisa anualmente", "status": "machine-draft" }
+  },
+  "ADTRUST-009": {
+    "name": { "value": "Detección de relaciones de confianza huérfanas", "status": "machine-draft" },
+    "description": { "value": "Las relaciones de confianza huérfanas hacen referencia a dominios que ya no existen o que ya no son accesibles. Estos objetos de confianza obsoletos pueden conservar credenciales y crear confusión durante las auditorías de seguridad. Deben eliminarse para reducir la superficie de ataque innecesaria y mantener una topología de confianza limpia", "status": "machine-draft" },
+    "recommendedValue": { "value": "Sin relaciones de confianza huérfanas o no resolubles presentes", "status": "machine-draft" },
+    "remediationSteps": { "value": "Enumere todas las relaciones de confianza e intente validar cada una resolviendo el nombre del dominio de confianza y probando la relación con 'netdom trust /verify'. Elimine las relaciones de confianza huérfanas cuyo dominio asociado ya no exista o sea inaccesible mediante 'netdom trust /Remove' o Dominios y confianzas de Active Directory", "status": "machine-draft" }
+  },
+  "ADTRUST-010": {
+    "name": { "value": "Antigüedad y rotación de la clave de confianza", "status": "machine-draft" },
+    "description": { "value": "Las contraseñas de confianza (claves interdominio) deben rotarse con regularidad. Las claves de confianza obsoletas aumentan la ventana para los ataques basados en credenciales. De forma predeterminada, las contraseñas de confianza rotan cada 30 días, pero esto debe verificarse, ya que las rotaciones fallidas pueden pasar desapercibidas", "status": "machine-draft" },
+    "recommendedValue": { "value": "Contraseñas de confianza rotadas en los últimos 30 días. Rotación automática de la contraseña de confianza no deshabilitada", "status": "machine-draft" },
+    "remediationSteps": { "value": "Compruebe la fecha de la última definición de la contraseña de confianza examinando el atributo trustAuthOutgoing o ejecutando 'netdom trust /domain:trusted.domain /verify'. Si la contraseña de confianza está obsoleta, restablézcala con 'netdom trust /domain:trusted.domain /Reset'. Verifique que ningún GPO ni parámetro de registro haya deshabilitado la rotación automática de la contraseña de confianza", "status": "machine-draft" }
+  },
+  "ADTRUST-011": {
+    "name": { "value": "Visualización de la jerarquía de confianza", "status": "machine-draft" },
+    "description": { "value": "Se debe mantener un mapa completo de la topología de confianza que muestre todas las relaciones de confianza, direcciones, tipos y rutas de transitividad. Esta visualización es esencial para comprender el límite de autenticación completo e identificar rutas de acceso inesperadas", "status": "machine-draft" },
+    "recommendedValue": { "value": "Diagrama de topología de confianza actualizado, mantenido y revisado trimestralmente", "status": "machine-draft" },
+    "remediationSteps": { "value": "Genere un mapa de la topología de confianza mediante herramientas automatizadas o documente manualmente todas las relaciones de confianza, incluyendo dirección, tipo, transitividad, estado del filtrado de SID y estado de la autenticación selectiva. Actualice el diagrama cada vez que se añadan, modifiquen o eliminen relaciones de confianza. Incluya el mapa en la documentación de seguridad y revíselo trimestralmente", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "_family": "ADNetworkChecks.json",
+  "ADNET-001": {
+    "name": {
+      "value": "Firma LDAP requerida en los controladores de dominio",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Cuando los controladores de dominio no requieren la firma LDAP, un atacante que pueda interceptar o forzar el tráfico LDAP (por ejemplo, mediante PetitPotam o cualquier desencadenante de autenticación NTLM) puede retransmitir la autenticación NTLM al servicio LDAP de un controlador de dominio y leer o escribir datos del directorio como el principal coaccionado. Aplicar la firma LDAP cierra el destino de retransmisión más común en un controlador de dominio.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva Default Domain Controllers Policy establece 'Controlador de dominio: requisitos de firma del servidor LDAP' en 'Requerir firma' (LDAPServerIntegrity = 2)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Controllers Policy: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Controlador de dominio: requisitos de firma del servidor LDAP' = 'Requerir firma'. Verifique con: reg query HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters /v LDAPServerIntegrity (debe ser 2). Microsoft ha estado reforzando este valor predeterminado desde 2020 (ADV190023) y lo aplicará de forma predeterminada en futuras versiones de Windows Server.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-002": {
+    "name": {
+      "value": "Enlace de canal LDAP aplicado en los controladores de dominio",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El enlace de canal LDAP vincula una autenticación LDAPS al canal TLS subyacente. Sin él, un atacante que haya interceptado una sesión LDAP protegida con TLS todavía puede retransmitir la autenticación NTLM a LDAPS. Junto con la firma LDAP, el enlace de canal elimina LDAP como objetivo de retransmisión.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva Default Domain Controllers Policy establece 'Controlador de dominio: requisitos del token de enlace de canal del servidor LDAP' en 'Siempre' (LdapEnforceChannelBinding = 2)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Controllers Policy: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Controlador de dominio: requisitos del token de enlace de canal del servidor LDAP' = 'Siempre'. Registro: HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters\\LdapEnforceChannelBinding = 2. Introducido originalmente para CVE-2017-8563.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-003": {
+    "name": {
+      "value": "Firma del servidor SMB requerida (directiva de dominio)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Sin la firma SMB requerida en el lado del servidor, un atacante que pueda posicionarse en la ruta de red o forzar la autenticación SMB puede retransmitir NTLM a SMB y ejecutar acciones de archivo como el principal coaccionado. Este es el destino de retransmisión clásico para herramientas como ntlmrelayx; aplicar la firma del lado del servidor lo cierra.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva Default Domain Policy habilita 'Servidor de red de Microsoft: firmar digitalmente las comunicaciones (siempre)' (RequireSecuritySignature en LanManServer = 1)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Policy: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Servidor de red de Microsoft: firmar digitalmente las comunicaciones (siempre)' = Habilitado. Registro: HKLM\\System\\CurrentControlSet\\Services\\LanmanServer\\Parameters\\RequireSecuritySignature = 1. Windows 11 24H2 / Server 2025 lo habilitan de forma predeterminada; las versiones de sistema operativo más antiguas necesitan una directiva explícita.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-004": {
+    "name": {
+      "value": "Firma del cliente SMB requerida (directiva de dominio)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La firma SMB del lado del cliente es la mitad del contrato que impide que una estación de trabajo sea inducida a autenticarse ante un servidor SMB malicioso (al estilo de responder). Sin ella, cualquier usuario de la red que sea engañado para resolver un nombre hostil (envenenamiento LLMNR, WPAD, etc.) entrega un hash NTLM que un atacante puede descifrar o retransmitir.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva Default Domain Policy habilita 'Cliente de red de Microsoft: firmar digitalmente las comunicaciones (siempre)' (RequireSecuritySignature en LanmanWorkstation = 1)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Policy: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Cliente de red de Microsoft: firmar digitalmente las comunicaciones (siempre)' = Habilitado. Registro: HKLM\\System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters\\RequireSecuritySignature = 1.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-005": {
+    "name": {
+      "value": "LLMNR deshabilitado por directiva de dominio",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Link-Local Multicast Name Resolution es un mecanismo de reserva basado en difusión que cualquier host del segmento local puede responder. Responder.py y herramientas similares suplantan la respuesta, recolectan los desafíos-respuesta NTLMv2 y los descifran sin conexión o los retransmiten. Deshabilitar LLMNR en todo el dominio es el refuerzo de estación de trabajo de mayor impacto que puede realizar para una postura frente a pruebas de intrusión internas.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva Default Domain Policy habilita 'Desactivar la resolución de nombres de multidifusión' (directiva DnsClient EnableMulticast = 0)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Policy: Configuración del equipo > Directivas > Plantillas administrativas > Red > Cliente DNS > 'Desactivar la resolución de nombres de multidifusión' = Habilitado. Registro: HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\\EnableMulticast = 0.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-006": {
+    "name": {
+      "value": "Configuración de NetBIOS sobre TCP/IP revisada",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "NetBIOS-NS es la segunda vía de los ataques de envenenamiento de resolución de nombres después de LLMNR. Deshabilitarlo a nivel de DHCP/interfaz requiere un restablecimiento de la configuración de red que la GPO no puede expresar por completo; sin embargo, el valor NetbiosOptions de Tcpip\\Parameters\\Interfaces se puede establecer mediante la opción de ámbito DHCP 1 o directamente en el registro. Esta comprobación informa si ALGÚN artefacto de directiva de todo el dominio lo aborda, para que el auditor sepa si debe investigar en la capa de DHCP o de imagen.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Existe un método de todo el dominio para deshabilitar NetBIOS sobre TCP/IP en las estaciones de trabajo (opción DHCP 1 = 0x2, preferencia de directiva de grupo o línea base de imagen)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Deshabilite NetBIOS sobre TCP/IP en toda la flota. Opciones: (1) Establezca la opción de ámbito DHCP Microsoft Disable Netbios Option (opción 1) en 0x2; (2) Preferencias de directiva de grupo > Configuración de Windows > Registro para insertar NetbiosOptions = 2 en cada clave Tcpip_<Interface>; (3) Incorpórelo a la línea base de imagen de la estación de trabajo. Este parámetro es específico de la interfaz y no se puede abordar directamente mediante la configuración de seguridad estándar de GPO.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-007": {
+    "name": {
+      "value": "Postura de mitigación de mitm6 en IPv6",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "mitm6 es el equivalente en IPv6 de Responder: un servidor DHCPv6 malicioso entrega un servidor DNS de enlace local y luego envenena las búsquedas de WPAD para recolectar credenciales. Las empresas que no han implementado IPv6 normalmente tampoco lo han deshabilitado, dejando IPv6 de enlace local habilitado sin ninguna postura defensiva. La mitigación consiste en implementar IPv6 correctamente con RA Guard / DHCPv6 Guard en el conmutador, o deshabilitar los componentes de IPv6 mediante DisabledComponents = 0xFF.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "IPv6 está deshabilitado en todo el dominio mediante DisabledComponents = 0xFF, O la red tiene RA Guard + DHCPv6 Guard implementados en la capa de acceso (fuera de banda, no detectable desde AD)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Si no usa IPv6: inserte HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\DisabledComponents = 0xFF (hex) mediante el Registro de GPO en todas las estaciones de trabajo y servidores. Si usa IPv6: asegúrese de que sus conmutadores de acceso apliquen DHCPv6 Guard / RA Guard para que los anuncios DHCPv6 no autorizados se descarten en el puerto. Microsoft ha declarado explícitamente que deshabilitar IPv6 por completo no es recomendable para Windows, pero es aceptable en entornos donde IPv6 no se utiliza.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-008": {
+    "name": {
+      "value": "Detección automática de WPAD deshabilitada",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Web Proxy Auto-Discovery resuelve el nombre 'wpad' mediante DNS, NetBIOS o LLMNR y confía en cualquier configuración de proxy que reciba. Un atacante puede envenenar cualquiera de esas resoluciones y actuar como proxy del tráfico web de la víctima. Incluso con LLMNR y NetBIOS deshabilitados, el servicio WinHttpAutoProxySvc todavía puede intentar WPAD, por lo que se recomienda una GPO de defensa en profundidad que deshabilite WPAD por completo.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Una GPO deshabilita WPAD mediante 'Desactivar el almacenamiento en caché de resultados de proxy automático' o estableciendo el tipo de inicio de WinHttpAutoProxySvc en 4 (deshabilitado), o el servidor DNS tiene una entrada wpad en GlobalQueryBlockList",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Tres controles complementarios: (1) Agregue 'wpad' a la GlobalQueryBlockList del servidor DNS: dnscmd /Config /GlobalQueryBlockList wpad isatap; (2) Deshabilite el servicio WinHttpAutoProxySvc mediante la directiva de Servicios de GPO; (3) GPO de Internet Explorer / Edge: 'Deshabilitar el cambio de la configuración automática' y asegúrese de que no haya ninguna URL de PAC configurada automáticamente. (1) es la corrección de mayor impacto.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-009": {
+    "name": {
+      "value": "Servicio de cola de impresión en los controladores de dominio",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El servicio de cola de impresión (Print Spooler) en un controlador de dominio es el punto de conexión RPC explotado por la técnica de coacción PrinterBug (y una larga lista de derivados, incluida la CVE-2021-1675 PrintNightmare original). Combinado con cualquier destino de retransmisión NTLM (ADCS Web, LDAP sin firma, SMB sin firma), otorga a un atacante no autenticado una primitiva para coaccionar a la cuenta de equipo del controlador de dominio a autenticarse ante un objetivo de su elección. El servicio de cola de impresión rara vez es necesario en un controlador de dominio.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "El servicio de cola de impresión está deshabilitado (tipo de inicio 4) en la directiva Default Domain Controllers Policy",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Controllers Policy: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Servicios del sistema > Cola de impresión > 'Definir esta configuración de directiva' = Deshabilitado. Esto se propaga a todos los controladores de dominio en el siguiente gpupdate. Verifique en cada controlador de dominio: Get-Service Spooler debe mostrar Status=Stopped, StartType=Disabled. Si un controlador de dominio también ejecuta servicios de impresión (no debería), busque primero otro host para ese rol.",
+      "status": "machine-draft"
+    }
+  },
+  "ADNET-010": {
+    "name": {
+      "value": "Estado predeterminado del servicio WebClient en las estaciones de trabajo",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El servicio WebClient (redireccionador WebDAV) permite a un atacante coaccionar la autenticación HTTP desde una estación de trabajo haciendo referencia a una ruta UNC que comienza con un nombre de host que contiene una '@' (por ejemplo, \\\\attacker@80\\share). Este es el análogo de PetitPotam en la estación de trabajo y es el origen de retransmisión que se utiliza con más frecuencia para atacar la inscripción web de ADCS (ESC8). WebClient se inicia bajo demanda, pero debe establecerse en Deshabilitado en todo el dominio para las estaciones de trabajo no móviles.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva Default Domain Policy deshabilita el servicio WebClient (tipo de inicio 4) para todas las estaciones de trabajo y servidores miembro que no requieren WebDAV",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Edite la directiva Default Domain Policy: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Servicios del sistema > WebClient > 'Definir esta configuración de directiva' = Deshabilitado. Si un subconjunto de hosts (por ejemplo, clientes de SharePoint) realmente necesita WebDAV, aplique una GPO opuesta solo a esas OU. Supervise la reactivación repentina.",
+      "status": "machine-draft"
+    }
+  }
+}

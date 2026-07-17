@@ -1,0 +1,39 @@
+{
+  "_family": "ADAttackPathChecks.json",
+  "ADPATH-001": {
+    "name": {
+      "value": "Rutas de escalada hacia Tier-0",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Modela el control no predeterminado sobre objetos de Tier-0 (la raíz del dominio, AdminSDHolder, la OU de Domain Controllers y los contenedores de GPO / Configuration / Schema) como RUTAS de escalada de privilegios e informa de la técnica de toma de control concreta que habilita cada una. Cualquier principal no predeterminado que posea derechos de GenericAll / WriteDacl / WriteOwner / replicación sobre uno de estos objetos constituye una ruta de un salto hacia la equivalencia con Domain Admin. También señala los grupos no predeterminados anidados dentro de un grupo de Tier-0 como pivotes de escalada: controlar dicho grupo, o ser agregado a él, otorga los privilegios del grupo de Tier-0. El cálculo completo de la cadena de control transitiva en todo el dominio (un usuario de bajo privilegio a través de una cadena de aristas GenericWrite/AddMember hasta Domain Admins) requiere la recolección de ACL de todo el dominio, que es un elemento aparte de la hoja de ruta.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ningún principal no predeterminado tiene control sobre los objetos de Tier-0.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Para cada ruta informada, elimine del DACL del objeto de destino la ACE controlable por el atacante (Usuarios y equipos de Active Directory > Seguridad avanzada, o Set-Acl), o elimine el principal del grupo que se lo concede. Solo los administradores de Tier-0 deberían poseer derechos de GenericAll/WriteDacl/WriteOwner o de replicación sobre la raíz del dominio, AdminSDHolder, la OU de Domain Controllers y los contenedores Policies/Configuration/Schema.",
+      "status": "machine-draft"
+    }
+  },
+  "ADPATH-002": {
+    "name": {
+      "value": "Cadenas de escalada transitiva hacia Tier-0",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Calcula cadenas de escalada de privilegios de MÚLTIPLES SALTOS hacia Tier-0 siguiendo de forma transitiva las aristas de control (GenericAll / WriteDacl / WriteOwner / AddMember) y de pertenencia a grupos, por ejemplo HelpDesk --[WriteDacl]--> CORP-Admins --[MemberOf]--> Domain Admins. Complementa a ADPATH-001 (salto único) encadenando aristas de longitud arbitraria e informando de la ruta más corta por principal. La PROFUNDIDAD de la cadena está limitada por la cobertura de recolección de ACL: con la recolección actual de seis objetos críticos, la mayoría de las cadenas son de un solo salto, por lo que esta comprobación suele estar limpia hoy en día; el recolector de ACL de todo el dominio (hoja de ruta, restringido a entorno en vivo) rellena las aristas de control sobre objetos arbitrarios y desbloquea cadenas profundas de bajo privilegio hasta Domain Admin. El motor en sí encadena a profundidad arbitraria (ruta más corta BFS, a prueba de ciclos).",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ninguna cadena de control transitiva lleva a un principal no privilegiado hasta Tier-0.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Para cada cadena, rompa el eslabón más débil: elimine la ACE controlable por el atacante en el primer salto (el control del principal no privilegiado sobre el siguiente objeto de la cadena), o elimine el grupo anidado del grupo de Tier-0. Vuelva a ejecutar la comprobación para confirmar que la cadena queda cortada.",
+      "status": "machine-draft"
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "_family": "ADLoggingChecks.json",
+  "ADLOG-001": {
+    "name": {
+      "value": "Directiva de auditoría avanzada configurada",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "La antigua directiva de auditoría de nueve categorías es demasiado imprecisa para las investigaciones modernas: puede indicarte que ALGO falló en 'Auditar eventos de inicio de sesión de cuenta', pero no si fue un error de preautenticación de Kerberos, una solicitud de vale de servicio o un paso de credenciales explícito. Windows admite la directiva de auditoría avanzada (más de 60 subcategorías) desde Vista, pero hay que habilitarla de forma expresa. La presencia de audit.csv en la carpeta SYSVOL de la Default Domain Controllers Policy es el indicador observable de que el dominio ha migrado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La Default Domain Controllers Policy incluye un audit.csv (Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Configuración de directiva de auditoría avanzada > Directivas de auditoría > <subcategorías>).",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Abre la Default Domain Controllers Policy en GPMC. Ve a Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Configuración de directiva de auditoría avanzada > Directivas de auditoría. Habilita como mínimo: Inicio de sesión de cuenta > Operaciones de vale de servicio Kerberos (Correcto+Erróneo), Inicio y cierre de sesión > Inicio de sesión (Correcto+Erróneo) + Inicio de sesión especial (Correcto), Administración de cuentas > todo (Correcto), Acceso a objetos > Recurso compartido de archivos + Recurso compartido de archivos detallado (Correcto+Erróneo si se supervisa el movimiento lateral), Seguimiento detallado > Creación de procesos (Correcto). Habilita también 'Auditoría: forzar la configuración de subcategorías de directiva de auditoría' en Opciones de seguridad para que tenga prioridad sobre la antigua configuración de nueve categorías.",
+      "status": "machine-draft"
+    }
+  },
+  "ADLOG-002": {
+    "name": {
+      "value": "Registro de bloques de script de PowerShell habilitado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El evento 4104 (registro de bloques de script de PowerShell) es el evento de Windows más útil para investigar intrusiones modernas: captura el código PowerShell que realmente se ejecuta tras la desofuscación, incluido el código pasado mediante -EncodedCommand. Sin él, un investigador que analiza el despliegue de ransomware basado en PowerShell está a ciegas. El parámetro lo entrega una plantilla administrativa en HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging\\EnableScriptBlockLogging.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva de grupo 'Activar el registro de bloques de script de PowerShell' está habilitada en el nivel de dominio o de la OU de controladores de dominio. Registro: EnableScriptBlockLogging = 1.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configuración del equipo > Directivas > Plantillas administrativas > Componentes de Windows > Windows PowerShell > 'Activar el registro de bloques de script de PowerShell' = Habilitado. Verifica tras gpupdate: Get-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging'. Asegúrate de que la capacidad del registro de eventos de 'Microsoft-Windows-PowerShell/Operational' esté dimensionada para el volumen (los 15 MB predeterminados rotarán en cuestión de horas bajo carga).",
+      "status": "machine-draft"
+    }
+  },
+  "ADLOG-003": {
+    "name": {
+      "value": "Registro de módulos de PowerShell habilitado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El evento 4103 (registro de módulos de PowerShell) registra las invocaciones de cmdlets y parámetros de cualquier módulo configurado para el registro. Combínalo con el registro de bloques de script y tendrás una pila de telemetría de alta confianza para cualquier ataque basado en PowerShell. El parámetro lo entrega una plantilla administrativa en HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ModuleLogging.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva de grupo 'Activar el registro de módulos' está habilitada con al menos la lista de nombres de módulo '*'. Registro: EnableModuleLogging = 1.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configuración del equipo > Directivas > Plantillas administrativas > Componentes de Windows > Windows PowerShell > 'Activar el registro de módulos' = Habilitado. Añade '*' a la lista de nombres de módulo (registra todos los módulos) o específicamente Microsoft.PowerShell.* más los módulos que tu entorno utiliza para la administración.",
+      "status": "machine-draft"
+    }
+  },
+  "ADLOG-004": {
+    "name": {
+      "value": "Auditoría de creación de procesos con línea de comandos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El evento 4688 (creación de procesos) es la señal fundamental de movimiento lateral: indica qué proceso se inició y quién lo hizo. El evento 4688 predeterminado NO incluye la línea de comandos, lo que lo vuelve casi inútil para investigaciones que impliquen PowerShell, wmic, mshta u otros binarios living-off-the-land. La directiva 'Incluir línea de comandos en los eventos de creación de procesos' cubre esa carencia.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva de grupo 'Incluir línea de comandos en los eventos de creación de procesos' está habilitada Y la subcategoría de directiva de auditoría avanzada 'Auditar la creación de procesos' está establecida en Correcto.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Dos parámetros, ambos obligatorios: (1) Configuración del equipo > Directivas > Plantillas administrativas > Sistema > Auditar la creación de procesos > 'Incluir línea de comandos en los eventos de creación de procesos' = Habilitado. (2) Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Configuración de directiva de auditoría avanzada > Seguimiento detallado > Auditar la creación de procesos = Correcto. Sin (1), los eventos 4688 llegan sin la cadena de argumentos NewProcessName. Sin (2), no llegan en absoluto.",
+      "status": "machine-draft"
+    }
+  },
+  "ADLOG-005": {
+    "name": {
+      "value": "Directiva de protección contra alteraciones de Microsoft Defender",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Si tu EDR puede desactivarse desde el endpoint sin una acción administrativa, todo atacante lo desactivará como primer paso de su manual de operaciones. La protección contra alteraciones de Defender (y su equivalente en cualquier EDR moderno) bloquea la desactivación local. Esta comprobación busca los parámetros de GPO que rigen la protección en tiempo real de Defender: el estado completo de la protección contra alteraciones se establece en la nube (portal de Intune/MDE), pero el refuerzo del lado de GPO es verificable desde SYSVOL.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "El usuario local no puede deshabilitar la protección en tiempo real de Defender; las exclusiones están estrictamente controladas (o vacías); SmartScreen mejorado está activado. La protección contra alteraciones en sí se establece a través del portal en la nube de Microsoft Defender para Endpoint: verifícalo por otra vía.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En el portal de MDE: Configuración > Endpoints > Características avanzadas > Protección contra alteraciones = Activada (aplicar a todos los dispositivos). En GPO: Configuración del equipo > Directivas > Plantillas administrativas > Componentes de Windows > Antivirus de Microsoft Defender > 'Desactivar el Antivirus de Microsoft Defender' = Deshabilitado (sí, doble negación: esto significa 'NO permitir desactivar Defender'). Además: > Protección en tiempo real > 'Desactivar la protección en tiempo real' = Deshabilitado. Revisa con atención la subclave de exclusiones: cada entrada ahí es un agujero que un atacante encontrará.",
+      "status": "machine-draft"
+    }
+  },
+  "ADLOG-006": {
+    "name": {
+      "value": "Administrador de suscripciones de reenvío de eventos de Windows (WEF)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los registros que solo existen en el host que los generó son exactamente tan útiles como el disco local de ese host después de que el atacante lo borre. El reenvío de eventos de Windows envía los registros fuera del equipo a un recopilador en el momento de la escritura. Sin una GPO de SubscriptionManager que apunte cada endpoint al recopilador, el WEF no se produce.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "La directiva de grupo 'Configurar el administrador de suscripciones de destino' está establecida en estaciones de trabajo y servidores para apuntar al recopilador WEF.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configuración del equipo > Directivas > Plantillas administrativas > Componentes de Windows > Reenvío de eventos > 'Configurar el administrador de suscripciones de destino' = Habilitado. Valor: Server=http://wec-server.domain.tld:5985/wsman/SubscriptionManager/WEC,Refresh=60. Configura las suscripciones en el recopilador con consultas xpath para los eventos que te interesan (4624, 4625, 4688, 4768, 4769, 4104, 1102, etc.). Si no tienes un recopilador WEF, este es el proyecto por el que empezar; casi siempre es más económico que un despliegue completo de agente SIEM para la misma telemetría.",
+      "status": "machine-draft"
+    }
+  },
+  "ADLOG-007": {
+    "name": {
+      "value": "Indicador de despliegue de Sysmon",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Sysmon (System Monitor, de Sysinternals) es la fuente de telemetría de endpoint de referencia para los eventos que el registro nativo de Windows no cubre bien: hash de archivo en la creación de procesos, conexiones de red por proceso, cargas de DLL, supervisión del registro y canalizaciones con nombre. Se ejecuta como un controlador en modo kernel. No hay detección desde el lado de GPO de 'Sysmon está instalado' solo desde SYSVOL: el indicador es la presencia de una GPO de configuración de Sysmon o un script de inicio que lo despliega. Esta comprobación genera una ADVERTENCIA y pide al auditor que lo verifique por otra vía.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Sysmon está instalado en estaciones de trabajo y servidores mediante una GPO de despliegue o un envío desde la gestión de configuración, con una configuración ajustada al entorno (SwiftOnSecurity, Olaf Hartong o líneas base proporcionadas por el proveedor).",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Despliega Sysmon (https://download.sysinternals.com/files/Sysmon.zip) mediante un script de inicio de GPO o tu plataforma de gestión de configuración. Usa una línea base de la comunidad como punto de partida (SwiftOnSecurity/sysmon-config u Olaf Hartong/sysmon-modular). Verifica el despliegue mediante Get-CimInstance Win32_Service -Filter \"Name='Sysmon64'\" en un conjunto representativo de hosts, o consulta al recopilador WEF los eventos de 'Microsoft-Windows-Sysmon/Operational'.",
+      "status": "machine-draft"
+    }
+  }
+}

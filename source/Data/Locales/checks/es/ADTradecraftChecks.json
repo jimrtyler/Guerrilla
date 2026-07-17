@@ -1,0 +1,183 @@
+{
+  "_family": "ADTradecraftChecks.json",
+  "ADTRADE-001": {
+    "name": {
+      "value": "Restos de cpassword de Preferencias de directiva de grupo en SYSVOL",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Desde 2008 hasta mayo de 2014, las Preferencias de directiva de grupo permitían a los administradores insertar tareas programadas, contraseñas de usuarios locales, unidades asignadas y servicios mediante un campo 'cpassword', cifrado con una clave AES-256 que Microsoft documentó públicamente. La corrección de MS14-025 deshabilitó el campo cpassword en las NUEVAS preferencias, pero dejó intactas las existentes en SYSVOL. Todos los ejercicios de equipo rojo siguen encontrando estos casos. Cualquier usuario del dominio autenticado puede leer SYSVOL, obtener el cpassword y descifrarlo sin conexión. Si encuentra algo aquí, trate cada credencial expuesta como comprometida y rótela.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Cero atributos cpassword en cualquier ubicación bajo \\\\domain\\SYSVOL\\domain\\Policies\\**\\*.xml.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Analice SYSVOL: Get-ChildItem -Path \\\\<domain>\\SYSVOL\\<domain>\\Policies -Recurse -Include *.xml | Select-String 'cpassword'. Para cada coincidencia: (1) rote la contraseña de la cuenta cuya credencial está expuesta (el nombre de usuario está en el mismo XML), (2) audite los registros en busca de uso de esa credencial desde que se creó la preferencia, (3) elimine la preferencia GPP una vez que la nueva credencial esté en su lugar. El artículo KB2962486 de Microsoft contiene la guía de limpieza.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-002": {
+    "name": {
+      "value": "Indicador de DCShadow (servidores no autorizados en la partición de configuración)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "DCShadow (Vincent LE TOUX / Benjamin Delpy, BlueHat IL 2018) registra un host controlado por el atacante como controlador de dominio escribiendo objetos nTDSDSA y server bajo CN=Sites,CN=Configuration. El controlador de dominio falso se utiliza luego para inyectar datos de replicación maliciosos (historial de SID, hashes de contraseñas) sin llegar a ser nunca un controlador de dominio real. NOTA: en dominios de larga duración, un objeto server sin correspondencia es con mucha más frecuencia METADATOS RESIDUALES DE UN DC (un DC eliminado sin 'ntdsutil metadata cleanup') que un ataque DCShadow real, por lo que se clasifica como Alto en lugar de Crítico. Investigue la marca de tiempo whenCreated para distinguir un objeto creado recientemente (sospechoso) de metadatos antiguos y obsoletos.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Todos los objetos server bajo CN=Sites,CN=Configuration corresponden a controladores de dominio reales e inventariados. Ningún objeto server creado recientemente que no coincida con un DC conocido.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Enumere: Get-ADObject -Filter {objectClass -eq 'server'} -SearchBase \"CN=Sites,$((Get-ADRootDSE).configurationNamingContext)\" -Properties whenCreated, dNSHostName | Sort whenCreated. Contraste con su inventario de DC (Get-ADDomainController -Filter *). Cualquier objeto server que no coincida con un DC real, especialmente si se creó recientemente, exige una respuesta a incidentes inmediata: DCShadow es una primitiva del nivel de toma de control del dominio. Supervise los eventos 5137 / 5141 en el contenedor de esquema como señal en tiempo de detección.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-003": {
+    "name": {
+      "value": "Claves de recuperación de BitLocker obsoletas",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las claves de recuperación de BitLocker se almacenan en Active Directory como objetos secundarios msFVE-RecoveryInformation del equipo que realizó la copia de seguridad. Cuando un equipo se retira pero el objeto de AD queda colgado, las claves de recuperación siguen siendo consultables por cualquiera que tenga derechos de recuperación de BitLocker, normalmente un grupo más amplio que 'Tier Zero'. Las claves obsoletas implican que las unidades desechadas pueden descifrarse si se recuperan de un reacondicionador o de un contenedor de basura.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Todos los objetos msFVE-RecoveryInformation pertenecen a equipos activos en los últimos 90 días. Ninguna clave huérfana de cuentas de equipo deshabilitadas o modificadas recientemente pero ya obsoletas.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Enumere la información de recuperación: Get-ADObject -Filter {objectClass -eq 'msFVE-RecoveryInformation'} -Properties whenCreated. Para cada una, ascienda hasta el objeto de equipo principal y compruebe su lastLogonTimestamp / Enabled. Para equipos inactivos durante más de 90 días: confirme que la unidad se ha borrado o destruido y, a continuación, elimine el objeto de equipo de AD (lo que elimina en cascada la información de recuperación). Para equipos en uso activo pero con claves de recuperación muy antiguas: rótelas mediante Backup-BitLockerKeyProtector. Verifique que el grupo de recuperación de BitLocker tenga una pertenencia restringida.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-004": {
+    "name": {
+      "value": "Higiene de la directiva de replicación de contraseñas de RODC",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los controladores de dominio de solo lectura (RODC) almacenan en caché las contraseñas de los principales enumerados en su directiva de replicación de contraseñas (PRP). Si una cuenta de Tier Zero (Domain Admin, Enterprise Admin, krbtgt) es alcanzable por la PRP de un RODC, ya sea directamente o mediante anidamiento de grupos, comprometer el RODC compromete esas cuentas. El grupo predeterminado 'Denied RODC Password Replication Group' debería contener explícitamente DA / EA / SA / Schema Admins / krbtgt; algunos entornos personalizan la directiva y eliminan accidentalmente esas denegaciones.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Todos los RODC del dominio tienen una directiva de replicación de contraseñas en la que Domain Admins, Enterprise Admins, Schema Admins, krbtgt y Account Operators son miembros del lado de denegación. Ninguna cuenta con privilegios elevados es miembro del lado de permiso.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Para cada RODC: Get-ADDomainController -Filter {IsReadOnly -eq $true} | ForEach-Object { Get-ADDomainControllerPasswordReplicationPolicy -Identity $_ -Allowed; Get-ADDomainControllerPasswordReplicationPolicy -Identity $_ -Denied }. Verifique que la lista de denegados contenga el grupo integrado 'Denied RODC Password Replication Group'. Si su entorno no tiene RODC, esta comprobación es N/A: PASS. La guía de planificación de RODC de Microsoft contiene la plantilla canónica de PRP.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-005": {
+    "name": {
+      "value": "Rotación de claves de la cuenta de equipo de SSO fluido de Entra (AZUREADSSOACC$)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Cuando el inicio de sesión único fluido de Entra (Azure AD) está habilitado para identidad híbrida, Active Directory crea una cuenta de equipo denominada AZUREADSSOACC$. Su contraseña es la clave Kerberos compartida que Entra utiliza para validar los tickets de SSO. Microsoft documenta que esta clave NO se rota automáticamente: los administradores deben renovarla. Si un atacante extrae la clave de AZUREADSSOACC$ (es un hash NT normal legible mediante DCSync o desde un controlador de dominio), puede falsificar tickets Silver de Kerberos para el servicio de Azure AD y autenticarse como CUALQUIER usuario híbrido sincronizado, sin más interacción, mientras la clave siga siendo válida. Una clave que no se ha rotado en más de 90 días amplía drásticamente esa ventana.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Clave Kerberos de AZUREADSSOACC$ rotada al menos cada 90 días (renuévela dos veces por rotación para invalidar la clave anterior).",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Rote la clave de SSO fluido en una máquina con el módulo de Entra Connect / Azure AD: Import-Module 'C:\\Program Files\\Microsoft Azure Active Directory Connect\\AzureADSSO.psd1'; New-AzureADSSOAuthenticationContext; Update-AzureADSSOForest. Realice la rotación dos veces (la cuenta almacena la clave actual y la anterior) y prográmela de forma recurrente. Si el SSO fluido ya no se utiliza, deshabilítelo y elimine el objeto AZUREADSSOACC$.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-006": {
+    "name": {
+      "value": "Credenciales en la sombra (msDS-KeyCredentialLink) en principales privilegiados",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "El atributo msDS-KeyCredentialLink contiene claves públicas utilizadas para el inicio de sesión PKINIT sin contraseña / Windows Hello para Empresas. Un atacante con acceso de escritura a este atributo en un objetivo puede añadir su PROPIO par de claves (Whisker / pyWhisker) y luego solicitar un TGT de Kerberos como esa cuenta usando la clave privada correspondiente: una técnica sigilosa de persistencia y suplantación conocida como 'credenciales en la sombra'. Cualquier credencial de clave inesperada en un objeto de Tier Zero (un administrador de dominio, un controlador de dominio o cualquier cuenta con adminCount=1) debe tratarse como una posible puerta trasera hasta que se demuestre que es una inscripción legítima de WHfB.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ningún valor msDS-KeyCredentialLink no reconocido en principales privilegiados/de Tier Zero; cada clave corresponde a una inscripción conocida de WHfB/sin contraseña.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Para cada principal marcado, inspeccione las credenciales de clave (Get-ADObject -Properties msDS-KeyCredentialLink, o el cmdlet Get-ADKeyCredential de DSInternals) y correlacione cada clave de dispositivo con una inscripción legítima de Windows Hello para Empresas. Elimine cualquier entrada que no pueda atribuir a una inscripción autorizada. Restrinja quién puede escribir msDS-KeyCredentialLink (audite Key Admins / Enterprise Key Admins y las DACL de OU/objeto que conceden esa escritura). Restablezca las cuentas afectadas si se sospecha un compromiso.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-007": {
+    "name": {
+      "value": "Superficie de escalada de migración de dMSA BadSuccessor",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Windows Server 2025 introdujo las cuentas de servicio administradas delegadas (dMSA, clase de objeto msDS-DelegatedManagedServiceAccount) con una función de migración: una dMSA puede marcarse como sustituta de una cuenta existente, tras lo cual hereda los privilegios y las claves Kerberos de esa cuenta. La técnica 'BadSuccessor', divulgada en 2024, abusa de esto: un principal que solo puede CREAR una dMSA en una OU (CreateChild en la clase dMSA, o permisos amplios de escritura/GenericAll sobre la OU) puede crear una, apuntarla a una cuenta privilegiada y heredar sus claves, escalando a esa cuenta sin tener nunca derechos sobre ella directamente. Esta comprobación inventaria las OU donde un principal que no es de Tier Zero tiene esa capacidad.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ningún principal que no sea de Tier Zero puede crear ni escribir una MSA delegada (msDS-DelegatedManagedServiceAccount) en ninguna OU.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "En cada OU marcada, elimine CreateChild (para la clase msDS-DelegatedManagedServiceAccount), GenericAll, WriteDacl y WriteOwner de los principales no administrativos. Audite ampliamente los permisos delegados de las OU: las mismas ACE que habilitan BadSuccessor también habilitan otros abusos de creación de objetos. Hasta que se aplique el parche o la mitigación, supervise la creación de objetos msDS-DelegatedManagedServiceAccount (eventos 4662/5137). Esta comprobación se OMITE en bosques cuyo esquema es anterior a Server 2025.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-008": {
+    "name": {
+      "value": "Pertenencia a los grupos Key Admins / Enterprise Key Admins",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "A los grupos Key Admins (RID de dominio 526) y Enterprise Key Admins (RID 527) se les concede el derecho de escribir el atributo msDS-KeyCredentialLink en todo el dominio/bosque. Eso convierte a cualquier miembro en una primitiva de credenciales en la sombra de alcance de dominio: un miembro puede colocar credenciales de clave en cualquier cuenta y autenticarse como ella mediante PKINIT. Estos grupos se entregan VACÍOS y deberían permanecer vacíos a menos que un flujo de trabajo específico de aprovisionamiento de claves de Windows Hello para Empresas los requiera de forma demostrable. Cualquier miembro es una ruta de escalada que debe justificarse.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Los grupos Key Admins y Enterprise Key Admins están vacíos (sin miembros permanentes).",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Revise cada miembro de Key Admins y Enterprise Key Admins. Elimine cualquier cuenta que no tenga una necesidad documentada y continua de aprovisionar claves de Windows Hello para Empresas. Si el aprovisionamiento de claves de WHfB requiere derechos delegados, limítelos a una cuenta de servicio dedicada con los permisos más restringidos posibles en lugar de la pertenencia a estos grupos de alcance de dominio. Trate a los miembros inesperados como un posible mecanismo de persistencia.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-009": {
+    "name": {
+      "value": "Pertenencia al grupo Cert Publishers",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Los miembros del grupo Cert Publishers (RID de dominio 517) tienen permiso para publicar certificados en el almacén NTAuth y en objetos de usuario/equipo. De forma predeterminada, el grupo contiene únicamente las cuentas de equipo de la CA empresarial. Una cuenta de usuario o de servicio incluida en este grupo obtiene la capacidad de influir en qué certificados son de confianza para la autenticación, lo que constituye un peldaño en varias rutas de escalada de AD CS (ataques de clase ESC) y puede habilitar la suplantación basada en certificados. La pertenencia de cuentas de equipo (los propios hosts de la CA) es esperada; cualquier miembro que no sea un equipo es un hallazgo.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Cert Publishers contiene únicamente las cuentas de equipo de la CA empresarial: ninguna cuenta de usuario o de servicio.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Elimine cualquier cuenta de usuario o de servicio del grupo Cert Publishers; solo las cuentas de equipo de la CA empresarial pertenecen a él. Revise el contenido del almacén NTAuth (certutil -viewstore -enterprise NTAuth) en busca de certificados de CA inesperados. Refuerce AD CS de forma amplia: audite los permisos de inscripción de plantillas de certificados y la superficie de configuración incorrecta ESC1-ESC8.",
+      "status": "machine-draft"
+    }
+  },
+  "ADTRADE-010": {
+    "name": {
+      "value": "Postura de las cuentas de servicio administradas de grupo (gMSA) y exposición de contraseñas",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Las cuentas de servicio administradas de grupo (gMSA) tienen contraseñas de 240 bits que Active Directory genera y rota automáticamente, eliminando el Kerberoasting de contraseñas débiles de cuentas de servicio y el esfuerzo de la rotación manual. Dos preocupaciones de postura: (1) si las gMSA se utilizan siquiera para las identidades de servicio, y (2) quién está autorizado a recuperar la contraseña administrada, controlado por el descriptor de seguridad msDS-GroupMSAMembership (PrincipalsAllowedToRetrieveManagedPassword). Si ese descriptor concede acceso a un principal amplio (Everyone, Authenticated Users, Domain Users) o a un principal no privilegiado, dicho principal puede recuperar la contraseña gMSA en texto claro (por ejemplo, GMSAPasswordReader) y suplantar por completo el servicio.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Las identidades de servicio se ejecutan como gMSA; msDS-GroupMSAMembership está limitado únicamente a los hosts específicos que deben ejecutar el servicio (sin principales amplios ni no privilegiados).",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Para cada gMSA, establezca PrincipalsAllowedToRetrieveManagedPassword en las cuentas de equipo exactas (o un grupo estrictamente delimitado) que ejecutan el servicio: Set-ADServiceAccount -Identity <gmsa> -PrincipalsAllowedToRetrieveManagedPassword <hosts>. Elimine Everyone / Authenticated Users / Domain Users de esa lista. Cuando las cuentas de servicio sigan usando contraseñas estáticas de cuenta de usuario, migre a gMSA para obtener rotación automática y resistencia al Kerberoasting.",
+      "status": "machine-draft"
+    }
+  }
+}
