@@ -1,0 +1,183 @@
+{
+  "_family": "ADPrivilegedAccountChecks.json",
+  "ADPRIV-001": {
+    "name": { "value": "Énumération des Domain Admins", "status": "machine-draft" },
+    "description": { "value": "Le groupe Domain Admins offre un contrôle administratif total sur tous les systèmes joints au domaine. L'appartenance devrait être strictement limitée et chaque membre doit avoir une justification métier documentée. Une appartenance excessive augmente considérablement la surface d'attaque pour le vol d'informations d'identification et le déplacement latéral", "status": "machine-draft" },
+    "recommendedValue": { "value": "Appartenance minimale (idéalement 2 à 3 comptes maximum) avec justification documentée pour chaque membre. Aucun compte utilisateur d'usage quotidien", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Domain Admins, y compris les groupes imbriqués, à l'aide de Get-ADGroupMember -Identity 'Domain Admins' -Recursive. Examinez le besoin métier de chaque membre. Retirez les membres inutiles et migrez vers des modèles d'administration déléguée. Assurez-vous qu'aucun compte utilisateur ordinaire n'est membre", "status": "machine-draft" }
+  },
+  "ADPRIV-002": {
+    "name": { "value": "Énumération des Enterprise Admins", "status": "machine-draft" },
+    "description": { "value": "Le groupe Enterprise Admins dispose de privilèges administratifs à l'échelle de la forêt sur tous les domaines. Ce groupe devrait être vide en fonctionnement normal et n'être renseigné que temporairement pour des modifications au niveau de la forêt. Un compte Enterprise Admin compromis conduit à une compromission totale de la forêt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide en fonctionnement normal. Membres ajoutés temporairement uniquement pour des modifications au niveau de la forêt avec approbation documentée", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Enterprise Admins à l'aide de Get-ADGroupMember -Identity 'Enterprise Admins' -Recursive. Retirez tous les membres permanents. Mettez en place un processus d'accès juste-à-temps pour les opérations au niveau de la forêt, qui ajoute et retire temporairement les membres avec une journalisation d'audit complète", "status": "machine-draft" }
+  },
+  "ADPRIV-003": {
+    "name": { "value": "Énumération des Schema Admins", "status": "machine-draft" },
+    "description": { "value": "Le groupe Schema Admins peut modifier le schéma AD, ce qui est irréversible et affecte l'ensemble de la forêt. Ce groupe devrait être vide en fonctionnement normal, car les modifications de schéma sont rares et à fort impact", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide en fonctionnement normal. Membres ajoutés temporairement uniquement pour des modifications de schéma avec approbation de gestion des changements", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Schema Admins à l'aide de Get-ADGroupMember -Identity 'Schema Admins'. Retirez tous les membres permanents. N'ajoutez des membres que lorsque des modifications de schéma sont requises, via un processus formel de gestion des changements", "status": "machine-draft" }
+  },
+  "ADPRIV-004": {
+    "name": { "value": "Énumération des Account Operators", "status": "machine-draft" },
+    "description": { "value": "Les Account Operators peuvent créer et modifier la plupart des comptes utilisateur et de groupe du domaine, y compris créer des comptes dans des OU privilégiées. Ce groupe est fréquemment négligé mais offre un potentiel important d'élévation de privilèges", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide. Utilisez des autorisations déléguées au niveau des OU plutôt que l'appartenance au groupe Account Operators", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Account Operators à l'aide de Get-ADGroupMember -Identity 'Account Operators'. Retirez tous les membres et remplacez par une délégation limitée aux OU à l'aide de l'Assistant Délégation de contrôle d'Active Directory. Documentez toutes les autorisations déléguées", "status": "machine-draft" }
+  },
+  "ADPRIV-005": {
+    "name": { "value": "Énumération des Server Operators", "status": "machine-draft" },
+    "description": { "value": "Les Server Operators peuvent ouvrir une session sur les contrôleurs de domaine, gérer les services et modifier les ressources partagées. Ce groupe peut être détourné pour élever les privilèges sur les DC en manipulant des services afin d'exécuter du code arbitraire en tant que SYSTEM", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide. Utilisez plutôt des comptes de gestion de service dédiés avec une délégation spécifique", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Server Operators à l'aide de Get-ADGroupMember -Identity 'Server Operators'. Retirez tous les membres et mettez en place une délégation ciblée pour toute tâche de gestion de serveur requise. Auditez séparément les droits d'ouverture de session sur les DC", "status": "machine-draft" }
+  },
+  "ADPRIV-006": {
+    "name": { "value": "Énumération des Backup Operators", "status": "machine-draft" },
+    "description": { "value": "Les Backup Operators peuvent sauvegarder et restaurer des fichiers sur les contrôleurs de domaine, y compris la base de données AD (ntds.dit). Cela permet l'extraction de tous les hachages de mots de passe du domaine, rendant l'appartenance à Backup Operators équivalente à un accès Domain Admin pour un attaquant compétent", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide ou restreint uniquement à des comptes de service de sauvegarde dédiés. Aucun compte utilisateur", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Backup Operators à l'aide de Get-ADGroupMember -Identity 'Backup Operators'. Retirez tous les comptes utilisateur. Si des comptes de service de sauvegarde nécessitent l'appartenance, assurez-vous qu'ils sont dédiés, dotés de mots de passe robustes et surveillés. Envisagez des solutions de sauvegarde basées sur des agents qui ne nécessitent pas l'appartenance à Backup Operators", "status": "machine-draft" }
+  },
+  "ADPRIV-007": {
+    "name": { "value": "Énumération des Print Operators", "status": "machine-draft" },
+    "description": { "value": "Les Print Operators peuvent gérer les imprimantes et charger des pilotes d'imprimante sur les contrôleurs de domaine. Des pilotes d'imprimante malveillants peuvent exécuter du code arbitraire en tant que SYSTEM sur les DC, offrant un chemin vers la compromission totale du domaine", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide. Gérez les imprimantes à l'aide de serveurs d'impression dédiés, et non de contrôleurs de domaine", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à Print Operators à l'aide de Get-ADGroupMember -Identity 'Print Operators'. Retirez tous les membres. Déployez les services d'impression sur des serveurs membres dédiés plutôt que sur des contrôleurs de domaine. Restreignez l'installation de pilotes d'imprimante via la stratégie de groupe", "status": "machine-draft" }
+  },
+  "ADPRIV-008": {
+    "name": { "value": "Appartenance au groupe DnsAdmins", "status": "machine-draft" },
+    "description": { "value": "Les membres du groupe DnsAdmins peuvent configurer le service DNS des contrôleurs de domaine pour charger une DLL arbitraire, qui s'exécute en tant que SYSTEM. Ce chemin d'élévation de privilèges bien connu peut conduire à une compromission totale du domaine à partir d'une appartenance à un groupe apparemment peu privilégié", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vide ou restreint uniquement à des comptes d'administration DNS dédiés. Appartenance traitée comme privilégiée de Tier 0", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez l'appartenance à DnsAdmins à l'aide de Get-ADGroupMember -Identity 'DnsAdmins'. Retirez les membres inutiles. Traitez DnsAdmins comme un groupe privilégié de Tier 0 dans votre modèle en niveaux. Surveillez les modifications de la configuration du serveur DNS et de la valeur de registre ServerLevelPluginDll", "status": "machine-draft" }
+  },
+  "ADPRIV-009": {
+    "name": { "value": "Analyse de l'appartenance à des groupes imbriqués", "status": "machine-draft" },
+    "description": { "value": "Les appartenances à des groupes imbriqués peuvent masquer les privilèges effectifs en dissimulant un accès privilégié derrière des chaînes d'imbrication de groupes. Des utilisateurs peuvent disposer d'un accès équivalent à Domain Admin via des groupes profondément imbriqués, non visibles par une simple énumération de groupes", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tous les chemins de groupes imbriqués vers des groupes privilégiés documentés. Profondeur d'imbrication maximale de 2 niveaux. Aucune imbrication circulaire", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez de manière récursive toutes les appartenances aux groupes privilégiés à l'aide de Get-ADGroupMember -Recursive. Cartographiez tous les chemins d'imbrication et identifiez les utilisateurs qui obtiennent des privilèges via une appartenance indirecte. Aplatissez l'imbrication inutile et documentez tous les chemins imbriqués restants avec une justification métier", "status": "machine-draft" }
+  },
+  "ADPRIV-010": {
+    "name": { "value": "Utilisateurs privilégiés dont le mot de passe n'expire jamais", "status": "machine-draft" },
+    "description": { "value": "Les comptes privilégiés portant l'indicateur « Le mot de passe n'expire jamais » sont exemptés des stratégies de rotation des mots de passe. Si un tel compte est compromis, l'attaquant conserve indéfiniment un accès persistant, le mot de passe n'étant jamais forcé de changer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte privilégié avec l'indicateur « Le mot de passe n'expire jamais ». Tous les comptes privilégiés soumis à une stratégie de rotation des mots de passe de 60 jours ou moins", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes privilégiés avec PasswordNeverExpires à l'aide de Get-ADUser -Filter {PasswordNeverExpires -eq $true -and AdminCount -eq 1}. Effacez l'indicateur et assurez-vous que ces comptes sont couverts par une stratégie de mot de passe appropriée. Mettez en place une FGPP pour les comptes privilégiés avec un âge maximal de mot de passe de 60 jours", "status": "machine-draft" }
+  },
+  "ADPRIV-011": {
+    "name": { "value": "Utilisateurs privilégiés sans mot de passe requis", "status": "machine-draft" },
+    "description": { "value": "L'indicateur PASSWD_NOTREQD permet à un compte d'avoir un mot de passe vide, contournant totalement la stratégie de mot de passe. Sur les comptes privilégiés, c'est catastrophique car cela permet un accès non authentifié à des ressources hautement privilégiées", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte privilégié avec l'indicateur PASSWD_NOTREQD", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes à l'aide de Get-ADUser -Filter {PasswordNotRequired -eq $true -and AdminCount -eq 1}. Effacez immédiatement l'indicateur PASSWD_NOTREQD et définissez un mot de passe robuste sur tous les comptes identifiés. Investiguez comment cet indicateur a été défini, car il peut indiquer une compromission", "status": "machine-draft" }
+  },
+  "ADPRIV-012": {
+    "name": { "value": "Utilisateurs privilégiés sans préauthentification Kerberos", "status": "machine-draft" },
+    "description": { "value": "Les comptes dont la préauthentification Kerberos est désactivée sont vulnérables au AS-REP Roasting, où un attaquant peut demander du matériel chiffré hors connexion sans aucune authentification et le casser pour récupérer le mot de passe du compte. Sur les comptes privilégiés, cela offre un chemin direct vers la compromission du domaine", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte privilégié avec l'indicateur « Ne pas demander la préauthentification Kerberos »", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes à l'aide de Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true -and AdminCount -eq 1}. Activez immédiatement la préauthentification Kerberos sur tous les comptes privilégiés. Renouvelez les mots de passe des comptes concernés car ils ont pu déjà être compromis via AS-REP Roasting", "status": "machine-draft" }
+  },
+  "ADPRIV-013": {
+    "name": { "value": "Utilisateurs privilégiés avec chiffrement réversible", "status": "machine-draft" },
+    "description": { "value": "Les comptes ayant « Stocker le mot de passe en utilisant un chiffrement réversible » activé stockent les mots de passe dans un format déchiffrable en clair. Cela équivaut à stocker les mots de passe en clair et permet à tout attaquant ayant accès à la base de données AD de récupérer le mot de passe réel", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte avec le chiffrement réversible activé, en particulier pas de comptes privilégiés", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes à l'aide de Get-ADUser -Filter {AllowReversiblePasswordEncryption -eq $true -and AdminCount -eq 1}. Effacez l'indicateur et forcez un changement immédiat de mot de passe sur tous les comptes concernés. Examinez les stratégies de mot de passe pour vous assurer qu'elles n'exigent pas de chiffrement réversible", "status": "machine-draft" }
+  },
+  "ADPRIV-014": {
+    "name": { "value": "Utilisateurs privilégiés en Kerberos DES uniquement", "status": "machine-draft" },
+    "description": { "value": "Les comptes configurés pour utiliser le chiffrement Kerberos DES uniquement emploient un algorithme cryptographiquement cassé. Les clés DES peuvent être cassées rapidement par force brute, permettant aux attaquants de forger ou de déchiffrer les tickets Kerberos des comptes concernés", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte avec l'indicateur « Utiliser les types de chiffrement Kerberos DES pour ce compte »", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes à l'aide de Get-ADUser -Filter {UseDESKeyOnly -eq $true -and AdminCount -eq 1}. Effacez l'indicateur DES uniquement et assurez-vous que les comptes prennent en charge le chiffrement AES256. Renouvelez les mots de passe des comptes concernés afin de générer de nouvelles clés Kerberos basées sur AES", "status": "machine-draft" }
+  },
+  "ADPRIV-015": {
+    "name": { "value": "Absence d'indicateur MFA sur les comptes privilégiés", "status": "machine-draft" },
+    "description": { "value": "Les comptes privilégiés devraient être protégés par une authentification multifacteur pour toutes les ouvertures de session interactives et distantes. Sans MFA, un mot de passe volé suffit à lui seul à obtenir un accès administratif total au domaine", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tous les comptes privilégiés tenus d'utiliser la MFA via carte à puce, Windows Hello Entreprise ou FIDO2. Indicateur « Une carte à puce est nécessaire pour ouvrir une session interactive » défini le cas échéant", "status": "machine-draft" },
+    "remediationSteps": { "value": "Examinez les comptes privilégiés pour l'exigence d'ouverture de session par carte à puce à l'aide de Get-ADUser -Filter {SmartcardLogonRequired -eq $false -and AdminCount -eq 1}. Déployez l'authentification par carte à puce ou Windows Hello Entreprise pour tous les comptes privilégiés. Activez l'indicateur « Une carte à puce est nécessaire pour ouvrir une session interactive » sur les comptes Tier 0", "status": "machine-draft" }
+  },
+  "ADPRIV-016": {
+    "name": { "value": "Mots de passe faibles sur les comptes privilégiés", "status": "machine-draft" },
+    "description": { "value": "Les comptes privilégiés avec des mots de passe faibles ou couramment utilisés sont trivialement compromis par pulvérisation de mots de passe, attaques par dictionnaire ou credential stuffing. Un mot de passe faible sur un compte Domain Admin peut conduire à une compromission totale du domaine en quelques minutes", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tous les mots de passe des comptes privilégiés comptent au moins 25 caractères et ne figurent pas dans les dictionnaires de mots de passe courants", "status": "machine-draft" },
+    "remediationSteps": { "value": "Testez la robustesse des mots de passe des comptes privilégiés en comparant les hachages NT à des listes de mots de passe faibles connues (à l'aide d'outils comme DSInternals). Forcez le changement immédiat de mot de passe sur tout compte avec un mot de passe faible. Mettez en place une FGPP exigeant des mots de passe de 25 caractères ou plus pour les comptes privilégiés", "status": "machine-draft" }
+  },
+  "ADPRIV-017": {
+    "name": { "value": "Mots de passe anciens sur les comptes privilégiés", "status": "machine-draft" },
+    "description": { "value": "Les comptes privilégiés dont les mots de passe n'ont pas été changés depuis plus de 90 jours présentent une fenêtre d'exposition prolongée. Si les informations d'identification ont été compromises, l'attaquant conserve l'accès pendant toute la période où le mot de passe reste inchangé", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tous les mots de passe des comptes privilégiés changés au cours des 60 derniers jours", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes privilégiés avec des mots de passe anciens à l'aide de Get-ADUser -Filter {AdminCount -eq 1} -Properties PasswordLastSet | Where-Object {$_.PasswordLastSet -lt (Get-Date).AddDays(-90)}. Forcez la rotation des mots de passe sur tous les comptes identifiés. Mettez en place une FGPP avec un âge maximal de mot de passe de 60 jours pour les comptes privilégiés", "status": "machine-draft" }
+  },
+  "ADPRIV-018": {
+    "name": { "value": "Comptes privilégiés ne s'étant jamais connectés", "status": "machine-draft" },
+    "description": { "value": "Les comptes privilégiés qui ne se sont jamais connectés peuvent être des comptes provisionnés jamais réclamés, des comptes de test ou des artefacts de migration. Ces comptes non gérés dans des groupes privilégiés représentent un risque important car ils peuvent avoir des mots de passe par défaut ou faibles", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte privilégié avec un LastLogonTimestamp nul. Tous les comptes privilégiés activement utilisés par leurs propriétaires attitrés", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes privilégiés ne s'étant jamais connectés à l'aide de Get-ADUser -Filter {AdminCount -eq 1} -Properties LastLogonTimestamp | Where-Object {$_.LastLogonTimestamp -eq $null}. Investiguez chaque compte pour déterminer s'il est nécessaire. Désactivez ou retirez les comptes inutiles des groupes privilégiés", "status": "machine-draft" }
+  },
+  "ADPRIV-019": {
+    "name": { "value": "Comptes désactivés dans des groupes privilégiés", "status": "machine-draft" },
+    "description": { "value": "Les comptes désactivés qui demeurent dans des groupes privilégiés créent un risque, car la réactivation du compte (intentionnelle ou par compromission) accorde immédiatement un accès privilégié total. Les comptes désactivés devraient être retirés de tous les groupes privilégiés", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte désactivé dans un quelconque groupe privilégié", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes désactivés dans les groupes privilégiés à l'aide de Get-ADGroupMember 'Domain Admins' -Recursive | Get-ADUser | Where-Object {$_.Enabled -eq $false}. Répétez pour tous les groupes privilégiés. Retirez immédiatement les comptes désactivés de toutes les appartenances aux groupes privilégiés", "status": "machine-draft" }
+  },
+  "ADPRIV-020": {
+    "name": { "value": "Audit des objets protégés par AdminSDHolder", "status": "machine-draft" },
+    "description": { "value": "AdminSDHolder est un mécanisme de sécurité qui réécrit les ACL des objets protégés (utilisateurs et groupes privilégiés) toutes les 60 minutes via SDProp. Les modifications de l'ACL d'AdminSDHolder se propagent à tous les objets protégés, ce qui en fait une cible de grande valeur pour la persistance. Des ACE non autorisées sur AdminSDHolder accordent un accès par porte dérobée à tous les comptes privilégiés", "status": "machine-draft" },
+    "recommendedValue": { "value": "L'ACL d'AdminSDHolder ne contient que les entrées par défaut, sans ACE non autorisée ou inattendue", "status": "machine-draft" },
+    "remediationSteps": { "value": "Examinez l'ACL d'AdminSDHolder sur CN=AdminSDHolder,CN=System,DC=domain à l'aide de Get-ACL ou d'ADSIEdit. Comparez à la ligne de base documentée. Retirez immédiatement toute ACE non par défaut. Surveillez les modifications d'AdminSDHolder dans le cadre de la surveillance de sécurité continue", "status": "machine-draft" }
+  },
+  "ADPRIV-021": {
+    "name": { "value": "Orphelins AdminCount", "status": "machine-draft" },
+    "description": { "value": "Lorsque des objets sont retirés de groupes protégés, l'attribut AdminCount reste défini à 1 et les autorisations héritées restent bloquées. Ces « orphelins AdminCount » ont un héritage d'autorisations rompu, ce qui peut empêcher l'application correcte des stratégies de sécurité et masquer une élévation de privilèges", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte avec AdminCount=1 qui n'est membre d'aucun groupe protégé", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes orphelins à l'aide de Get-ADUser -Filter {AdminCount -eq 1} et recoupez avec l'appartenance actuelle aux groupes protégés. Pour les orphelins, effacez l'attribut AdminCount et réactivez l'héritage sur l'ACL de l'objet. Utilisez PowerShell ou ADSIEdit pour corriger les autorisations héritées", "status": "machine-draft" }
+  },
+  "ADPRIV-022": {
+    "name": { "value": "Ancienneté du mot de passe krbtgt", "status": "machine-draft" },
+    "description": { "value": "Le mot de passe du compte krbtgt sert à chiffrer et signer tous les tickets Kerberos du domaine. S'il est compromis, un attaquant peut créer des Golden Tickets accordant un accès illimité à toute ressource pour n'importe quelle durée. Le mot de passe krbtgt devrait être renouvelé au moins tous les 180 jours et immédiatement après toute compromission suspectée", "status": "machine-draft" },
+    "recommendedValue": { "value": "Mot de passe krbtgt changé au cours des 180 derniers jours. Renouvelé deux fois (pour invalider tous les tickets existants) après toute compromission suspectée", "status": "machine-draft" },
+    "remediationSteps": { "value": "Vérifiez l'ancienneté du mot de passe krbtgt à l'aide de Get-ADUser krbtgt -Properties PasswordLastSet. Réinitialisez le mot de passe deux fois (avec un délai suffisant entre les réinitialisations pour que la réplication se termine) afin d'invalider tous les tickets existants. Utilisez le script de réinitialisation krbtgt de Microsoft pour effectuer la rotation en toute sécurité. Planifiez une rotation régulière tous les 180 jours", "status": "machine-draft" }
+  },
+  "ADPRIV-023": {
+    "name": { "value": "Évaluation de l'exposition du compte krbtgt", "status": "machine-draft" },
+    "description": { "value": "La configuration du compte krbtgt devrait être évaluée à la recherche d'indicateurs d'exposition, notamment les types de chiffrement pris en charge, les paramètres de délégation et les SPN. Toute mauvaise configuration accroît le risque d'attaques Golden Ticket et d'autres attaques basées sur Kerberos", "status": "machine-draft" },
+    "recommendedValue": { "value": "Compte krbtgt configuré avec le chiffrement AES256 uniquement, aucune délégation et aucun SPN supplémentaire au-delà du kadmin/changepw par défaut", "status": "machine-draft" },
+    "remediationSteps": { "value": "Examinez les propriétés du compte krbtgt, y compris msDS-SupportedEncryptionTypes, les paramètres de délégation et les SPN. Assurez-vous qu'AES256 est le type de chiffrement principal. Vérifiez qu'aucun indicateur de délégation n'est défini. Recherchez des SPN inattendus qui pourraient indiquer une compromission ou une mauvaise configuration", "status": "machine-draft" }
+  },
+  "ADPRIV-024": {
+    "name": { "value": "Comptes de service dans des groupes privilégiés", "status": "machine-draft" },
+    "description": { "value": "Les comptes de service dans des groupes privilégiés présentent un risque élevé car ils ont généralement des mots de passe qui n'expirent pas, sont partagés entre administrateurs, peuvent être stockés dans des scripts ou fichiers de configuration, et s'exécutent sur plusieurs serveurs où les informations d'identification peuvent être collectées", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte de service dans des groupes privilégiés. Les comptes de service devraient utiliser des autorisations déléguées limitées à l'accès minimal requis", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les comptes de service dans les groupes privilégiés en examinant tous les membres et en recherchant les comptes utilisés comme identités d'ouverture de session de service. Retirez les comptes de service des groupes privilégiés et n'accordez que les autorisations spécifiques nécessaires via la délégation. Migrez vers des comptes de service administrés de groupe (gMSA) lorsque c'est possible", "status": "machine-draft" }
+  },
+  "ADPRIV-025": {
+    "name": { "value": "Comptes d'ordinateur dans des groupes privilégiés", "status": "machine-draft" },
+    "description": { "value": "Les comptes d'ordinateur dans des groupes privilégiés accordent à tout processus s'exécutant en tant que SYSTEM sur ces ordinateurs les privilèges du groupe. Un attaquant qui compromet une telle machine obtient un accès équivalent à Domain Admin, élargissant considérablement la surface d'attaque de déplacement latéral", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte d'ordinateur dans un quelconque groupe privilégié", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez les membres des groupes privilégiés et identifiez tout compte d'ordinateur à l'aide de Get-ADGroupMember 'Domain Admins' | Where-Object {$_.objectClass -eq 'computer'}. Répétez pour tous les groupes privilégiés. Retirez immédiatement les comptes d'ordinateur et investiguez la raison de leur ajout", "status": "machine-draft" }
+  },
+  "ADPRIV-026": {
+    "name": { "value": "Ouverture de session locale des utilisateurs privilégiés sur les DC", "status": "machine-draft" },
+    "description": { "value": "Seuls les comptes d'administration Tier 0 désignés devraient être autorisés à ouvrir une session localement sur les contrôleurs de domaine. Autoriser des comptes non-Tier 0 à ouvrir une session sur les DC expose les informations d'identification privilégiées à des attaques de collecte d'identifiants sur des postes de travail moins sécurisés", "status": "machine-draft" },
+    "recommendedValue": { "value": "Seuls les Domain Admins et les comptes Tier 0 désignés autorisés à ouvrir une session localement sur les DC. « Permettre l'ouverture de session locale » restreint via une GPO sur l'OU Domain Controllers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configurez via une stratégie de groupe appliquée à l'OU Domain Controllers : Configuration ordinateur > Stratégies > Paramètres Windows > Paramètres de sécurité > Stratégies locales > Attribution des droits utilisateur > « Permettre l'ouverture de session locale » = Administrators, Domain Admins uniquement. Retirez toutes les autres entrées et testez soigneusement", "status": "machine-draft" }
+  },
+  "ADPRIV-027": {
+    "name": { "value": "RDP des utilisateurs privilégiés sur les DC", "status": "machine-draft" },
+    "description": { "value": "L'accès Bureau à distance aux contrôleurs de domaine devrait être strictement limité aux administrateurs Tier 0 désignés. Les sessions RDP mettent en cache des informations d'identification qui peuvent être collectées, et un accès RDP excessif augmente la surface d'attaque pour le vol d'identifiants et le déplacement latéral vers les DC", "status": "machine-draft" },
+    "recommendedValue": { "value": "Seuls les comptes d'administration Tier 0 désignés autorisés à accéder aux DC en RDP. « Permettre l'ouverture de session par les services Bureau à distance » restreint via une GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configurez via une stratégie de groupe appliquée à l'OU Domain Controllers : Configuration ordinateur > Stratégies > Paramètres Windows > Paramètres de sécurité > Stratégies locales > Attribution des droits utilisateur > « Permettre l'ouverture de session par les services Bureau à distance » = Administrators uniquement. Envisagez d'utiliser Remote Credential Guard ou le mode Restricted Admin pour les sessions RDP", "status": "machine-draft" }
+  },
+  "ADPRIV-028": {
+    "name": { "value": "Utilisateurs disposant de droits DCSync", "status": "machine-draft" },
+    "description": { "value": "DCSync permet la réplication des données de mot de passe depuis Active Directory, y compris tous les hachages utilisateur. Les comptes disposant des droits « Replicating Directory Changes All » et « Replicating Directory Changes » peuvent extraire chaque hachage de mot de passe du domaine sans toucher à un DC. Seuls les comptes d'ordinateur des contrôleurs de domaine et le compte administrateur par défaut devraient posséder ces droits", "status": "machine-draft" },
+    "recommendedValue": { "value": "Seuls les comptes d'ordinateur des contrôleurs de domaine et le compte administrateur par défaut disposent de droits de réplication. Aucun utilisateur ou groupe supplémentaire ne se voit accorder d'autorisations DCSync", "status": "machine-draft" },
+    "remediationSteps": { "value": "Auditez l'ACL de la racine du domaine pour « Replicating Directory Changes » et « Replicating Directory Changes All » à l'aide de (Get-ACL 'AD:\\DC=domain,DC=com').Access | Where-Object {$_.ObjectType -match '1131f6a[a-d]'}. Retirez immédiatement toute entrée non autorisée. Investiguez si des comptes non autorisés ont déjà effectué un DCSync", "status": "machine-draft" }
+  },
+  "ADPRIV-029": {
+    "name": { "value": "Audit du groupe Protected Users", "status": "machine-draft" },
+    "description": { "value": "Le groupe de sécurité Protected Users fournit des protections d'authentification renforcées, notamment la désactivation de l'authentification NTLM, l'imposition du chiffrement Kerberos AES, l'empêchement de la mise en cache des informations d'identification et la définition de durées de vie de TGT courtes. Tous les comptes privilégiés Tier 0 devraient en être membres", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tous les comptes utilisateur privilégiés Tier 0 sont membres du groupe Protected Users", "status": "machine-draft" },
+    "remediationSteps": { "value": "Ajoutez tous les comptes Tier 0 au groupe Protected Users à l'aide de Add-ADGroupMember -Identity 'Protected Users' -Members <compte>. Testez d'abord chaque compte, car Protected Users désactive NTLM et la délégation d'informations d'identification, ce qui peut casser les applications héritées. Remarque : les comptes de service et les comptes d'ordinateur ne devraient PAS être ajoutés", "status": "machine-draft" }
+  },
+  "ADPRIV-030": {
+    "name": { "value": "Utilisateurs privilégiés absents de Protected Users", "status": "machine-draft" },
+    "description": { "value": "Les comptes privilégiés qui ne sont pas membres du groupe Protected Users ne bénéficient pas des protections d'authentification renforcées et restent vulnérables aux techniques de vol d'informations d'identification, notamment le relais NTLM, la mise en cache des informations d'identification et les tickets Kerberos de longue durée. Chaque compte privilégié éligible devrait être protégé", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tous les comptes utilisateur privilégiés éligibles inscrits dans le groupe Protected Users. Exceptions documentées avec des contrôles compensatoires", "status": "machine-draft" },
+    "remediationSteps": { "value": "Comparez les membres des groupes privilégiés à l'appartenance à Protected Users. Pour chaque compte privilégié absent de Protected Users, évaluez la compatibilité (dépendances NTLM, exigences de délégation) et ajoutez-le au groupe. Documentez toute exception avec des raisons techniques spécifiques et des contrôles compensatoires", "status": "machine-draft" }
+  }
+}

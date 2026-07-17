@@ -1,0 +1,69 @@
+{
+  "_family": "ADTrustChecks.json",
+  "ADTRUST-001": {
+    "name": { "value": "Énumération des relations d'approbation", "status": "machine-draft" },
+    "description": { "value": "Toutes les relations d'approbation devraient être inventoriées afin d'établir une vision complète de la frontière d'authentification. Les approbations non documentées étendent la surface d'attaque en permettant à des utilisateurs de domaines externes d'accéder aux ressources", "status": "machine-draft" },
+    "recommendedValue": { "value": "Toutes les relations d'approbation documentées avec justification métier, direction, type et propriétaire", "status": "machine-draft" },
+    "remediationSteps": { "value": "Exécutez Get-ADTrust -Filter * pour énumérer toutes les approbations. Documentez chaque approbation avec sa direction, son type (forêt, externe, raccourci, domaine), sa transitivité et sa justification métier. Examinez et supprimez toute approbation qui ne répond plus à un besoin métier", "status": "machine-draft" }
+  },
+  "ADTRUST-002": {
+    "name": { "value": "Analyse de la direction des approbations", "status": "machine-draft" },
+    "description": { "value": "Les approbations entrantes permettent aux utilisateurs de domaines externes de s'authentifier dans votre domaine. Chaque approbation entrante ou bidirectionnelle devrait être examinée afin de s'assurer que le domaine approuvé maintient des contrôles de sécurité adéquats. Un domaine approuvé compromis peut être utilisé pour attaquer votre environnement", "status": "machine-draft" },
+    "recommendedValue": { "value": "Toutes les directions d'approbation justifiées et documentées. Approbations bidirectionnelles converties en approbations unidirectionnelles lorsque c'est possible afin de réduire la surface d'attaque", "status": "machine-draft" },
+    "remediationSteps": { "value": "Examinez chaque direction d'approbation à l'aide de Get-ADTrust -Filter *. Pour les approbations bidirectionnelles, évaluez si les deux directions sont requises. Convertissez en approbations unidirectionnelles lorsque le besoin métier ne requiert qu'une seule direction. Documentez la justification de tous les chemins d'approbation entrants", "status": "machine-draft" }
+  },
+  "ADTRUST-003": {
+    "name": { "value": "Analyse de la transitivité des approbations", "status": "machine-draft" },
+    "description": { "value": "Les approbations transitives étendent les chemins d'authentification au-delà des partenaires d'approbation directs, créant potentiellement des chemins d'accès involontaires via des chaînes de domaines approuvés. Chaque approbation transitive devrait être évaluée au regard de la surface d'attaque étendue qu'elle crée", "status": "machine-draft" },
+    "recommendedValue": { "value": "Toutes les approbations transitives documentées avec une analyse complète du chemin de transitivité. Approbations externes préférées aux approbations de forêt lorsque la transitivité n'est pas requise", "status": "machine-draft" },
+    "remediationSteps": { "value": "Cartographiez tous les chemins d'approbation transitifs afin d'identifier les routes d'authentification indirectes. Pour les approbations de forêt, comprenez que tous les domaines enfants sont approuvés de manière transitive. Envisagez d'utiliser des approbations externes (non transitives) lorsque seul l'accès à un domaine spécifique est nécessaire", "status": "machine-draft" }
+  },
+  "ADTRUST-004": {
+    "name": { "value": "État du filtrage des SID", "status": "machine-draft" },
+    "description": { "value": "Le filtrage des SID supprime les SID provenant de domaines étrangers dans les jetons d'authentification, empêchant les attaques par injection de SID history. Sans filtrage des SID, un attaquant qui compromet un domaine approuvé peut forger des tickets contenant des SID privilégiés (tels que Enterprise Admins) de votre domaine, aboutissant à une compromission totale", "status": "machine-draft" },
+    "recommendedValue": { "value": "Filtrage des SID (quarantaine) activé sur toutes les approbations externes et de forêt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Vérifiez l'état du filtrage des SID à l'aide de « netdom trust /domain:trusted.domain /Quarantine ». Activez le filtrage des SID avec « netdom trust /domain:trusted.domain /Quarantine:Yes ». Remarque : le filtrage des SID est activé par défaut sur les approbations externes mais doit être vérifié sur les approbations de forêt, où il a pu être délibérément désactivé", "status": "machine-draft" }
+  },
+  "ADTRUST-005": {
+    "name": { "value": "Détection d'abus de SID history", "status": "machine-draft" },
+    "description": { "value": "Le SID history est destiné aux migrations de domaine mais peut être détourné pour injecter des SID privilégiés dans les jetons utilisateur au-delà des frontières d'approbation. Les attaquants qui compromettent un domaine approuvé peuvent ajouter des SID Enterprise Admin ou Domain Admin au SID history de tout compte qu'ils contrôlent", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucun compte avec des valeurs de SID history référençant des groupes privilégiés. SID history nettoyé une fois toutes les migrations terminées", "status": "machine-draft" },
+    "remediationSteps": { "value": "Recherchez les comptes avec du SID history à l'aide de Get-ADUser -Filter {SIDHistory -like '*'} -Properties SIDHistory. Identifiez toute entrée de SID history référençant des groupes privilégiés (Domain Admins, Enterprise Admins, etc.). Nettoyez le SID history après la migration à l'aide de Remove-ADUser avec le paramètre SIDHistory. Activez le filtrage des SID sur les approbations", "status": "machine-draft" }
+  },
+  "ADTRUST-006": {
+    "name": { "value": "État de l'authentification sélective", "status": "machine-draft" },
+    "description": { "value": "L'authentification sélective restreint les utilisateurs d'un domaine approuvé qui peuvent s'authentifier auprès de ressources de votre domaine en exigeant des autorisations explicites sur chaque ressource. Sans elle, tous les utilisateurs authentifiés du domaine approuvé peuvent accéder à toute ressource pour laquelle ils disposent d'autorisations, ce qui étend considérablement la surface d'attaque", "status": "machine-draft" },
+    "recommendedValue": { "value": "Authentification sélective activée sur toutes les approbations de forêt. Autorisations « Autorisé à s'authentifier » accordées uniquement sur les ressources requises", "status": "machine-draft" },
+    "remediationSteps": { "value": "Activez l'authentification sélective sur les approbations de forêt via Domaines et approbations Active Directory > Propriétés de l'approbation > onglet Authentification > sélectionnez « Authentification sélective ». Accordez ensuite l'autorisation « Autorisé à s'authentifier » sur les objets ordinateur spécifiques auxquels les utilisateurs externes doivent accéder", "status": "machine-draft" }
+  },
+  "ADTRUST-007": {
+    "name": { "value": "Sécurité de l'approbation hybride Azure AD", "status": "machine-draft" },
+    "description": { "value": "Les configurations d'identité hybride reliant l'AD local à Azure AD créent des chemins d'attaque supplémentaires. Azure AD Connect, les agents d'authentification directe et les services de fédération peuvent être ciblés pour pivoter entre les environnements cloud et locaux", "status": "machine-draft" },
+    "recommendedValue": { "value": "Azure AD Connect exécutant la dernière version sur un serveur dédié et durci. PHS préféré à PTA/fédération. SSO fluide désactivé s'il n'est pas requis. Comptes cloud-only de secours d'urgence configurés", "status": "machine-draft" },
+    "remediationSteps": { "value": "Examinez la configuration d'Azure AD Connect et assurez-vous qu'il s'exécute sur un serveur durci de Tier 0. Évaluez le passage de la fédération ou de PTA à la synchronisation de hachage de mot de passe (PHS) pour réduire la surface d'attaque. Si vous utilisez le SSO fluide, assurez-vous que le mot de passe du compte d'ordinateur AZUREADSSOACC est renouvelé. Vérifiez l'existence de comptes cloud-only d'accès d'urgence", "status": "machine-draft" }
+  },
+  "ADTRUST-008": {
+    "name": { "value": "Énumération des approbations de domaines étrangers", "status": "machine-draft" },
+    "description": { "value": "Les approbations avec des domaines externes à l'organisation étendent la frontière de sécurité à des entités dont les normes de sécurité peuvent différer. Les approbations de domaines étrangers devraient faire l'objet d'un examen supplémentaire, car l'organisation qui approuve ne peut pas contrôler la posture de sécurité du domaine externe", "status": "machine-draft" },
+    "recommendedValue": { "value": "Toutes les approbations de domaines étrangers documentées avec évaluation de sécurité externe, exigences de sécurité contractuelles et revue annuelle", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifiez les approbations avec des domaines externes à l'organisation à l'aide de Get-ADTrust -Filter *. Pour chaque approbation externe, vérifiez qu'un accord de sécurité est en place, que le filtrage des SID est activé, que l'authentification sélective est configurée et que l'approbation est revue chaque année", "status": "machine-draft" }
+  },
+  "ADTRUST-009": {
+    "name": { "value": "Détection des approbations orphelines", "status": "machine-draft" },
+    "description": { "value": "Les approbations orphelines référencent des domaines qui n'existent plus ou ne sont plus accessibles. Ces objets d'approbation obsolètes peuvent conserver des informations d'identification et créer de la confusion lors des audits de sécurité. Ils devraient être supprimés afin de réduire la surface d'attaque inutile et de maintenir une topologie d'approbation propre", "status": "machine-draft" },
+    "recommendedValue": { "value": "Aucune relation d'approbation orpheline ou non résoluble présente", "status": "machine-draft" },
+    "remediationSteps": { "value": "Énumérez toutes les approbations et tentez de valider chacune en résolvant le nom du domaine approuvé et en testant l'approbation avec « netdom trust /verify ». Supprimez les approbations orphelines lorsque le domaine partenaire n'existe plus ou est inaccessible à l'aide de « netdom trust /Remove » ou de Domaines et approbations Active Directory", "status": "machine-draft" }
+  },
+  "ADTRUST-010": {
+    "name": { "value": "Ancienneté et rotation des clés d'approbation", "status": "machine-draft" },
+    "description": { "value": "Les mots de passe d'approbation (clés inter-domaines) devraient être renouvelés régulièrement. Des clés d'approbation obsolètes augmentent la fenêtre d'attaques basées sur les informations d'identification. Par défaut, les mots de passe d'approbation sont renouvelés tous les 30 jours, mais cela devrait être vérifié car des échecs de rotation peuvent passer inaperçus", "status": "machine-draft" },
+    "recommendedValue": { "value": "Mots de passe d'approbation renouvelés au cours des 30 derniers jours. Rotation automatique des mots de passe d'approbation non désactivée", "status": "machine-draft" },
+    "remediationSteps": { "value": "Vérifiez la date de dernière définition du mot de passe d'approbation en examinant l'attribut trustAuthOutgoing ou en exécutant « netdom trust /domain:trusted.domain /verify ». Si le mot de passe d'approbation est obsolète, réinitialisez-le à l'aide de « netdom trust /domain:trusted.domain /Reset ». Vérifiez qu'aucun paramètre de GPO ou de registre n'a désactivé la rotation automatique des mots de passe d'approbation", "status": "machine-draft" }
+  },
+  "ADTRUST-011": {
+    "name": { "value": "Visualisation de la hiérarchie des approbations", "status": "machine-draft" },
+    "description": { "value": "Une carte complète de la topologie d'approbation devrait être maintenue, montrant toutes les relations d'approbation, directions, types et chemins de transitivité. Cette visualisation est essentielle pour comprendre l'ensemble de la frontière d'authentification et identifier les chemins d'accès inattendus", "status": "machine-draft" },
+    "recommendedValue": { "value": "Diagramme de topologie d'approbation à jour, maintenu et revu chaque trimestre", "status": "machine-draft" },
+    "remediationSteps": { "value": "Générez une carte de topologie d'approbation à l'aide d'outils automatisés ou documentez manuellement toutes les relations d'approbation, y compris la direction, le type, la transitivité, l'état du filtrage des SID et l'état de l'authentification sélective. Mettez à jour le diagramme chaque fois que des approbations sont ajoutées, modifiées ou supprimées. Incluez la carte dans la documentation de sécurité et revoyez-la chaque trimestre", "status": "machine-draft" }
+  }
+}
