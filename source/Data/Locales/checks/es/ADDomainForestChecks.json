@@ -1,0 +1,123 @@
+{
+  "_family": "ADDomainForestChecks.json",
+  "ADDOM-001": {
+    "name": { "value": "Nivel funcional del bosque", "status": "machine-draft" },
+    "description": { "value": "El nivel funcional del bosque de Active Directory debe estar en Windows Server 2016 o superior para habilitar funciones de seguridad modernas como Privileged Access Management y protecciones mejoradas de Kerberos. Ejecutar niveles funcionales más antiguos expone el entorno a ataques que aprovechan debilidades de protocolos heredados", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 o superior", "status": "machine-draft" },
+    "remediationSteps": { "value": "Eleve el nivel funcional del bosque a través de Dominios y confianzas de Active Directory > clic derecho en la raíz del bosque > Elevar el nivel funcional del bosque. Asegúrese de que todos los controladores de dominio ejecuten una versión de SO compatible antes de elevarlo", "status": "machine-draft" }
+  },
+  "ADDOM-002": {
+    "name": { "value": "Nivel funcional del dominio", "status": "machine-draft" },
+    "description": { "value": "El nivel funcional del dominio de Active Directory debe estar en Windows Server 2016 o superior. Los niveles funcionales inferiores impiden el uso de funciones de seguridad críticas, incluidas la funcionalidad del grupo Protected Users, las políticas de autenticación y el Kerberos armoring moderno", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 o superior", "status": "machine-draft" },
+    "remediationSteps": { "value": "Eleve el nivel funcional del dominio a través de Dominios y confianzas de Active Directory > clic derecho en el dominio > Elevar el nivel funcional del dominio. Verifique primero que todos los DC del dominio ejecuten una versión de SO compatible", "status": "machine-draft" }
+  },
+  "ADDOM-003": {
+    "name": { "value": "Identificación de la versión del esquema", "status": "machine-draft" },
+    "description": { "value": "La versión del esquema de AD debe estar documentada y corresponder a la última versión compatible. Un esquema desactualizado puede carecer de los atributos que requieren las funciones de seguridad y las aplicaciones modernas", "status": "machine-draft" },
+    "recommendedValue": { "value": "Versión del esquema correspondiente a Windows Server 2022 (versión 88) o posterior", "status": "machine-draft" },
+    "remediationSteps": { "value": "Ejecute adprep /forestprep y adprep /domainprep desde el medio de instalación más reciente de Windows Server para actualizar el esquema. Verifique el atributo objectVersion en CN=Schema,CN=Configuration,DC=domain", "status": "machine-draft" }
+  },
+  "ADDOM-004": {
+    "name": { "value": "Inventario de controladores de dominio", "status": "machine-draft" },
+    "description": { "value": "Todos los controladores de dominio deben inventariarse con su versión de SO, nivel de parches y ubicación. Los controladores de dominio no rastreados representan un riesgo de seguridad significativo, ya que pueden no recibir parches o estar comprometidos sin ser detectados", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todos los controladores de dominio documentados con la versión de SO actual, pertenencia a sitio y estado de parches", "status": "machine-draft" },
+    "remediationSteps": { "value": "Consulte todos los objetos de equipo de DC en la OU Domain Controllers. Verifique que cada DC esté contabilizado, ejecute un SO compatible y reciba parches con regularidad. Elimine o degrade de inmediato cualquier DC no autorizado", "status": "machine-draft" }
+  },
+  "ADDOM-005": {
+    "name": { "value": "SO obsoleto en controladores de dominio", "status": "machine-draft" },
+    "description": { "value": "Los controladores de dominio que ejecutan sistemas operativos al final de su vida útil (Windows Server 2012 R2 o anterior) no reciben actualizaciones de seguridad y son vulnerables a exploits conocidos. Estos representan un riesgo crítico de infraestructura, ya que comprometer un DC otorga el control total del dominio", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todos los controladores de dominio ejecutando Windows Server 2019 o posterior con los parches actuales", "status": "machine-draft" },
+    "remediationSteps": { "value": "Planifique la migración de los DC que ejecutan versiones de SO obsoletas. Construya nuevos DC en Windows Server 2022, transfiera los roles FSMO si es necesario, replique y luego degrade y retire los DC antiguos. Priorice esta corrección, ya que los DC heredados son objeto de ataque activo", "status": "machine-draft" }
+  },
+  "ADDOM-006": {
+    "name": { "value": "Identificación de los titulares de roles FSMO", "status": "machine-draft" },
+    "description": { "value": "Los cinco roles FSMO (Schema Master, Domain Naming Master, RID Master, PDC Emulator, Infrastructure Master) deben documentarse y ubicarse en los controladores de dominio apropiados. Conocer la ubicación de los roles es esencial para la recuperación ante desastres y la conciencia operativa", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todos los roles FSMO documentados, ubicados en DC fiables e incluidos en la planificación de recuperación ante desastres", "status": "machine-draft" },
+    "remediationSteps": { "value": "Ejecute 'netdom query fsmo' o consulte el esquema de AD y las particiones de dominio para identificar a los titulares de los roles. Documente los roles y verifique que estén en DC de alta disponibilidad. Transfiera los roles si los titulares actuales no son apropiados", "status": "machine-draft" }
+  },
+  "ADDOM-007": {
+    "name": { "value": "Estado de la replicación de AD", "status": "machine-draft" },
+    "description": { "value": "Los errores de replicación de Active Directory pueden provocar una aplicación inconsistente de las políticas de seguridad, que credenciales obsoletas sigan siendo válidas y escenarios de split-brain. Los errores de replicación persistentes también pueden indicar un DC comprometido o no autorizado", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todos los controladores de dominio replicando correctamente sin errores en las últimas 24 horas", "status": "machine-draft" },
+    "remediationSteps": { "value": "Ejecute 'repadmin /replsummary' y 'repadmin /showrepl' para identificar los errores. Investigue y resuelva problemas de DNS, problemas de conectividad de red o condiciones de USN rollback. Supervise el estado de la replicación como parte de las operaciones rutinarias", "status": "machine-draft" }
+  },
+  "ADDOM-008": {
+    "name": { "value": "Configuración del tiempo de vida de tombstone", "status": "machine-draft" },
+    "description": { "value": "El tiempo de vida de tombstone define durante cuánto tiempo se conservan los objetos eliminados antes de su eliminación permanente y determina el tiempo máximo que un DC puede estar sin conexión antes de tener que reconstruirse. Un valor demasiado bajo puede provocar objetos persistentes; el valor predeterminado de 60 días debe aumentarse a 180 días para los entornos modernos", "status": "machine-draft" },
+    "recommendedValue": { "value": "180 días", "status": "machine-draft" },
+    "remediationSteps": { "value": "Modifique el atributo tombstoneLifetime en CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=domain. Establézcalo en 180 mediante ADSIEdit o PowerShell. Asegúrese de que la Papelera de reciclaje de AD esté habilitada antes de modificarlo", "status": "machine-draft" }
+  },
+  "ADDOM-009": {
+    "name": { "value": "Estado de la Papelera de reciclaje de AD", "status": "machine-draft" },
+    "description": { "value": "La Papelera de reciclaje de Active Directory permite la recuperación de objetos eliminados con todos sus atributos intactos. Sin ella, restaurar objetos eliminados accidental o maliciosamente requiere una restauración autoritativa desde una copia de seguridad, lo que provoca un tiempo de inactividad significativo", "status": "machine-draft" },
+    "recommendedValue": { "value": "Habilitada", "status": "machine-draft" },
+    "remediationSteps": { "value": "Habilite la Papelera de reciclaje de AD a través del Centro de administración de Active Directory > clic derecho en el dominio > Habilitar Papelera de reciclaje, o ejecute Enable-ADOptionalFeature 'Recycle Bin Feature' en PowerShell. Nota: esta acción es irreversible", "status": "machine-draft" }
+  },
+  "ADDOM-010": {
+    "name": { "value": "Configuración de sitios y subredes", "status": "machine-draft" },
+    "description": { "value": "Todas las subredes IP en uso deben asignarse a sitios de AD. La falta de asignaciones de subred a sitio hace que los clientes se autentiquen contra DC subóptimos, lo que potencialmente envía credenciales a través de enlaces WAN en texto claro y degrada la postura de seguridad", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas las subredes IP asignadas a los sitios de AD apropiados sin subredes huérfanas", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revise el contenedor Sitios y servicios de Active Directory > Subredes. Contraste con la documentación de red para identificar las subredes no asignadas. Cree objetos de subred para todas las redes de producción y asócielos con el sitio correcto", "status": "machine-draft" }
+  },
+  "ADDOM-011": {
+    "name": { "value": "Configuración de vínculos de sitio", "status": "machine-draft" },
+    "description": { "value": "Los vínculos de sitio de AD deben configurarse con un costo, un intervalo de replicación y una programación apropiados para garantizar una replicación oportuna respetando a la vez las restricciones de red. Los vínculos de sitio mal configurados pueden retrasar la propagación de las políticas de seguridad", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vínculos de sitio configurados con costos apropiados e intervalos de replicación de 15 a 60 minutos según la capacidad del enlace", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revise Sitios y servicios de Active Directory > Transportes entre sitios > IP. Verifique que cada vínculo de sitio tenga valores de costo apropiados, un intervalo de replicación (el valor predeterminado de 180 minutos suele ser demasiado largo) y una programación adecuados. Ajuste según la topología de red", "status": "machine-draft" }
+  },
+  "ADDOM-012": {
+    "name": { "value": "Seguridad de las zonas DNS", "status": "machine-draft" },
+    "description": { "value": "Las zonas DNS integradas en AD deben usar únicamente actualizaciones dinámicas seguras. Permitir actualizaciones no seguras habilita a los atacantes a envenenar registros DNS, redirigir el tráfico de autenticación y realizar ataques de adversario en el medio contra los sistemas unidos al dominio", "status": "machine-draft" },
+    "recommendedValue": { "value": "Solo actualizaciones dinámicas seguras en todas las zonas DNS integradas en AD", "status": "machine-draft" },
+    "remediationSteps": { "value": "Abra el Administrador de DNS > clic derecho en cada zona integrada en AD > Propiedades > pestaña General > cambie las Actualizaciones dinámicas a 'Solo seguras'. Revise todas las zonas de búsqueda directa e inversa. Verifique la firma DNSSEC si corresponde", "status": "machine-draft" }
+  },
+  "ADDOM-013": {
+    "name": { "value": "Requisitos de firma LDAP", "status": "machine-draft" },
+    "description": { "value": "La firma LDAP debe ser obligatoria en todos los controladores de dominio para evitar ataques de adversario en el medio sobre el tráfico LDAP. Sin firma, los atacantes pueden interceptar y modificar consultas y respuestas LDAP, lo que potencialmente permite escalar privilegios o exfiltrar datos", "status": "machine-draft" },
+    "recommendedValue": { "value": "Requisito de firma del servidor LDAP establecido en 'Requerir firma' en todos los DC", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configure mediante directiva de grupo: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Controlador de dominio: requisitos de firma del servidor LDAP' = 'Requerir firma'. Aplique a la OU Domain Controllers", "status": "machine-draft" }
+  },
+  "ADDOM-014": {
+    "name": { "value": "Enlace de canal LDAP", "status": "machine-draft" },
+    "description": { "value": "Los tokens de enlace de canal LDAP evitan los ataques de retransmisión al vincular criptográficamente la sesión LDAP con el canal TLS. Sin el enlace de canal, los atacantes pueden retransmitir la autenticación LDAP para obtener acceso no autorizado", "status": "machine-draft" },
+    "recommendedValue": { "value": "Enlace de canal LDAP establecido en 'Siempre' en todos los controladores de dominio", "status": "machine-draft" },
+    "remediationSteps": { "value": "Establezca el valor de registro LdapEnforceChannelBinding en 2 (Siempre) en HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters en todos los DC. Pruebe primero con el valor 1 (Cuando sea compatible) para identificar clientes incompatibles", "status": "machine-draft" }
+  },
+  "ADDOM-015": {
+    "name": { "value": "Requisitos de firma SMB", "status": "machine-draft" },
+    "description": { "value": "La firma SMB debe ser obligatoria en todos los controladores de dominio para evitar ataques de adversario en el medio y de retransmisión sobre el tráfico SMB. Los ataques de retransmisión SMB pueden usarse para obtener acceso de nivel SYSTEM en los controladores de dominio, lo que conduce al compromiso total del dominio", "status": "machine-draft" },
+    "recommendedValue": { "value": "Firma SMB obligatoria en todos los controladores de dominio y servidores miembro", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configure mediante directiva de grupo: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Servidor de red Microsoft: firmar digitalmente las comunicaciones (siempre)' = Habilitado. Aplique a la OU Domain Controllers y a todas las OU de servidores", "status": "machine-draft" }
+  },
+  "ADDOM-016": {
+    "name": { "value": "Detección de uso de NTLMv1", "status": "machine-draft" },
+    "description": { "value": "NTLMv1 es un protocolo de autenticación gravemente debilitado que puede descifrarse en segundos con hardware moderno. Todo uso de NTLMv1 en el entorno debe identificarse y eliminarse, ya que expone las credenciales a ataques triviales sin conexión", "status": "machine-draft" },
+    "recommendedValue": { "value": "Cero eventos de autenticación NTLMv1 detectados; nivel de autenticación de LAN Manager establecido para rechazar NTLMv1", "status": "machine-draft" },
+    "remediationSteps": { "value": "Habilite la auditoría de NTLM mediante directiva de grupo: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > configuración de 'Seguridad de red: Restringir NTLM'. Revise los registros de eventos en busca de uso de NTLMv1 y corrija las aplicaciones, luego establezca 'Seguridad de red: nivel de autenticación de LAN Manager' en 'Enviar solo respuesta NTLMv2. Rechazar LM y NTLM'", "status": "machine-draft" }
+  },
+  "ADDOM-017": {
+    "name": { "value": "Imposición de NTLMv2", "status": "machine-draft" },
+    "description": { "value": "El nivel de autenticación de LAN Manager debe configurarse para enviar únicamente respuestas NTLMv2 y rechazar LM y NTLMv1. Aunque NTLMv2 sigue siendo menos seguro que Kerberos, es significativamente más robusto que NTLMv1 y debe ser el estándar mínimo de NTLM", "status": "machine-draft" },
+    "recommendedValue": { "value": "Nivel de autenticación de LAN Manager establecido en 'Enviar solo respuesta NTLMv2. Rechazar LM y NTLM' (nivel 5)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configure mediante directiva de grupo: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > 'Seguridad de red: nivel de autenticación de LAN Manager' = 'Enviar solo respuesta NTLMv2. Rechazar LM y NTLM'. Pruebe exhaustivamente antes de la imposición", "status": "machine-draft" }
+  },
+  "ADDOM-018": {
+    "name": { "value": "Enumeración por sesión nula", "status": "machine-draft" },
+    "description": { "value": "El acceso anónimo (sesión nula) a Active Directory permite a los atacantes no autenticados enumerar usuarios, grupos, recursos compartidos e información del dominio. Estos datos de reconocimiento se usan para planificar ataques de credenciales y movimiento lateral", "status": "machine-draft" },
+    "recommendedValue": { "value": "Enumeración por sesión nula deshabilitada; RestrictAnonymous y RestrictAnonymousSAM configurados para impedir el acceso anónimo", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configure mediante directiva de grupo: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Directivas locales > Opciones de seguridad > establezca 'Acceso de red: restringir el acceso anónimo a canalizaciones con nombre y recursos compartidos' = Habilitado, 'Acceso de red: no permitir la enumeración anónima de cuentas SAM' = Habilitado, 'Acceso de red: no permitir la enumeración anónima de cuentas y recursos compartidos SAM' = Habilitado", "status": "machine-draft" }
+  },
+  "ADDOM-019": {
+    "name": { "value": "Cola de impresión en controladores de dominio", "status": "machine-draft" },
+    "description": { "value": "El servicio de Cola de impresión en los controladores de dominio habilita los ataques PrintNightmare (CVE-2021-34527) y SpoolSample/PrinterBug. Un atacante puede forzar a un DC a autenticarse en un servidor controlado por el atacante, lo que permite la retransmisión de credenciales y el abuso de la delegación no restringida", "status": "machine-draft" },
+    "recommendedValue": { "value": "Servicio de Cola de impresión deshabilitado en todos los controladores de dominio", "status": "machine-draft" },
+    "remediationSteps": { "value": "Deshabilite el servicio de Cola de impresión en todos los controladores de dominio mediante directiva de grupo: Configuración del equipo > Directivas > Configuración de Windows > Configuración de seguridad > Servicios del sistema > Cola de impresión > Modo de inicio = Deshabilitado. Aplique a la OU Domain Controllers. Verifique que ninguna funcionalidad de impresión dependa de los DC", "status": "machine-draft" }
+  },
+  "ADDOM-020": {
+    "name": { "value": "Configuración de la contraseña DSRM", "status": "machine-draft" },
+    "description": { "value": "La contraseña del Modo de restauración de servicios de directorio (DSRM) proporciona acceso de administrador local a un controlador de dominio cuando se arranca en modo de recuperación. Un atacante con acceso físico o remoto que conozca la contraseña DSRM puede extraer toda la base de datos de AD. La contraseña DSRM debe ser única por DC y rotarse con regularidad", "status": "machine-draft" },
+    "recommendedValue": { "value": "Contraseña DSRM única por DC, rotada anualmente y almacenada de forma segura. DsrmAdminLogonBehavior establecido en 0 para impedir el inicio de sesión DSRM por red", "status": "machine-draft" },
+    "remediationSteps": { "value": "Restablezca las contraseñas DSRM con 'ntdsutil > set dsrm password' en cada DC. Establezca el valor de registro DsrmAdminLogonBehavior en 0 en HKLM\\System\\CurrentControlSet\\Control\\Lsa para impedir que la cuenta DSRM se use para el inicio de sesión por red. Documente y almacene las contraseñas de forma segura", "status": "machine-draft" }
+  }
+}
