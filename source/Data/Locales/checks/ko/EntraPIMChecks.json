@@ -1,0 +1,87 @@
+{
+  "_family": "EntraPIMChecks.json",
+  "EIDPIM-001": {
+    "name": { "value": "전역 관리자 열거", "status": "machine-draft" },
+    "description": { "value": "전역 관리자 역할은 모든 Microsoft 365 및 Entra ID 서비스에 대한 무제한 접근 권한을 부여하므로 테넌트에서 가장 높은 권한의 역할입니다. 조직은 운영 복원력과 최소 권한 원칙의 균형을 맞추기 위해 전역 관리자를 최소 2명, 최대 4명으로 유지해야 합니다. 과도한 전역 관리자 할당은 자격 증명 도난과 테넌트 전체 침해에 대한 공격 표면을 급격히 확대합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "전역 관리자 최대 2~4명", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID > 역할 및 관리자 > 전역 관리자로 이동하여 할당된 모든 사용자를 검토합니다. 불필요한 영구 할당을 제거하고 4개 이하의 계정만 이 역할을 보유하도록 합니다. 가능한 경우 영구 할당을 PIM 자격 할당으로 전환합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-002": {
+    "name": { "value": "모든 권한 있는 역할 할당", "status": "machine-draft" },
+    "description": { "value": "영구(활성) 및 자격(적시) 할당을 모두 포함한 모든 권한 있는 역할 할당의 포괄적인 인벤토리는 권한 있는 접근 환경을 이해하는 데 필수적입니다. 이 열거는 얼마나 많은 사용자가 상승된 권한을 보유하고 있는지, 할당이 최소 권한 원칙을 따르는지에 대한 가시성을 제공합니다. 이 인벤토리를 정기적으로 검토하면 역할 확산과 과도하게 프로비저닝된 계정을 식별하는 데 도움이 됩니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 권한 있는 역할 할당을 문서화하고 분기별로 검토합니다. 영구 할당보다 자격 할당을 선호합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "각 권한 있는 역할에 대해 Entra ID > 역할 및 관리자에서 모든 역할 할당을 검토합니다. 모든 영구 및 자격 할당을 업무상 정당성과 함께 문서화합니다. 각 할당의 지속적인 필요성을 검증하기 위해 분기별 액세스 검토 프로세스를 확립합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-003": {
+    "name": { "value": "영구 권한 있는 역할 할당", "status": "machine-draft" },
+    "description": { "value": "영구(활성) 권한 있는 역할 할당은 시간 제한이나 활성화 요구사항 없이 상시 관리 접근을 제공합니다. 이러한 영구 할당은 PIM을 통해 자격(적시) 할당으로 전환해야 하며, 이는 정당성, 승인, 시간 제한 접근 창을 갖춘 명시적 활성화를 요구합니다. 상시 권한 있는 접근은 공격자가 추가 게이트 없이 즉시 상승된 접근 권한을 획득하기 때문에 자격 증명 침해의 위험과 영향을 증가시킵니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "비상 액세스 계정을 제외하고 영구 권한 있는 역할 할당이 없습니다. 그 외 모든 권한 있는 할당은 PIM 자격 할당이어야 합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID > 역할 및 관리자로 이동하여 모든 영구 역할 할당을 식별합니다. 활성 할당을 제거하고 해당하는 자격 할당을 생성하여 각 영구 할당을 PIM을 통한 자격 할당으로 전환합니다. 비상 액세스 계정만 영구 전역 관리자 할당을 유지해야 합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-004": {
+    "name": { "value": "게스트 사용자에 대한 권한 있는 역할 할당", "status": "machine-draft" },
+    "description": { "value": "권한 있는 Entra ID 역할이 할당된 게스트 또는 외부 사용자는 상당한 공급망 및 제3자 위험을 초래합니다. 이러한 계정은 외부 조직에서 시작되며 내부 계정과 동일한 보안 제어, 암호 정책, 모니터링의 대상이 아닙니다. 관리 권한을 가진 침해된 게스트 계정은 전체 테넌트 침해로 이어질 수 있으며 일반적인 내부 보안 모니터링을 통해 탐지하기 어렵습니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "어떤 권한 있는 Entra ID 역할에도 게스트 또는 외부 사용자가 할당되지 않았습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 권한 있는 역할 할당을 검토하고 userType이 Guest인 구성원을 식별합니다. 모든 게스트 계정에서 권한 있는 역할 할당을 즉시 제거합니다. 외부 관리 접근이 필요한 경우, 게스트 초대를 사용하는 대신 완전한 조직 통제하에 테넌트 내에 전용 클라우드 전용 계정을 프로비저닝합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-005": {
+    "name": { "value": "동기화 계정에 대한 권한 있는 역할 할당", "status": "machine-draft" },
+    "description": { "value": "Entra Connect를 통해 온-프레미스 Active Directory에서 동기화되어 권한 있는 클라우드 역할을 보유하는 계정은 위험한 하이브리드 공격 경로를 만듭니다. 온-프레미스 환경이 침해되면 공격자는 동기화 계정의 자격 증명이나 특성을 조작하여 클라우드 테넌트에 대한 관리 접근 권한을 얻을 수 있습니다. 온-프레미스와 클라우드 환경 사이의 보안 경계를 유지하기 위해 클라우드 권한 있는 역할은 클라우드 전용 계정에만 할당해야 합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "동기화된(하이브리드) 계정에 권한 있는 Entra ID 역할이 할당되지 않았습니다. 모든 권한 있는 계정은 클라우드 전용이어야 합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "onPremisesSyncEnabled 속성이 true인 모든 권한 있는 역할 구성원을 식별합니다. 각 관리자에 대해 전용 클라우드 전용 관리 계정을 생성하고 필요한 권한 있는 역할을 이 새 계정에 할당합니다. 온-프레미스에서 클라우드로의 상승 경로를 제거하기 위해 모든 동기화 계정에서 권한 있는 역할 할당을 제거합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-006": {
+    "name": { "value": "MFA가 없는 권한 있는 사용자", "status": "machine-draft" },
+    "description": { "value": "다단계 인증이 등록되지 않은 권한 있는 계정은 암호 스프레이, 피싱, 무차별 대입을 포함한 자격 증명 기반 공격에 노출됩니다. MFA가 없는 침해된 권한 있는 계정은 도난당한 암호만으로 공격자에게 즉시 관리 접근 권한을 제공합니다. 권한 있는 역할이 할당된 모든 계정은 강력한 MFA 방법을 등록하고 Conditional Access 정책을 통해 적용해야 합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "권한 있는 사용자의 100%가 MFA를 등록하고 Conditional Access를 통해 적용합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID > 사용자 > 사용자별 MFA 또는 인증 방법 활동 보고서를 통해 모든 권한 있는 사용자의 MFA 등록 상태를 검토합니다. Conditional Access 정책이 모든 디렉터리 역할 할당에 MFA를 요구하는지 확인합니다. MFA 등록이 없는 권한 있는 사용자에게 연락하여 정해진 기한 내에 등록을 적용합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-007": {
+    "name": { "value": "약한 인증 방법을 사용하는 권한 있는 사용자", "status": "machine-draft" },
+    "description": { "value": "SMS, 음성 통화, 이메일 OTP와 같은 약한 인증 방법에 의존하는 권한 있는 계정은 SIM 스와핑, 통화 가로채기, 이메일 침해 공격에 취약합니다. 이러한 레거시 MFA 방법은 FIDO2 보안 키, Windows Hello for Business, 인증서 기반 인증과 같은 피싱 방지 방법과 동일한 수준의 보증을 제공하지 않습니다. 권한 있는 계정은 피싱 방지 인증 방법만 사용하도록 요구해야 합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 권한 있는 사용자가 피싱 방지 MFA 방법(FIDO2, Windows Hello for Business 또는 인증서 기반 인증)을 사용합니다. SMS, 음성 또는 이메일 OTP는 없습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID > 인증 방법 > 활동을 통해 각 권한 있는 사용자에 대해 등록된 인증 방법을 검토합니다. 피싱 방지 MFA의 인증 강도를 요구하는 권한 있는 역할을 대상으로 하는 Conditional Access 정책을 작성합니다. 모든 권한 있는 사용자에게 FIDO2 보안 키를 프로비저닝하거나 Windows Hello for Business를 구성하고 약한 방법을 제거합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-008": {
+    "name": { "value": "권한 있는 역할의 비활성화된 계정", "status": "machine-draft" },
+    "description": { "value": "권한 있는 역할 할당을 유지하는 비활성화된 사용자 계정은 잠재적 보안 위험을 만듭니다. 계정이 관리 작업이나 침해를 통해 다시 활성화되면 즉시 전체 권한 있는 접근 권한을 되찾습니다. 비활성화된 계정은 이 재활성화 위험을 제거하기 위해 오프보딩 또는 계정 프로비저닝 해제 프로세스의 일부로 모든 권한 있는 역할에서 신속하게 제거해야 합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "활성 또는 자격 권한 있는 역할 할당을 가진 비활성화된 계정이 없습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 권한 있는 역할 구성원을 열거하고 accountEnabled가 false인 계정을 필터링합니다. 비활성화된 계정에서 모든 권한 있는 역할 할당을 즉시 제거합니다. 계정이 비활성화될 때 역할 할당을 탐지하고 제거하는 자동화된 프로세스 또는 액세스 검토를 구현합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-009": {
+    "name": { "value": "활성 권한 있는 역할을 가진 로그인 이력 없는 계정", "status": "machine-draft" },
+    "description": { "value": "권한 있는 역할 할당을 보유하지만 한 번도 로그인하지 않은 계정은 프로비저닝되었지만 사용되지 않은 계정, 테스트 계정 또는 마이그레이션 잔여물일 수 있습니다. 이러한 휴면 권한 있는 계정은 기본 또는 약한 자격 증명을 가질 수 있고 의도된 소유자가 모니터링할 가능성이 낮기 때문에 고위험 표적입니다. 이러한 계정 중 하나를 발견하고 인증하는 공격자는 즉시 권한 있는 접근 권한을 획득합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "한 번도 로그인하지 않은 계정에 권한 있는 역할 할당이 없습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 권한 있는 역할 구성원을 검토하고 lastSignInDateTime이 null이거나 비어 있는 계정을 식별합니다. 각 계정을 조사하여 여전히 필요한지 파악합니다. 휴면 계정에서 권한 있는 역할 할당을 제거하고 유효한 업무 목적이 없는 계정은 비활성화합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-010": {
+    "name": { "value": "PIM 구성 감사", "status": "machine-draft" },
+    "description": { "value": "Privileged Identity Management 역할 설정은 승인 필요 여부, 정당성 제공 필요 여부, 최대 활성화 기간, 알림 수신자를 포함한 활성화 워크플로를 제어합니다. 잘못 구성된 PIM 설정은 권한 있는 역할이 감독 없이 활성화되도록 허용하여 적시 접근의 보안 이점을 사실상 무효화할 수 있습니다. 각 권한 있는 역할은 지정된 승인자의 승인을 요구하고, 활성화 정당성을 의무화하며, 보안 담당자에게 알림을 보내야 합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 권한 있는 역할을 다음과 같이 구성합니다: 승인 필요, 정당성 필요, 최대 활성화 기간 8시간 이하, 역할 활성화에 대한 알림 사용", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID > 역할 및 관리자 > 설정으로 이동하여 각 권한 있는 역할 구성을 검토합니다. 지정된 승인자를 통한 승인 요구사항을 사용하도록 설정하고, 활성화 정당성을 요구하며, 최대 활성화 기간을 8시간 이하로 설정하고, 활성화 이벤트에 대한 알림 수신자를 구성합니다. 전역 관리자, 권한 있는 역할 관리자, Exchange 관리자 역할에 특별히 주의를 기울입니다", "status": "machine-draft" }
+  },
+  "EIDPIM-011": {
+    "name": { "value": "PIM 자격 역할 활성화 이력", "status": "machine-draft" },
+    "description": { "value": "PIM 활성화 이력을 검토하면 권한 있는 역할이 얼마나 자주, 누구에 의해, 어떤 정당성으로, 어느 기간 동안 활성화되는지에 대한 통찰을 얻을 수 있습니다. 이 감사 추적은 업무 시간 외 활성화, 유효한 정당성 없는 활성화, 침해된 계정이나 내부자 위협을 나타낼 수 있는 과도한 활성화 빈도와 같은 비정상적인 권한 있는 접근 패턴을 탐지하는 데 매우 중요합니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "PIM 활성화 로그를 정기적으로 검토합니다. 모든 활성화에 유효한 업무상 정당성이 문서화되어 있습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "PIM 작업으로 필터링된 Entra ID > 역할 및 관리자 > 감사 로그를 통해 PIM 활성화 이력을 검토합니다. 업무 시간 외 활성화, 익숙하지 않은 계정에 의한 활성화, 모호한 정당성을 가진 활성화를 포함한 비정상적인 패턴의 활성화를 조사합니다. 보안 운영의 일부로 PIM 감사 로그에 대한 정기적인 검토 주기를 확립합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-012": {
+    "name": { "value": "비상 액세스 계정 검증", "status": "machine-draft" },
+    "description": { "value": "비상 액세스(break-glass) 계정은 MFA 중단, Conditional Access 구성 오류, ID 공급자 장애와 같이 정상적인 인증 메커니즘이 실패할 때 테넌트에 대한 관리 접근을 보장하는 중요한 안전장치입니다. 최소 2개의 비상 액세스 계정이 존재하고, 클라우드 전용이며, 모든 Conditional Access 정책에서 제외되고, 안전하게 저장된 FIDO2 키와 같은 강력한 인증으로 보호되어야 합니다. 적절하게 구성된 비상 액세스 계정이 없으면 조직은 자체 테넌트에서 영구적으로 잠길 위험이 있습니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "클라우드 전용이며, 영구적으로 전역 관리자가 할당되고, 모든 Conditional Access 정책에서 제외되며, 안전하게 저장된 FIDO2 또는 길고 복잡한 암호를 가진 최소 2개의 비상 액세스 계정", "status": "machine-draft" },
+    "remediationSteps": { "value": "클라우드 전용(동기화되지 않음)인 최소 2개의 전용 비상 액세스 계정을 생성하고, 영구 전역 관리자 역할을 할당하며, 모든 Conditional Access 정책에서 제외하고, FIDO2 보안 키 또는 물리적 금고에 저장된 매우 길고 복잡한 암호로 구성합니다. 이러한 계정의 모든 로그인 활동에 대한 모니터링 경고를 구성하고 비상 액세스 절차를 분기별로 테스트합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-013": {
+    "name": { "value": "별도 관리 계정 적용", "status": "machine-draft" },
+    "description": { "value": "관리 작업은 이메일, 웹 브라우징, 협업과 같은 일상 활동에 사용되는 동일한 계정이 아니라 전용 관리 계정에서 수행해야 합니다. 관리 작업과 일상 작업에 단일 계정을 사용하면 권한 있는 자격 증명이 피싱, 드라이브 바이 다운로드, 일상 업무 중에 마주치는 기타 위협에 노출됩니다. 별도의 관리 계정은 일반 사용자 활동을 통한 권한 있는 자격 증명 침해 가능성을 크게 줄입니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 관리자가 일상 사용 계정과 별도의 전용 관리 계정을 사용합니다. 관리 계정에는 사서함이나 생산성 라이선스가 할당되지 않아야 합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 권한 있는 역할 구성원을 검토하고 생산성 라이선스(Exchange Online, SharePoint, Teams)도 할당되어 이중 사용을 나타내는 계정을 식별합니다. 각 관리자에 대해 adm-username과 같은 명명 규칙을 따르는 전용 관리 계정을 생성합니다. 권한 있는 역할을 전용 관리 계정에만 할당하고 일상 사용 계정에서 권한 있는 역할을 제거합니다", "status": "machine-draft" }
+  },
+  "EIDPIM-014": {
+    "name": { "value": "권한 있는 역할 할당 알림 설정", "status": "machine-draft" },
+    "description": { "value": "권한 있는 역할이 활성화되거나 영구적으로 할당될 때 보안 담당자에게 경고하도록 알림을 구성해야 합니다. 적절한 알림 설정이 없으면 무단 권한 상승이나 역할 활성화가 감지되지 않아 공격자나 악의적인 내부자가 어떤 경고도 트리거하지 않고 상승된 권한으로 작업할 수 있습니다. 알림 설정은 예방적 PIM 구성을 보완하는 중요한 탐지 제어입니다", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 권한 있는 역할 활성화와 새로운 영구 할당에 대한 알림을 사용하도록 설정하고 지정된 보안 운영 담당자에게 전송합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "각 권한 있는 역할에 대해 Entra ID > 역할 및 관리자 > 설정으로 이동합니다. 알림 탭에서 역할 활성화, 영구 할당, 자격 할당 이벤트에 대한 알림이 사용 설정되어 있는지 확인합니다. 알림 수신자에 보안 운영 팀 배포 목록을 포함하도록 구성합니다. 테스트 활성화를 수행하여 알림이 수신되는지 확인합니다", "status": "machine-draft" }
+  }
+}

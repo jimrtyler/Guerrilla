@@ -1,0 +1,21 @@
+{
+  "_family": "M365AuditChecks.json",
+  "M365AUDIT-001": {
+    "name": { "value": "통합 감사 로그 사용", "status": "machine-draft" },
+    "description": { "value": "Microsoft 365 통합 감사 로그는 Exchange Online, SharePoint Online, OneDrive, Azure AD, Microsoft Teams 및 기타 서비스 전반의 사용자와 관리자 활동을 기록하여 보안 조사를 위한 기초 데이터 원본을 제공합니다. 통합 감사가 비활성화되면 조직은 사서함 접근, 파일 공유, 권한 변경, 관리 작업 등 중요한 활동에 대한 가시성을 잃습니다. 감사 로그를 비활성화하는 것은 공격자가 테넌트를 침해한 후 흔적을 지우기 위해 사용하는 알려진 기법입니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "감사를 비활성화하는 사용자별 또는 사서함별 재정의 없이 조직 전체에 통합 감사 로그를 사용합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Get-AdminAuditLogConfig를 실행하여 UnifiedAuditLogIngestionEnabled가 True로 설정되어 있는지 확인함으로써 통합 감사 로깅이 사용 중인지 검증합니다. 감사가 비활성화된 경우 즉시 사용하도록 설정하고, 이것이 보안 침해를 나타낼 수 있으므로 감사 기록을 조사하여 언제 누구에 의해 비활성화되었는지 파악합니다. 향후 통합 감사 로그를 비활성화하려는 시도를 탐지하는 모니터링 경고를 설정하고, 감사 로그 설정을 수정하는 데 필요한 권한을 최소한의 신뢰할 수 있는 관리자로 제한합니다.", "status": "machine-draft" }
+  },
+  "M365AUDIT-002": {
+    "name": { "value": "감사 로그 보존 정책", "status": "machine-draft" },
+    "description": { "value": "기본적으로 Microsoft 365 감사 로그 레코드는 180일(표준 라이선스의 경우 90일) 동안 보존되는데, 이는 장기간 진행되는 공격을 탐지하거나 규제 준수 요구사항을 충족하기에 부족할 수 있습니다. 지능형 지속 위협은 탐지되기 전 몇 달 동안 환경 내에서 활동할 수 있으며, 적절한 로그 보존이 없으면 조사에 필요한 포렌식 증거가 이미 삭제되었을 수 있습니다. 감사 로그 보존을 연장하면 필요할 때 과거 활동 데이터를 사용할 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "감사 로그 보존을 최소 365일로 설정하고, 우선순위가 높은 활동 유형은 더 긴 기간 동안 보존하며, 장기 저장을 위해 로그를 외부 SIEM으로 내보냅니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Microsoft Purview 규정 준수 포털에서 감사 로그 보존 정책을 구성하여 모든 감사 로그 레코드를 최소 365일 동안 보존하고, MailItemsAccessed, FileAccessed, UserLoggedIn과 같은 우선순위가 높은 레코드 유형은 보존 기간을 연장합니다. Microsoft 365 E5 또는 동등한 라이선스를 보유한 조직은 장기 포렌식 조사를 지원하기 위해 중요한 감사 레코드 유형에 대해 10년 보존 정책을 구성합니다. 기본 보존 기간을 넘어서는 장기 저장과 고급 상관 분석을 위해 Microsoft Sentinel과 같은 외부 SIEM 또는 로그 분석 플랫폼으로 로그 내보내기를 구현합니다.", "status": "machine-draft" }
+  },
+  "M365AUDIT-003": {
+    "name": { "value": "감사 로그 검색 기능", "status": "machine-draft" },
+    "description": { "value": "감사 로그 데이터를 효과적으로 검색하고 분석하는 능력은 보안 조사, 규정 준수 감사, 인시던트 대응 활동에 매우 중요합니다. 검증된 검색 기능과 교육받은 인력이 없으면 존재하는 감사 로그 데이터도 시간에 민감한 보안 인시던트 중에 활용될 수 없습니다. 조직은 감사 로그 검색 도구가 접근 가능하고 정상 작동하며, 대응 절차에 감사 로그 분석이 포함되도록 보장해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "보안 팀이 감사 로그 검색에 접근할 수 있고, 일반적인 조사 시나리오에 대한 검색 쿼리가 테스트 및 문서화되어 있으며, SIEM 통합이 정상 작동합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "보안 운영 및 인시던트 대응 팀 구성원이 통합 감사 로그를 검색할 수 있는 적절한 역할 할당(감사 로그 또는 보기 전용 감사 로그 역할)을 보유하고 있는지 확인합니다. 사서함 침해, 무단 파일 접근, 관리 권한 상승 등 일반적인 조사 시나리오에 대한 표준 검색 쿼리를 작성하고 문서화합니다. 감사 로그 검색 기능을 정기적으로 테스트하고, SIEM 통합이 자동화된 탐지 및 상관 분석을 위해 감사 이벤트를 올바르게 수집하고 인덱싱하는지 검증합니다.", "status": "machine-draft" }
+  }
+}

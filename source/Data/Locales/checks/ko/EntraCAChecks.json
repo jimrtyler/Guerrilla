@@ -1,0 +1,111 @@
+{
+  "_family": "EntraCAChecks.json",
+  "EIDCA-001": {
+    "name": { "value": "전체 CA 정책 인벤토리", "status": "machine-draft" },
+    "description": { "value": "모든 Conditional Access 정책과 그 설정에 대한 완전한 인벤토리를 유지해야 합니다. 이는 보안 태세에 대한 가시성을 제공하고 테넌트 전반의 격차 분석, 변경 추적, 규정 준수 감사를 가능하게 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 Conditional Access 정책을 상태, 조건, 부여 제어, 세션 제어와 함께 문서화합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra 관리 센터의 Conditional Access 블레이드로 이동하여 모든 정책을 내보냅니다. 각 정책의 명명 규칙, 설명, 적절한 상태(사용, 사용 안 함 또는 보고서 전용)가 올바른지 검토합니다. 감사 목적으로 모든 정책 구성의 버전 관리된 기록을 유지합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-002": {
+    "name": { "value": "CA 정책 적용 범위 격차 분석", "status": "machine-draft" },
+    "description": { "value": "모든 사용자와 애플리케이션은 최소한 하나의 Conditional Access 정책으로 보호되어야 합니다. 적용 범위의 격차는 사용자나 애플리케이션을 MFA, 디바이스 준수, 위치 제한과 같은 보안 제어 없이 남겨두어 무단 접근을 위한 공격 경로를 만듭니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "활성 사용자와 중요 애플리케이션의 100%가 최소 하나의 CA 정책으로 보호됩니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 Conditional Access 정책을 검토하여 어떤 정책의 대상도 되지 않는 사용자와 애플리케이션을 식별합니다. 보호되지 않는 사용자와 애플리케이션을 적절한 부여 및 세션 제어로 포함하는 정책을 작성합니다. 권한 있는 계정과 업무상 중요한 애플리케이션의 적용 범위를 우선시합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-003": {
+    "name": { "value": "보고서 전용 모드의 CA 정책", "status": "machine-draft" },
+    "description": { "value": "보고서 전용 모드로 남겨진 Conditional Access 정책은 보안 제어를 적용하지 않고 어떤 일이 발생했을지만 기록합니다. 테스트를 완료한 정책은 환경을 능동적으로 보호하기 위해 사용 상태로 전환해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "정의된 전환 일정에 따라 능동적으로 테스트 중인 경우가 아니면 보고서 전용 모드의 정책이 없습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "현재 보고서 전용 모드에 있는 모든 Conditional Access 정책을 검토하고 로그인 로그 영향 데이터를 평가합니다. 검증되었고 수용 가능한 영향을 보이는 정책은 상태를 보고서 전용에서 사용으로 변경합니다. 적용 전 최대 보고서 전용 기간을 정의하는 정책 수명 주기 프로세스를 확립합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-004": {
+    "name": { "value": "CA 제외 그룹 분석", "status": "machine-draft" },
+    "description": { "value": "Conditional Access 정책에서 제외된 사용자와 그룹은 중요한 보안 제어를 우회합니다. 제외는 최소화하고, 업무상 정당성과 함께 문서화하며, 권한 확대와 무단 접근을 방지하기 위해 정기적으로 검토해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 제외를 업무상 정당성과 함께 문서화하고 분기별로 검토합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 Conditional Access 정책을 감사하여 제외된 사용자와 그룹을 식별합니다. 각 제외에 대한 업무상 정당성을 문서화하고 주기적 검토를 담당하는 소유자를 지정합니다. 더 이상 유효한 업무상 필요가 없는 제외를 제거하고, 제외가 필요한 경우 보완 제어를 구현합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-005": {
+    "name": { "value": "CA 제외의 보호되지 않은 그룹", "status": "machine-draft" },
+    "description": { "value": "소유권, 멤버십 검토 또는 액세스 제한이 없는 Conditional Access 제외에 사용되는 그룹은 공격자가 보안 정책을 우회하는 데 악용될 수 있습니다. 보호되지 않은 제외 그룹에 자신을 추가하는 공격자는 해당 그룹을 대상으로 하는 모든 CA 제어를 사실상 우회합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 CA 제외 그룹에 지정된 소유자, 제한된 멤버십 관리, 정기적인 액세스 검토가 활성화되어 있습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "CA 정책 제외에서 참조된 모든 그룹을 식별하고 각 그룹에 지정된 소유자, 제한된 가입/탈퇴 설정, 활성 액세스 검토 일정이 있는지 확인합니다. 권한 있는 액세스 그룹 기능을 사용하도록 설정하거나 그룹 멤버십 변경을 승인된 관리자로만 제한합니다. 관리되지 않거나 소유자가 없는 그룹은 CA 제외에서 즉시 제거합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-006": {
+    "name": { "value": "비상 액세스 계정 CA 제외 검증", "status": "machine-draft" },
+    "description": { "value": "비상 액세스(break-glass) 계정은 중단이나 구성 오류 중에도 접근을 보장하기 위해 Conditional Access 정책에서 제외되어야 하지만, 이러한 제외는 엄격하게 제어되어야 합니다. 비상 액세스 제외를 올바르게 구성하지 못하면 중요한 인시던트 중에 완전한 잠금이 발생하거나 모니터링되지 않는 백도어 계정이 만들어질 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모니터링, 경고, 정기 검증과 함께 정확히 두 개의 비상 액세스 계정이 모든 CA 정책에서 제외됩니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "전용 비상 액세스 계정이 존재하고, 모든 Conditional Access 정책에서 제외되며, 일상 운영에 사용되지 않는지 확인합니다. 비상 액세스 계정에서 발생하는 모든 로그인 활동에 대해 트리거되도록 Azure Monitor 경고를 구성합니다. 비상 액세스 계정 접근을 분기별로 테스트하고 자격 증명을 물리적 금고 또는 하드웨어 보안 모듈에 안전하게 저장합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-007": {
+    "name": { "value": "Conditional Access를 통한 MFA 적용", "status": "machine-draft" },
+    "description": { "value": "자격 증명 기반 공격을 방지하기 위해 Conditional Access 정책을 통해 모든 사용자에게 다단계 인증을 요구해야 합니다. MFA 적용이 없으면 침해된 암호만으로 조직 리소스에 대한 전체 접근이 부여되므로, 이는 계정 탈취에 대한 단일 최고 영향 제어입니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Conditional Access를 통해 모든 클라우드 애플리케이션에서 사용자의 100%에게 MFA를 요구합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 사용자와 모든 클라우드 애플리케이션을 대상으로 다단계 인증을 요구하는 부여 제어를 사용하는 Conditional Access 정책을 작성합니다. 이 정책이 게스트와 외부 협업자를 포함한 모든 사용자 유형을 포함하는지 확인합니다. 로그인 로그를 모니터링하여 MFA가 요청되는지 확인하고 CA 인사이트 통합 문서에서 적용 범위 격차를 검토합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-008": {
+    "name": { "value": "CA를 통한 레거시 인증 차단", "status": "machine-draft" },
+    "description": { "value": "IMAP, POP3, SMTP, ActiveSync와 같은 레거시 인증 프로토콜은 최신 인증이나 MFA를 지원하지 않아 암호 스프레이 및 무차별 대입 공격의 주요 공격 경로가 됩니다. Conditional Access를 통해 레거시 인증을 차단하는 것은 이러한 프로토콜이 MFA 제어를 우회하지 못하도록 하는 데 필수적입니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 사용자에 대해 Conditional Access를 통해 모든 레거시 인증 프로토콜을 차단합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 사용자와 모든 클라우드 애플리케이션을 대상으로 클라이언트 앱 조건을 Exchange ActiveSync 클라이언트 및 기타 클라이언트로 설정한 다음 부여 제어를 액세스 차단으로 설정하는 Conditional Access 정책을 작성합니다. 정책이 사용 상태인지 확인하고 남은 레거시 인증 시도가 있는지 로그인 로그를 모니터링합니다. 애플리케이션 소유자와 협력하여 남은 레거시 프로토콜 종속성을 최신 인증으로 마이그레이션합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-009": {
+    "name": { "value": "CA의 디바이스 준수 요구사항", "status": "machine-draft" },
+    "description": { "value": "Conditional Access 정책은 관리되고 정상 상태인 디바이스만 조직 리소스에 접근할 수 있도록 디바이스 준수를 요구해야 합니다. 디바이스 준수 요구사항이 없으면 관리되지 않거나 침해된 디바이스가 민감한 데이터에 접근하여 데이터 유출과 맬웨어 확산의 위험을 높일 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 클라우드 애플리케이션에 대한 접근에 디바이스 준수 또는 하이브리드 Azure AD 조인을 요구합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 클라우드 애플리케이션에 대한 부여 제어로 디바이스 준수 또는 하이브리드 Azure AD 조인을 요구하도록 Conditional Access 정책을 작성하거나 업데이트합니다. 이 요구사항을 적용하기 전에 Intune 디바이스 준수 정책이 적절한 보안 기준으로 구성되어 있는지 확인합니다. 처음에는 보고서 전용 모드를 사용하여 영향을 평가한 후, 관리되는 디바이스 적용 범위가 충분한지 확인한 다음 적용으로 전환합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-010": {
+    "name": { "value": "위치 기반 CA 정책 감사", "status": "machine-draft" },
+    "description": { "value": "위치 기반 Conditional Access 정책은 IP 주소 범위, 국가 또는 명명된 위치를 기준으로 접근을 제한합니다. 위치 제어가 없으면 공격자가 어떤 지리적 위치에서도 인증할 수 있어 의심스럽거나 고위험 지역에서의 무단 접근을 탐지하고 방지하기 어려워집니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "신뢰할 수 없는 위치에서의 접근을 차단하거나 추가 제어를 요구하도록 위치 기반 정책을 구성합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "기존 명명된 위치를 검토하고 신뢰할 수 있는 회사 IP 범위와 국가가 정확하게 정의되어 있는지 확인합니다. 특히 권한 있는 계정과 민감한 애플리케이션에 대해 신뢰할 수 없는 위치에서의 접근에 MFA를 요구하거나 차단하는 Conditional Access 정책을 작성합니다. 회사 네트워크 인프라가 변경됨에 따라 명명된 위치 정의를 정기적으로 업데이트합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-011": {
+    "name": { "value": "명명된 위치 구성 검토", "status": "machine-draft" },
+    "description": { "value": "명명된 위치는 Conditional Access 정책에서 사용하는 신뢰할 수 있는 네트워크 경계와 신뢰할 수 없는 네트워크 경계를 정의합니다. 잘못 구성된 명명된 위치는 신뢰할 수 없는 네트워크에서 지나치게 관대한 접근을 허용하거나 정당한 회사 위치에서 불필요하게 제한된 접근을 초래할 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 명명된 위치가 현재 회사 네트워크 경계를 정확하게 반영하며 신뢰할 수 있는 위치가 적절하게 표시됩니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra 관리 센터의 명명된 위치 블레이드로 이동하여 구성된 모든 위치의 정확성을 검토합니다. 신뢰할 수 있는 회사 IP 범위가 최신 상태인지, 국가 기반 위치가 조직의 존재와 일치하는지 확인합니다. 오래되었거나 사용하지 않는 명명된 위치를 제거하고 신뢰할 수 있는 위치 플래그가 검증된 회사 네트워크에만 적용되도록 합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-012": {
+    "name": { "value": "로그인 위험 기반 CA 정책", "status": "machine-draft" },
+    "description": { "value": "로그인 위험 기반 Conditional Access 정책은 Azure AD Identity Protection 신호를 사용하여 불가능한 이동, 익명 IP 사용, 자격 증명 유출 탐지와 같은 비정상적인 로그인 동작을 탐지합니다. 위험 기반 정책이 없으면 침해된 자격 증명이 추가 확인을 트리거하지 않고 의심스러운 위치나 패턴에서 사용될 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "중간 및 높은 로그인 위험 수준에 대해 MFA를 요구하거나 접근을 차단하도록 CA 정책을 구성합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "로그인 위험 조건을 중간 및 높음으로 설정하여 모든 사용자를 대상으로 하고 부여 제어로 다단계 인증을 요구하는 Conditional Access 정책을 작성합니다. Azure AD Identity Protection이 사용 설정되어 있고 적절하게 라이선스되어 있는지(Entra ID P2 필요) 확인합니다. 위험한 로그인 보고서를 정기적으로 모니터링하고 조직 패턴에 따라 위험 탐지 민감도를 조정합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-013": {
+    "name": { "value": "사용자 위험 기반 CA 정책", "status": "machine-draft" },
+    "description": { "value": "사용자 위험 기반 Conditional Access 정책은 유출된 자격 증명이나 비정상적인 활동 패턴과 같이 사용자 계정이 침해되었을 수 있음을 나타내는 누적 위험 신호에 대응합니다. 사용자 위험 정책이 없으면 Identity Protection에 의해 침해된 것으로 플래그가 지정된 계정이 암호 변경이나 추가 확인 없이 계속 정상적으로 작동합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "높은 사용자 위험에 대해 암호 변경을 요구하고 중간 사용자 위험에 대해 MFA를 요구하도록 CA 정책을 구성합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "사용자 위험 조건을 중간 및 높음으로 설정하여 모든 사용자를 대상으로 하고, 높은 위험에는 부여 제어로 안전한 암호 변경을, 중간 위험에는 MFA를 요구하는 Conditional Access 정책을 작성합니다. 자동화된 해결이 가능하도록 셀프 서비스 암호 재설정(SSPR)이 모든 사용자에 대해 사용 설정되고 등록되어 있는지 확인합니다. 위험한 사용자 보고서를 정기적으로 검토하고 위험 수준이 높게 유지되는 계정을 조사합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-014": {
+    "name": { "value": "세션 제어 감사", "status": "machine-draft" },
+    "description": { "value": "Conditional Access 세션 제어는 로그인 빈도와 브라우저 세션 지속성을 관리합니다. 적절한 세션 제어가 없으면 사용자가 무기한 인증된 상태로 유지되어 세션 하이재킹과 토큰 도난 공격의 기회 창을 늘릴 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "지속적인 브라우저 세션을 비활성화한 상태로 민감한 애플리케이션에 대해 로그인 빈도를 최대 24시간으로 설정합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "로그인 빈도와 지속적인 브라우저 세션 설정을 포함한 세션 제어 구성에 대해 Conditional Access 정책을 검토합니다. 애플리케이션 민감도에 따라 적절한 간격으로 로그인 빈도를 구성하며, 권한 있는 접근에는 더 짧은 간격을 사용합니다. 토큰이 만료되고 재인증이 필요하도록 민감한 애플리케이션에서 지속적인 브라우저 세션을 비활성화합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-015": {
+    "name": { "value": "공격 시나리오에 대한 CA What-If 시뮬레이션", "status": "machine-draft" },
+    "description": { "value": "Conditional Access What-If 도구를 사용하면 로그인 시나리오를 시뮬레이션하여 일반적인 공격 패턴에 대한 정책 동작을 검증할 수 있습니다. 정기적인 What-If 테스트가 없으면 정책 구성 오류나 격차가 공격자에게 악용될 때까지 감지되지 않을 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "외부 공격자, 침해된 디바이스, 레거시 인증 시도를 포함한 일반적인 공격 시나리오를 다루는 분기별 What-If 시뮬레이션을 수행합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Conditional Access What-If 도구를 사용하여 외부 MFA 우회, 레거시 인증 시도, 관리되지 않는 디바이스 접근, 침해된 자격 증명 사용과 같은 일반적인 공격 패턴에 대한 로그인 시나리오를 시뮬레이션합니다. 각 시뮬레이션 결과를 문서화하고 시뮬레이션된 공격을 차단하지 못하는 정책을 해결합니다. 모든 CA 정책 수정에 대한 변경 관리 프로세스에 What-If 테스트를 통합합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-016": {
+    "name": { "value": "CA 정책 문서 내보내기", "status": "machine-draft" },
+    "description": { "value": "모든 Conditional Access 정책의 완전한 내보내기는 문서화, 재해 복구, 규정 준수 감사 목적으로 생성되어야 합니다. 문서화된 정책 내보내기가 없으면 테넌트 침해나 실수로 인한 삭제 후 CA 정책을 다시 구축하는 데 상당한 노력이 필요하며 보안 격차가 발생할 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "각 정책 변경 후 업데이트되는 안전한 버전 관리 저장소에 전체 CA 정책 내보내기를 생성하고 저장합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Microsoft Graph API 또는 Entra 관리 센터를 사용하여 모든 Conditional Access 정책을 내보내고 출력을 안전한 버전 제어 저장소에 저장합니다. 정기적인 일정 또는 정책 수정으로 트리거되어 정책 스냅샷을 캡처하는 자동화된 프로세스를 확립합니다. 내보내기를 테넌트 재해 복구 계획에 포함하고 내보내기에서 정책을 복원할 수 있는지 검증합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-017": {
+    "name": { "value": "관리자에게 고위험 사용자 알림", "status": "machine-draft" },
+    "description": { "value": "Identity Protection은 사용자가 고위험으로 플래그가 지정될 때 관리자에게 이메일을 보내 발생 중인 계정 침해 가능성을 사전에 조사하고 억제할 수 있게 합니다. SCuBA는 고위험 사용자가 탐지될 때 관리자에게 이러한 알림을 보낼 것을 권장합니다. Identity Protection의 '위험이 탐지된 사용자' 알림 수신자 구성은 안정적인 읽기 전용 Microsoft Graph 엔드포인트를 통해 노출되지 않으므로 에이전트리스 평가로는 긍정적으로 확인할 수 없습니다. 이 검사는 요구사항을 정직하게 드러내고 확인할 수 없는 준수를 주장하는 대신 지원 위험 탐지 원격 분석이 테넌트에서 사용 가능한지 여부를 보고합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "고위험 사용자가 탐지될 때 관리자에게 이메일을 보내도록 Identity Protection을 구성합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "고위험 사용자 알림을 구성하여 SCuBA MS.AAD.2.2를 충족합니다. Entra ID에서 Protection > Identity Protection > Notifications로 이동하여 '위험이 탐지된 사용자' 경고를 적절한 보안 관리자 또는 모니터링되는 보안 운영 배포 목록으로 이메일 발송하도록 설정합니다. 이 제어에는 Entra ID P2(Identity Protection)가 필요합니다. 알림 수신자 목록은 Microsoft Graph를 통해 에이전트리스로 읽을 수 없으므로 포털에서 설정을 수동으로 확인합니다.", "status": "machine-draft" }
+  },
+  "EIDCA-018": {
+    "name": { "value": "MFA 등록에 관리되는 디바이스 요구", "status": "machine-draft" },
+    "description": { "value": "보안 정보 등록 작업에 기관 관리(준수 또는 하이브리드 Entra 조인) 디바이스를 요구하면 공격자가 도난당한 자격 증명을 사용하여 자신의 MFA 방법을 등록하고 지속성을 확립할 위험이 줄어듭니다. SCuBA는 MFA 등록에 관리되는 디바이스를 요구할 것을 권장합니다. 이는 '보안 정보 등록' 사용자 작업을 대상으로 하고 부여 제어로 준수 디바이스 또는 하이브리드 Entra ID 조인 디바이스를 요구하는 Conditional Access 정책으로 구현됩니다. 이 검사는 해당 구성에 대해 사용 설정된 Conditional Access 정책을 검사합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "사용 설정된 Conditional Access 정책이 보안 정보 등록 사용자 작업을 대상으로 하고 준수 또는 하이브리드 Entra ID 조인 디바이스를 요구합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "MFA 등록에 관리되는 디바이스를 요구하는 Conditional Access 정책을 작성하여 SCuBA MS.AAD.3.8을 충족합니다. '보안 정보 등록' 사용자 작업을 대상으로 하고, 모든 사용자(비상 액세스 계정 제외)로 범위를 지정하며, 부여 제어를 준수 디바이스 또는 하이브리드 Entra ID 조인 디바이스 요구로 설정합니다. 보고서 전용 모드에서 시범 운영하고, 새 디바이스에 대한 부트스트랩 경로(예: 임시 액세스 통과)가 존재하는지 확인한 다음 적용을 사용하도록 설정합니다.", "status": "machine-draft" }
+  }
+}

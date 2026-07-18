@@ -1,0 +1,81 @@
+{
+  "_family": "EntraFedChecks.json",
+  "EIDFED-001": {
+    "name": { "value": "페더레이션 도메인 열거", "status": "machine-draft" },
+    "description": { "value": "테넌트의 모든 페더레이션 도메인에 대한 완전한 인벤토리는 각 도메인의 인증이 어떻게 구성되어 있는지에 대한 가시성을 제공합니다. 페더레이션 도메인은 인증을 외부 ID 공급자로 리디렉션하며, 이는 적절하게 보호되고 모니터링되어야 합니다. 이 기준 인벤토리를 통해 페더레이션 공격 표면을 평가하고 Golden SAML 또는 백도어 페더레이션 공격의 일부로 공격자가 구성했을 수 있는 도메인을 식별할 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 페더레이션 도메인을 문서화된 ID 공급자 엔드포인트, 서명 인증서, 업무상 정당성과 함께 인벤토리합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Microsoft Graph를 사용하여 테넌트의 모든 도메인을 열거하고 페더레이션 인증이 구성된 도메인을 식별합니다. 각 페더레이션 도메인에 대해 ID 공급자 엔드포인트, 서명 인증서 세부 정보, 페더레이션 프로토콜을 문서화합니다. 각 페더레이션 트러스트가 승인되었으며 조직 통제하의 알려진 정당한 ID 공급자에 해당하는지 확인합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-002": {
+    "name": { "value": "페더레이션 서명 인증서 유효 기간", "status": "machine-draft" },
+    "description": { "value": "유효 기간이 지나치게 긴 페더레이션 서명 인증서는 개인 키를 획득한 공격자가 SAML 토큰을 위조하고 지속적인 무단 접근을 유지할 수 있는 확장된 기회 창을 제공합니다. 유효 기간이 3년을 초과하는 인증서는 보안 모범 사례에서 벗어나며 침해되었거나 공격자가 생성한 인증서를 나타낼 수 있습니다. 수명이 짧은 인증서는 개인 키가 침해될 경우 잠재적 악용 기간을 제한합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "자동 순환 절차가 마련된 상태로 유효 기간이 1년을 넘지 않는 페더레이션 서명 인증서를 사용합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "모든 페더레이션 도메인의 서명 인증서를 검토하고 NotBefore 및 NotAfter 날짜를 확인하여 유효 기간을 파악합니다. 유효 기간이 3년을 초과하는 인증서는 조직 인증서 정책에 맞춘 더 짧은 수명을 사용하는 새 인증서로 교체합니다. 자동화된 인증서 순환 절차를 구현하고 만료가 임박한 인증서에 대한 모니터링 경고를 구성합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-003": {
+    "name": { "value": "페더레이션 서명 인증서 발급자/주체 불일치", "status": "machine-draft" },
+    "description": { "value": "페더레이션 서명 인증서의 발급자 필드와 주체 필드 간의 불일치는 공격자가 정당한 서명 인증서를 자신이 제어하는 인증서로 교체한 잠재적 Golden SAML 공격의 강력한 지표입니다. Golden SAML 공격에서 공격자는 임의의 발급자/주체 값을 가진 자체 서명 인증서를 생성하여 페더레이션 트러스트 서명 인증서로 구성함으로써 모든 사용자에 대한 SAML 토큰을 위조할 수 있습니다. 예상되는 인증 기관 체인과 일치하지 않는 발급자/주체 불일치는 즉각적인 조사가 필요합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "페더레이션 서명 인증서의 발급자 및 주체 필드가 예상 조직 PKI 체인과 일치하며 예상치 못한 자체 서명 인증서가 없습니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "각 페더레이션 도메인 트러스트에서 서명 인증서를 추출하고 발급자 및 주체 필드를 예상 조직 PKI 계층과 비교합니다. 발급자가 알려진 인증 기관과 일치하지 않거나 주체에 예상치 못한 값이 포함된 인증서를 조사합니다. 불일치가 탐지되면 이를 잠재적 보안 인시던트로 취급하고 페더레이션 서명 인증서를 즉시 순환하며 무단 페더레이션 구성 변경에 대한 감사 로그를 검토합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-004": {
+    "name": { "value": "페더레이션 트러스트 메타데이터 분석", "status": "machine-draft" },
+    "description": { "value": "페더레이션 트러스트 메타데이터는 페더레이션 인증에 사용되는 ID 공급자 엔드포인트, 지원되는 프로토콜, 토큰 서명 구성을 정의합니다. 조작된 메타데이터는 인증 흐름을 공격자가 제어하는 엔드포인트로 리디렉션하거나 불법 서명 인증서를 도입하여 토큰 위조 및 사칭 공격을 가능하게 할 수 있습니다. 메타데이터 엔드포인트 URL, 수동 및 능동 엔드포인트, 서명 알고리즘 구성은 알려진 정상 값과 대조하여 검증해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 페더레이션 트러스트 메타데이터를 알려진 정상 기준과 대조하여 검증하고, 메타데이터 새로 고침 URL이 조직이 제어하는 엔드포인트를 가리키도록 합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "메타데이터 교환 URI, 수동 로그온 엔드포인트, 발급자 URI, 서명 인증서 세부 정보를 포함하여 각 페더레이션 도메인의 페더레이션 구성을 검토합니다. 현재 값을 문서화된 기준 구성과 비교하여 무단 수정을 식별합니다. 메타데이터 새로 고침 엔드포인트가 HTTPS를 사용하고 조직이 제어하는 인프라를 가리키는지 확인하며, 서명 알고리즘이 SHA-256 이상을 사용하는지 검증합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-005": {
+    "name": { "value": "Azure AD Connect 구성 검토", "status": "machine-draft" },
+    "description": { "value": "Azure AD Connect는 온-프레미스 Active Directory 개체를 Entra ID로 동기화하며 하이브리드 ID 아키텍처의 중요한 구성 요소입니다. 잘못 구성된 Azure AD Connect 설정은 민감한 특성을 클라우드에 노출하거나, 의도하지 않은 권한 상승 경로를 만들거나, 온-프레미스 접근 권한을 가진 공격자가 클라우드 ID를 조작하도록 허용할 수 있습니다. 커넥터 계정 권한, 동기화 규칙, 기능 구성을 보안 모범 사례와 대조하여 검토해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Azure AD Connect를 최소 권한 커넥터 계정, 강화된 동기화 규칙, 모든 보안 기능이 사용 설정된 상태로 구성합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "커넥터 계정 권한, 동기화 규칙, 사용 설정된 기능을 포함하여 Azure AD Connect 구성을 검토합니다. AD DS 커넥터 계정이 최소한의 필수 권한을 사용하고 Entra ID 커넥터 계정이 전용 클라우드 전용 서비스 계정인지 확인합니다. Azure AD Connect 서버가 제한된 관리 접근과 포괄적인 모니터링을 갖춘 Tier 0 자산으로 취급되는지 확인합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-006": {
+    "name": { "value": "Azure AD Connect 동기화 범위 감사", "status": "machine-draft" },
+    "description": { "value": "Azure AD Connect의 동기화 범위는 어떤 온-프레미스 조직 구성 단위, 그룹, 특성이 Entra ID로 복제되는지 결정합니다. 지나치게 광범위한 동기화 범위는 온-프레미스에만 남아 있어야 하는 민감한 서비스 계정, 관리 계정, 보안 그룹을 복제할 수 있습니다. 반대로 부적절하게 제한된 범위는 클라우드 접근이 필요한 계정을 동기화하지 못해 인증 실패를 초래할 수 있습니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "동기화 범위를 필요한 조직 구성 단위와 개체로만 제한하고, 민감한 서비스 계정과 관리 개체는 제외합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "OU 필터링, 그룹 기반 필터링, 특성 수준 필터링 규칙을 포함하여 Azure AD Connect 동기화 범위를 검토합니다. 클라우드 접근이 필요한 사용자 계정이 포함된 OU만 동기화 범위에 포함되는지 확인합니다. 클라우드 표현이 필요하지 않은 민감한 온-프레미스 서비스 계정, 관리 계정, 보안 그룹을 제외하고, 포함된 각 OU에 대한 근거를 문서화합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-007": {
+    "name": { "value": "암호 해시 동기화 사용 상태", "status": "machine-draft" },
+    "description": { "value": "암호 해시 동기화(PHS)는 온-프레미스 암호 해시의 해시를 Entra ID로 복제하여 페더레이션이나 통과 인증을 사용할 수 없을 때 백업으로 클라우드 인증을 가능하게 합니다. PHS는 복원력을 제공하고 Entra ID Identity Protection을 통한 유출된 자격 증명 탐지를 가능하게 하지만, 조직은 암호 파생물을 클라우드에 저장하는 것의 보안 영향을 이해해야 합니다. PHS는 조직의 보안 요구사항과 위험 허용 범위와 대조하여 평가해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Entra ID Identity Protection을 통한 유출된 자격 증명 탐지를 활성화한 상태로 PHS를 백업 인증 방법으로 사용합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Azure AD Connect 구성을 확인하여 암호 해시 동기화가 사용 설정되어 있는지 파악합니다. PHS가 비활성화된 경우, 백업 인증 방법으로 그리고 Entra ID Identity Protection 유출된 자격 증명 탐지를 지원하기 위해 사용하도록 설정하는 것을 평가합니다. PHS가 이미 사용 설정된 경우, Entra ID Identity Protection이 침해된 자격 증명에 대한 위험 기반 탐지를 위해 암호 해시를 활용하도록 구성되어 있는지 확인합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-008": {
+    "name": { "value": "통과 인증 에이전트 상태", "status": "machine-draft" },
+    "description": { "value": "통과 인증(PTA)은 클라우드에 암호 해시를 저장하지 않고 온-프레미스 Active Directory에 대해 실시간으로 사용자 암호를 검증합니다. 온-프레미스 서버에서 실행되는 PTA 에이전트는 적절하게 보호되고 모니터링되며 최신 상태로 유지되어야 합니다. 침해된 PTA 에이전트는 모든 암호를 수락하거나 인증 중에 자격 증명을 가로채도록 조작될 수 있기 때문입니다. 에이전트 상태, 버전 최신성, 서버 보안 태세는 인증 무결성을 유지하는 데 매우 중요합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "최신 에이전트 버전과 상태 모니터링이 사용 설정된 상태로 강화된 서버에 최소 2개의 PTA 에이전트를 배포합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID > 하이브리드 관리 > Azure AD Connect > 통과 인증에서 PTA 에이전트 상태를 검토합니다. 중복성을 위해 최소 2개의 에이전트가 배포되어 있고 모든 에이전트가 최신 소프트웨어 버전으로 정상 상태를 표시하는지 확인합니다. PTA 에이전트 서버가 제한된 관리 접근, 최신 보안 패치, 포괄적인 이벤트 로그 모니터링을 갖춘 Tier 0 자산으로 취급되는지 확인합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-009": {
+    "name": { "value": "AD FS 서버 구성 평가", "status": "machine-draft" },
+    "description": { "value": "Active Directory Federation Services(AD FS) 서버는 페더레이션 도메인의 인증을 처리하고 보안에 민감한 SAML 토큰을 처리합니다. 약한 토큰 서명 알고리즘, 비활성화된 감사 로깅, 지나치게 관대한 엑스트라넷 접근, 오래된 클레임 규칙과 같은 잘못 구성된 AD FS 설정은 토큰 위조, 자격 증명 수집, 무단 접근에 악용될 수 있습니다. AD FS 구성은 Microsoft 보안 기준 및 강화 가이드와 대조하여 정기적으로 평가해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "SHA-256 서명, 포괄적인 감사 로깅, 최신 Windows Server 패치를 적용하여 Microsoft 보안 기준에 따라 AD FS 서버를 구성합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "토큰 서명 알고리즘(SHA-256이어야 함), 감사 로그 설정(성공 및 실패 이벤트를 캡처해야 함), 엑스트라넷 접근 정책, 클레임 규칙 복잡성을 포함하여 AD FS 서버 구성을 검토합니다. AD FS 서버가 최신 Windows Server 패치를 실행하고 AD FS 팜이 중복 서버로 구성되어 있는지 확인합니다. AD FS 서비스 계정이 최소 권한 원칙을 따르고 토큰 서명 인증서 개인 키가 적절하게 보호되는지 검증합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-010": {
+    "name": { "value": "AD FS 엑스트라넷 잠금 설정", "status": "machine-draft" },
+    "description": { "value": "AD FS 엑스트라넷 잠금은 인터넷에 노출된 AD FS 엔드포인트를 표적으로 하는 무차별 대입 및 암호 스프레이 공격으로부터 보호합니다. 적절한 엑스트라넷 잠금 구성이 없으면 공격자는 AD FS 프록시를 통해 모든 페더레이션 계정에 대해 무제한 암호 추측을 시도하여 약하거나 흔히 사용되는 암호를 가진 계정을 침해할 수 있습니다. AD FS의 스마트 잠금 기능은 정당한 사용자에 대한 잠금 영향을 최소화하면서 보호를 제공합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "무차별 대입 공격을 방지하기 위해 적절한 임계값과 관찰 기간이 구성된 상태로 엑스트라넷 스마트 잠금을 사용합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "AD FS 서버에서 PowerShell의 Get-AdfsProperties를 사용하여 AD FS 엑스트라넷 잠금 구성을 검토합니다. 아직 활성화되지 않은 경우 엑스트라넷 스마트 잠금을 사용하도록 설정하고 조직의 인증 패턴에 따라 적절한 잠금 임계값과 관찰 기간을 구성합니다. AD FS 보안 로그에서 엑스트라넷 잠금 이벤트를 모니터링하고 정당한 사용자가 잠기거나 무차별 대입 시도가 성공하는 경우 임계값을 조정합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-011": {
+    "name": { "value": "하이브리드 조인 구성", "status": "machine-draft" },
+    "description": { "value": "하이브리드 Azure AD 조인은 온-프레미스 도메인 조인 디바이스를 Entra ID에 등록하여 디바이스 준수 또는 도메인 조인 상태를 요구하는 Conditional Access 정책을 가능하게 합니다. 잘못 구성된 하이브리드 조인 설정은 디바이스 등록 실패를 초래하여 사용자가 디바이스 기반 Conditional Access 요구사항을 충족하지 못하게 하거나, 서비스 연결 지점이 적절하게 보호되지 않으면 무단 디바이스가 등록되도록 허용할 수 있습니다. 구성은 종단 간으로 검증해야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "서비스 연결 지점이 적절하게 보호되고 모든 대상 OU에 대해 디바이스 등록이 검증된 상태로 하이브리드 Azure AD 조인을 구성하고 작동시킵니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Active Directory의 서비스 연결 지점(SCP) 구성을 검증하고 올바른 Entra ID 테넌트를 가리키는지 확인합니다. Azure AD Connect의 하이브리드 조인 구성에 올바른 도메인이 포함되어 있고 필요한 엔터프라이즈 등록 엔드포인트에 클라이언트 디바이스에서 접근할 수 있는지 확인합니다. Entra ID의 디바이스 목록을 검토하여 디바이스가 성공적으로 등록되고 있는지 검증하고 보류 상태를 표시하는 디바이스의 문제를 해결합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-012": {
+    "name": { "value": "클라우드 전용 대 동기화 계정 분석", "status": "machine-draft" },
+    "description": { "value": "클라우드 전용 계정과 온-프레미스 동기화 계정의 분포를 이해하면 하이브리드 ID 환경에 대한 가시성을 제공하고 잠재적 보안 격차를 식별하는 데 도움이 됩니다. 클라우드 전용 계정은 전적으로 Entra ID에서 관리되는 반면 동기화 계정은 온-프레미스 Active Directory에서 시작되어 그 보안 태세를 상속합니다. 이 분석은 클라우드 전용이어야 하지만 동기화되고 있는 계정 또는 그 반대의 경우를 식별하는 데 도움이 되며, 인증 방법 선택과 보안 제어 배치에 대한 결정에 정보를 제공합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "모든 계정을 클라우드 전용 또는 동기화로 분류하고 각 계정 유형과 역할에 대한 예상 상태를 문서화합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "Entra ID에서 모든 사용자 계정을 내보내고 onPremisesSyncEnabled 속성으로 분류하여 어떤 계정이 온-프레미스에서 동기화되었는지 클라우드 전용인지 파악합니다. 온-프레미스 침해가 클라우드 관리에 영향을 미치지 않도록 권한 있는 관리 계정이 클라우드 전용인지 확인합니다. 각 계정 유형에 대한 예상 ID 원본을 문서화하고 실제 원본이 예상 구성과 일치하지 않는 계정을 조사합니다.", "status": "machine-draft" }
+  },
+  "EIDFED-013": {
+    "name": { "value": "Entra Connect 동기화 클라이언트 버전 최신성", "status": "machine-draft" },
+    "description": { "value": "Microsoft Entra Connect(이전의 Azure AD Connect)는 온-프레미스 Active Directory ID를 Entra ID로 복제하는 동기화 클라이언트이며 Tier-0 하이브리드 구성 요소입니다. Connect 서버의 침해는 위조되거나 조작된 클라우드 ID와 테넌트 전체 영향으로 이어질 수 있습니다. Microsoft는 주기적으로 미공개 보안 수정 사항을 포함하는 Entra Connect 빌드를 '즉시 업데이트' 지침과 함께 신속하게 제공합니다. 최소 안전 기준 미만의 빌드를 실행하는 Connect 서버는 알려졌지만 미공개된 취약점에 노출된 패치되지 않은 Tier-0 자산입니다. 버전은 클라우드 디렉터리 속성이 아니라 온-프레미스 Connect 서버의 특성이므로, 버전 최신성은 Connect 호스트에서 신뢰할 수 있게 확인해야 하며, 읽을 수 없는 경우 준수한다고 가정하지 말고 수동 검증을 위해 드러내야 합니다.", "status": "machine-draft" },
+    "recommendedValue": { "value": "지원되는 경우 자동 업그레이드를 사용 설정하고 Connect 서버를 Tier-0 자산으로 관리하는 상태로, Entra Connect를 사용 가능한 최신 빌드(최소 안전 기준 이상)로 업데이트합니다", "status": "machine-draft" },
+    "remediationSteps": { "value": "동기화 서버에 설치된 Entra Connect 빌드를 레지스트리 키 HKLM\\SOFTWARE\\Microsoft\\Azure AD Connect 또는 Get-ADSyncGlobalSettings를 사용하여 식별하고, Microsoft가 게시한 최신 빌드와 비교합니다. 보안 수정 사항을 적용하기 위해 Entra Connect를 최신 릴리스로 업데이트하고, 배포가 지원하는 경우 자동 업그레이드를 사용하도록 설정합니다. Entra Connect 서버를 Tier-0 자산으로 취급합니다: 관리 접근을 제한하고, 최신 운영 체제 패치를 적용하며, 포괄적인 모니터링을 사용하도록 설정합니다. Microsoft Entra Connect 릴리스 정보를 추적하고 보안 빌드를 신속하게 적용하는 반복 프로세스를 문서화합니다.", "status": "machine-draft" }
+  }
+}
