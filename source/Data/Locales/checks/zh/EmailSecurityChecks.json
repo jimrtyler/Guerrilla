@@ -1,0 +1,189 @@
+{
+  "_family": "EmailSecurityChecks.json",
+  "EMAIL-001": {
+    "name": { "value": "SPF 记录验证", "status": "machine-draft" },
+    "description": { "value": "所有域都必须存在有效的发件人策略框架（SPF）记录。SPF 通过指定哪些邮件服务器有权代表某个域发送电子邮件来防止电子邮件欺骗", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有域发布有效的 v=spf1 记录，并使用 -all 或 ~all 限定符", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 验证电子邮件 > 为每个域发布 SPF 记录：v=spf1 include:_spf.google.com ~all", "status": "machine-draft" }
+  },
+  "EMAIL-002": {
+    "name": { "value": "已启用 DKIM 签名", "status": "machine-draft" },
+    "description": { "value": "必须为所有域启用有效的 DomainKeys Identified Mail（DKIM）签名。DKIM 提供加密证明，确保电子邮件内容在传输过程中未被篡改", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有域启用 DKIM 签名并发布有效的密钥", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 验证电子邮件 > 为每个域生成 DKIM 密钥并发布 DNS 记录", "status": "machine-draft" }
+  },
+  "EMAIL-003": {
+    "name": { "value": "DMARC 策略审计", "status": "machine-draft" },
+    "description": { "value": "所有域的基于域的消息身份验证、报告和一致性（DMARC）策略都必须设置为 reject 或 quarantine。DMARC 策略为 none 时无法提供任何防欺骗保护", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域的 DMARC 策略均设置为 reject 或 quarantine", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 _dmarc.<domain> 处发布 DMARC TXT 记录，使用 p=reject 或 p=quarantine。先以 p=none 进行监控，然后升级为 quarantine，最终升级为 reject", "status": "machine-draft" }
+  },
+  "EMAIL-004": {
+    "name": { "value": "MTA-STS 策略", "status": "machine-draft" },
+    "description": { "value": "邮件传输代理严格传输安全（MTA-STS）通过要求经过身份验证的 TLS 连接，防止 TLS 降级攻击以及电子邮件在传输过程中被中间人拦截", "status": "machine-draft" },
+    "recommendedValue": { "value": "已发布 MTA-STS TXT 记录，并将策略托管在 https://mta-sts.<domain>/.well-known/mta-sts.txt", "status": "machine-draft" },
+    "remediationSteps": { "value": "发布 _mta-sts.<domain> TXT 记录，内容为 v=STSv1; id=<unique_id>，并将 MTA-STS 策略文件托管在 https://mta-sts.<domain>/.well-known/mta-sts.txt", "status": "machine-draft" }
+  },
+  "EMAIL-005": {
+    "name": { "value": "TLS 强制", "status": "machine-draft" },
+    "description": { "value": "应要求对电子邮件传输使用传输层安全（TLS），以防止窃听。合规性 TLS 设置可确保与指定合作伙伴域之间建立加密连接", "status": "machine-draft" },
+    "recommendedValue": { "value": "对所有出站和入站连接均要求使用 TLS", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 合规 > 安全传输（TLS）合规 > 添加规则，要求对所有域或特定合作伙伴域使用 TLS", "status": "machine-draft" }
+  },
+  "EMAIL-006": {
+    "name": { "value": "电子邮件允许列表/阻止列表审查", "status": "machine-draft" },
+    "description": { "value": "应审查电子邮件允许列表和阻止列表中过于宽松的条目。列入允许列表的发件人会绕过垃圾邮件过滤，若配置不当可能被利用", "status": "machine-draft" },
+    "recommendedValue": { "value": "允许列表条目应尽可能少，且不含通配符域；阻止列表应持续维护", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 垃圾邮件、钓鱼和恶意软件 > 审查电子邮件允许列表和已阻止的发件人列表中是否存在过于宽泛的条目", "status": "machine-draft" }
+  },
+  "EMAIL-007": {
+    "name": { "value": "入站网关配置", "status": "machine-draft" },
+    "description": { "value": "入站电子邮件网关应正确配置，以保留发件人身份验证结果。配置错误的网关可能会剥离 SPF/DKIM/DMARC 标头或绕过安全过滤", "status": "machine-draft" },
+    "recommendedValue": { "value": "入站网关已配置正确的 IP 范围并保留标头", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 垃圾邮件、钓鱼和恶意软件 > 入站网关 > 验证网关 IP，并确认身份验证标头得以保留", "status": "machine-draft" }
+  },
+  "EMAIL-008": {
+    "name": { "value": "电子邮件路由规则审计", "status": "machine-draft" },
+    "description": { "value": "应审查电子邮件路由规则，排查可疑或未经授权的配置。恶意路由规则可能会将电子邮件重定向到攻击者控制的目的地", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有路由规则均经过审查并记录了业务理由", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 路由 > 审查所有路由规则、默认路由和收件人映射中是否存在未经授权的条目", "status": "machine-draft" }
+  },
+  "EMAIL-009": {
+    "name": { "value": "自动转发策略", "status": "machine-draft" },
+    "description": { "value": "应禁用向外部地址自动转发电子邮件，以防止数据外泄。攻击者在攻陷账户后经常会设置转发规则", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有组织部门均禁用自动转发", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 最终用户访问权限 > 为所有组织部门禁用自动转发。通过 Gmail API 审查现有的转发规则", "status": "machine-draft" }
+  },
+  "EMAIL-010": {
+    "name": { "value": "委托访问设置", "status": "machine-draft" },
+    "description": { "value": "邮件委托允许用户授予其他用户对其邮箱的读取和发送访问权限。过度委托可能导致未经授权的访问和冒充", "status": "machine-draft" },
+    "recommendedValue": { "value": "邮件委托受到限制并定期审查；不存在意外的受托人", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 最终用户访问权限 > 审查邮件委托设置。通过 Gmail API 检查各个用户是否存在未经授权的受托人", "status": "machine-draft" }
+  },
+  "EMAIL-011": {
+    "name": { "value": "POP/IMAP 访问设置", "status": "machine-draft" },
+    "description": { "value": "除非确有需要，否则应禁用 POP 和 IMAP 访问。这些旧式协议会绕过现代安全控制，并可能被用于基于凭据的攻击", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有用户禁用 POP 和 IMAP", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 最终用户访问权限 > 禁用 POP 和 IMAP 访问。通过 Gmail API 审查各个用户的设置", "status": "machine-draft" }
+  },
+  "EMAIL-012": {
+    "name": { "value": "垃圾邮件和钓鱼过滤设置", "status": "machine-draft" },
+    "description": { "value": "应启用增强型垃圾邮件和钓鱼过滤器，以针对社会工程攻击和恶意电子邮件活动提供最大程度的防护", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用增强型垃圾邮件过滤和积极的钓鱼检测", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 垃圾邮件、钓鱼和恶意软件 > 启用“过滤垃圾邮件时更积极”以及所有钓鱼防护选项", "status": "machine-draft" }
+  },
+  "EMAIL-013": {
+    "name": { "value": "增强型投递前邮件扫描", "status": "machine-draft" },
+    "description": { "value": "增强型投递前邮件扫描使用高级启发式方法和沙盒，在邮件投递到用户收件箱之前检测恶意软件和威胁", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用增强型投递前邮件扫描", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 垃圾邮件、钓鱼和恶意软件 > 启用“增强型投递前邮件扫描”以识别可疑内容", "status": "machine-draft" }
+  },
+  "EMAIL-014": {
+    "name": { "value": "外部收件人警告", "status": "machine-draft" },
+    "description": { "value": "当用户向组织外部的收件人发送电子邮件时，应向其发出警告，以防止意外的数据泄露和社会工程", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有用户启用外部收件人警告", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 最终用户访问权限 > 启用“当用户向域外发送邮件时向其发出警告”", "status": "machine-draft" }
+  },
+  "EMAIL-015": {
+    "name": { "value": "附件安全设置", "status": "machine-draft" },
+    "description": { "value": "应启用所有附件安全防护，以检测和阻止恶意文件附件，包括加密压缩包、异常文件类型和脚本", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用所有附件防护选项，并采取隔离操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 安全性 > 附件 > 启用所有防护：加密附件、来自不受信任发件人的脚本以及异常附件类型", "status": "machine-draft" }
+  },
+  "EMAIL-016": {
+    "name": { "value": "链接和外部图片防护", "status": "machine-draft" },
+    "description": { "value": "应启用链接防护，以扫描 URL 中的钓鱼和恶意软件。外部图片代理可防止跟踪像素和 IP 泄露", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用 URL 扫描、点击时警告和外部图片代理", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 安全性 > 链接和外部图片 > 启用“识别短网址背后的链接”、“扫描链接的图片”以及“点击指向不受信任域的链接时显示警告提示”", "status": "machine-draft" }
+  },
+  "EMAIL-017": {
+    "name": { "value": "欺骗和身份验证防护", "status": "machine-draft" },
+    "description": { "value": "欺骗和身份验证防护可防范域欺骗、员工姓名欺骗，以及来自与本组织外观相似的域的未经身份验证的电子邮件", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用所有欺骗和身份验证防护，并采取隔离操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 安全性 > 欺骗和身份验证 > 启用所有防护：域欺骗、员工姓名欺骗、入站电子邮件欺骗以及未经身份验证的电子邮件", "status": "machine-draft" }
+  },
+  "EMAIL-018": {
+    "name": { "value": "合规规则审计", "status": "machine-draft" },
+    "description": { "value": "应审查内容合规规则，确保敏感数据得到妥善处理。规则可根据内容模式强制执行加密、隔离或拒绝", "status": "machine-draft" },
+    "recommendedValue": { "value": "已为敏感数据类型配置内容合规规则并采取适当操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 合规 > 内容合规 > 审查现有规则，并为敏感内容类型（PII、财务数据、健康记录）创建规则", "status": "machine-draft" }
+  },
+  "EMAIL-019": {
+    "name": { "value": "DLP 规则配置", "status": "machine-draft" },
+    "description": { "value": "应配置数据丢失防护（DLP）规则，以检测和防止敏感数据通过电子邮件离开组织。DLP 提供自动化的内容检查和策略执行", "status": "machine-draft" },
+    "recommendedValue": { "value": "已为关键数据类型（信用卡、SSN、健康记录）配置 DLP 规则，并采取阻止或警告操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "安全 > 数据保护 > 管理规则：创建一条 Gmail DLP 规则，用于检测敏感内容模式（信用卡、SSN、健康记录）并应用阻止或警告操作", "status": "machine-draft" }
+  },
+  "EMAIL-020": {
+    "name": { "value": "Gmail 保密模式", "status": "machine-draft" },
+    "description": { "value": "Gmail 保密模式允许发件人为邮件设置过期日期并撤销访问权限。请根据组织策略审查此功能是启用还是受限", "status": "machine-draft" },
+    "recommendedValue": { "value": "为处理敏感数据的用户启用 Gmail 保密模式", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 最终用户访问权限 > 审查 Gmail 保密模式设置，并根据组织要求启用或限制", "status": "machine-draft" }
+  },
+  "EMAIL-021": {
+    "name": { "value": "S/MIME 设置", "status": "machine-draft" },
+    "description": { "value": "S/MIME 提供端到端电子邮件加密和数字签名。如果合规要求，应正确配置和管理 S/MIME 证书", "status": "machine-draft" },
+    "recommendedValue": { "value": "如合规要求，则启用 S/MIME；证书得到妥善管理", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Gmail > 最终用户访问权限 > S/MIME > 如有需要，启用托管 S/MIME，并确保证书已上传且有效", "status": "machine-draft" }
+  },
+  "EMAIL-022": {
+    "name": { "value": "邮件转发规则枚举", "status": "machine-draft" },
+    "description": { "value": "应枚举并审查所有用户级邮件转发规则。攻击者通常会设置转发规则，以在账户被攻陷后维持对电子邮件的持久访问", "status": "machine-draft" },
+    "recommendedValue": { "value": "不存在未经授权的转发规则；所有转发规则均已记录并获得批准", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Gmail API 枚举所有用户的转发规则。移除未经授权的转发地址。在组织部门级别禁用自动转发，以防止将来被滥用", "status": "machine-draft" }
+  },
+  "EMAIL-023": {
+    "name": { "value": "已禁用按用户出站网关（GWS.GMAIL.12.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.12.1 要求禁用按用户出站网关。启用后，用户可以通过自己的外部 SMTP 服务器路由出站邮件，绕过组织的邮件安全控制，从而形成数据外泄和欺骗途径。此检查从 Cloud Identity Policy API 读取 gmail.per_user_outbound_gateway 策略，并标记允许外部 SMTP 路由的任何组织部门。当未返回该策略时，结果为“未评估”。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有组织部门禁用按用户出站网关（外部 SMTP）", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Google 管理控制台中，依次进入应用 > Google Workspace > Gmail > 路由，确保不允许按用户出站网关，使用户无法通过外部 SMTP 服务器路由邮件。仅通过经批准的网关集中进行出站路由。", "status": "machine-draft" }
+  },
+  "EMAIL-024": {
+    "name": { "value": "已启用 Gmail 安全沙盒（GWS.GMAIL.16.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.16.1 建议启用 Gmail 安全沙盒，它会在虚拟环境中引爆入站附件，以检测签名扫描漏掉的零日恶意软件。此检查从 Cloud Identity Policy API 读取 gmail.security_sandbox 策略，并标记禁用了沙盒的组织部门。在获得许可的租户上确认之前，确切的策略字段为尽力而为；当未返回该策略时，结果为“未评估”，而非捏造的判定。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有组织部门启用安全沙盒（虚拟附件引爆）", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Google 管理控制台中，依次进入应用 > Google Workspace > Gmail > 安全性 > 附件，启用安全沙盒，使入站附件在投递前于虚拟环境中引爆。请注意，安全沙盒需要相应的 Google Workspace 版本。", "status": "machine-draft" }
+  },
+  "EMAIL-025": {
+    "name": { "value": "已禁用 Gmail 邮件委托（GWS.GMAIL.1.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.1.1：邮件委托允许用户授予另一账户对其邮箱的读取/发送访问权限，这是一条会超出委托本身用途而长期存在的数据访问途径。读取 gmail.mail_delegation；在 enableMailDelegation 处于开启状态时发出警告。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非有意需要，否则禁用邮件委托", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Gmail 设置 > 用户设置中，除非存在经审查的业务需求，否则禁用邮件委托。", "status": "machine-draft" }
+  },
+  "EMAIL-026": {
+    "name": { "value": "已禁用 Gmail POP 和 IMAP 访问（GWS.GMAIL.9.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.9.1：旧式 POP 和 IMAP 协议会绕过现代身份验证，是凭据填充/MFA 绕过的途径。读取 gmail.imap_access 和 gmail.pop_access；在其中任一启用时判定为失败。", "status": "machine-draft" },
+    "recommendedValue": { "value": "已禁用 POP 和 IMAP 访问", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Gmail 设置 > 最终用户访问权限中，禁用 POP 和 IMAP，使邮件客户端必须使用经过现代身份验证的协议。", "status": "machine-draft" }
+  },
+  "EMAIL-027": {
+    "name": { "value": "已禁用 Gmail 用户电子邮件/联系人导入（GWS.GMAIL.8.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.8.1：用户电子邮件上传（从外部账户导入邮件和联系人）会将外部数据拉入租户，也可能反向外泄。读取 gmail.user_email_uploads；在 enableMailAndContactsImport 处于开启状态时发出警告。", "status": "machine-draft" },
+    "recommendedValue": { "value": "已禁用用户电子邮件/联系人导入", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Gmail 设置中，除非确有需要，否则禁用用户从其他账户导入邮件和联系人的功能。", "status": "machine-draft" }
+  },
+  "EMAIL-028": {
+    "name": { "value": "已禁用 Google Workspace Sync for Outlook（GWS.GMAIL.10.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.10.1：Google Workspace Sync for Microsoft Outlook（GWSMO）将邮箱数据桥接到 Outlook 客户端，扩大了数据面并绕过了部分 Web 防护。读取 gmail.workspace_sync_for_outlook；在其启用时发出警告。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非确有需要，否则禁用 GWSMO", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Gmail 最终用户访问权限设置中，除非存在经审查的需求，否则禁用 Google Workspace Sync for Microsoft Outlook。", "status": "machine-draft" }
+  },
+  "EMAIL-029": {
+    "name": { "value": "已审查 Gmail 垃圾邮件覆盖发件人列表（GWS.GMAIL.18.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.18.1：批准发件人/垃圾邮件覆盖列表会使来自所列域的邮件绕过垃圾邮件过滤，若范围过宽即形成钓鱼绕过。读取 gmail.spam_override_lists；在配置了覆盖发件人域时发出警告。", "status": "machine-draft" },
+    "recommendedValue": { "value": "垃圾邮件覆盖发件人列表不存在，或数量极少且经过审查", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Gmail 垃圾邮件设置中，审查并尽量精简批准发件人/绕过列表，避免受信任域的邮件被全面豁免垃圾邮件过滤。", "status": "machine-draft" }
+  },
+  "EMAIL-030": {
+    "name": { "value": "已禁用自动电子邮件转发（GWS.GMAIL.11.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.11.1 建议禁用自动电子邮件转发，尤其是转发到外部域。自动转发是常见的数据外泄渠道，也是账户被接管后的持久化机制，因为它会将入站邮件静默复制到攻击者控制的地址。此检查读取 gmail.auto_forwarding Cloud Identity 策略，并标记启用了自动转发的任何组织部门。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有组织部门中禁用自动电子邮件转发（enableAutoForwarding = false）。", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Google 管理控制台中，依次进入应用 > Google Workspace > Gmail > 最终用户访问权限，禁用“允许用户将传入邮件自动转发到其他地址”，优先针对外部目的地。审查现有转发规则中是否存在意外的外部收件人。", "status": "machine-draft" }
+  },
+  "EMAIL-031": {
+    "name": { "value": "已启用增强型投递前邮件扫描（GWS.GMAIL.15.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.15.1 要求启用增强型投递前邮件扫描，以在邮件到达收件箱之前提高对可疑内容和钓鱼内容的检测能力。此检查读取 gmail.enhanced_pre_delivery_message_scanning Cloud Identity 策略，并标记未启用改进型可疑内容检测的任何组织部门。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有组织部门中启用增强型投递前邮件扫描（enableImprovedSuspiciousContentDetection = true）。", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Google 管理控制台中，依次进入应用 > Google Workspace > Gmail > 垃圾邮件、钓鱼和恶意软件，启用增强型投递前邮件扫描，使 Gmail 在投递前对可疑内容执行额外分析。", "status": "machine-draft" }
+  }
+}

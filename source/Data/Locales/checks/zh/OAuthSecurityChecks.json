@@ -1,0 +1,63 @@
+{
+  "_family": "OAuthSecurityChecks.json",
+  "OAUTH-001": {
+    "name": { "value": "OAuth 应用白名单/阻止列表", "status": "machine-draft" },
+    "description": { "value": "应通过允许列表或阻止列表来管理 OAuth 应用访问，以防止未经授权的应用访问组织数据", "status": "machine-draft" },
+    "recommendedValue": { "value": "已配置 OAuth 应用允许列表，仅包含经批准的应用", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 应用访问权限控制 > 管理第三方应用访问权限 > 配置受信任/被阻止的应用", "status": "machine-draft" }
+  },
+  "OAUTH-002": {
+    "name": { "value": "已安装 OAuth 应用清单", "status": "machine-draft" },
+    "description": { "value": "应清点并审查用户安装的所有 OAuth 应用，以识别访问组织数据的未经授权或存在风险的应用", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有已安装的 OAuth 应用均经安全团队审查并批准", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 应用访问权限控制 > 审查已安装的应用，并撤销未经授权应用的访问权限", "status": "machine-draft" }
+  },
+  "OAUTH-003": {
+    "name": { "value": "OAuth 作用域分析", "status": "machine-draft" },
+    "description": { "value": "持有高风险作用域（Gmail、Drive、Admin）的 OAuth 应用会带来重大的数据外泄风险，必须予以审查和限制", "status": "machine-draft" },
+    "recommendedValue": { "value": "不存在持有高风险作用域（gmail、drive、admin）的未经授权应用", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 应用访问权限控制 > 审查持有敏感作用域的应用 > 根据需要撤销或限制", "status": "machine-draft" }
+  },
+  "OAUTH-004": {
+    "name": { "value": "OAuth 应用风险评分", "status": "machine-draft" },
+    "description": { "value": "应根据 OAuth 应用被授予的作用域和发布者可信度对其进行风险评分，以便确定安全审查的优先级", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有高风险应用均经审查并批准；不存在持有宽泛作用域的未经审查应用", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 应用访问权限控制 > 按作用域广度排序审查应用 > 处理高风险应用", "status": "machine-draft" }
+  },
+  "OAUTH-005": {
+    "name": { "value": "未验证应用访问策略", "status": "machine-draft" },
+    "description": { "value": "应限制对未验证第三方应用的访问，以防止用户向可能存在恶意的应用授予权限", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有用户阻止未验证应用的访问", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 应用访问权限控制 > 设置 > 阻止未验证的应用", "status": "machine-draft" }
+  },
+  "OAUTH-006": {
+    "name": { "value": "API 访问控制", "status": "machine-draft" },
+    "description": { "value": "应通过适当的作用域划分和限制来控制 API 访问，以防止对组织数据进行未经授权的程序化访问", "status": "machine-draft" },
+    "recommendedValue": { "value": "API 访问仅限经批准的应用和作用域", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 管理 Google 服务 > 将 API 访问限制为仅受信任的应用", "status": "machine-draft" }
+  },
+  "OAUTH-007": {
+    "name": { "value": "Marketplace 应用安装限制", "status": "machine-draft" },
+    "description": { "value": "应限制 Google Workspace Marketplace 应用的安装，以防止用户安装未经授权的应用", "status": "machine-draft" },
+    "recommendedValue": { "value": "Marketplace 应用安装仅限管理员批准的应用或允许列表中的应用", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace Marketplace 应用 > 设置 > 限制 Marketplace 应用安装", "status": "machine-draft" }
+  },
+  "OAUTH-008": {
+    "name": { "value": "全域委托授权审计", "status": "machine-draft" },
+    "description": { "value": "全域委托允许服务账户冒充任何用户并访问其数据。未经授权或过于宽松的授权构成严重的安全风险", "status": "machine-draft" },
+    "recommendedValue": { "value": "全域委托授权数量最少且权限受限；所有授权均经审查并批准", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 全域委托 > 审查所有授权，移除不必要的授权，并将作用域限制到所需的最小范围", "status": "machine-draft" }
+  },
+  "OAUTH-009": {
+    "name": { "value": "服务账户密钥枚举", "status": "machine-draft" },
+    "description": { "value": "应对服务账户密钥进行清点并定期轮换。泄露或陈旧的密钥会提供持久的未经授权访问", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有服务账户密钥均已清点、在 90 天内轮换，且未使用的密钥已移除", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Cloud Console > IAM 和管理 > 服务账户 > 审查并轮换密钥 > 移除未使用的服务账户密钥", "status": "machine-draft" }
+  },
+  "OAUTH-010": {
+    "name": { "value": "持有敏感作用域的已连接应用", "status": "machine-draft" },
+    "description": { "value": "应对可访问 Drive、Gmail 或 Calendar 数据的应用进行清点和验证，以防止通过已连接的应用发生数据外泄", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有持有敏感作用域（Drive、Gmail、Calendar）的应用均经审查并批准", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 应用访问权限控制 > 按作用域筛选（Drive、Gmail、Calendar） > 审查并限制未经授权的应用", "status": "machine-draft" }
+  }
+}

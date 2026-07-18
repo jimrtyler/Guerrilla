@@ -1,0 +1,63 @@
+{
+  "_family": "K12Checks.json",
+  "GWS-K12-001": {
+    "name": { "value": "学生组织部门共享未从教职员工继承", "status": "machine-draft" },
+    "description": { "value": "学区通常为教职员工的需求配置 Drive 外部共享，并让学生组织部门继承该配置。继承在日常管理中是不可见的：学生组织部门显示某个值，但没有人是专门为学生做出这一选择的。学生组织部门上的外部共享配置应当是明确的本地决定，或者是完全禁用的继承值。", "status": "machine-draft" },
+    "recommendedValue": { "value": "Drive 外部共享配置在每个学生组织部门上本地应用，或继承的值为 DISALLOWED", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Drive and Docs > 共享设置。在左侧面板中选择学生组织部门，并为该组织部门明确设置“向组织外部共享”（当它是本地决定时，该设置显示“本地应用”，否则显示“继承”）。", "status": "machine-draft" }
+  },
+  "GWS-K12-002": {
+    "name": { "value": "学生外部 Drive 共享受限", "status": "machine-draft" },
+    "description": { "value": "无论教职员工的配置态势如何，学生组织部门都不应允许在组织外部进行不受限制的静默共享。可辩护的学生态势范围从完全禁用到仅限允许列表中的域；开启共享但带有警告提示是可接受的最弱底线，且应当是学区针对相应年龄段的审慎决定。", "status": "machine-draft" },
+    "recommendedValue": { "value": "学生组织部门的外部 Drive 共享为 DISALLOWED，或限制为允许列表中的域；如果为 ALLOWED，则启用外部共享警告并记录该选择", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Drive and Docs > 共享设置。选择学生组织部门，并将“向组织外部共享”设置为“关闭”或“允许列表中的域”。如果学区有意允许某个学生组织部门进行外部共享，则至少应启用“当组织内用户拥有的文件被共享到外部时发出警告”。", "status": "machine-draft" }
+  },
+  "GWS-K12-003": {
+    "name": { "value": "学生无法授权第三方应用", "status": "machine-draft" },
+    "description": { "value": "除非学区对学生组织部门限制第三方 API 访问，否则学生在任意网站上点击“使用 Google 账号登录”都可能授予该网站访问其学校账户数据的权限。学生不应拥有任何未配置的第三方应用访问权限，或仅拥有学区精心整理的允许列表。这是学校租户中影响力最大的单项设置之一。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为学生组织部门阻止未配置的第三方应用（BLOCK_ALL_SCOPES）；学区已审查的应用逐个列入允许列表", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > 访问权限和数据控制 > API 控制 > 应用访问权限控制 > 管理第三方应用访问权限。选择学生组织部门，将未配置的第三方应用设置为“阻止所有第三方 API 访问”，并将学区已审查的特定应用列入允许列表。", "status": "machine-draft" }
+  },
+  "GWS-K12-004": {
+    "name": { "value": "供应商委托访问审查", "status": "machine-draft" },
+    "description": { "value": "全域委托授权使供应商的服务账户对整个租户中的用户数据（包括学生数据）拥有长期访问权限。SIS 平台、花名册工具和教育科技供应商多年来积累这些授权，而陈旧的授权很少被移除。每一项持有敏感作用域的授权都应与当前的供应商合同以及可行的最窄作用域集合相对应。", "status": "machine-draft" },
+    "recommendedValue": { "value": "每一项全域委托授权都对应一家当前供应商，且仅携带该供应商所需的作用域", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > 访问权限和数据控制 > API 控制 > 全域委托。对于每个客户端 ID，确认它归哪家供应商所有以及合同是否仍然有效；移除已终止合作供应商的授权；缩减超出供应商职能的作用域集合（mail、Drive、目录和联系人作用域尤其值得仔细审查）。", "status": "machine-draft" }
+  },
+  "GWS-K12-005": {
+    "name": { "value": "委托管理员最小权限", "status": "machine-draft" },
+    "description": { "value": "学区经常为辅导员、秘书和校舍管理人员出于合法任务分配委托管理员角色，但所用角色的范围远超任务本身。在整个域范围内携带用户管理或安全权限的委托角色会触及每一个学生账户；将同一角色的范围限定到某个组织部门则可将其约束在范围内。此检查会呈现域范围的委托分配以供审查；每位持有者是否需要如此大的覆盖范围由学区自行判定。", "status": "machine-draft" },
+    "recommendedValue": { "value": "携带用户管理或安全权限的委托管理员角色被限定到持有者所支持的组织部门，而非整个域", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 账号 > 管理员角色。对于证据中标记的每一项自定义或预置角色分配，要么将分配范围收窄到相关的组织部门（编辑该分配的范围），要么用仅携带持有者职责所需权限的角色予以替换。", "status": "machine-draft" }
+  },
+  "GWS-K12-006": {
+    "name": { "value": "学生沟通边界", "status": "machine-draft" },
+    "description": { "value": "Chat 和 Meet 各自拥有独立的设置，用于管理账户能否与组织外部的人沟通。对于学生组织部门，这些设置是一条安全边界：它们决定学区外部的账户能否通过学区提供的工具主动与学生建立联系。此处的 FAIL 意味着某项设置允许了一类学区并未积极决定允许的外部联系；这并不意味着此类联系已经发生。Gmail 外部邮件限制位于此检查无法读取的路由规则中，特此注明以供人工审查。", "status": "machine-draft" },
+    "recommendedValue": { "value": "学生组织部门的外部聊天关闭或限制为受信任的域；学生仅加入学区主办的会议", "status": "machine-draft" },
+    "remediationSteps": { "value": "Chat：管理控制台 > 应用 > Google Workspace > Google Chat > 外部聊天设置；选择学生组织部门，关闭外部聊天或限制为允许列表中的域。Meet：管理控制台 > 应用 > Google Workspace > Google Meet > Meet 安全设置；选择学生组织部门，将用户可加入的会议限制为您的组织。Gmail：在应用 > Google Workspace > Gmail > 路由下审查任何学生外部邮件限制。", "status": "machine-draft" }
+  },
+  "GWS-K12-007": {
+    "name": { "value": "监护人访问完整性", "status": "machine-draft" },
+    "description": { "value": "监护人邮件摘要的存在是为了让家长看到自己孩子的活动。可由机器评估的完整性属性是谁可以注册和移除监护人：仅限域管理员是狭窄的暴露面；已验证的教师会扩大暴露面，并需要一套有记录的身份核验流程。学区在邀请监护人之前如何核验其身份，是此检查无法读取的策略审查项。检查发现描述的是配置态势，而非事件。", "status": "machine-draft" },
+    "recommendedValue": { "value": "如果启用了监护人访问，则监护人管理限制为域管理员，或存在一套有记录的教师侧核验流程", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Classroom > 监护人访问。选择学生组织部门。如果正在使用监护人摘要，将“谁可以管理监护人”设置为仅限域管理员，或记录教师在邀请监护人之前必须遵循的核验流程。", "status": "machine-draft" }
+  },
+  "GWS-K12-008": {
+    "name": { "value": "受管学生 Chromebook 态势", "status": "machine-draft" },
+    "description": { "value": "学生 Chromebook 是学区规模最大的设备群，也是边界受考验最多的设备群。保持设备群处于受管状态的态势是：被擦除的设备会自动重新注册（学生无法通过擦除来摆脱管理）、扩展程序从学区允许列表安装而非从带阻止列表的开放商店安装，以及来自 Web Store 之外的旁加载扩展程序被阻止。", "status": "machine-draft" },
+    "recommendedValue": { "value": "擦除后强制自动重新注册；扩展程序安装仅限允许列表；在学生组织部门上阻止外部（旁加载）扩展程序", "status": "machine-draft" },
+    "remediationSteps": { "value": "设备 > Chrome > 设置。选择学生组织部门。在设备设置 > 注册和访问下，将强制重新注册设置为“强制设备在擦除后自动重新注册”。在用户和浏览器 > 应用和扩展程序下，将 Chrome Web Store 安装策略设置为阻止所有应用并使用管理员管理的允许列表，同时阻止外部扩展程序。", "status": "machine-draft" }
+  },
+  "GWS-K12-009": {
+    "name": { "value": "离校学生账户处置", "status": "machine-draft" },
+    "description": { "value": "毕业和退学会产生无人负责的账户。属于离校学生的活跃账户是一个无人看管的身份，它仍在接收邮件、仍持有数据。此检查会呈现学生组织部门中处于活跃状态但已一年或更长时间未登录的账户，并提醒学区：已停用的账户仍持有 Drive 数据，其所有权应在删除前解决。", "status": "machine-draft" },
+    "recommendedValue": { "value": "离校学生在离校时被停用或归档；没有任何学生账户在一年未登录的情况下仍保持活跃", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 目录 > 用户。筛选到学生组织部门并按上次登录时间排序。停用或归档属于已退学或已毕业学生的账户。在删除已停用账户之前，转移 Drive 所有权（管理控制台 > 目录 > 用户 > 选择用户 > 删除 > 转移内容），或根据您的保留策略要求通过 Takeout/Vault 导出。", "status": "machine-draft" }
+  },
+  "GWS-K12-010": {
+    "name": { "value": "学生账户安全底线", "status": "machine-draft" },
+    "description": { "value": "诚实的学生安全底线是按年龄段划分的：处处采用强密码策略和由学区控制的恢复方式；对面向年龄足以持有第二因素学生的组织部门强制实施两步验证。由学生自行控制的账户自助恢复在任何年龄段都是一条账户接管途径，会导致此检查失败；缺少 2SV 强制会作为学区年龄段决策的背景信息予以报告，绝不会将其作为对小学组织部门的盲目失败判定。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为学生组织部门禁用自助恢复；采用最小长度 12 位及以上的 STRONG 密码策略；在年龄段支持的情况下强制实施 2SV，其他情况下记录例外", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > 身份验证。选择学生组织部门。在账户恢复下，为学生组织部门关闭用户账户自助恢复（恢复通过学区服务台进行）。在密码管理下，强制实施最小长度 12 位或更高的强密码。在两步验证下，对能够持有第二因素的年龄段强制实施 2SV，并为更低龄的组织部门记录例外。", "status": "machine-draft" }
+  }
+}

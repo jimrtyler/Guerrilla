@@ -1,0 +1,75 @@
+{
+  "_family": "GwsServiceChecks.json",
+  "GWS-SITES-001": {
+    "name": { "value": "已禁用 Sites 服务", "status": "machine-draft" },
+    "description": { "value": "应为所有用户禁用 Google Sites 服务以减小攻击面，与最小权限原则保持一致。在有记录的需求下，可按组织部门或群组有选择地启用 Sites。", "status": "machine-draft" },
+    "recommendedValue": { "value": "对所有人关闭 Sites 服务（仅在需要时按组织部门/群组有选择地启用）", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > Google Workspace > Sites > 服务状态 > 对所有人设置为“关闭”。仅在存在有记录的业务需求时，才按组织部门或群组有选择地启用。", "status": "machine-draft" }
+  },
+  "GWS-CLASS-001": {
+    "name": { "value": "Classroom 成员资格：谁可以加入课程", "status": "machine-draft" },
+    "description": { "value": "在您的域中谁可以加入课程应限制为仅域内用户，以防止外部账户加入内部课程。", "status": "machine-draft" },
+    "recommendedValue": { "value": "将谁可以加入课程设置为“仅您域中的用户”", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Classroom > 课程设置 > 关于课程成员资格 > 在您的域中谁可以加入课程 > 设置为“仅您域中的用户”。", "status": "machine-draft" }
+  },
+  "GWS-CLASS-002": {
+    "name": { "value": "Classroom 成员资格：用户可以加入哪些课程", "status": "machine-draft" },
+    "description": { "value": "您域中的用户可以加入哪些课程应限制为仅域内课程，以防止内部用户加入可能导致数据外泄的外部课程。", "status": "machine-draft" },
+    "recommendedValue": { "value": "将用户可以加入哪些课程设置为“仅您域中的课程”", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Classroom > 课程设置 > 关于课程成员资格 > 您域中的用户可以加入哪些课程 > 设置为“仅您域中的课程”。", "status": "machine-draft" }
+  },
+  "GWS-CLASS-003": {
+    "name": { "value": "Classroom API 数据访问受限", "status": "machine-draft" },
+    "description": { "value": "用户不应能够授权第三方应用访问其 Google Classroom 数据，以防止外部集成对数据进行不受控的访问。", "status": "machine-draft" },
+    "recommendedValue": { "value": "用户无法授权应用访问 Classroom 数据（已禁用 API 数据访问）", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Classroom > 数据访问 > 取消勾选“用户可以授权应用访问其 Google Classroom 数据”。", "status": "machine-draft" }
+  },
+  "GWS-CLASS-004": {
+    "name": { "value": "已禁用 Classroom 花名册导入", "status": "machine-draft" },
+    "description": { "value": "应关闭通过第三方集成进行的花名册导入，以免在没有明确治理的情况下从外部系统同步课程花名册。", "status": "machine-draft" },
+    "recommendedValue": { "value": "花名册导入已关闭", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Classroom > 花名册导入 > 选择“关闭”。", "status": "machine-draft" }
+  },
+  "GWS-CLASS-005": {
+    "name": { "value": "Classroom 学生退课受限", "status": "machine-draft" },
+    "description": { "value": "只应允许教师将学生从课程中退课，以防止学生将自己或他人退课并破坏课程成员资格的完整性。", "status": "machine-draft" },
+    "recommendedValue": { "value": "学生退课仅限教师", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Classroom > 学生退课 > 选择“仅教师”。", "status": "machine-draft" }
+  },
+  "GWS-CLASS-006": {
+    "name": { "value": "Classroom 课程创建仅限已验证的教师", "status": "machine-draft" },
+    "description": { "value": "课程创建应仅限已验证的教师，以防止未经授权的用户创建课程并招募成员。", "status": "machine-draft" },
+    "recommendedValue": { "value": "课程创建仅限已验证的教师", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Classroom > 常规设置 > 教师权限 > 选择“仅已验证的教师”。", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-001": {
+    "name": { "value": "Gemini 应用访问仅限持有许可的用户", "status": "machine-draft" },
+    "description": { "value": "对于没有许可的所有人，应将 Gemini 应用的用户访问设置为“关闭”，确保生成式 AI 的访问由许可分配来管理，而非向所有用户开放。", "status": "machine-draft" },
+    "recommendedValue": { "value": "对没有许可的用户关闭 Gemini 应用访问", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 生成式 AI > Gemini 应用 > 用户访问 > 取消勾选“允许所有用户访问 Gemini 应用，无论是否持有许可”。", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-002": {
+    "name": { "value": "已禁用 Gemini Alpha 功能", "status": "machine-draft" },
+    "description": { "value": "应禁用 Gemini Alpha 功能。预发布功能可能尚未完成安全审查，可能使组织数据暴露于未经审查的处理过程。", "status": "machine-draft" },
+    "recommendedValue": { "value": "已关闭对 Gemini for Workspace 中 Alpha 功能的访问", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 生成式 AI > Gemini for Workspace > Alpha 功能 > 选择“关闭对 Gemini for Google Workspace 中 Alpha 功能的访问”。", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-003": {
+    "name": { "value": "已启用 Gemini 对话历史记录", "status": "machine-draft" },
+    "description": { "value": "应启用 Gemini 对话历史记录，以便出于审计和合规目的保留 AI 交互记录。禁用历史记录可能掩盖数据处理过程。", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用 Gemini 对话历史记录", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 生成式 AI > Gemini 应用 > Gemini 对话历史记录 > 确保对话历史记录已开启。", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-004": {
+    "name": { "value": "Gemini 对话保留期至少 18 个月", "status": "machine-draft" },
+    "description": { "value": "应将 Gemini 对话保留期设置为至少 18 个月，以支持审计、法律保留和事件调查的要求。", "status": "machine-draft" },
+    "recommendedValue": { "value": "对话保留期设置为至少 18 个月", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 生成式 AI > Gemini 应用 > Gemini 对话历史记录 > 将保留期设置为至少 18 个月。", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-005": {
+    "name": { "value": "已禁用 Gemini 对话共享", "status": "machine-draft" },
+    "description": { "value": "应将通过链接进行的 Gemini 对话共享设置为“关闭”，以防止可能包含敏感提示和输出的 AI 对话内容被共享给预期收件人以外的人。", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过链接进行的对话共享设置为“关闭”", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 生成式 AI > Gemini 应用 > 共享 > 将“允许通过链接共享对话”设置为“关闭”。", "status": "machine-draft" }
+  }
+}

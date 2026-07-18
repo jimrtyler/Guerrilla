@@ -1,0 +1,39 @@
+{
+  "_family": "LoggingAlertingChecks.json",
+  "LOG-001": {
+    "name": { "value": "审计日志保留设置", "status": "machine-draft" },
+    "description": { "value": "审计日志应保留足够长的时间，以支持事件调查和合规要求。默认保留期因 Workspace 版本而异", "status": "machine-draft" },
+    "recommendedValue": { "value": "审计日志保留 12 个月或更长时间；通过 BigQuery 导出以延长长期保留", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 报告 > 审计和调查 > 审查日志的可用性。通过管理控制台 > 报告 > BigQuery 导出配置 BigQuery 导出，以实现长期保留", "status": "machine-draft" }
+  },
+  "LOG-002": {
+    "name": { "value": "提醒中心规则清单", "status": "machine-draft" },
+    "description": { "value": "应配置提醒中心规则，以检测与安全相关的事件并发出通知，包括可疑登录、数据外泄和策略违规", "status": "machine-draft" },
+    "recommendedValue": { "value": "为关键安全事件（可疑登录、数据外泄、权限变更）配置提醒规则", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > 提醒中心 > 审查现有规则 > 为缺失的安全事件类别创建规则", "status": "machine-draft" }
+  },
+  "LOG-003": {
+    "name": { "value": "活动规则覆盖分析", "status": "machine-draft" },
+    "description": { "value": "活动规则应在各安全领域提供充分的覆盖，包括登录、Drive、管理员和电子邮件事件", "status": "machine-draft" },
+    "recommendedValue": { "value": "涵盖登录、Drive 共享、管理员变更、电子邮件转发和 OAuth 事件的活动规则", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > 提醒中心 > 规则 > 审查各事件类别的覆盖情况 > 为未覆盖的安全领域添加规则", "status": "machine-draft" }
+  },
+  "LOG-004": {
+    "name": { "value": "数据导出设置", "status": "machine-draft" },
+    "description": { "value": "应对 Google Takeout（数据导出）加以控制，以防止用户将组织数据批量导出到域外", "status": "machine-draft" },
+    "recommendedValue": { "value": "为大多数用户禁用或限制 Google Takeout", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 应用 > 其他 Google 服务 > Google Takeout > 为适用的组织部门禁用或限制", "status": "machine-draft" }
+  },
+  "LOG-005": {
+    "name": { "value": "管理员电子邮件提醒配置", "status": "machine-draft" },
+    "description": { "value": "应为关键管理员操作配置电子邮件提醒，包括超级管理员变更、安全设置修改和批量操作", "status": "machine-draft" },
+    "recommendedValue": { "value": "为关键管理员操作和安全事件启用电子邮件提醒", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > 提醒中心 > 为关键提醒类型配置电子邮件通知收件人", "status": "machine-draft" }
+  },
+  "LOG-006": {
+    "name": { "value": "报告 API 访问", "status": "machine-draft" },
+    "description": { "value": "应审查对 Reports API 的访问，以确保只有经过授权的服务账户和应用才能检索审计和使用数据", "status": "machine-draft" },
+    "recommendedValue": { "value": "Reports API 访问仅限经过授权的服务账户", "status": "machine-draft" },
+    "remediationSteps": { "value": "管理控制台 > 安全 > API 控制 > 全域委托 > 审查持有 Reports API 作用域的授权 > 移除未经授权的访问", "status": "machine-draft" }
+  }
+}

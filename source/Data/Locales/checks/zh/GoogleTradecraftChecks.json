@@ -1,0 +1,39 @@
+{
+  "_family": "GoogleTradecraftChecks.json",
+  "GTRADE-001": {
+    "name": { "value": "全域委托组织接管风险", "status": "machine-draft" },
+    "description": { "value": "全域委托将冒充能力绑定到服务账户的 OAuth 客户端 ID，而非其密钥，因此任何能在持有宽泛作用域的受委托服务账户上创建密钥的人，无需超级管理员即可获得组织范围内的冒充能力（即 DeleFriend 技术）。携带完整 Gmail/Drive/Directory/cloud-platform 作用域的委托授权是接管的前提条件。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何服务账户被委托组织冒充作用域（完整 Gmail/Drive/Directory/cloud-platform）；仅限范围狭窄的只读作用域", "status": "machine-draft" },
+    "remediationSteps": { "value": "安全 > API 控制 > 全域委托：移除或收紧任何持有完整 mail.google.com、完整 drive、admin.directory 或 cloud-platform 作用域的授权；限制为所需的最小只读作用域。在 GCP 中，禁止在受委托的服务账户上创建密钥（iam.disableServiceAccountKeyCreation）。", "status": "machine-draft" }
+  },
+  "GTRADE-002": {
+    "name": { "value": "可被互联网读取的 Google 群组", "status": "machine-draft" },
+    "description": { "value": "主题可被“互联网上的任何人”查看的群组会静默泄露其全部消息历史，这一类问题已使数千家组织的内部邮件（财务信息、凭据、PII）遭到暴露。Google 未针对此类暴露提供原生提醒。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何群组可被互联网上的任何人查看（whoCanViewGroup 不为 ANYONE_CAN_VIEW）", "status": "machine-draft" },
+    "remediationSteps": { "value": "应用 > Google Workspace > Groups for Business > 共享设置，以及各群组的访问设置：将“谁可以查看对话”从“互联网上的任何人”改为仅成员/组织。", "status": "machine-draft" }
+  },
+  "GTRADE-003": {
+    "name": { "value": "开放加入/外部成员群组", "status": "machine-draft" },
+    "description": { "value": "任何人（或域内任何人）都可加入、或允许外部成员的群组会扩大信任边界并实现自助访问，如果此类群组还持有资源或 IAM 访问权限，加入它便会继承该访问权限（Google 将这一权限提升途径归类为预期行为）。", "status": "machine-draft" },
+    "recommendedValue": { "value": "群组仅限受邀成员；除非明确需要，否则不允许任何人加入，也不允许外部成员", "status": "machine-draft" },
+    "remediationSteps": { "value": "应用 > Google Workspace > Groups for Business：将默认的“谁可以加入”设置为“仅受邀用户”，并禁用“允许外部成员”，除非某个群组明确需要；审查授予资源/IAM 访问权限的群组。", "status": "machine-draft" }
+  },
+  "GTRADE-004": {
+    "name": { "value": "超级管理员泛滥", "status": "machine-draft" },
+    "description": { "value": "超级管理员会绕过 SSO 和大多数控制；超级管理员数量庞大会扩大组织价值最高的攻击面。Google 的最佳实践是将数量控制在较小范围（少于五个），日常工作则在最小权限角色下完成。", "status": "machine-draft" },
+    "recommendedValue": { "value": "活跃的超级管理员少于 5 个", "status": "machine-draft" },
+    "remediationSteps": { "value": "账号 > 管理员角色 > 超级管理员：将成员数量减少到最少的应急（break-glass）集合；将日常职责转移到最小权限的自定义/预置角色；对所有剩余的超级管理员强制实施抗钓鱼的 2SV。", "status": "machine-draft" }
+  },
+  "GTRADE-005": {
+    "name": { "value": "等同超级管理员的自定义角色", "status": "machine-draft" },
+    "description": { "value": "携带高权限（用户管理、安全设置、角色管理、数据导出/Takeout）的自定义管理员角色可以近似超级管理员能力，同时逃避简单的超级管理员人数统计，这是一种隐蔽的权限集中和持久化途径。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除应急（break-glass）用途外，没有任何自定义角色携带等同超级管理员的权限（用户/安全/角色管理或数据导出）", "status": "machine-draft" },
+    "remediationSteps": { "value": "账号 > 管理员角色：审查持有用户管理、安全设置、角色管理或数据导出/Takeout 权限的自定义角色；拆分为范围狭窄的角色并限制被分配者。", "status": "machine-draft" }
+  },
+  "GTRADE-006": {
+    "name": { "value": "持久/作用域过大的 OAuth 授权", "status": "machine-draft" },
+    "description": { "value": "持有完整 Gmail/Drive/admin 作用域的第三方 OAuth 授权会绕过 MFA，并在密码重置后依然有效（Apps Script、应用专用密码和 IMAP-OAuth 会话不会因重置而被撤销），是一条持久的持久化通道。Google 会记录授权，但未附带默认的恶意授权分类器。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何第三方 OAuth 应用持有完整的 mail/drive/admin 作用域；持久授权已审查并明确撤销", "status": "machine-draft" },
+    "remediationSteps": { "value": "安全 > API 控制 > 应用访问权限控制：审查持有完整 Gmail/Drive/Directory 作用域的应用，限制为允许列表中的应用，并明确撤销不需要的授权（仅重置密码并不会撤销 OAuth、应用专用密码或 Apps Script 访问权限）。", "status": "machine-draft" }
+  }
+}
