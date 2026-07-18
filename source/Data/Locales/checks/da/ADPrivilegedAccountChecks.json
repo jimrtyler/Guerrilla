@@ -1,0 +1,183 @@
+{
+  "_family": "ADPrivilegedAccountChecks.json",
+  "ADPRIV-001": {
+    "name": { "value": "Optælling af Domain Admins", "status": "machine-draft" },
+    "description": { "value": "Gruppen Domain Admins giver fuld administrativ kontrol over alle domænetilsluttede systemer. Medlemskab bør være strengt begrænset, og hvert medlem skal have en dokumenteret forretningsmæssig begrundelse. Overdrevent medlemskab øger dramatisk angrebsfladen for tyveri af legitimationsoplysninger og lateral bevægelse", "status": "machine-draft" },
+    "recommendedValue": { "value": "Minimalt medlemskab (ideelt maksimalt 2-3 konti) med dokumenteret begrundelse for hvert medlem. Ingen daglige brugerkonti", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Domain Admins, herunder indlejrede grupper, med Get-ADGroupMember -Identity 'Domain Admins' -Recursive. Gennemgå hvert medlem for et forretningsmæssigt behov. Fjern unødvendige medlemmer, og migrer til modeller med delegeret administration. Sørg for, at ingen almindelige brugerkonti er medlemmer", "status": "machine-draft" }
+  },
+  "ADPRIV-002": {
+    "name": { "value": "Optælling af Enterprise Admins", "status": "machine-draft" },
+    "description": { "value": "Gruppen Enterprise Admins har skovomspændende administrative rettigheder på tværs af alle domæner. Denne gruppe bør være tom under normal drift og kun midlertidigt befolket ved ændringer på skovniveau. En kompromitteret Enterprise Admin-konto fører til fuldstændig kompromittering af skoven", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom under normal drift. Medlemmer tilføjes kun midlertidigt ved ændringer på skovniveau med dokumenteret godkendelse", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Enterprise Admins med Get-ADGroupMember -Identity 'Enterprise Admins' -Recursive. Fjern alle permanente medlemmer. Implementér en just-in-time-adgangsproces for operationer på skovniveau, der midlertidigt tilføjer og fjerner medlemmer med fuld overvågningslogning", "status": "machine-draft" }
+  },
+  "ADPRIV-003": {
+    "name": { "value": "Optælling af Schema Admins", "status": "machine-draft" },
+    "description": { "value": "Gruppen Schema Admins kan ændre AD-skemaet, hvilket er irreversibelt og påvirker hele skoven. Denne gruppe bør være tom under normal drift, da skemaændringer er sjældne og har stor indvirkning", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom under normal drift. Medlemmer tilføjes kun midlertidigt ved skemaændringer med godkendelse fra ændringsstyring", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Schema Admins med Get-ADGroupMember -Identity 'Schema Admins'. Fjern alle permanente medlemmer. Tilføj kun medlemmer, når skemaændringer er påkrævet, via en formel ændringsstyringsproces", "status": "machine-draft" }
+  },
+  "ADPRIV-004": {
+    "name": { "value": "Optælling af Account Operators", "status": "machine-draft" },
+    "description": { "value": "Account Operators kan oprette og ændre de fleste bruger- og gruppekonti i domænet, herunder oprette konti i privilegerede OU'er. Denne gruppe overses ofte, men giver et betydeligt potentiale for rettighedseskalering", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom. Brug delegerede tilladelser på OU-niveau i stedet for medlemskab af gruppen Account Operators", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Account Operators med Get-ADGroupMember -Identity 'Account Operators'. Fjern alle medlemmer, og erstat med OU-afgrænset delegering ved hjælp af guiden Active Directory Delegation of Control. Dokumentér alle delegerede tilladelser", "status": "machine-draft" }
+  },
+  "ADPRIV-005": {
+    "name": { "value": "Optælling af Server Operators", "status": "machine-draft" },
+    "description": { "value": "Server Operators kan logge på domænecontrollere, administrere tjenester og ændre delte ressourcer. Denne gruppe kan misbruges til at eskalere rettigheder på DC'er ved at manipulere tjenester til at køre vilkårlig kode som SYSTEM", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom. Brug i stedet dedikerede tjenesteadministrationskonti med specifik delegering", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Server Operators med Get-ADGroupMember -Identity 'Server Operators'. Fjern alle medlemmer, og implementér målrettet delegering til eventuelle nødvendige serveradministrationsopgaver. Revidér DC-logonrettigheder separat", "status": "machine-draft" }
+  },
+  "ADPRIV-006": {
+    "name": { "value": "Optælling af Backup Operators", "status": "machine-draft" },
+    "description": { "value": "Backup Operators kan sikkerhedskopiere og gendanne filer på domænecontrollere, herunder AD-databasen (ntds.dit). Dette tillader udtræk af alle adgangskodehashes i domænet, hvilket gør medlemskab af Backup Operators ækvivalent med Domain Admin-adgang for en dygtig angriber", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom eller begrænset til udelukkende dedikerede backuptjenestekonti. Ingen brugerkonti", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Backup Operators med Get-ADGroupMember -Identity 'Backup Operators'. Fjern alle brugerkonti. Hvis backuptjenestekonti kræver medlemskab, skal du sikre, at de er dedikerede, har stærke adgangskoder og overvåges. Overvej agentbaserede backupløsninger, der ikke kræver medlemskab af Backup Operators", "status": "machine-draft" }
+  },
+  "ADPRIV-007": {
+    "name": { "value": "Optælling af Print Operators", "status": "machine-draft" },
+    "description": { "value": "Print Operators kan administrere printere og indlæse printerdrivere på domænecontrollere. Skadelige printerdrivere kan udføre vilkårlig kode som SYSTEM på DC'er, hvilket giver en sti til fuld kompromittering af domænet", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom. Administrer printere ved hjælp af dedikerede printservere, ikke domænecontrollere", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af Print Operators med Get-ADGroupMember -Identity 'Print Operators'. Fjern alle medlemmer. Udrul udskrivningstjenester på dedikerede medlemsservere i stedet for domænecontrollere. Begræns installation af printerdrivere via gruppepolitik", "status": "machine-draft" }
+  },
+  "ADPRIV-008": {
+    "name": { "value": "Medlemskab af gruppen DnsAdmins", "status": "machine-draft" },
+    "description": { "value": "Medlemmer af gruppen DnsAdmins kan konfigurere DNS-tjenesten på domænecontrollere til at indlæse en vilkårlig DLL, der udføres som SYSTEM. Denne velkendte sti til rettighedseskalering kan føre til fuld kompromittering af domænet fra et tilsyneladende lavtprivilegeret gruppemedlemskab", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tom eller begrænset til udelukkende dedikerede DNS-administrationskonti. Medlemskab behandlet som Tier 0-privilegeret", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemskabet af DnsAdmins med Get-ADGroupMember -Identity 'DnsAdmins'. Fjern unødvendige medlemmer. Behandl DnsAdmins som en Tier 0-privilegeret gruppe i din tiermodel. Overvåg for ændringer i DNS-serverkonfigurationen og registreringsdatabaseværdien ServerLevelPluginDll", "status": "machine-draft" }
+  },
+  "ADPRIV-009": {
+    "name": { "value": "Analyse af indlejret gruppemedlemskab", "status": "machine-draft" },
+    "description": { "value": "Indlejrede gruppemedlemskaber kan sløre effektive rettigheder ved at skjule privilegeret adgang bag kæder af gruppeindlejring. Brugere kan have Domain Admin-ækvivalent adgang gennem dybt indlejrede grupper, der ikke er synlige ved simpel gruppeoptælling", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle indlejrede gruppestier til privilegerede grupper dokumenteret. Maksimal indlejringsdybde på 2 niveauer. Ingen cirkulær indlejring", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl rekursivt alle medlemskaber af privilegerede grupper med Get-ADGroupMember -Recursive. Kortlæg alle indlejringsstier, og identificer brugere, der opnår rettigheder gennem indirekte medlemskab. Udjævn unødvendig indlejring, og dokumentér alle resterende indlejrede stier med en forretningsmæssig begrundelse", "status": "machine-draft" }
+  },
+  "ADPRIV-010": {
+    "name": { "value": "Privilegerede brugere med adgangskode, der aldrig udløber", "status": "machine-draft" },
+    "description": { "value": "Privilegerede konti med flaget 'Password Never Expires' angivet er undtaget fra politikker for rotation af adgangskoder. Hvis en sådan konto kompromitteres, bevarer angriberen vedvarende adgang på ubestemt tid, da adgangskoden aldrig vil blive tvunget til at ændres", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen privilegerede konti med flaget Password Never Expires angivet. Alle privilegerede konti underlagt en politik for rotation af adgangskoder på 60 dage eller mindre", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer privilegerede konti med PasswordNeverExpires med Get-ADUser -Filter {PasswordNeverExpires -eq $true -and AdminCount -eq 1}. Ryd flaget, og sørg for, at disse konti er omfattet af en passende adgangskodepolitik. Implementér FGPP for privilegerede konti med en maksimal adgangskodealder på 60 dage", "status": "machine-draft" }
+  },
+  "ADPRIV-011": {
+    "name": { "value": "Privilegerede brugere uden krav om adgangskode", "status": "machine-draft" },
+    "description": { "value": "Flaget PASSWD_NOTREQD tillader en konto at have en tom adgangskode, hvilket helt omgår adgangskodepolitikken. På privilegerede konti er dette katastrofalt, da det tillader ugodkendt adgang til stærkt privilegerede ressourcer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen privilegerede konti med flaget PASSWD_NOTREQD angivet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer konti med Get-ADUser -Filter {PasswordNotRequired -eq $true -and AdminCount -eq 1}. Ryd straks flaget PASSWD_NOTREQD, og angiv en stærk adgangskode på alle identificerede konti. Undersøg, hvordan dette flag blev sat, da det kan indikere kompromittering", "status": "machine-draft" }
+  },
+  "ADPRIV-012": {
+    "name": { "value": "Privilegerede brugere uden Kerberos-forhåndsgodkendelse", "status": "machine-draft" },
+    "description": { "value": "Konti med Kerberos-forhåndsgodkendelse deaktiveret er sårbare over for AS-REP Roasting, hvor en angriber kan anmode om krypteret materiale offline uden nogen godkendelse og knække det for at gendanne kontoens adgangskode. På privilegerede konti giver dette en direkte sti til kompromittering af domænet", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen privilegerede konti med flaget 'Kræv ikke Kerberos-forhåndsgodkendelse' angivet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer konti med Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true -and AdminCount -eq 1}. Aktivér straks Kerberos-forhåndsgodkendelse på alle privilegerede konti. Udskift adgangskoderne på berørte konti, da de allerede kan være blevet kompromitteret via AS-REP Roasting", "status": "machine-draft" }
+  },
+  "ADPRIV-013": {
+    "name": { "value": "Privilegerede brugere med reversibel kryptering", "status": "machine-draft" },
+    "description": { "value": "Konti med 'Store password using reversible encryption' aktiveret gemmer adgangskoder i et format, der kan dekrypteres til klartekst. Dette svarer til at gemme adgangskoder i klartekst og tillader enhver angriber med adgang til AD-databasen at hente den faktiske adgangskode", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen konti med reversibel kryptering aktiveret, især ikke privilegerede konti", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer konti med Get-ADUser -Filter {AllowReversiblePasswordEncryption -eq $true -and AdminCount -eq 1}. Ryd flaget, og fremtving en øjeblikkelig ændring af adgangskode på alle berørte konti. Gennemgå adgangskodepolitikker for at sikre, at de ikke kræver reversibel kryptering", "status": "machine-draft" }
+  },
+  "ADPRIV-014": {
+    "name": { "value": "Privilegerede brugere med kun DES-Kerberos", "status": "machine-draft" },
+    "description": { "value": "Konti konfigureret til at anvende kun DES-Kerberos-kryptering anvender en kryptografisk brudt algoritme. DES-nøgler kan brute-forces hurtigt, hvilket tillader angribere at forfalske eller dekryptere Kerberos-billetter for de berørte konti", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen konti med flaget 'Use Kerberos DES encryption types for this account' angivet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer konti med Get-ADUser -Filter {UseDESKeyOnly -eq $true -and AdminCount -eq 1}. Ryd flaget for kun DES, og sørg for, at konti understøtter AES256-kryptering. Udskift adgangskoderne på berørte konti for at generere nye AES-baserede Kerberos-nøgler", "status": "machine-draft" }
+  },
+  "ADPRIV-015": {
+    "name": { "value": "Privilegerede konti uden MFA-indikator", "status": "machine-draft" },
+    "description": { "value": "Privilegerede konti bør beskyttes af multifaktorgodkendelse ved alle interaktive og eksterne logon. Uden MFA er en stjålet adgangskode alene tilstrækkelig til at opnå fuld administrativ adgang til domænet", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle privilegerede konti skal anvende MFA via smartkort, Windows Hello for Business eller FIDO2. Flaget 'Smart card is required for interactive logon' angivet, hvor det er relevant", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå privilegerede konti for krav om smartkortlogon med Get-ADUser -Filter {SmartcardLogonRequired -eq $false -and AdminCount -eq 1}. Udrul godkendelse med smartkort eller Windows Hello for Business til alle privilegerede konti. Aktivér flaget 'Smart card is required for interactive logon' på Tier 0-konti", "status": "machine-draft" }
+  },
+  "ADPRIV-016": {
+    "name": { "value": "Privilegerede konti med svage adgangskoder", "status": "machine-draft" },
+    "description": { "value": "Privilegerede konti med svage eller almindeligt anvendte adgangskoder kompromitteres trivielt gennem password spraying, ordbogsangreb eller credential stuffing. En svag adgangskode på en Domain Admin-konto kan føre til fuldstændig kompromittering af domænet inden for få minutter", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle privilegerede kontoers adgangskoder opfylder et minimum på 25 tegn og findes ikke i almindelige adgangskodeordbøger", "status": "machine-draft" },
+    "remediationSteps": { "value": "Test styrken af privilegerede kontoers adgangskoder ved at sammenligne NT-hashes med kendte lister over svage adgangskoder (med værktøjer som DSInternals). Fremtving straks ændring af adgangskoder på alle konti med svage adgangskoder. Implementér FGPP, der kræver adgangskoder på 25+ tegn for privilegerede konti", "status": "machine-draft" }
+  },
+  "ADPRIV-017": {
+    "name": { "value": "Privilegerede konti med gamle adgangskoder", "status": "machine-draft" },
+    "description": { "value": "Privilegerede konti med adgangskoder, der ikke er ændret i over 90 dage, har et forlænget eksponeringsvindue. Hvis legitimationsoplysningerne blev kompromitteret, bevarer angriberen adgang i hele den periode, adgangskoden forbliver uændret", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle privilegerede kontoers adgangskoder ændret inden for de sidste 60 dage", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer privilegerede konti med gamle adgangskoder med Get-ADUser -Filter {AdminCount -eq 1} -Properties PasswordLastSet | Where-Object {$_.PasswordLastSet -lt (Get-Date).AddDays(-90)}. Fremtving rotation af adgangskoder på alle identificerede konti. Implementér FGPP med en maksimal adgangskodealder på 60 dage for privilegerede konti", "status": "machine-draft" }
+  },
+  "ADPRIV-018": {
+    "name": { "value": "Privilegerede konti, der aldrig har logget på", "status": "machine-draft" },
+    "description": { "value": "Privilegerede konti, der aldrig har logget på, kan være tildelte konti, der aldrig blev taget i brug, testkonti eller migreringsartefakter. Disse ustyrede konti i privilegerede grupper udgør en betydelig risiko, da de kan have standard- eller svage adgangskoder", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen privilegerede konti med null LastLogonTimestamp. Alle privilegerede konti aktivt anvendt af deres tildelte ejere", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer privilegerede konti, der aldrig har logget på, med Get-ADUser -Filter {AdminCount -eq 1} -Properties LastLogonTimestamp | Where-Object {$_.LastLogonTimestamp -eq $null}. Undersøg hver konto for at afgøre, om den er nødvendig. Deaktivér eller fjern unødvendige konti fra privilegerede grupper", "status": "machine-draft" }
+  },
+  "ADPRIV-019": {
+    "name": { "value": "Deaktiverede konti i privilegerede grupper", "status": "machine-draft" },
+    "description": { "value": "Deaktiverede konti, der forbliver i privilegerede grupper, skaber risiko, fordi genaktivering af kontoen (bevidst eller gennem kompromittering) straks giver fuld privilegeret adgang. Deaktiverede konti bør fjernes fra alle privilegerede grupper", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen deaktiverede konti i nogen privilegerede grupper", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer deaktiverede konti i privilegerede grupper med Get-ADGroupMember 'Domain Admins' -Recursive | Get-ADUser | Where-Object {$_.Enabled -eq $false}. Gentag for alle privilegerede grupper. Fjern straks deaktiverede konti fra alle privilegerede gruppemedlemskaber", "status": "machine-draft" }
+  },
+  "ADPRIV-020": {
+    "name": { "value": "Revision af AdminSDHolder-beskyttede objekter", "status": "machine-draft" },
+    "description": { "value": "AdminSDHolder er en sikkerhedsmekanisme, der overskriver ACL'er på beskyttede objekter (privilegerede brugere og grupper) hvert 60. minut via SDProp. Ændringer af AdminSDHolder-ACL'en udbredes til alle beskyttede objekter, hvilket gør den til et mål af høj værdi for persistens. Uautoriserede ACE'er på AdminSDHolder giver bagdørsadgang til alle privilegerede konti", "status": "machine-draft" },
+    "recommendedValue": { "value": "AdminSDHolder-ACL'en indeholder kun standardposter uden uautoriserede eller uventede ACE'er", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå AdminSDHolder-ACL'en ved CN=AdminSDHolder,CN=System,DC=domain med Get-ACL eller ADSIEdit. Sammenlign med den dokumenterede baseline. Fjern straks eventuelle ikke-standardmæssige ACE'er. Overvåg for ændringer af AdminSDHolder som en del af den løbende sikkerhedsovervågning", "status": "machine-draft" }
+  },
+  "ADPRIV-021": {
+    "name": { "value": "AdminCount-forældreløse objekter", "status": "machine-draft" },
+    "description": { "value": "Når objekter fjernes fra beskyttede grupper, forbliver attributten AdminCount sat til 1, og nedarvede tilladelser forbliver blokeret. Disse 'AdminCount-forældreløse objekter' har brudt tilladelsesnedarvning, hvilket kan forhindre sikkerhedspolitikker i at gælde korrekt og kan maskere rettighedseskalering", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen konti med AdminCount=1, der ikke er medlemmer af nogen beskyttet gruppe", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer forældreløse konti med Get-ADUser -Filter {AdminCount -eq 1}, og kryds med det aktuelle medlemskab af beskyttede grupper. For forældreløse objekter skal du rydde attributten AdminCount og genaktivere nedarvning på objektets ACL. Brug PowerShell eller ADSIEdit til at rette nedarvede tilladelser", "status": "machine-draft" }
+  },
+  "ADPRIV-022": {
+    "name": { "value": "Alder på krbtgt-adgangskode", "status": "machine-draft" },
+    "description": { "value": "krbtgt-kontoens adgangskode bruges til at kryptere og signere alle Kerberos-billetter i domænet. Hvis den kompromitteres, kan en angriber oprette Golden Tickets, der giver ubegrænset adgang til enhver ressource i vilkårlig varighed. krbtgt-adgangskoden bør roteres mindst hver 180. dag og straks efter enhver formodet kompromittering", "status": "machine-draft" },
+    "recommendedValue": { "value": "krbtgt-adgangskode ændret inden for de sidste 180 dage. Roteret to gange (for at ugyldiggøre alle eksisterende billetter) efter enhver formodet kompromittering", "status": "machine-draft" },
+    "remediationSteps": { "value": "Kontrollér alderen på krbtgt-adgangskoden med Get-ADUser krbtgt -Properties PasswordLastSet. Nulstil adgangskoden to gange (med tilstrækkelig tid mellem nulstillinger til, at replikeringen kan fuldføres) for at ugyldiggøre alle eksisterende billetter. Brug krbtgt-nulstillingsscriptet fra Microsoft til sikkert at udføre rotationen. Planlæg regelmæssig rotation hver 180. dag", "status": "machine-draft" }
+  },
+  "ADPRIV-023": {
+    "name": { "value": "Vurdering af krbtgt-kontoeksponering", "status": "machine-draft" },
+    "description": { "value": "krbtgt-kontoens konfiguration bør vurderes for eksponeringsindikatorer, herunder understøttede krypteringstyper, delegeringsindstillinger og SPN'er. Enhver fejlkonfiguration øger risikoen for Golden Ticket og andre Kerberos-baserede angreb", "status": "machine-draft" },
+    "recommendedValue": { "value": "krbtgt-kontoen konfigureret med kun AES256-kryptering, ingen delegering og ingen yderligere SPN'er ud over standarden kadmin/changepw", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå krbtgt-kontoens egenskaber, herunder msDS-SupportedEncryptionTypes, delegeringsindstillinger og SPN'er. Sørg for, at AES256 er den primære krypteringstype. Verificér, at ingen delegeringsflag er sat. Kontrollér for uventede SPN'er, der kan indikere kompromittering eller fejlkonfiguration", "status": "machine-draft" }
+  },
+  "ADPRIV-024": {
+    "name": { "value": "Tjenestekonti i privilegerede grupper", "status": "machine-draft" },
+    "description": { "value": "Tjenestekonti i privilegerede grupper udgør en forhøjet risiko, fordi de typisk har adgangskoder, der ikke udløber, deles blandt administratorer, kan være gemt i scripts eller konfigurationsfiler og kører på flere servere, hvor legitimationsoplysninger kan høstes", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen tjenestekonti i privilegerede grupper. Tjenestekonti bør anvende delegerede tilladelser afgrænset til den minimalt nødvendige adgang", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer tjenestekonti i privilegerede grupper ved at gennemgå alle medlemmer og kontrollere for konti, der anvendes som tjenestelogonidentiteter. Fjern tjenestekonti fra privilegerede grupper, og giv kun de specifikke tilladelser, der er nødvendige, via delegering. Migrer til gruppeadministrerede tjenestekonti (gMSA), hvor det er muligt", "status": "machine-draft" }
+  },
+  "ADPRIV-025": {
+    "name": { "value": "Computerkonti i privilegerede grupper", "status": "machine-draft" },
+    "description": { "value": "Computerkonti i privilegerede grupper giver enhver proces, der kører som SYSTEM på de pågældende computere, gruppens rettigheder. En angriber, der kompromitterer en sådan maskine, opnår Domain Admin-ækvivalent adgang, hvilket betydeligt udvider angrebsfladen for lateral bevægelse", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen computerkonti i nogen privilegerede grupper", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl medlemmerne af privilegerede grupper, og identificer eventuelle computerkonti med Get-ADGroupMember 'Domain Admins' | Where-Object {$_.objectClass -eq 'computer'}. Gentag for alle privilegerede grupper. Fjern straks computerkonti, og undersøg, hvorfor de blev tilføjet", "status": "machine-draft" }
+  },
+  "ADPRIV-026": {
+    "name": { "value": "Privilegerede brugeres lokale logon på DC'er", "status": "machine-draft" },
+    "description": { "value": "Kun udpegede Tier 0-administrative konti bør have tilladelse til at logge lokalt på domænecontrollere. At tillade konti uden Tier 0 at logge på DC'er eksponerer privilegerede legitimationsoplysninger for høstningsangreb på mindre sikrede arbejdsstationer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kun Domain Admins og udpegede Tier 0-konti tilladt lokal logon på DC'er. 'Allow log on locally' begrænset via GPO på OU'en Domain Controllers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Konfigurer via gruppepolitik anvendt på OU'en Domain Controllers: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > User Rights Assignment > 'Allow log on locally' = kun Administrators, Domain Admins. Fjern alle andre poster, og test grundigt", "status": "machine-draft" }
+  },
+  "ADPRIV-027": {
+    "name": { "value": "Privilegerede brugeres RDP på DC'er", "status": "machine-draft" },
+    "description": { "value": "Fjernskrivebordsadgang til domænecontrollere bør være strengt begrænset til udpegede Tier 0-administratorer. RDP-sessioner cachelagrer legitimationsoplysninger, der kan høstes, og overdreven RDP-adgang øger angrebsfladen for tyveri af legitimationsoplysninger og lateral bevægelse til DC'er", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kun udpegede Tier 0-administrative konti tilladt RDP-adgang til DC'er. 'Allow log on through Remote Desktop Services' begrænset via GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "Konfigurer via gruppepolitik anvendt på OU'en Domain Controllers: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > User Rights Assignment > 'Allow log on through Remote Desktop Services' = kun Administrators. Overvej at anvende Remote Credential Guard eller Restricted Admin-tilstand til RDP-sessioner", "status": "machine-draft" }
+  },
+  "ADPRIV-028": {
+    "name": { "value": "Brugere med DCSync-rettigheder", "status": "machine-draft" },
+    "description": { "value": "DCSync tillader replikering af adgangskodedata fra Active Directory, herunder alle brugerhashes. Konti med rettighederne 'Replicating Directory Changes All' og 'Replicating Directory Changes' kan udtrække hver adgangskodehash i domænet uden at røre en DC. Kun domænecontrolleres computerkonti og standardadministratorkontoen bør have disse rettigheder", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kun domænecontrolleres computerkonti og standardadministratorkontoen har replikeringsrettigheder. Ingen yderligere brugere eller grupper tildelt DCSync-tilladelser", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revidér domænerodens ACL for 'Replicating Directory Changes' og 'Replicating Directory Changes All' med (Get-ACL 'AD:\\DC=domain,DC=com').Access | Where-Object {$_.ObjectType -match '1131f6a[a-d]'}. Fjern straks eventuelle uautoriserede poster. Undersøg, om uautoriserede konti allerede har udført DCSync", "status": "machine-draft" }
+  },
+  "ADPRIV-029": {
+    "name": { "value": "Revision af gruppen Protected Users", "status": "machine-draft" },
+    "description": { "value": "Sikkerhedsgruppen Protected Users leverer hærdede godkendelsesbeskyttelser, herunder deaktivering af NTLM-godkendelse, håndhævelse af AES-Kerberos-kryptering, forhindring af cachelagring af legitimationsoplysninger og fastsættelse af korte TGT-levetider. Alle Tier 0-privilegerede konti bør være medlemmer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle Tier 0-privilegerede brugerkonti er medlemmer af gruppen Protected Users", "status": "machine-draft" },
+    "remediationSteps": { "value": "Føj alle Tier 0-konti til gruppen Protected Users med Add-ADGroupMember -Identity 'Protected Users' -Members <konto>. Test hver konto først, da Protected Users deaktiverer NTLM og delegering af legitimationsoplysninger, hvilket kan bryde ældre programmer. Bemærk: tjenestekonti og computerkonti bør IKKE tilføjes", "status": "machine-draft" }
+  },
+  "ADPRIV-030": {
+    "name": { "value": "Privilegerede brugere ikke i Protected Users", "status": "machine-draft" },
+    "description": { "value": "Privilegerede konti, der ikke er medlemmer af gruppen Protected Users, mangler hærdede godkendelsesbeskyttelser og forbliver sårbare over for teknikker til tyveri af legitimationsoplysninger, herunder NTLM-relay, cachelagring af legitimationsoplysninger og langlivede Kerberos-billetter. Enhver berettiget privilegeret konto bør beskyttes", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle berettigede privilegerede brugerkonti tilmeldt gruppen Protected Users. Undtagelser dokumenteret med kompenserende kontroller", "status": "machine-draft" },
+    "remediationSteps": { "value": "Sammenlign medlemmerne af privilegerede grupper med medlemskabet af Protected Users. For hver privilegeret konto, der ikke er i Protected Users, skal du vurdere kompatibiliteten (NTLM-afhængigheder, delegeringskrav) og føje den til gruppen. Dokumentér eventuelle undtagelser med specifikke tekniske årsager og kompenserende kontroller", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "_family": "ADLogonScriptChecks.json",
+  "ADSCRIPT-001": {
+    "name": { "value": "Tilladelser på NETLOGON-sharen", "status": "machine-draft" },
+    "description": { "value": "NETLOGON-sharen hoster logonscripts, der udføres på hvert domænetilsluttet system under brugerlogon. Alt for tilladende NTFS- eller sharetilladelser på NETLOGON gør det muligt for enhver godkendt bruger at ændre scripts, hvilket muliggør udbredt kodeudførelse. Kun Domain Admins og autoriserede administratorer bør have skriveadgang", "status": "machine-draft" },
+    "recommendedValue": { "value": "NETLOGON-share: Authenticated Users kun Read; skriveadgang begrænset til Domain Admins og autoriserede GPO-administratorer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå NTFS-tilladelserne på NETLOGON-mappen (typisk %SystemRoot%\\SYSVOL\\sysvol\\<domæne>\\Scripts) på hver domænecontroller. Fjern skrive-, ændrings- eller fuld kontrol-tilladelser for ikke-administrative grupper. Kontrollér, at sharetilladelserne stemmer overens med NTFS-tilladelserne. Sørg for, at tilladelserne er ensartede på tværs af alle domænecontrollere via DFSR-replikering.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-002": {
+    "name": { "value": "Tilladelser på SYSVOL-sharen", "status": "machine-draft" },
+    "description": { "value": "SYSVOL-sharen indeholder gruppepolitikskabeloner, scripts og konfigurationsfiler, der anvendes på alle domænetilsluttede systemer. Forkerte SYSVOL-tilladelser kan gøre det muligt for uautoriserede brugere at ændre gruppepolitikindstillinger, udrulle skadelige scripts eller manipulere sikkerhedskonfigurationer, der påvirker hele domænet", "status": "machine-draft" },
+    "recommendedValue": { "value": "SYSVOL-share: Authenticated Users kun Read; skriveadgang begrænset til Domain Admins og SYSTEM", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revidér NTFS-tilladelserne på SYSVOL-mappetræet på hver domænecontroller. Rodmappen SYSVOL bør give Authenticated Users Read og Execute. GPO-undermapper bør stemme overens med de tilladelser, der er defineret på det tilsvarende GPC-objekt i AD. Kør dcdiag /test:sysvolcheck for at identificere tilladelsesproblemer. Nulstil tilladelser med icacls om nødvendigt.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-003": {
+    "name": { "value": "Oversigt over logonscripts", "status": "machine-draft" },
+    "description": { "value": "En oversigt over alle logonscripts, der refereres af brugerkonti (attributten scriptPath), gruppepolitik-logon/logoff-scripts og start-/lukningsscripts giver indsigt i al kode, der udføres automatisk i miljøet. Scripts, der findes i NETLOGON, men ikke refereres, kan være forældreløse eller indikatorer på tidligere kompromittering", "status": "machine-draft" },
+    "recommendedValue": { "value": "Komplet oversigt over alle logonscripts med dokumenteret formål, ejer og dato for seneste ændring", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl alle brugeres scriptPath-attributter med Get-ADUser -Filter {scriptPath -like '*'} -Properties scriptPath. Angiv alle GPO-konfigurerede scripts fra GPO-rapporter. Optæl alle filer i NETLOGON-sharen. Kryds referencerne for at identificere forældreløse scripts, ubrugte scripts og scripts, der refereres af brugerkonti, men mangler i NETLOGON. Dokumentér hvert scripts formål og ejer.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-004": {
+    "name": { "value": "Hårdkodede legitimationsoplysninger i scripts", "status": "machine-draft" },
+    "description": { "value": "Logonscripts indeholder ofte hårdkodede legitimationsoplysninger, herunder adgangskoder til netværksdrevtilknytninger, tjenestekonti, databaseforbindelser og API-nøgler. Disse legitimationsoplysninger kan læses af alle godkendte brugere via NETLOGON-sharen og udgør en triviel mulighed for høst af legitimationsoplysninger for angribere", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen hårdkodede legitimationsoplysninger, adgangskoder eller API-nøgler i nogen NETLOGON- eller SYSVOL-scripts", "status": "machine-draft" },
+    "remediationSteps": { "value": "Scan alle scripts i NETLOGON og SYSVOL for mønstre, der indikerer legitimationsoplysninger: password, passwd, pwd, credential, secret, apikey, token, connectionstring og lignende nøgleord. Erstat hårdkodede legitimationsoplysninger med sikre alternativer såsom Windows Credential Manager, gMSA-konti eller krypterede konfigurationsfiler med begrænset adgang. Udskift straks alle legitimationsoplysninger, der findes i scripts.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-005": {
+    "name": { "value": "Brug af LOLBins i scripts", "status": "machine-draft" },
+    "description": { "value": "Living Off The Land Binaries (LOLBins) er legitime Windows-eksekverbare filer, der kan misbruges til skadelige formål. Deres tilstedeværelse i logonscripts kan indikere, at en angriber har indsat skadelige kommandoer, der blander sig med normale operationer. Almindelige LOLBins omfatter certutil, bitsadmin, mshta, regsvr32, rundll32 og wscript, der bruges til at downloade eller udføre nyttelaster", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen brug af LOLBins i logonscripts, medmindre det er dokumenteret og driftsmæssigt begrundet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Scan alle scripts for referencer til kendte LOLBins, herunder certutil, bitsadmin, mshta, regsvr32, rundll32, wscript, cscript, msiexec, installutil, regasm, regsvcs, msconfig og control. Gennemgå hver forekomst for at afgøre, om brugen er legitim. Erstat LOLBins med sikrere alternativer, hvor det er muligt. Dokumentér enhver driftsmæssigt nødvendig brug af LOLBins.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-006": {
+    "name": { "value": "Klartekstadgangskoder i scripts", "status": "machine-draft" },
+    "description": { "value": "Scripts, der indeholder klartekstadgangskoder i net use-kommandoer, databaseforbindelsesstrenge eller variabeltildelinger, eksponerer legitimationsoplysninger for enhver godkendt domænebruger, der kan læse NETLOGON-sharen. Dette omfatter adgangskoder til tjenestekonti, databasekonti og netværksressourcer, der kan give stier til lateral bevægelse", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen klartekstadgangskoder i nogen scriptfiler; al godkendelse anvender integreret sikkerhed eller sikker lagring af legitimationsoplysninger", "status": "machine-draft" },
+    "remediationSteps": { "value": "Søg i alle scriptfiler efter mønstre som 'net use * /user:', tildelinger af adgangskoder i PowerShell eller batch, forbindelsesstrenge med Password= eller Pwd= og WScript.Network.MapNetworkDrive-kald med legitimationsoplysninger. Erstat al brug af klartekstlegitimationsoplysninger med Windows integreret godkendelse, Credential Manager eller gMSA-konti. Udskift straks alle eksponerede adgangskoder.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-007": {
+    "name": { "value": "Scripttilladelser med skriveadgang for alle", "status": "machine-draft" },
+    "description": { "value": "Individuelle scriptfiler i NETLOGON eller SYSVOL, der giver skrive- eller ændringstilladelser til ikke-administrative brugere, kan ændres af enhver angriber med domænelegitimationsoplysninger. Selv hvis tilladelserne på shareniveau er korrekte, skaber alt for tilladende NTFS-tilladelser på filniveau på individuelle scripts en mulighed for kodeudførelse", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle scriptfiler i NETLOGON og SYSVOL kan kun skrives af Domain Admins og SYSTEM; ingen skriveadgang for Domain Users eller Authenticated Users", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl NTFS-tilladelserne på hver fil i NETLOGON-sharen og SYSVOL-scriptmapperne. Identificer filer, hvor Domain Users, Authenticated Users, Everyone eller andre brede grupper har Write-, Modify- eller Full Control-tilladelser. Nulstil tilladelser med icacls, så Read og Execute gives til Authenticated Users og Full Control kun til Domain Admins og SYSTEM.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-008": {
+    "name": { "value": "Referencer til eksterne ressourcer", "status": "machine-draft" },
+    "description": { "value": "Logonscripts, der refererer til eksterne ressourcer såsom internet-URL'er, ikke-domæne-UNC-stier eller cloudlagerplaceringer, introducerer risiko i forsyningskæden. Hvis den eksterne ressource kompromitteres, downloader og udfører alle systemer, der kører scriptet, skadeligt indhold. Eksterne referencer skaber også muligheder for dataeksfiltrering", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen referencer til eksterne URL'er, internetressourcer eller ikke-domæne-UNC-stier i logonscripts", "status": "machine-draft" },
+    "remediationSteps": { "value": "Scan alle scripts for HTTP/HTTPS-URL'er, FTP-referencer, ikke-domæne-UNC-stier og cloudlager-URL'er (OneDrive, SharePoint Online, Azure Blob, AWS S3). Erstat eksterne referencer med lokalt hostede kopier på interne filshares. Hvis eksterne ressourcer er påkrævet, skal du implementere integritetsverifikation (hashkontrol) før udførelse. Dokumentér alle godkendte afhængigheder af eksterne ressourcer.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-009": {
+    "name": { "value": "Fejlbehæftede scripts", "status": "machine-draft" },
+    "description": { "value": "Scripts med syntaksfejl, kodningsproblemer eller beskadiget indhold kan fejle lydløst under udførelsen, hvilket resulterer i ufuldstændig sikkerhedskonfiguration eller manglende drevtilknytninger. Fejlbehæftede scripts kan også indikere manipulation, hvor en angriber ændrede et script, men introducerede fejl, eller hvor kodningsproblemer maskerer indsat skadeligt indhold", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle scripts består syntaksvalidering uden kodningsafvigelser eller strukturelle fejl", "status": "machine-draft" },
+    "remediationSteps": { "value": "Validér scriptsyntaks med passende værktøjer: PowerShell-scripts med Test-ScriptFileInfo eller PSScriptAnalyzer, batchfiler med manuel gennemgang for uafsluttede blokke og ugyldige kommandoer, VBScript med WSH-syntakskontrol. Kontrollér filkodning for uventede bytesekvenser eller blandet kodning. Gennemgå scripts med usædvanlig kodning (UTF-16 med BOM i batchfiler, null-bytes) for potentiel indsprøjtning.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-010": {
+    "name": { "value": "UNC-stier til placeringer uden for domænecontrollere", "status": "machine-draft" },
+    "description": { "value": "Logonscripts, der refererer til UNC-stier, der peger på filshares uden for domænecontrollere, skaber afhængighed af yderligere systemer og udvider angrebsfladen. Hvis den refererede filserver kompromitteres, kan en angriber ændre de delte ressourcer for at levere skadelige nyttelaster gennem den betroede logonscriptmekanisme. UNC-stier kan også udnyttes til NTLM-relayangreb", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle scripts' UNC-stier refererer til SYSVOL eller NETLOGON på domænecontrollere; ingen referencer til filshares uden for domænecontrollere til scriptindhold", "status": "machine-draft" },
+    "remediationSteps": { "value": "Scan alle scripts for UNC-stier (mønstre af typen \\\\server\\share). Identificer stier, der ikke peger på domænets SYSVOL- eller NETLOGON-shares. Migrer refererede ressourcer til NETLOGON-sharen, hvor det er passende. For legitime filshare-referencer skal du sikre, at målserverne er Tier 0- eller Tier 1-aktiver med passende hærdning. Dokumentér alle godkendte afhængigheder af UNC-stier uden for domænecontrollere.", "status": "machine-draft" }
+  },
+  "ADSCRIPT-011": {
+    "name": { "value": "Analyse af scriptindhold", "status": "machine-draft" },
+    "description": { "value": "En omfattende indholdsanalyse af alle logonscripts kan afsløre mistænkelige mønstre ud over specifikke kontroller, såsom obfuskeret kode, base64-kodede kommandoer, PowerShell-download-cradles, kodede eksekverbare filer og antianalyseteknikker. Disse mønstre er stærke indikatorer på skadelig scriptindsprøjtning eller bagdøre plantet af angribere", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen obfuskeret kode, kodede nyttelaster, download-cradles eller antianalyseteknikker til stede i nogen logonscripts", "status": "machine-draft" },
+    "remediationSteps": { "value": "Analyser alle scripts for mistænkelige mønstre, herunder base64-kodning (Convert-FromBase64, certutil -decode), download-cradles (Invoke-WebRequest, Net.WebClient, BitsTransfer), obfuskeringsteknikker (strengsammenkædning, tegnkoder, variabelsubstitution til at skjule kommandoer) og antianalyseteknikker (sleep-timere, miljøkontroller). Undersøg og erstat alle scripts, der indeholder mistænkelige mønstre.", "status": "machine-draft" }
+  }
+}

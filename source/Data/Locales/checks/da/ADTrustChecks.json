@@ -1,0 +1,69 @@
+{
+  "_family": "ADTrustChecks.json",
+  "ADTRUST-001": {
+    "name": { "value": "Optælling af tillidsrelationer", "status": "machine-draft" },
+    "description": { "value": "Alle tillidsrelationer bør optælles for at etablere et komplet billede af godkendelsesgrænsen. Udokumenterede tillidsrelationer udvider angrebsfladen ved at tillade brugere fra eksterne domæner at tilgå ressourcer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle tillidsrelationer dokumenteret med forretningsmæssig begrundelse, retning, type og ejer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Kør Get-ADTrust -Filter * for at optælle alle tillidsrelationer. Dokumentér hver tillidsrelation med dens retning, type (skov, ekstern, genvej, realm), transitivitet og forretningsmæssige begrundelse. Gennemgå og fjern eventuelle tillidsrelationer, der ikke længere tjener et forretningsmæssigt behov", "status": "machine-draft" }
+  },
+  "ADTRUST-002": {
+    "name": { "value": "Analyse af tillidsretning", "status": "machine-draft" },
+    "description": { "value": "Indgående tillidsrelationer tillader eksterne domænebrugere at godkende sig ind i dit domæne. Hver indgående eller tovejs tillidsrelation bør gennemgås for at sikre, at det betroede domæne opretholder tilstrækkelige sikkerhedskontroller. Et kompromitteret betroet domæne kan anvendes til at angribe dit miljø", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle tillidsretninger begrundet og dokumenteret. Tovejs tillidsrelationer konverteret til envejs, hvor det er muligt, for at reducere angrebsfladen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå hver tillidsretning med Get-ADTrust -Filter *. For tovejs tillidsrelationer skal du vurdere, om begge retninger er nødvendige. Konvertér til envejs tillidsrelationer, hvor det forretningsmæssige behov kun kræver én retning. Dokumentér begrundelsen for alle indgående tillidsstier", "status": "machine-draft" }
+  },
+  "ADTRUST-003": {
+    "name": { "value": "Analyse af tillidstransitivitet", "status": "machine-draft" },
+    "description": { "value": "Transitive tillidsrelationer udvider godkendelsesstier ud over direkte tillidspartnere og kan potentielt skabe utilsigtede adgangsstier gennem kæder af betroede domæner. Hver transitiv tillidsrelation bør vurderes for den udvidede angrebsflade, den skaber", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle transitive tillidsrelationer dokumenteret med fuld analyse af transitivitetsstien. Eksterne tillidsrelationer foretrukket frem for skovtillidsrelationer, når transitivitet ikke er påkrævet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Kortlæg alle transitive tillidsstier for at identificere indirekte godkendelsesruter. For skovtillidsrelationer skal du forstå, at alle underordnede domæner er transitivt betroede. Overvej at anvende eksterne (ikke-transitive) tillidsrelationer, når kun specifik domæneadgang er nødvendig", "status": "machine-draft" }
+  },
+  "ADTRUST-004": {
+    "name": { "value": "Status for SID-filtrering", "status": "machine-draft" },
+    "description": { "value": "SID-filtrering fjerner SID'er fra fremmede domæner i godkendelsestokens, hvilket forhindrer angreb med indsprøjtning af SID-historik. Uden SID-filtrering kan en angriber, der kompromitterer et betroet domæne, fremstille billetter, der indeholder privilegerede SID'er (såsom Enterprise Admins) fra dit domæne, og opnå fuld kompromittering", "status": "machine-draft" },
+    "recommendedValue": { "value": "SID-filtrering (karantæne) aktiveret på alle eksterne tillidsrelationer og skovtillidsrelationer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Verificér status for SID-filtrering med 'netdom trust /domain:trusted.domain /Quarantine'. Aktivér SID-filtrering med 'netdom trust /domain:trusted.domain /Quarantine:Yes'. Bemærk: SID-filtrering er aktiveret som standard på eksterne tillidsrelationer, men skal verificeres på skovtillidsrelationer, hvor den kan være blevet bevidst deaktiveret", "status": "machine-draft" }
+  },
+  "ADTRUST-005": {
+    "name": { "value": "Registrering af misbrug af SID-historik", "status": "machine-draft" },
+    "description": { "value": "SID-historik er beregnet til domænemigreringer, men kan misbruges til at indsprøjte privilegerede SID'er i brugertokens på tværs af tillidsgrænser. Angribere, der kompromitterer et betroet domæne, kan tilføje Enterprise Admin- eller Domain Admin-SID'er til SID-historikken for enhver konto, de kontrollerer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen konti med SID-historikværdier, der refererer til privilegerede grupper. SID-historik ryddet op efter fuldførelse af alle migreringer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Søg efter konti med SID-historik med Get-ADUser -Filter {SIDHistory -like '*'} -Properties SIDHistory. Identificer eventuelle SID-historikposter, der refererer til privilegerede grupper (Domain Admins, Enterprise Admins osv.). Ryd op i SID-historik efter migrering med Remove-ADUser med SIDHistory-parameteren. Aktivér SID-filtrering på tillidsrelationer", "status": "machine-draft" }
+  },
+  "ADTRUST-006": {
+    "name": { "value": "Status for selektiv godkendelse", "status": "machine-draft" },
+    "description": { "value": "Selektiv godkendelse begrænser, hvilke brugere fra et betroet domæne der kan godkende sig over for ressourcer i dit domæne, ved at kræve eksplicitte tilladelser på hver ressource. Uden den kan alle godkendte brugere fra det betroede domæne tilgå enhver ressource, de har tilladelser til, hvilket udvider angrebsfladen betydeligt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Selektiv godkendelse aktiveret på alle skovtillidsrelationer. Allowed-to-Authenticate-tilladelser tildelt kun på nødvendige ressourcer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Aktivér selektiv godkendelse på skovtillidsrelationer via Active Directory Domains and Trusts > Egenskaber for tillidsrelationen > fanen Authentication > vælg 'Selective authentication'. Tildel derefter tilladelsen 'Allowed to Authenticate' på specifikke computerobjekter, som eksterne brugere har brug for at tilgå", "status": "machine-draft" }
+  },
+  "ADTRUST-007": {
+    "name": { "value": "Sikkerhed for Azure AD-hybridtillidsrelation", "status": "machine-draft" },
+    "description": { "value": "Hybride identitetskonfigurationer, der forbinder lokal AD med Azure AD, skaber yderligere angrebsstier. Azure AD Connect, pass-through-godkendelsesagenter og federationstjenester kan angribes for at pivotere mellem cloud- og lokale miljøer", "status": "machine-draft" },
+    "recommendedValue": { "value": "Azure AD Connect kører den seneste version på en hærdet, dedikeret server. PHS foretrukket frem for PTA/federation. Seamless SSO deaktiveret, hvis det ikke er påkrævet. Cloud-only break-glass-konti konfigureret", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå konfigurationen af Azure AD Connect, og sørg for, at den kører på en Tier 0-hærdet server. Vurdér at skifte fra federation eller PTA til Password Hash Sync (PHS) for at reducere angrebsfladen. Hvis Seamless SSO anvendes, skal du sørge for, at adgangskoden til AZUREADSSOACC-computerkontoen roteres. Verificér, at der findes cloud-only-nødadgangskonti", "status": "machine-draft" }
+  },
+  "ADTRUST-008": {
+    "name": { "value": "Optælling af tillidsrelationer til fremmede domæner", "status": "machine-draft" },
+    "description": { "value": "Tillidsrelationer med domæner uden for organisationen udvider sikkerhedsgrænsen til enheder med potentielt forskellige sikkerhedsstandarder. Tillidsrelationer til fremmede domæner bør underkastes yderligere granskning, da den tillidsgivende organisation ikke kan kontrollere sikkerhedssituationen i det eksterne domæne", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle tillidsrelationer til fremmede domæner dokumenteret med ekstern sikkerhedsvurdering, kontraktlige sikkerhedskrav og årlig gennemgang", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer tillidsrelationer med domæner uden for organisationen med Get-ADTrust -Filter *. For hver ekstern tillidsrelation skal du verificere, at der findes en sikkerhedsaftale, at SID-filtrering er aktiveret, at selektiv godkendelse er konfigureret, og at tillidsrelationen gennemgås årligt", "status": "machine-draft" }
+  },
+  "ADTRUST-009": {
+    "name": { "value": "Registrering af forældreløse tillidsrelationer", "status": "machine-draft" },
+    "description": { "value": "Forældreløse tillidsrelationer refererer til domæner, der ikke længere findes eller ikke længere kan nås. Disse forældede tillidsobjekter kan bevare legitimationsoplysninger og skabe forvirring under sikkerhedsrevisioner. De bør fjernes for at reducere unødvendig angrebsflade og opretholde en ren tillidstopologi", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen forældreløse eller uopløselige tillidsrelationer til stede", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl alle tillidsrelationer, og forsøg at validere hver enkelt ved at opløse det betroede domænenavn og teste tillidsrelationen med 'netdom trust /verify'. Fjern forældreløse tillidsrelationer, hvor partnerdomænet ikke længere findes eller ikke kan nås, med 'netdom trust /Remove' eller Active Directory Domains and Trusts", "status": "machine-draft" }
+  },
+  "ADTRUST-010": {
+    "name": { "value": "Alder og rotation af tillidsnøgler", "status": "machine-draft" },
+    "description": { "value": "Tillidsadgangskoder (inter-realm-nøgler) bør roteres regelmæssigt. Forældede tillidsnøgler øger vinduet for legitimationsbaserede angreb. Som standard roteres tillidsadgangskoder hver 30. dag, men dette bør verificeres, da mislykkede rotationer kan forblive uopdagede", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tillidsadgangskoder roteret inden for de sidste 30 dage. Automatisk rotation af tillidsadgangskoder ikke deaktiveret", "status": "machine-draft" },
+    "remediationSteps": { "value": "Kontrollér datoen for seneste indstilling af tillidsadgangskoden ved at undersøge attributten trustAuthOutgoing eller ved at køre 'netdom trust /domain:trusted.domain /verify'. Hvis tillidsadgangskoden er forældet, skal du nulstille den med 'netdom trust /domain:trusted.domain /Reset'. Verificér, at ingen GPO- eller registreringsdatabaseindstilling har deaktiveret automatisk rotation af tillidsadgangskoder", "status": "machine-draft" }
+  },
+  "ADTRUST-011": {
+    "name": { "value": "Visualisering af tillidshierarki", "status": "machine-draft" },
+    "description": { "value": "Der bør opretholdes et komplet kort over tillidstopologien, der viser alle tillidsrelationer, retninger, typer og transitivitetsstier. Denne visualisering er afgørende for at forstå den fulde godkendelsesgrænse og identificere uventede adgangsstier", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ajourført diagram over tillidstopologi opretholdt og gennemgået kvartalsvist", "status": "machine-draft" },
+    "remediationSteps": { "value": "Generér et kort over tillidstopologien ved hjælp af automatiserede værktøjer, eller dokumentér manuelt alle tillidsrelationer, herunder retning, type, transitivitet, status for SID-filtrering og status for selektiv godkendelse. Opdatér diagrammet, når tillidsrelationer tilføjes, ændres eller fjernes. Inkludér kortet i sikkerhedsdokumentationen, og gennemgå det kvartalsvist", "status": "machine-draft" }
+  }
+}

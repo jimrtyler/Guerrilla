@@ -1,0 +1,69 @@
+{
+  "_family": "ADStaleObjectChecks.json",
+  "ADSTALE-001": {
+    "name": { "value": "Inaktive brugerkonti", "status": "machine-draft" },
+    "description": { "value": "Brugerkonti, der ikke er blevet anvendt i en længere periode, udgør en unødvendig angrebsflade. Inaktive konti kan stadig have gyldige legitimationsoplysninger og gruppemedlemskaber, hvilket gør dem til attraktive mål for angribere, der kan kompromittere glemte eller delte legitimationsoplysninger uden at udløse alarmer knyttet til aktive brugere. Konti, der har været inaktive i mere end 90 dage, bør gennemgås og deaktiveres", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen aktiverede brugerkonti inaktive i mere end 90 dage; inaktive konti deaktiveret eller fjernet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Forespørg brugerkonti, hvor lastLogonTimestamp er ældre end 90 dage, og kontoen er aktiveret, med Search-ADAccount -AccountInactive -TimeSpan 90 -UsersOnly. Verificér med kontoejere eller ledere, før du foretager handlinger. Deaktivér inaktive konti først, og slet derefter efter en frist på 30 dage, hvis de ikke tages i brug. Fjern deaktiverede konti fra alle sikkerhedsgrupper. Implementér automatiseret livscyklusstyring", "status": "machine-draft" }
+  },
+  "ADSTALE-002": {
+    "name": { "value": "Inaktive computerkonti", "status": "machine-draft" },
+    "description": { "value": "Computerkonti, der ikke har godkendt sig over for domænet i en længere periode, indikerer nedlagte, geninstallerede eller offline systemer. Disse forældede computerkonti beholder deres maskinlegitimationsoplysninger og gruppemedlemskaber, og en angriber, der gendanner eller nulstiller maskinkontoens adgangskode, kan godkende sig som computeren og potentielt tilgå ressourcer eller udføre Kerberos-delegeringsangreb", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen aktiverede computerkonti inaktive i mere end 90 dage; inaktive konti deaktiveret eller fjernet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Forespørg computerkonti, hvor lastLogonTimestamp er ældre end 90 dage, med Search-ADAccount -AccountInactive -TimeSpan 90 -ComputersOnly. Kryds med systemer til aktivstyring for at verificere nedlæggelsesstatus. Deaktivér forældede computerkonti, og flyt dem til en OU for deaktiverede computere. Slet efter en frist på 60 dage, hvis systemet ikke forbinder igen. Fjern fra sikkerhedsgrupper ved deaktivering", "status": "machine-draft" }
+  },
+  "ADSTALE-003": {
+    "name": { "value": "Deaktiverede konti med gruppemedlemskaber", "status": "machine-draft" },
+    "description": { "value": "Deaktiverede bruger- og computerkonti, der beholder medlemskab i sikkerhedsgrupper, optræder fortsat i gruppebaserede evalueringer af adgangskontrol og kan skabe forvirring i adgangsgennemgange. Selv om deaktiverede konti ikke kan godkende sig, kan deres gruppemedlemskaber gendannes, hvis kontoen genaktiveres, og de bevarede medlemskaber oppuster gruppestørrelser og komplicerer analyse af mindste privilegium", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle deaktiverede konti fjernet fra alle sikkerhedsgrupper undtagen Domain Users", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer deaktiverede konti med ikke-standardmæssige gruppemedlemskaber med Get-ADUser -Filter {Enabled -eq $false} -Properties MemberOf. Fjern alle sikkerhedsgruppemedlemskaber (undtagen den primære gruppe) fra deaktiverede konti. Implementér et automatiseret arbejdsforløb, der fjerner gruppemedlemskaber, når konti deaktiveres. Inkludér oprydning af gruppemedlemskaber i processen for nedlæggelse af konti", "status": "machine-draft" }
+  },
+  "ADSTALE-004": {
+    "name": { "value": "Udløbne adgangskoder ikke deaktiveret", "status": "machine-draft" },
+    "description": { "value": "Konti med adgangskoder, der har overskredet den maksimale adgangskodealder, men forbliver aktiverede, kan indikere konti, der ikke administreres aktivt. Disse konti kan være blevet kompromitteret med legitimationsoplysninger opnået gennem historiske lækager eller credential dumps, og de længe uændrede adgangskoder øger vinduet for offline brute-force-angreb", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen konti med adgangskoder ældre end politikken for maksimal adgangskodealder, medmindre de udtrykkeligt er undtaget som dokumenterede tjenestekonti", "status": "machine-draft" },
+    "remediationSteps": { "value": "Forespørg konti, hvor PasswordLastSet er ældre end den maksimale adgangskodealder, med Get-ADUser -Filter * -Properties PasswordLastSet,PasswordNeverExpires. Udelad konti med PasswordNeverExpires, der er dokumenterede tjenestekonti. Fremtving nulstilling af adgangskode ved næste logon for konti med udløbne adgangskoder. Deaktivér konti, der ikke tages i brug efter underretning. Gennemgå PasswordNeverExpires-undtagelser årligt", "status": "machine-draft" }
+  },
+  "ADSTALE-005": {
+    "name": { "value": "Computere med forældede operativsystemer", "status": "machine-draft" },
+    "description": { "value": "Domænetilsluttede computere, der kører forældede operativsystemer (Windows XP, Windows Server 2003, Windows Vista, Windows Server 2008), som ikke længere modtager sikkerhedsopdateringer, udgør aktiver med høj risiko. Disse systemer indeholder kendte, ikke-patchede sårbarheder, der aktivt udnyttes af angribere, og kan ikke understøtte moderne sikkerhedskontroller såsom Credential Guard eller LAPS", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen computere, der kører Windows XP, Server 2003, Vista eller Server 2008, tilsluttet domænet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Forespørg computerkonti efter attributten operatingSystem for at identificere forældede OS-versioner. Verificér, at identificerede systemer stadig er aktive, med lastLogonTimestamp og ping-tests. Opret en migreringsplan for at opgradere eller udskifte forældede systemer. For systemer, der ikke kan opgraderes umiddelbart, skal du implementere netværksisolering med VLAN'er og firewallregler. Deaktivér computerkonti for bekræftede nedlagte systemer", "status": "machine-draft" }
+  },
+  "ADSTALE-006": {
+    "name": { "value": "Ikke-understøttede OS-versioner", "status": "machine-draft" },
+    "description": { "value": "Domænetilsluttede computere, der kører operativsystemer, der er efter deres slutdato for support (Windows 7, Windows 8.1, Windows Server 2008 R2, Windows Server 2012/R2), modtager ikke længere regelmæssige sikkerhedsrettelser. Selv om Extended Security Updates kan være tilgængelige for nogle, udgør disse systemer en forhøjet risiko og bør identificeres, spores og prioriteres til migrering til understøttede platforme", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen computere, der kører operativsystemer efter slutdato for support, medmindre de er omfattet af Extended Security Updates med en dokumenteret migreringsplan", "status": "machine-draft" },
+    "remediationSteps": { "value": "Forespørg computerkonti efter attributten operatingSystem for at identificere OS-versioner efter slutdato for support. Afgør, hvilke systemer der er omfattet af Extended Security Updates (ESU). Opret migreringstidsplaner for alle ikke-understøttede systemer. Implementér kompenserende kontroller for systemer, der ikke kan opgraderes umiddelbart: netværkssegmentering, forbedret overvågning, begrænset tjenesteadgang. Følg fremdriften i forhold til migreringstidsplanerne", "status": "machine-draft" }
+  },
+  "ADSTALE-007": {
+    "name": { "value": "Forældreløse Foreign Security Principals", "status": "machine-draft" },
+    "description": { "value": "Foreign Security Principals (FSP'er) er pladsholderobjekter, der oprettes i containeren ForeignSecurityPrincipals, når eksterne domænebrugere eller -grupper føjes til lokale domænegrupper via tillidsrelationer. Forældreløse FSP'er refererer til SID'er fra betroede domæner, der ikke længere findes, eller konti, der er blevet slettet, hvilket resulterer i uopløselige SID'er i gruppemedlemskaber, der roder adgangskontrollen til og komplicerer revision", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen forældreløse Foreign Security Principals med uopløselige SID'er i domænet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl alle objekter i CN=ForeignSecurityPrincipals, og forsøg at opløse hver SID til et navn ved hjælp af den tilsvarende tillidsrelation. Identificer FSP'er, hvor SID'en ikke kan opløses (tillidsrelation fjernet eller konto slettet). Fjern forældreløse FSP'er fra eventuelle gruppemedlemskaber. Slet de forældreløse FSP-objekter. Gennemgå de resterende FSP'er for at verificere, at tillidsrelationen og de refererede konti stadig er gyldige", "status": "machine-draft" }
+  },
+  "ADSTALE-008": {
+    "name": { "value": "Forældreløs SID-historik", "status": "machine-draft" },
+    "description": { "value": "SID-historik anvendes under domænemigreringer for at bevare adgang til ressourcer i kildedomænet. Når migreringen er fuldført, bør SID-historikposter fjernes, da de kan misbruges til rettighedseskalering. Forældreløse SID-historikposter, der refererer til ikke-eksisterende domæner eller slettede konti, giver ingen legitim fordel og øger risikoen for SID-indsprøjtningsangreb på tværs af tillidsgrænser", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen SID-historikposter, der refererer til ikke-eksisterende domæner. SID-historik ryddet efter fuldførelse af migrering", "status": "machine-draft" },
+    "remediationSteps": { "value": "Forespørg alle bruger- og gruppekonti med SID-historik med Get-ADUser -Filter {SIDHistory -like '*'} -Properties SIDHistory. Kryds hver SID-historiks domænekomponent med eksisterende tillidsrelationer for at identificere forældreløse poster. Fjern SID-historikposter for fuldførte migreringer med Remove-ADUser med parameteren -Remove eller Netdom trust /CleanupSIDHistory. Overvåg for nye tilføjelser af SID-historik med Event ID 4765", "status": "machine-draft" }
+  },
+  "ADSTALE-009": {
+    "name": { "value": "Forladte OU'er", "status": "machine-draft" },
+    "description": { "value": "Tomme eller næsten tomme organisationsenheder, der ikke længere tjener et formål, tilføjer kompleksitet til AD-strukturen, komplicerer gruppepolitikanalyse og kan have delegerede tilladelser, der ikke længere overvåges. Forladte OU'er fra tidligere organisatorisk omstrukturering eller nedlagte projekter kan forvirre administratorer og skabe potentielle mål for GPO-tilknytningsangreb", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen tomme OU'er uden et dokumenteret formål; OU-strukturen afspejler de aktuelle organisatoriske krav", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl alle OU'er, og tæl deres underordnede objekter. Identificer OU'er med nul eller meget få objekter. Gennemgå OU-beskrivelser og eventuel tilknyttet dokumentation for at afgøre, om OU'en er planlagt til fremtidig brug. Fjern delegerede tilladelser fra forladte OU'er. Slet tomme OU'er uden et dokumenteret formål efter at have verificeret, at de ikke refereres af GPO-tilknytninger, scripts eller automatisering. Opdatér dokumentationen af OU-strukturen", "status": "machine-draft" }
+  },
+  "ADSTALE-010": {
+    "name": { "value": "Printerobjekter", "status": "machine-draft" },
+    "description": { "value": "Printerobjekter, der er publiceret i Active Directory, eksponerer printersharestier og servernavne, der kan anvendes til rekognoscering. Sårbarhedsfamilien PrintNightmare (CVE-2021-34527 og relaterede) demonstrerede, at printerrelaterede objekter og konfigurationer kan udnyttes til fjernudførelse af kode. Forældede printerobjekter, der refererer til nedlagte printservere, giver vildledende oplysninger og en unødvendig angrebsflade", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kun aktive, administrerede printerobjekter publiceret i AD; forældede printerobjekter fjernet", "status": "machine-draft" },
+    "remediationSteps": { "value": "Optæl alle printQueue-objekter i AD med Get-ADObject -Filter {objectClass -eq 'printQueue'}. Verificér, at hvert printerobjekt refererer til en aktiv, tilgængelig printserver og printer. Fjern printerobjekter for nedlagte printere eller printservere. Gennemgå, om publicering af printere i AD er nødvendig for miljøet. Sørg for, at printservere er patchede mod PrintNightmare-sårbarheder", "status": "machine-draft" }
+  },
+  "ADSTALE-011": {
+    "name": { "value": "Forældelse af DNS-poster", "status": "machine-draft" },
+    "description": { "value": "Forældede DNS-poster i Active Directory-integrerede DNS-zoner peger på IP-adresser, der ikke længere er tildelt de oprindelige værter. Angribere kan overtage disse forladte IP-adresser og opsnappe trafik beregnet til de oprindelige værter, hvilket muliggør man-in-the-middle-angreb, høst af legitimationsoplysninger og efterligning af tjenester. DNS-scavenging bør aktiveres for automatisk at rydde op i forældede poster", "status": "machine-draft" },
+    "recommendedValue": { "value": "DNS-scavenging aktiveret med passende no-refresh- og refresh-intervaller; ingen forældede DNS-poster ældre end 30 dage", "status": "machine-draft" },
+    "remediationSteps": { "value": "Aktivér DNS-scavenging på DNS-serverens egenskaber og på hver AD-integreret DNS-zone. Konfigurer no-refresh-intervallet til 7 dage og refresh-intervallet til 7 dage. Angiv scavenging-periode på mindst én DNS-server. Gennemgå manuelt ældede DNS-poster før den første scavenging-kørsel for at identificere kritiske statiske poster, der skal udelukkes. Markér poster, der ikke bør scavenges, som statiske", "status": "machine-draft" }
+  }
+}
