@@ -1,0 +1,123 @@
+{
+  "_family": "ADDomainForestChecks.json",
+  "ADDOM-001": {
+    "name": { "value": "林功能级别", "status": "machine-draft" },
+    "description": { "value": "Active Directory 林功能级别应达到 Windows Server 2016 或更高，以启用现代安全功能，例如特权访问管理和改进的 Kerberos 保护。运行较旧的功能级别会使环境暴露于利用旧协议弱点的攻击之下", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 或更高", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Active Directory 域和信任 > 右键单击林根 > 提升林功能级别，来提升林功能级别。在提升之前，确保所有域控制器均运行受支持的操作系统版本", "status": "machine-draft" }
+  },
+  "ADDOM-002": {
+    "name": { "value": "域功能级别", "status": "machine-draft" },
+    "description": { "value": "Active Directory 域功能级别应达到 Windows Server 2016 或更高。较低的功能级别会阻止使用关键的安全功能，包括 Protected Users 组功能、身份验证策略和现代 Kerberos armoring", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 或更高", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Active Directory 域和信任 > 右键单击域 > 提升域功能级别，来提升域功能级别。请先核实域中所有 DC 均运行兼容的操作系统版本", "status": "machine-draft" }
+  },
+  "ADDOM-003": {
+    "name": { "value": "架构版本识别", "status": "machine-draft" },
+    "description": { "value": "应记录 AD 架构版本，且该版本应对应于最新受支持的版本。过时的架构可能缺少现代安全功能和应用程序所需的属性", "status": "machine-draft" },
+    "recommendedValue": { "value": "对应于 Windows Server 2022（版本 88）或更高版本的架构版本", "status": "machine-draft" },
+    "remediationSteps": { "value": "从最新的 Windows Server 安装介质运行 adprep /forestprep 和 adprep /domainprep 以更新架构。核实 CN=Schema,CN=Configuration,DC=domain 上的 objectVersion 属性", "status": "machine-draft" }
+  },
+  "ADDOM-004": {
+    "name": { "value": "域控制器清单", "status": "machine-draft" },
+    "description": { "value": "应对所有域控制器进行清点，记录其操作系统版本、补丁级别和位置。未受跟踪的域控制器代表重大安全风险，因为它们可能漏装补丁或在未被检测到的情况下被攻陷", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器均记录在案，包含当前操作系统版本、站点成员身份和补丁状态", "status": "machine-draft" },
+    "remediationSteps": { "value": "从 Domain Controllers OU 查询所有 DC 计算机对象。核实每台 DC 均在册、运行受支持的操作系统并定期接收补丁。立即删除或降级任何未经授权的 DC", "status": "machine-draft" }
+  },
+  "ADDOM-005": {
+    "name": { "value": "域控制器上的过时操作系统", "status": "machine-draft" },
+    "description": { "value": "运行已终止生命周期操作系统（Windows Server 2012 R2 或更早）的域控制器不再接收安全更新，容易受到已知漏洞利用的攻击。这些代表关键的基础设施风险，因为攻陷一台 DC 即可获得对整个域的完全控制", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器均运行 Windows Server 2019 或更高版本并安装最新补丁", "status": "machine-draft" },
+    "remediationSteps": { "value": "规划运行过时操作系统版本的 DC 的迁移。在 Windows Server 2022 上构建新 DC，如有需要则转移 FSMO 角色，进行复制，然后降级并停用旧 DC。请优先处理此修复，因为旧版 DC 正在被主动攻击", "status": "machine-draft" }
+  },
+  "ADDOM-006": {
+    "name": { "value": "FSMO 角色持有者识别", "status": "machine-draft" },
+    "description": { "value": "应记录五个 FSMO 角色（架构主机、域命名主机、RID 主机、PDC 仿真器、基础结构主机），并将其放置在适当的域控制器上。了解角色的放置位置对于灾难恢复和运营态势感知至关重要", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 FSMO 角色均记录在案、放置在可靠的 DC 上，并纳入灾难恢复规划", "status": "machine-draft" },
+    "remediationSteps": { "value": "运行 'netdom query fsmo' 或查询 AD 架构和域分区以识别角色持有者。记录角色并核实其位于高可用的 DC 上。如果当前持有者不合适，则转移角色", "status": "machine-draft" }
+  },
+  "ADDOM-007": {
+    "name": { "value": "AD 复制运行状况", "status": "machine-draft" },
+    "description": { "value": "Active Directory 复制失败可能导致安全策略应用不一致、过时凭据仍然有效以及脑裂情形。持续的复制失败也可能表明存在被攻陷或恶意的 DC", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器均成功复制，且过去 24 小时内没有错误", "status": "machine-draft" },
+    "remediationSteps": { "value": "运行 'repadmin /replsummary' 和 'repadmin /showrepl' 以识别失败。调查并解决 DNS 问题、网络连接问题或 USN 回滚状况。将复制状态监视作为日常运营的一部分", "status": "machine-draft" }
+  },
+  "ADDOM-008": {
+    "name": { "value": "墓碑生存期配置", "status": "machine-draft" },
+    "description": { "value": "墓碑生存期定义了已删除对象在永久移除前的保留时长，并决定了 DC 在必须重建之前可以离线的最长时间。值过低可能导致残留对象；对于现代环境，应将默认的 60 天增加到 180 天", "status": "machine-draft" },
+    "recommendedValue": { "value": "180 天", "status": "machine-draft" },
+    "remediationSteps": { "value": "修改 CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=domain 上的 tombstoneLifetime 属性。使用 ADSIEdit 或 PowerShell 将其设置为 180。修改前请确保已启用 AD 回收站", "status": "machine-draft" }
+  },
+  "ADDOM-009": {
+    "name": { "value": "AD 回收站状态", "status": "machine-draft" },
+    "description": { "value": "Active Directory 回收站允许恢复已删除对象并保留其所有属性完好无损。如果没有它，恢复意外或恶意删除的对象需要从备份进行授权还原，会导致重大停机", "status": "machine-draft" },
+    "recommendedValue": { "value": "已启用", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Active Directory 管理中心 > 右键单击域 > 启用回收站，或在 PowerShell 中运行 Enable-ADOptionalFeature 'Recycle Bin Feature' 来启用 AD 回收站。注意：此操作不可逆", "status": "machine-draft" }
+  },
+  "ADDOM-010": {
+    "name": { "value": "站点和子网配置", "status": "machine-draft" },
+    "description": { "value": "所有正在使用的 IP 子网都应分配给 AD 站点。缺失的子网到站点映射会导致客户端向次优的 DC 进行身份验证，可能通过 WAN 链路以明文发送凭据并削弱安全态势", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 IP 子网均映射到适当的 AD 站点，没有孤立的子网", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 AD 站点和服务 > 子网容器。与网络文档交叉核对以识别未映射的子网。为所有生产网络创建子网对象，并将其与正确的站点相关联", "status": "machine-draft" }
+  },
+  "ADDOM-011": {
+    "name": { "value": "站点链接配置", "status": "machine-draft" },
+    "description": { "value": "AD 站点链接应配置适当的成本、复制间隔和计划，以在尊重网络约束的同时确保及时复制。错误配置的站点链接可能延迟安全策略的传播", "status": "machine-draft" },
+    "recommendedValue": { "value": "站点链接配置适当的成本，复制间隔根据链路容量为 15 至 60 分钟", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 AD 站点和服务 > 站点间传输 > IP。核实每个站点链接均具有适当的成本值、复制间隔（默认的 180 分钟往往过长）和计划。根据网络拓扑进行调整", "status": "machine-draft" }
+  },
+  "ADDOM-012": {
+    "name": { "value": "DNS 区域安全", "status": "machine-draft" },
+    "description": { "value": "AD 集成 DNS 区域应仅使用安全动态更新。允许非安全更新会使攻击者能够毒化 DNS 记录、重定向身份验证流量，并对域加入系统实施对手在中间攻击", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 AD 集成 DNS 区域均仅允许安全动态更新", "status": "machine-draft" },
+    "remediationSteps": { "value": "打开 DNS 管理器 > 右键单击每个 AD 集成区域 > 属性 > 常规选项卡 > 将动态更新更改为“仅安全”。审查所有正向和反向查找区域。如适用，核实 DNSSEC 签名", "status": "machine-draft" }
+  },
+  "ADDOM-013": {
+    "name": { "value": "LDAP 签名要求", "status": "machine-draft" },
+    "description": { "value": "必须在所有域控制器上要求 LDAP 签名，以防止对 LDAP 流量的对手在中间攻击。如果没有签名，攻击者可以拦截并修改 LDAP 查询和响应，从而可能提升权限或窃取数据", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 DC 上的 LDAP 服务器签名要求均设置为“要求签名”", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略进行配置：计算机配置 > 策略 > Windows 设置 > 安全设置 > 本地策略 > 安全选项 > “域控制器: LDAP 服务器签名要求” = “要求签名”。应用于 Domain Controllers OU", "status": "machine-draft" }
+  },
+  "ADDOM-014": {
+    "name": { "value": "LDAP 通道绑定", "status": "machine-draft" },
+    "description": { "value": "LDAP 通道绑定令牌通过将 LDAP 会话以密码学方式绑定到 TLS 通道来防止中继攻击。如果没有通道绑定，攻击者可以中继 LDAP 身份验证以获得未经授权的访问权", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器上的 LDAP 通道绑定均设置为“始终”", "status": "machine-draft" },
+    "remediationSteps": { "value": "在所有 DC 上，将 HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters 处的注册表值 LdapEnforceChannelBinding 设置为 2（始终）。先用值 1（受支持时）进行测试，以识别不兼容的客户端", "status": "machine-draft" }
+  },
+  "ADDOM-015": {
+    "name": { "value": "SMB 签名要求", "status": "machine-draft" },
+    "description": { "value": "必须在所有域控制器上要求 SMB 签名，以防止对 SMB 流量的对手在中间攻击和中继攻击。SMB 中继攻击可被用来在域控制器上获得 SYSTEM 级别的访问权，从而导致整个域被攻陷", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器和成员服务器上均要求 SMB 签名", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略进行配置：计算机配置 > 策略 > Windows 设置 > 安全设置 > 本地策略 > 安全选项 > “Microsoft 网络服务器: 对通信进行数字签名(始终)” = 已启用。应用于 Domain Controllers OU 和所有服务器 OU", "status": "machine-draft" }
+  },
+  "ADDOM-016": {
+    "name": { "value": "NTLMv1 使用检测", "status": "machine-draft" },
+    "description": { "value": "NTLMv1 是一种严重弱化的身份验证协议，用现代硬件可在数秒内破解。必须识别并消除环境中任何 NTLMv1 的使用，因为它会将凭据暴露于极易实施的离线攻击之下", "status": "machine-draft" },
+    "recommendedValue": { "value": "检测到零个 NTLMv1 身份验证事件；LAN Manager 身份验证级别设置为拒绝 NTLMv1", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略启用 NTLM 审核：计算机配置 > 策略 > Windows 设置 > 安全设置 > 本地策略 > 安全选项 > “网络安全: 限制 NTLM”系列设置。审查事件日志中的 NTLMv1 使用情况并整改相关应用程序，然后将“网络安全: LAN Manager 身份验证级别”设置为“仅发送 NTLMv2 响应。拒绝 LM 和 NTLM”", "status": "machine-draft" }
+  },
+  "ADDOM-017": {
+    "name": { "value": "NTLMv2 强制实施", "status": "machine-draft" },
+    "description": { "value": "应将 LAN Manager 身份验证级别配置为仅发送 NTLMv2 响应并拒绝 LM 和 NTLMv1。虽然 NTLMv2 的安全性仍不及 Kerberos，但它明显强于 NTLMv1，应作为最低的 NTLM 标准", "status": "machine-draft" },
+    "recommendedValue": { "value": "LAN Manager 身份验证级别设置为“仅发送 NTLMv2 响应。拒绝 LM 和 NTLM”（级别 5）", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略进行配置：计算机配置 > 策略 > Windows 设置 > 安全设置 > 本地策略 > 安全选项 > “网络安全: LAN Manager 身份验证级别” = “仅发送 NTLMv2 响应。拒绝 LM 和 NTLM”。强制实施前请充分测试", "status": "machine-draft" }
+  },
+  "ADDOM-018": {
+    "name": { "value": "空会话枚举", "status": "machine-draft" },
+    "description": { "value": "对 Active Directory 的匿名（空会话）访问允许未经身份验证的攻击者枚举用户、组、共享和域信息。这些侦察数据被用于规划凭据攻击和横向移动", "status": "machine-draft" },
+    "recommendedValue": { "value": "禁用空会话枚举；设置 RestrictAnonymous 和 RestrictAnonymousSAM 以阻止匿名访问", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略进行配置：计算机配置 > 策略 > Windows 设置 > 安全设置 > 本地策略 > 安全选项 > 将“网络访问: 限制匿名访问命名管道和共享” = 已启用，“网络访问: 不允许 SAM 账户的匿名枚举” = 已启用，“网络访问: 不允许 SAM 账户和共享的匿名枚举” = 已启用", "status": "machine-draft" }
+  },
+  "ADDOM-019": {
+    "name": { "value": "域控制器上的打印后台处理程序", "status": "machine-draft" },
+    "description": { "value": "域控制器上的打印后台处理程序服务会启用 PrintNightmare（CVE-2021-34527）以及 SpoolSample/PrinterBug 攻击。攻击者可以强制 DC 向攻击者控制的服务器进行身份验证，从而实现凭据中继和无约束委派滥用", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有域控制器上禁用打印后台处理程序服务", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略在所有域控制器上禁用打印后台处理程序服务：计算机配置 > 策略 > Windows 设置 > 安全设置 > 系统服务 > Print Spooler > 启动模式 = 已禁用。应用于 Domain Controllers OU。核实没有任何打印功能依赖于 DC", "status": "machine-draft" }
+  },
+  "ADDOM-020": {
+    "name": { "value": "DSRM 密码配置", "status": "machine-draft" },
+    "description": { "value": "目录服务还原模式（DSRM）密码在域控制器以恢复模式启动时提供本地管理员访问权。拥有物理或远程访问权并知道 DSRM 密码的攻击者可以提取整个 AD 数据库。DSRM 密码应每台 DC 各不相同并定期轮换", "status": "machine-draft" },
+    "recommendedValue": { "value": "DSRM 密码每台 DC 各不相同、每年轮换并安全存储。DsrmAdminLogonBehavior 设置为 0 以阻止网络 DSRM 登录", "status": "machine-draft" },
+    "remediationSteps": { "value": "在每台 DC 上使用 'ntdsutil > set dsrm password' 重置 DSRM 密码。将 HKLM\\System\\CurrentControlSet\\Control\\Lsa 处的注册表值 DsrmAdminLogonBehavior 设置为 0，以阻止 DSRM 账户被用于网络登录。记录并安全存储密码", "status": "machine-draft" }
+  }
+}

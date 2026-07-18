@@ -1,0 +1,117 @@
+{
+  "_family": "ADCertificateServicesChecks.json",
+  "ADCS-001": {
+    "name": { "value": "CA 服务器清单", "status": "machine-draft" },
+    "description": { "value": "环境中所有证书颁发机构服务器的清单为 AD CS 安全评估奠定了基础。这包括企业 CA、独立 CA、它们的角色（根 CA 与从属 CA）、操作系统版本以及已发布的证书模板。了解 PKI 层次结构对于识别攻击面至关重要", "status": "machine-draft" },
+    "recommendedValue": { "value": "完整的 CA 清单，记录每台 CA 服务器的 CA 类型、角色、操作系统版本和已发布的模板", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过查询 AD 中的 PKI 注册服务容器（CN=Enrollment Services,CN=Public Key Services,CN=Services,CN=Configuration）枚举所有 CA 服务器。记录每台 CA 的类型（企业/独立）、角色（根/从属）、主机名、操作系统版本和已发布的证书模板。核实所有 CA 服务器均运行受支持的操作系统版本并已安装最新补丁。", "status": "machine-draft" }
+  },
+  "ADCS-002": {
+    "name": { "value": "ESC1：注册者提供使用者可选名称", "status": "machine-draft" },
+    "description": { "value": "当某个证书模板允许注册者在证书请求中指定使用者可选名称（SAN）、拥有客户端身份验证或任何允许身份验证的 EKU，并允许低权限用户注册时，就会发生 ESC1。攻击者可以请求带有任意域用户（包括 Domain Admins）SAN 的证书，然后使用该证书以该用户身份进行身份验证", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何证书模板带有 CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT，同时允许低权限注册并拥有身份验证 EKU", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别 msPKI-Certificate-Name-Flag 包含 CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT（0x1）、模板拥有客户端身份验证或智能卡登录 EKU，且允许非管理员用户注册的模板。删除 CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT 标志，将注册权限限制为特权组，或删除身份验证 EKU。如果运营上确需指定 SAN，则实施 CA 管理员审批。", "status": "machine-draft" }
+  },
+  "ADCS-003": {
+    "name": { "value": "ESC2：任意用途扩展密钥用法", "status": "machine-draft" },
+    "description": { "value": "当某个证书模板指定了任意用途 EKU（OID 2.5.29.37.0）或根本没有 EKU（等同于 SubCA 模板）时，就会发生 ESC2。带有任意用途 EKU 的证书可用于任何用途，包括客户端身份验证、服务器身份验证和代码签名。结合注册者可控的 SAN 或较低的注册要求，这会导致域被攻陷", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何带有任意用途 EKU 或空 EKU 的证书模板允许低权限注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别 pKIExtendedKeyUsage 包含任意用途 OID（2.5.29.37.0）或为空、且允许非管理员用户注册的模板。用特定的所需 EKU（例如仅客户端身份验证）替换任意用途 EKU。如果是 SubCA 模板，则将注册权限仅限制为 Enterprise Admins。对任何仍带有宽泛 EKU 的模板实施 CA 管理员审批。", "status": "machine-draft" }
+  },
+  "ADCS-004": {
+    "name": { "value": "ESC3：注册代理模板滥用条件 1", "status": "machine-draft" },
+    "description": { "value": "ESC3 条件 1 识别拥有证书请求代理 EKU（OID 1.3.6.1.4.1.311.20.2.1）且允许低权限用户注册的证书模板。注册代理证书允许其持有者代表任何用户在其他模板中注册，其中可能包括通常需要 CA 管理员审批的带身份验证 EKU 的模板", "status": "machine-draft" },
+    "recommendedValue": { "value": "证书请求代理模板仅限于授权的注册代理；不可由低权限用户注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别拥有证书请求代理 EKU 且允许非管理用户注册的模板。将这些模板上的注册权限限制为专用的注册代理安全组。在 CA 上配置注册代理限制，以限定注册代理可以为哪些模板和用户注册。监视证书请求代理证书的颁发。", "status": "machine-draft" }
+  },
+  "ADCS-005": {
+    "name": { "value": "ESC3：注册代理模板滥用条件 2", "status": "machine-draft" },
+    "description": { "value": "ESC3 条件 2 识别接受代表其他用户注册（要求注册代理签名）且拥有身份验证 EKU 的证书模板。与 ESC3 条件 1 结合使用时，获得注册代理证书的攻击者可以代表任何用户（包括 Domain Admins）注册身份验证证书", "status": "machine-draft" },
+    "recommendedValue": { "value": "要求注册代理签名的模板通过 CA 上的注册代理限制被限定为特定的目标用户", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别要求带有证书请求代理应用程序策略的授权签名、且拥有客户端身份验证或智能卡登录 EKU 的模板。在 CA 上配置注册代理限制，以限定这些注册代理可以为哪些模板注册以及可以代表哪些用户注册。这在 CA 属性的“注册代理”限制下配置。", "status": "machine-draft" }
+  },
+  "ADCS-006": {
+    "name": { "value": "ESC4：存在漏洞的证书模板 ACL", "status": "machine-draft" },
+    "description": { "value": "当低权限用户对 AD 中的证书模板对象拥有写权限时，就会发生 ESC4，使他们能够修改模板属性以制造 ESC1、ESC2 或 ESC3 条件。拥有写访问权的攻击者可以添加 CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT、更改 EKU、修改注册权限或改动其他与安全相关的属性，以实现基于证书的权限提升", "status": "machine-draft" },
+    "recommendedValue": { "value": "非管理主体对证书模板对象没有任何写权限", "status": "machine-draft" },
+    "remediationSteps": { "value": "枚举 CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration 中所有证书模板对象上的 ACL。为非管理主体删除 WriteDACL、WriteOwner、WriteProperty 以及 GenericAll/GenericWrite ACE。只有 Enterprise Admins 和指定的 PKI 管理员应对模板对象拥有写访问权。监视证书模板对象上的 ACL 更改。", "status": "machine-draft" }
+  },
+  "ADCS-007": {
+    "name": { "value": "ESC4：存在漏洞的证书模板所有权", "status": "machine-draft" },
+    "description": { "value": "如果某个证书模板对象由非管理主体拥有，则该主体可以修改模板的 DACL 以为自己授予写访问权，然后修改模板以制造可被利用的条件。模板所有权应限制为 Enterprise Admins 或域的 PKI 管理组", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有证书模板对象均由 Enterprise Admins 或指定的 PKI 管理员拥有", "status": "machine-draft" },
+    "remediationSteps": { "value": "检查 CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration 中每个证书模板对象上的所有者字段。使用 Set-Acl 或 adsiedit.msc 中的安全选项卡，将任何所有权不正确的模板的所有权转移给 Enterprise Admins。调查非管理账户是如何成为所有者的，以防再次发生。", "status": "machine-draft" }
+  },
+  "ADCS-008": {
+    "name": { "value": "ESC5：存在漏洞的 PKI 对象 ACL", "status": "machine-draft" },
+    "description": { "value": "ESC5 涵盖证书模板以外其他 PKI 相关 AD 对象上的写权限，包括 CA 服务器的 AD 对象、NTAuthCertificates 对象、注册服务容器和证书模板容器。对这些对象的写访问权可能允许攻击者添加恶意 CA、修改注册设置或发布恶意模板", "status": "machine-draft" },
+    "recommendedValue": { "value": "非管理主体对 PKI 容器对象没有任何写权限；写访问权仅限于 Enterprise Admins", "status": "machine-draft" },
+    "remediationSteps": { "value": "审计 CN=Public Key Services,CN=Services,CN=Configuration 下所有对象的 ACL，包括注册服务容器、AIA 容器、NTAuthCertificates 对象和证书模板容器。为非管理主体删除写权限。确保 AD 中的 CA 计算机对象没有向宽泛组授予写权限。监视这些对象是否有未经授权的更改。", "status": "machine-draft" }
+  },
+  "ADCS-009": {
+    "name": { "value": "ESC6：EDITF_ATTRIBUTESUBJECTALTNAME2 标志", "status": "machine-draft" },
+    "description": { "value": "当 CA 上启用了 EDITF_ATTRIBUTESUBJECTALTNAME2 标志时，无论模板配置如何，任何证书请求都可以包含用户定义的使用者可选名称。这实际上使 CA 上的每个模板都容易受到 ESC1 式攻击，攻击者可为特权用户指定 SAN", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 CA 服务器上均禁用 EDITF_ATTRIBUTESUBJECTALTNAME2 标志", "status": "machine-draft" },
+    "remediationSteps": { "value": "在每台 CA 服务器上使用 certutil -getreg policy\\EditFlags 检查 CA 配置。如果设置了 EDITF_ATTRIBUTESUBJECTALTNAME2 标志（0x00040000），则使用 certutil -setreg policy\\EditFlags -EDITF_ATTRIBUTESUBJECTALTNAME2 将其删除。更改后重启 CertSvc 服务。审查所有最近颁发的证书，查找可能表明先前遭利用的意外 SAN。", "status": "machine-draft" }
+  },
+  "ADCS-010": {
+    "name": { "value": "ESC7：存在漏洞的 CA ACL", "status": "machine-draft" },
+    "description": { "value": "当非管理主体对 CA 拥有 ManageCA 或 ManageCertificates 权限时，就会发生 ESC7。ManageCA 允许修改 CA 配置，包括启用 EDITF_ATTRIBUTESUBJECTALTNAME2（制造 ESC6 条件）。ManageCertificates 允许批准挂起的证书请求，从而绕过敏感模板上的 CA 管理员审批要求", "status": "machine-draft" },
+    "recommendedValue": { "value": "ManageCA 和 ManageCertificates 权限仅限于指定的 CA 管理员", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 certsrv.msc > 属性 > 安全选项卡或 certutil -getacl 审查 CA 安全权限。为非管理主体删除 ManageCA 权限。为任何非授权证书管理员的主体删除 ManageCertificates。记录所有拥有 CA 管理权限的主体。在 CA 管理员与证书管理员之间实施职责分离。", "status": "machine-draft" }
+  },
+  "ADCS-011": {
+    "name": { "value": "ESC8：向 AD CS HTTP 终结点的 NTLM 中继", "status": "machine-draft" },
+    "description": { "value": "ESC8 利用接受 NTLM 身份验证的 AD CS Web 注册（certsrv）和证书注册服务（CES）HTTP 终结点。攻击者可以从域控制器或特权账户强制身份验证，并将 NTLM 身份验证中继到 CA HTTP 终结点，以被中继身份请求证书，从而导致域被攻陷", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有基于 HTTP 的注册终结点；如确需，则强制使用启用了身份验证扩展保护（EPA）的 HTTPS", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-CertificateEnrollmentService 并检查 IIS 绑定，识别所有 CA Web 注册终结点。禁用基于 HTTP 的注册终结点并要求使用 HTTPS。在 IIS 上启用身份验证扩展保护以防止 NTLM 中继。或者，完全禁用 Web 注册角色，仅使用基于 DCOM 的注册接口。在可能的情况下，在 CA 服务器上禁用 NTLM 身份验证。", "status": "machine-draft" }
+  },
+  "ADCS-012": {
+    "name": { "value": "ESC9：无安全扩展", "status": "machine-draft" },
+    "description": { "value": "ESC9 利用已颁发证书中缺失 szOID_NTDS_CA_SECURITY_EXT 安全扩展的情形。在缺少此扩展且 StrongCertificateBindingEnforcement 未设置为 2 时，能够修改某用户 UPN 属性（通过对用户对象的 GenericWrite）的攻击者可以请求证书、将 UPN 改回，然后使用该证书以被修改的身份进行身份验证", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器上的 StrongCertificateBindingEnforcement 均设置为 2；身份验证模板上未设置 CT_FLAG_NO_SECURITY_EXTENSION", "status": "machine-draft" },
+    "remediationSteps": { "value": "检查 msPKI-Enrollment-Flag 中带有 CT_FLAG_NO_SECURITY_EXTENSION（0x80000）的模板。从所有具备身份验证能力的模板中删除此标志。在所有域控制器上将 HKLM\\SYSTEM\\CurrentControlSet\\Services\\Kdc 下的注册表值 StrongCertificateBindingEnforcement 设置为 2，以强制实施强证书映射。在启用强制实施后测试基于证书的身份验证。", "status": "machine-draft" }
+  },
+  "ADCS-013": {
+    "name": { "value": "ESC11：未加密的 RPC 中继", "status": "machine-draft" },
+    "description": { "value": "当 CA 未对 RPC 连接强制加密时，ESC11 针对 AD CS RPC 注册接口（ICertPassage）。与针对 HTTP 的 ESC8 类似，攻击者可以将 NTLM 身份验证中继到未加密的 RPC 终结点，以被中继身份请求证书。这会影响默认的基于 DCOM 的注册接口", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 CA 服务器上均启用 IF_ENFORCEENCRYPTICERTREQUEST 标志以要求 RPC 加密", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 certutil -getreg CA\\InterfaceFlags 检查 CA 接口标志。使用 certutil -setreg CA\\InterfaceFlags +IF_ENFORCEENCRYPTICERTREQUEST 启用 IF_ENFORCEENCRYPTICERTREQUEST 标志。重启 CertSvc 服务。在启用加密强制实施后，核实域加入客户端仍能正常进行证书注册。", "status": "machine-draft" }
+  },
+  "ADCS-014": {
+    "name": { "value": "ESC13：颁发策略 OID 组链接", "status": "machine-draft" },
+    "description": { "value": "ESC13 利用通过 msDS-OIDToGroupLink 属性建立的证书颁发策略 OID 与 AD 安全组之间的关联。当某个证书模板拥有映射到某安全组的颁发策略时，任何在该模板中注册的人在基于证书的身份验证期间实际上就获得了所链接组的成员身份", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有颁发策略 OID 链接到特权安全组；msDS-OIDToGroupLink 仅存在于非敏感组上", "status": "machine-draft" },
+    "remediationSteps": { "value": "查询 CN=OID,CN=Public Key Services,CN=Services,CN=Configuration 中所有 OID 对象的 msDS-OIDToGroupLink 属性。识别任何链接到特权组（Domain Admins、Enterprise Admins 等）的 OID。从链接到敏感组的 OID 中删除 msDS-OIDToGroupLink 属性。如果运营上确需该关联，则将使用该颁发策略的模板上的注册权限仅限制为授权主体。", "status": "machine-draft" }
+  },
+  "ADCS-015": {
+    "name": { "value": "ESC15：架构 v1 模板中的应用程序策略", "status": "machine-draft" },
+    "description": { "value": "ESC15（也称为 EKUwu）利用架构版本 1 的证书模板，其应用程序策略扩展可由注册者在证书请求中指定。由于架构 v1 模板不强制执行模板中的应用程序策略，攻击者可以向已颁发的证书添加客户端身份验证或任何其他 EKU，而不受模板配置的限制", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有发布任何允许低权限注册的架构 v1 模板；将所有必需的模板迁移到架构 v2 或更高版本", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别在企业 CA 上发布的所有架构 v1 模板（msPKI-Template-Schema-Version = 1）。通过基于 v1 模板创建带有显式 EKU 强制执行的新模板，将架构 v1 模板迁移到架构 v2 或更高版本。将任何剩余 v1 模板上的注册权限仅限制为管理账户。取消发布不再需要的 v1 模板。", "status": "machine-draft" }
+  },
+  "ADCS-016": {
+    "name": { "value": "ESC16：UPN SAN 错误配置", "status": "machine-draft" },
+    "description": { "value": "ESC16 利用这样一种错误配置：StrongCertificateBindingEnforcement 设置为 1（兼容模式），且带有 CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT 或 CT_FLAG_SUBJECT_ALT_REQUIRE_UPN 的证书模板允许注册者在 SAN 中设置 UPN。弱绑定允许仅基于 UPN 而无需 OID 安全扩展就将证书映射到用户，从而实现冒充", "status": "machine-draft" },
+    "recommendedValue": { "value": "StrongCertificateBindingEnforcement 设置为 2；没有任何模板允许注册者指定的 UPN SAN 且允许低权限注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "在所有域控制器上，将 HKLM\\SYSTEM\\CurrentControlSet\\Services\\Kdc 下的 StrongCertificateBindingEnforcement 设置为 2。审查所有允许注册者指定使用者或要求在 SAN 中提供 UPN 的模板。将这些模板上的注册权限限制为授权主体。在强制实施强绑定后测试基于证书的身份验证，以便在全面推行前识别任何不兼容之处。", "status": "machine-draft" }
+  },
+  "ADCS-017": {
+    "name": { "value": "EKEUwu：扩展密钥用法滥用", "status": "machine-draft" },
+    "description": { "value": "EKEUwu 攻击针对注册者可以通过证书请求影响扩展密钥用法字段的证书模板。这发生在某些模板配置中，其中 EKU 未被模板严格强制执行，使攻击者能够向本不用于身份验证目的的证书添加身份验证 EKU", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有证书模板均严格强制执行模板定义中的 EKU；没有注册者可控的 EKU", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有证书模板的 EKU 强制执行情况。确保模板为架构 v2 或更高版本，其中 EKU 强制执行更为健壮。删除不严格定义并强制执行 EKU 的不必要模板。测试证书请求，以核实已颁发证书的 EKU 与模板定义相符。实施用于验证请求中 EKU 的 CA 颁发策略模块。", "status": "machine-draft" }
+  },
+  "ADCS-018": {
+    "name": { "value": "CA 审核配置", "status": "machine-draft" },
+    "description": { "value": "AD CS 证书颁发机构审核控制记录哪些与证书相关的事件，包括证书请求、颁发、吊销和 CA 配置更改。如果没有充分的 CA 审核，就无法检测或调查对基于证书的攻击途径（ESC1-ESC16）的利用，未经授权的证书颁发也会被忽视", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用所有 CA 审核类别：启动/停止、备份/还原、证书已颁发、证书已吊销、证书请求、CA 安全、CA 配置更改", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 certsrv.msc > CA 属性 > 审核选项卡配置 CA 审核。启用所有审核类别：备份和还原 CA 数据库、更改 CA 配置、更改 CA 安全设置、颁发和管理证书请求、吊销证书并发布 CRL、存储和检索存档密钥、启动和停止 AD CS。核实 Windows 安全事件日志具有足够的大小和保留设置。", "status": "machine-draft" }
+  },
+  "ADCS-019": {
+    "name": { "value": "证书模板枚举", "status": "machine-draft" },
+    "description": { "value": "对所有证书模板及其安全相关属性的全面枚举为 ESC 漏洞评估提供了基线。这包括模板架构版本、注册权限、EKU 配置、名称标志、注册标志、授权签名要求和有效期。这些信息为所有 ESC 专项检查提供输入", "status": "machine-draft" },
+    "recommendedValue": { "value": "完整的模板清单，记录安全属性；所有模板均已审查最小权限注册和适当的 EKU", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 certutil -template 或 PowerShell 从 CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration 枚举所有证书模板。对每个模板，记录：显示名称、架构版本、注册权限、EKU、名称标志（ENROLLEE_SUPPLIES_SUBJECT）、注册标志、授权签名要求、有效期和续订期。交叉核对每台 CA 上已发布的模板。", "status": "machine-draft" }
+  }
+}

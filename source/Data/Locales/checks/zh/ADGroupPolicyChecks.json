@@ -1,0 +1,147 @@
+{
+  "_family": "ADGroupPolicyChecks.json",
+  "ADGPO-001": {
+    "name": { "value": "带链接状态的 GPO 清单", "status": "machine-draft" },
+    "description": { "value": "对所有组策略对象及其链接状态、范围和强制状态的全面清单为 GPO 安全分析奠定了基础。了解哪些 GPO 已链接、已强制或已禁用，对于评估通过组策略交付的实际安全态势至关重要", "status": "machine-draft" },
+    "recommendedValue": { "value": "完整的 GPO 清单，记录每个 GPO 的链接状态、范围和所有者", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-GPO -All 和 Get-GPOReport 生成完整的 GPO 清单。记录每个 GPO 的用途、所有者、链接位置和强制状态。建立 GPO 命名约定，并确保所有 GPO 均符合该约定。实施 GPO 变更管理流程。", "status": "machine-draft" }
+  },
+  "ADGPO-002": {
+    "name": { "value": "空 GPO", "status": "machine-draft" },
+    "description": { "value": "不包含任何已配置设置的 GPO（计算机配置和用户配置部分均为空）会给组策略处理增加不必要的复杂性，并且可能表明是被放弃的配置工作，或从未清理的测试遗留物", "status": "machine-draft" },
+    "recommendedValue": { "value": "域中没有空 GPO；所有 GPO 均至少包含一项已配置的设置", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 XML 格式的 Get-GPOReport 并检查空的 ExtensionData 元素，以识别没有已配置设置的 GPO。核实空 GPO 不是为将来使用而保留的占位符。在确认它们未被任何自动化或文档引用后，删除真正为空的 GPO。", "status": "machine-draft" }
+  },
+  "ADGPO-003": {
+    "name": { "value": "未链接的 GPO", "status": "machine-draft" },
+    "description": { "value": "未链接到任何站点、域或 OU 的 GPO 不会被应用，代表未使用的配置。未链接的 GPO 可能包含敏感设置、GPP 中的凭据或脚本，如果攻击者稍后将其链接到目标 OU，就可能被加以利用", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有未链接的 GPO，除非其作为模板或备份记录在案并具有适当的访问控制", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过将所有 GPO GUID 与所有 OU、站点和域根上的 gPLink 属性进行比较，识别未链接的 GPO。审查每个未链接的 GPO，以确定它应被链接、存档还是删除。从保留作为模板的未链接 GPO 中删除敏感内容。", "status": "machine-draft" }
+  },
+  "ADGPO-004": {
+    "name": { "value": "含内容的已禁用 GPO", "status": "machine-draft" },
+    "description": { "value": "用户配置或计算机配置部分已被禁用但仍包含已配置设置的 GPO，可能表明停用不彻底或无意中被禁用。如果被拥有 GPO 编辑权限的攻击者重新启用，这些休眠设置就会生效", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有 GPO 的已禁用部分包含已配置的设置；已禁用的部分应为空", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有 GpoStatus 为 UserSettingsDisabled 或 ComputerSettingsDisabled 的 GPO。核实已禁用的部分不包含活动设置。如果需要这些设置，则重新启用该部分；否则从已禁用的部分删除这些设置。记录任何有意禁用某部分的原因。", "status": "machine-draft" }
+  },
+  "ADGPO-005": {
+    "name": { "value": "重复的 GPO", "status": "machine-draft" },
+    "description": { "value": "多个具有基本相似或相同设置的 GPO 会造成管理开销、增加配置漂移的风险并使故障排查复杂化。重复的 GPO 也可能导致设置冲突，产生不可预测的行为", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有重复的 GPO；每个 GPO 都有独特的用途和不重叠的设置", "status": "machine-draft" },
+    "remediationSteps": { "value": "以 XML 格式导出所有 GPO 报告，并比较各 GPO 之间的设置以识别重复项。在可能的情况下，将重复的 GPO 合并为单个 GPO。更新 OU 链接以引用已合并的 GPO。在删除重复项之前，先在暂存 OU 中测试已合并的 GPO。", "status": "machine-draft" }
+  },
+  "ADGPO-006": {
+    "name": { "value": "含损坏链接的 GPO", "status": "machine-draft" },
+    "description": { "value": "引用不存在的 GPO 或其 SYSVOL 数据缺失的 GPO 链接表明存在复制问题、不当删除或损坏。损坏的链接可能导致组策略处理错误，并可能掩盖预期安全配置的缺失", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有损坏的 GPO 链接；所有 gPLink 引用均解析为具有完好 SYSVOL 数据的有效 GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "解析所有 OU、站点和域根上的 gPLink 属性，以提取被引用的 GPO GUID。核实每个 GUID 均存在于 GPC（AD）和 GPT（SYSVOL）容器中。使用 Set-GPLink 或直接编辑 gPLink 属性来删除损坏的链接。调查任何缺失 GPO 数据的根本原因。", "status": "machine-draft" }
+  },
+  "ADGPO-007": {
+    "name": { "value": "GPO 权限不一致", "status": "machine-draft" },
+    "description": { "value": "每个 GPO 同时具有 AD 权限（在 GPC 对象上）和 NTFS 权限（在 SYSVOL GPT 文件夹上）。这两组权限之间的不一致可能阻止 GPO 应用、允许未经授权的修改，或造成 SYSVOL 内容比 AD 对象更宽松的安全缺口", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 GPO 的 AD GPC 对象与 SYSVOL GPT 文件夹之间权限一致；Authenticated Users 拥有读取访问权", "status": "machine-draft" },
+    "remediationSteps": { "value": "将 AD 中每个 GPC 对象上的安全描述符与 SYSVOL 中对应 GPT 文件夹上的 NTFS ACL 进行比较。确保两者都向 Authenticated Users 授予读取访问权（GPO 应用所必需）。通过使 SYSVOL 权限与 AD 对象保持一致来解决任何不一致。运行 dcdiag /test:sysvolcheck 以识别问题。", "status": "machine-draft" }
+  },
+  "ADGPO-008": {
+    "name": { "value": "因 WMI 筛选器而未应用的 GPO", "status": "machine-draft" },
+    "description": { "value": "WMI 筛选器可以基于 WQL 查询阻止 GPO 应用于目标系统。过于宽泛或错误配置的 WMI 筛选器可能无意中阻止安全关键的 GPO 应用于需要它们的系统，从而在预期安全配置中造成缺口", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有安全关键的 GPO 均应用于预期目标；WMI 筛选器已针对实际环境条件进行验证", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-GPO 并检查 WMI 筛选器分配，审查链接到安全关键 GPO 的 WMI 筛选器。针对具有代表性的目标系统测试 WMI 筛选器查询，以核实其正确求值。在样本系统上使用组策略结果（gpresult）确认 GPO 正在应用。替换或修复正在阻止预期应用的 WMI 筛选器。", "status": "machine-draft" }
+  },
+  "ADGPO-009": {
+    "name": { "value": "无应用权限的 GPO", "status": "machine-draft" },
+    "description": { "value": "如果未向适当的安全主体授予“应用组策略”（读取 + 应用）权限，则即使 GPO 已链接到正确的 OU，这些系统也不会处理该 GPO。这通常发生在从 GPO 安全筛选中删除了 Authenticated Users 却未添加特定组时", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 GPO 均向适当的安全组授予“应用组策略”权限；没有 GPO 缺少应用目标", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-GPPermission 检查每个 GPO 的“应用组策略”权限。确保至少有一个含成员的安全组拥有“应用”权限。对于应仅应用于特定组的 GPO，核实目标组包含预期成员。如果使用了安全筛选，则添加拥有只读权限（无“应用”权限）的 Authenticated Users。", "status": "machine-draft" }
+  },
+  "ADGPO-010": {
+    "name": { "value": "SYSVOL/AD GPO 版本不匹配", "status": "machine-draft" },
+    "description": { "value": "每个 GPO 在 AD GPC 对象（versionNumber 属性）和 SYSVOL GPT 文件夹（gpt.ini）中都维护版本号。这些版本之间的不匹配表明存在复制失败、SYSVOL 损坏或 GPO 更新不完整。版本不匹配可能导致客户端应用过时或不完整的策略", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有域控制器上，所有 GPO 的 AD GPC 对象与 SYSVOL GPT gpt.ini 文件之间版本均匹配", "status": "machine-draft" },
+    "remediationSteps": { "value": "在所有域控制器上，将 AD 中的 versionNumber 属性与 SYSVOL gpt.ini 中的 Version 值针对每个 GPO 进行比较。调查并解决导致不匹配的任何 DFSR 或 FRS 复制问题。使用 repadmin /syncall 和 DFSRDIAG 强制复制。对于持续的不匹配，请使用 SYSVOL 的授权还原流程。", "status": "machine-draft" }
+  },
+  "ADGPO-011": {
+    "name": { "value": "GPO 设置安全分析", "status": "machine-draft" },
+    "description": { "value": "如果 GPO 设置禁用保护、放宽身份验证要求或配置不安全的默认值，就可能削弱安全态势。此检查分析所有 GPO 中的关键安全相关设置，包括密码策略、账户锁定、用户权限分配、安全选项和审核策略", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 GPO 设置均与组织安全基线保持一致；没有 GPO 削弱默认安全配置", "status": "machine-draft" },
+    "remediationSteps": { "value": "导出所有 GPO 报告，分析安全相关设置，包括密码策略、账户锁定、用户权限分配、受限组、安全选项和 Windows 防火墙规则。将设置与 CIS 基准或组织基线进行比较。整改配置了弱于基线设置的 GPO。", "status": "machine-draft" }
+  },
+  "ADGPO-012": {
+    "name": { "value": "cPassword/GPP 密码检测", "status": "machine-draft" },
+    "description": { "value": "组策略首选项中存储的密码（cPassword）使用 Microsoft 公开发布的一个众所周知的 AES 密钥加密（MS14-025）。任何域用户都可以读取 SYSVOL 中包含这些密码的 XML 文件，并轻易将其解密。这是最常见且最易被利用的 Active Directory 漏洞之一", "status": "machine-draft" },
+    "recommendedValue": { "value": "SYSVOL 中任何 GPP XML 文件中均不存在 cPassword 值", "status": "machine-draft" },
+    "remediationSteps": { "value": "在所有 SYSVOL GPO 文件夹中搜索 Groups.xml、Services.xml、Scheduledtasks.xml、DataSources.xml、Printers.xml 和 Drives.xml 中包含 cpassword 属性的 XML 文件。删除所有包含存储密码的 GPP 项。改用 LAPS、gMSA 或其他现代凭据管理解决方案。应用 MS14-025 补丁以阻止创建新的 cPassword。", "status": "machine-draft" }
+  },
+  "ADGPO-013": {
+    "name": { "value": "GPO 中的脚本分析", "status": "machine-draft" },
+    "description": { "value": "GPO 的启动、关闭、登录和注销脚本以系统或用户的权限执行，并存储在可访问的 SYSVOL 共享中。放置在 GPO 中的恶意脚本可以在整个域中实现广泛的代码执行。应审查脚本是否存在安全问题，包括硬编码凭据、不安全命令和对非安全位置的引用", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 GPO 脚本均已审查、在可能的情况下已签名，且不含硬编码凭据或不安全操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "从 GPO 报告的脚本部分枚举所有在 GPO 中配置的脚本（启动、关闭、登录、注销）。审查脚本内容中的硬编码凭据、LOLBins 使用、外部资源引用和不安全操作。在受支持的地方实施脚本签名。确保脚本文件权限将修改限制为授权管理员。", "status": "machine-draft" }
+  },
+  "ADGPO-014": {
+    "name": { "value": "GPO 中的 MSI 包", "status": "machine-draft" },
+    "description": { "value": "软件安装 GPO 设置将 MSI 包部署到目标计算机。GPO 中被攻陷或未经授权的 MSI 包可以在整个域中部署恶意软件。必须核实 MSI 包的源位置以及这些位置上的访问控制", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有通过 GPO 部署的 MSI 包均来自安全、受访问控制且完整性经过验证的位置", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别 GPO 中的所有软件安装设置。核实 MSI 源路径指向具有适当 NTFS 和共享权限的安全共享。确认 MSI 包来自受信任的供应商且未被篡改。考虑使用 WDAC 或 AppLocker 将 MSI 安装限制为已批准的包。", "status": "machine-draft" }
+  },
+  "ADGPO-015": {
+    "name": { "value": "GPO 中的计划任务", "status": "machine-draft" },
+    "description": { "value": "组策略首选项可以在目标计算机上创建以指定凭据或以 SYSTEM 身份运行的计划任务。通过 GPO 部署的恶意计划任务可在整个环境中提供持久的代码执行。这是一种用于维持域范围持久化的常见后利用技术", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有通过 GPO 部署的计划任务均记录在案、使用最小权限账户，且仅执行授权操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有 GPO 中 GPO 首选项内的所有计划任务项。核实每个任务以最低所需权限运行合法且授权的命令。删除任何存储凭据的任务（改用 gMSA 或 SYSTEM 上下文）。确保任务可执行文件存储在受保护的位置。记录每个通过 GPO 部署的计划任务的业务用途。", "status": "machine-draft" }
+  },
+  "ADGPO-016": {
+    "name": { "value": "注册表设置安全审查", "status": "machine-draft" },
+    "description": { "value": "GPO 可以部署影响安全配置的注册表设置，包括禁用安全功能、弱化身份验证协议或启用不安全的服务。应审查 GPO 中基于注册表的设置，以确保它们不会削弱目标系统的安全态势", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有 GPO 注册表设置削弱安全默认值；所有注册表修改均记录在案并有正当理由", "status": "machine-draft" },
+    "remediationSteps": { "value": "从管理模板和注册表首选项导出 GPO 注册表设置。审查影响安全相关注册表项的设置，包括 HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa、HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies 和身份验证相关项。删除或纠正削弱安全态势的设置。", "status": "machine-draft" }
+  },
+  "ADGPO-017": {
+    "name": { "value": "受限组分析", "status": "machine-draft" },
+    "description": { "value": "受限组 GPO 设置在目标系统上强制实施组成员身份，通常用于管理本地 Administrators 组的成员身份。错误配置的受限组可能无意中授予未经授权用户本地管理员访问权，或未能从特权本地组中删除未经授权的成员", "status": "machine-draft" },
+    "recommendedValue": { "value": "受限组配置为强制实施最小权限的本地管理员成员身份；本地 Administrators 中仅有授权的组", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有 GPO 中的受限组设置。核实本地 Administrators 组被管理为仅包含授权的管理组。确保受限组不将 Domain Users 或其他宽泛组添加到特权本地组。考虑使用组策略首选项以实现更细粒度的控制（添加/删除成员而不替换整个成员身份）。", "status": "machine-draft" }
+  },
+  "ADGPO-018": {
+    "name": { "value": "通过 GPO 的审核策略配置", "status": "machine-draft" },
+    "description": { "value": "通过组策略配置的 Windows 审核策略决定了在域加入系统上记录哪些安全事件。审核配置不足会造成盲点，使攻击者能够不被察觉地活动。关键审核类别包括登录事件、账户管理、目录服务访问和对象访问", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过 GPO 配置高级审核策略，对所有关键类别进行成功和失败审核，并与组织检测要求保持一致", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 GPO 配置高级审核策略配置（而非旧版审核策略）。至少启用：账户登录（成功/失败）、账户管理（成功/失败）、目录服务访问（成功/失败）、登录/注销（成功/失败）、对象访问（针对敏感资源的成功/失败）、策略更改（成功）、特权使用（成功/失败）和系统（成功/失败）。部署到所有域加入系统。", "status": "machine-draft" }
+  },
+  "ADGPO-019": {
+    "name": { "value": "通过 GPO 的 Windows 防火墙配置", "status": "machine-draft" },
+    "description": { "value": "通过 GPO 部署的“高级安全 Windows Defender 防火墙”设置控制域加入系统上的网络访问。禁用防火墙、允许过于宽松的入站规则或未能配置防火墙的 GPO，会使系统容易受到横向移动和基于网络的攻击", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过 GPO 为所有配置文件（域、专用、公用）启用 Windows 防火墙，并配置默认拒绝的入站规则", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有适用 GPO 中的 Windows 防火墙设置。确保为域、专用和公用配置文件启用防火墙。核实入站规则遵循默认拒绝的方式，仅对所需服务设置特定的允许规则。删除任何禁用 Windows 防火墙的 GPO 设置。在域范围部署之前，先在暂存 OU 中测试防火墙规则。", "status": "machine-draft" }
+  },
+  "ADGPO-020": {
+    "name": { "value": "通过 GPO 的 PowerShell 执行策略", "status": "machine-draft" },
+    "description": { "value": "PowerShell 执行策略控制哪些脚本可以在系统上运行。虽然执行策略并非安全边界，但通过 GPO 将其设置为 Unrestricted 或 Bypass 会移除一层防御，使攻击者更容易在无用户提示的情况下执行恶意脚本", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过 GPO 将 PowerShell 执行策略设置为 AllSigned 或 RemoteSigned；不设置为 Unrestricted 或 Bypass", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查“计算机配置 > 管理模板 > Windows 组件 > Windows PowerShell > 打开脚本执行”下的 GPO 设置。对于高安全性环境将执行策略设置为 AllSigned，对于标准环境设置为 RemoteSigned。为授权的 PowerShell 脚本实施代码签名。避免通过 GPO 设置 Bypass 或 Unrestricted。", "status": "machine-draft" }
+  },
+  "ADGPO-021": {
+    "name": { "value": "PowerShell 日志记录配置", "status": "machine-draft" },
+    "description": { "value": "PowerShell 模块日志记录、脚本块日志记录和脚本录制为基于 PowerShell 的攻击提供了关键可见性，而这类攻击在大多数现代 Active Directory 攻陷中都会被使用。如果没有这些日志记录能力，防御者就无法检测或调查基于 PowerShell 的侦察、凭据窃取或横向移动", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有系统上通过 GPO 启用模块日志记录、脚本块日志记录和脚本录制", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置“计算机配置 > 管理模板 > Windows 组件 > Windows PowerShell”下的 GPO 设置。启用模块日志记录并使用 '*' 记录所有模块。启用脚本块日志记录并记录“脚本块调用的开始/停止事件”。启用带有安全输出目录的 PowerShell 脚本录制。部署到所有域加入系统并核实日志收集。", "status": "machine-draft" }
+  },
+  "ADGPO-022": {
+    "name": { "value": "AppLocker/WDAC 策略评估", "status": "machine-draft" },
+    "description": { "value": "AppLocker 和 Windows Defender 应用程序控制等应用程序控制策略限制哪些可执行文件、脚本和 DLL 可以在受管系统上运行。如果没有应用程序控制，攻击者可以在被攻陷的系统上执行任意工具和恶意软件，以促成横向移动和持久化", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过 GPO 在所有工作站和服务器上以强制模式部署 AppLocker 或 WDAC 策略，并具有记录在案的基线", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 GPO 以审核模式开始部署 AppLocker 或 WDAC 策略。分析审核日志以建立已批准应用程序的基线。基于发布者、路径或哈希创建允许列表规则。在验证基线后，从审核模式过渡到强制模式。监视被阻止的执行事件，并根据需要更新规则。", "status": "machine-draft" }
+  },
+  "ADGPO-023": {
+    "name": { "value": "LAPS GPO 配置", "status": "machine-draft" },
+    "description": { "value": "本地管理员密码解决方案（LAPS）为域加入系统上的本地管理员密码提供自动轮换，防止通过共享的本地管理员凭据进行横向移动。LAPS 必须通过 GPO 部署才能生效，其配置设置决定了密码复杂性、轮换频率以及所管理的账户", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有域加入系统上通过 GPO 启用 LAPS，使用 24 个字符的密码和 30 天的最长使用期限", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 GPO 软件安装或 SCCM 在所有受管系统上安装 LAPS CSE。配置 LAPS GPO 设置：启用本地管理员密码管理，将密码复杂性设置为大写字母 + 小写字母 + 数字 + 特殊字符，将密码长度设置为 24 个或更多字符，并将密码使用期限设置为 30 天或更短。通过检查 ms-Mcs-AdmPwdExpirationTime 属性核实 LAPS 正常运行。", "status": "machine-draft" }
+  },
+  "ADGPO-024": {
+    "name": { "value": "GPO WMI 筛选器审查", "status": "machine-draft" },
+    "description": { "value": "WMI 筛选器基于在目标系统上求值的 WQL 查询控制 GPO 应用。恶意或错误配置的 WMI 筛选器可以有选择地阻止安全 GPO 应用于特定系统，从而造成针对性的安全缺口。应审查 WMI 筛选器的正确性、性能影响和潜在滥用", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 WMI 筛选器均记录在案、经过测试并产生预期结果；没有 WMI 筛选器阻止安全关键的 GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADObject -Filter 'objectClass -eq \"msWMI-Som\"' 清点所有 WMI 筛选器。审查每个筛选器中的 WQL 查询的正确性，并针对具有代表性的目标系统进行测试。核实 WMI 筛选器没有阻止安全关键的 GPO 应用。删除未使用的 WMI 筛选器。记录每个活动 WMI 筛选器的用途和预期行为。", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "_family": "ADKerberosChecks.json",
+  "ADKERB-001": {
+    "name": { "value": "可被 Kerberoasting 的账户", "status": "machine-draft" },
+    "description": { "value": "关联了服务主体名称（SPN）的用户账户容易受到 Kerberoasting 攻击：任何经过身份验证的域用户都可以请求一张用该账户密码哈希加密的服务票据，并尝试离线破解。此攻击无需任何特殊权限，且难以检测。每个带有 SPN 的用户账户都代表一个潜在的凭据暴露途径", "status": "machine-draft" },
+    "recommendedValue": { "value": "带有 SPN 的用户账户数量应尽可能少。所有可被 Kerberoasting 的账户均已识别、以业务理由记录在案，并使用 25 个字符以上的密码加以保护，或迁移到 gMSA", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADUser -Filter {ServicePrincipalName -ne '$null'} -Properties ServicePrincipalName 枚举可被 Kerberoasting 的账户。对每个账户：(1) 评估该 SPN 是否仍然需要，(2) 删除不必要的 SPN，(3) 在可能的情况下迁移到组托管服务账户，(4) 对于剩余的账户，确保密码为 25 个字符以上并定期轮换。通过事件 ID 4769 监视针对敏感账户的 Kerberos TGS 请求", "status": "machine-draft" }
+  },
+  "ADKERB-002": {
+    "name": { "value": "使用弱加密的可被 Kerberoasting 账户", "status": "machine-draft" },
+    "description": { "value": "配置为使用 RC4 或 DES 加密的带 SPN 用户账户，比使用 AES 的账户更容易通过 Kerberoasting 被破解。在现代 GPU 硬件上，RC4（ARCFOUR-HMAC-MD5）票据的破解速度比 AES 票据快若干个数量级。显式配置为弱加密类型或缺少 AES 密钥的账户是最高优先级的 Kerberoasting 目标", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有带 SPN 的账户均支持 AES256 加密。没有账户被限制为 RC4 或 DES 加密类型。所有服务账户的 msDS-SupportedEncryptionTypes 均包含 AES 标志", "status": "machine-draft" },
+    "remediationSteps": { "value": "查询带 SPN 的用户账户并检查其 msDS-SupportedEncryptionTypes 属性。值为 0（未设置）的账户默认使用 RC4。仅带有 RC4（0x4）或 DES（0x1、0x2、0x3）标志的账户存在漏洞。在域中启用 AES 支持后，轮换所有受影响账户的密码以生成 AES 密钥。将 msDS-SupportedEncryptionTypes 设置为包含 AES128（0x8）和 AES256（0x10）标志", "status": "machine-draft" }
+  },
+  "ADKERB-003": {
+    "name": { "value": "可被 AS-REP Roasting 的账户", "status": "machine-draft" },
+    "description": { "value": "设置了 DONT_REQUIRE_PREAUTH 标志的账户允许任何用户请求一个包含可离线破解的加密材料的 AS-REP，而无需任何事先身份验证。与 Kerberoasting 不同，在某些配置下，AS-REP Roasting 甚至不需要有效的域账户，这使其成为仅能通过网络访问域控制器的攻击者所青睐的初始访问技术", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有账户设置“不要求 Kerberos 预身份验证”标志。可被 AS-REP Roasting 的账户为零", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true -and Enabled -eq $true} 识别相关账户。在所有账户上启用 Kerberos 预身份验证。在现代环境中，几乎没有正当理由禁用预身份验证。轮换所有先前存在漏洞的账户的密码，因为它们可能已被作为攻击目标。监视预身份验证类型为 0 的事件 ID 4768", "status": "machine-draft" }
+  },
+  "ADKERB-004": {
+    "name": { "value": "无约束委派：计算机", "status": "machine-draft" },
+    "description": { "value": "具有无约束委派（TrustedForDelegation）的计算机账户会缓存向其进行身份验证的任何用户的 TGT。如果攻击者攻陷了这样的计算机，就可以提取缓存的 TGT 并冒充任何用户，包括 Domain Admins。结合 SpoolSample 或 PrinterBug 强制身份验证攻击，攻击者可以迫使域控制器进行身份验证并捕获其 TGT，从而导致整个域被攻陷", "status": "machine-draft" },
+    "recommendedValue": { "value": "除域控制器（本身即需要无约束委派）外，没有任何计算机账户具有无约束委派。所有其他委派均迁移到约束委派或基于资源的约束委派", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADComputer -Filter {TrustedForDelegation -eq $true} -Properties TrustedForDelegation 识别具有无约束委派的计算机。从结果中排除域控制器。对于剩余的计算机，通过识别其需要委派到的特定服务迁移到约束委派，然后配置 msDS-AllowedToDelegateTo。将敏感账户添加到 Protected Users 组，以防止其 TGT 被缓存。将高价值账户标记为“账户是敏感的，不能被委派”", "status": "machine-draft" }
+  },
+  "ADKERB-005": {
+    "name": { "value": "无约束委派：用户", "status": "machine-draft" },
+    "description": { "value": "具有无约束委派的用户账户比具有相同设置的计算机账户更加危险，因为用户账户更容易通过凭据窃取、钓鱼或密码攻击被攻陷。在具有无约束委派的用户账户下运行的任何服务，都可以冒充向其进行身份验证的任何用户，从而提供了通向域攻陷的直接途径", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何用户账户具有无约束委派。所有用户账户的委派均迁移到约束委派或基于资源的约束委派", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADUser -Filter {TrustedForDelegation -eq $true} -Properties TrustedForDelegation 识别具有无约束委派的用户。对于用户账户，这几乎从来都不是合法的配置。删除无约束委派标志，如果确实需要委派，则配置针对特定服务的约束委派。立即轮换该账户的密码，因为该账户可能已被作为攻击目标", "status": "machine-draft" }
+  },
+  "ADKERB-006": {
+    "name": { "value": "约束委派分析", "status": "machine-draft" },
+    "description": { "value": "约束委派通过 msDS-AllowedToDelegateTo 属性限制一个账户可以委派到哪些服务，但错误配置仍可能导致权限提升。委派到域控制器上的 LDAP、CIFS 或 HOST 服务可被滥用来执行 DCSync 攻击、访问 DC 文件共享或以被委派用户的身份执行命令。应对每一条约束委派条目的安全影响进行审查", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有约束委派条目均以业务理由记录在案。没有委派到域控制器上的敏感服务（LDAP、CIFS、HOST、WSMAN）", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADObject -Filter {msDS-AllowedToDelegateTo -ne '$null'} -Properties msDS-AllowedToDelegateTo 枚举约束委派。审查每个委派目标。将任何委派到 DC 服务（尤其是 LDAP、CIFS、HOST、HTTP、WSMAN）的情况标记为高风险。删除不必要的委派条目，并为合法条目提供业务理由并记录在案。考虑迁移到基于资源的约束委派以提升安全性", "status": "machine-draft" }
+  },
+  "ADKERB-007": {
+    "name": { "value": "基于资源的约束委派", "status": "machine-draft" },
+    "description": { "value": "基于资源的约束委派（RBCD）允许目标资源通过 msDS-AllowedToActOnBehalfOfOtherIdentity 属性控制哪些账户可以委派到它。虽然在设计上比传统约束委派更安全，但如果攻击者获得了对某个计算机对象的写访问权，从而配置未经授权的委派路径，RBCD 仍可能被滥用。这是一种常见的后利用技术", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 RBCD 配置均已记录在案并经过审计。msDS-AllowedToActOnBehalfOfOtherIdentity 中没有未经授权的条目。对计算机对象的写访问权仅限于授权的管理员", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADComputer -Filter {msDS-AllowedToActOnBehalfOfOtherIdentity -ne '$null'} -Properties msDS-AllowedToActOnBehalfOfOtherIdentity 枚举 RBCD 配置。审查每个条目的业务理由。审计谁对 AD 中的计算机对象拥有写访问权，以识别潜在的 RBCD 滥用路径。删除未经授权的 RBCD 条目。对 msDS-AllowedToActOnBehalfOfOtherIdentity 属性的更改实施监视", "status": "machine-draft" }
+  },
+  "ADKERB-008": {
+    "name": { "value": "协议转换滥用路径", "status": "machine-draft" },
+    "description": { "value": "配置为带协议转换的约束委派（TrustedToAuthForDelegation / T2A4D 标志）的账户，可以代表任何用户获取服务票据，而该用户无需实际通过 Kerberos 进行身份验证。这种 S4U2Self 能力允许该账户向其被允许委派到的服务冒充任何用户，与委派到敏感服务相结合时，使其成为强大的权限提升途径", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非明确需要并记录在案，否则在所有账户上禁用协议转换（TrustedToAuthForDelegation）。没有能够委派到域控制器服务的协议转换账户", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-ADObject -Filter {TrustedToAuthForDelegation -eq $true} -Properties TrustedToAuthForDelegation,msDS-AllowedToDelegateTo 识别具有协议转换的账户。对每个账户，评估是否确实需要协议转换（仅在初始身份验证不使用 Kerberos 时才需要）。在不需要时禁用协议转换。对于剩余的账户，严格限制委派目标，并确保范围内不包含任何 DC 服务", "status": "machine-draft" }
+  },
+  "ADKERB-009": {
+    "name": { "value": "Kerberos 加密类型", "status": "machine-draft" },
+    "description": { "value": "Kerberos 加密类型决定了票据加密的强度。DES 和 RC4（ARCFOUR-HMAC-MD5）在密码学上较弱，应予以禁用，改用 AES128 和 AES256。RC4 尤其是 Kerberoasting 攻击的目标，因为它比 AES 加密的票据破解速度快得多。强制仅使用 AES 加密可大幅增加离线凭据攻击的难度", "status": "machine-draft" },
+    "recommendedValue": { "value": "仅将 AES256_HMAC_SHA1 和 AES128_HMAC_SHA1 作为支持的加密类型。通过组策略和域功能级别禁用 DES 和 RC4", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过组策略进行配置：计算机配置 > 策略 > Windows 设置 > 安全设置 > 本地策略 > 安全选项 > “网络安全: 配置 Kerberos 允许的加密类型” = AES128_HMAC_SHA1、AES256_HMAC_SHA1、未来的加密类型。通过 msDS-SupportedEncryptionTypes 审计账户，以识别被限制为 RC4 的账户。在域级别启用 AES 支持后轮换密码，确保所有服务账户都生成了 AES 密钥", "status": "machine-draft" }
+  },
+  "ADKERB-010": {
+    "name": { "value": "Kerberos 票据生存期", "status": "machine-draft" },
+    "description": { "value": "Kerberos 票据生存期控制身份验证票据保持有效的时间。TGT 或服务票据生存期过长会延长被盗票据可用于 pass-the-ticket 攻击的时间窗口。应重新审视默认的 10 小时 TGT 生存期和最长 7 天的续订期，以在安全性和运营需求之间取得平衡", "status": "machine-draft" },
+    "recommendedValue": { "value": "TGT 最大生存期：4 至 10 小时。服务票据最大生存期：600 分钟。票据最长续订期：7 天。最大时钟偏差：5 分钟", "status": "machine-draft" },
+    "remediationSteps": { "value": "在默认域策略中配置 Kerberos 策略：计算机配置 > 策略 > Windows 设置 > 安全设置 > 账户策略 > Kerberos 策略。设置服务票据的最大生存期（600 分钟）、用户票据的最大生存期（10 小时或更短）以及用户票据续订的最大生存期（7 天）。对于 Tier 0 账户，将其添加到 Protected Users 组，该组会自动强制实施 4 小时的 TGT 生存期", "status": "machine-draft" }
+  },
+  "ADKERB-011": {
+    "name": { "value": "计算机 SPN 审计", "status": "machine-draft" },
+    "description": { "value": "计算机账户上的服务主体名称定义了注册为在每台计算机上运行的服务。重复的 SPN 会导致 Kerberos 身份验证失败，而未经授权的 SPN 可能表明存在恶意服务或被攻陷的计算机。整洁的 SPN 配置对于 Kerberos 正常运行和维护准确的服务清单至关重要", "status": "machine-draft" },
+    "recommendedValue": { "value": "整个域中没有重复的 SPN。计算机账户上的所有 SPN 均对应于合法且记录在案的服务", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用林中的 setspn -X 或 Get-ADObject 查询扫描重复的 SPN。删除重复的 SPN 或将其重新分配给正确的账户。审查计算机对象上的 SPN，以识别任何未经授权或意外的服务。使用 setspn -L <computername> 按计算机列出 SPN。为所有非默认 SPN 记录其业务用途", "status": "machine-draft" }
+  }
+}

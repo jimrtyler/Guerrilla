@@ -1,0 +1,99 @@
+{
+  "_family": "ADAclDelegationChecks.json",
+  "ADACL-001": {
+    "name": { "value": "关键对象 ACL 审计", "status": "machine-draft" },
+    "description": { "value": "必须审计关键 AD 对象（域根、AdminSDHolder、架构、配置、Domain Controllers OU）上的访问控制列表，以查找未经授权或过度的权限。这些对象上错误配置的 ACL 可能允许攻击者提升权限、修改目录服务，或完全控制整个域", "status": "machine-draft" },
+    "recommendedValue": { "value": "关键 AD 对象上仅有默认和明确授权的 ACE；没有意外的主体拥有修改或完全控制访问权", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-Acl 或 dsacls.exe 审查关键对象上的 ACL。删除向未经授权主体授予写入、修改或完全控制权限的非默认 ACE。使用 AdminSDHolder 对受保护组强制实施一致的 ACL。记录所有有意的委派。", "status": "machine-draft" }
+  },
+  "ADACL-002": {
+    "name": { "value": "关键对象上的 GenericAll 权限", "status": "machine-draft" },
+    "description": { "value": "GenericAll 授予对 AD 对象的完全控制权，包括修改属性、重置密码、更改组成员身份以及修改 DACL 的能力。对域管理员、域控制器或域根等关键对象拥有 GenericAll 的非默认主体，代表着通向域攻陷的直接途径", "status": "machine-draft" },
+    "recommendedValue": { "value": "关键 AD 对象上没有任何非默认主体拥有 GenericAll", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 PowerShell 或 BloodHound 枚举关键对象上的 ACL。为任何不需要完全控制的主体删除 GenericAll ACE。在存在运营需求的地方，改用最小权限的委派权限。使用目录服务更改审核（事件 ID 5136）监视 ACL 更改。", "status": "machine-draft" }
+  },
+  "ADACL-003": {
+    "name": { "value": "关键对象上的 GenericWrite 权限", "status": "machine-draft" },
+    "description": { "value": "GenericWrite 允许修改对象上的大多数属性，从而可以实施诸如定向 Kerberoasting（写入 SPN）、基于资源的约束委派（写入 msDS-AllowedToActOnBehalfOfOtherIdentity）或 Shadow Credentials（写入 msDS-KeyCredentialLink）等攻击。应调查对关键对象拥有 GenericWrite 的非默认主体", "status": "machine-draft" },
+    "recommendedValue": { "value": "关键 AD 对象上没有任何非默认主体拥有 GenericWrite", "status": "machine-draft" },
+    "remediationSteps": { "value": "审计用户、计算机和组对象上的 ACL，查找 GenericWrite 权限。删除不必要的 GenericWrite ACE，改用特定的属性级写入权限。特别注意对 msDS-AllowedToActOnBehalfOfOtherIdentity、servicePrincipalName 和 msDS-KeyCredentialLink 属性的写访问权。", "status": "machine-draft" }
+  },
+  "ADACL-004": {
+    "name": { "value": "关键对象上的 WriteDACL 权限", "status": "machine-draft" },
+    "description": { "value": "WriteDACL 权限允许主体修改对象的自主访问控制列表，实际上赋予了向自己或他人授予任何权限（包括 GenericAll）的能力。这是一个关键的权限提升途径，因为它使攻击者能够在并不直接拥有完全控制权的情况下为自己授予完全控制权", "status": "machine-draft" },
+    "recommendedValue": { "value": "关键 AD 对象上没有任何非默认主体拥有 WriteDACL", "status": "machine-draft" },
+    "remediationSteps": { "value": "枚举所有关键对象上的 WriteDACL 权限，包括域根、AdminSDHolder、GPO 对象和特权组对象。为非默认主体删除 WriteDACL。启用 ACL 更改审核（事件 ID 5136）以检测未经授权的 DACL 修改。定期审查更改。", "status": "machine-draft" }
+  },
+  "ADACL-005": {
+    "name": { "value": "关键对象上的 WriteOwner 权限", "status": "machine-draft" },
+    "description": { "value": "WriteOwner 权限允许更改 AD 对象的所有者。对象的所有者隐式拥有修改 DACL 的能力，因此从攻击的角度看，WriteOwner 在功能上等同于 WriteDACL。攻击者可以夺取所有权，然后为自己授予任何所需的权限", "status": "machine-draft" },
+    "recommendedValue": { "value": "关键 AD 对象上没有任何非默认主体拥有 WriteOwner", "status": "machine-draft" },
+    "remediationSteps": { "value": "审计关键对象上的 WriteOwner 权限。为非默认主体删除 WriteOwner ACE。核实对象所有者是适当的特权账户。启用所有权更改审核，并监视事件 ID 4662 中的 WriteOwner 操作。", "status": "machine-draft" }
+  },
+  "ADACL-006": {
+    "name": { "value": "ForceChangePassword 权限", "status": "machine-draft" },
+    "description": { "value": "扩展权限 User-Force-Change-Password（也称为重置密码）允许主体在不知道当前密码的情况下重置另一个用户的密码。当授予非特权账户或宽泛的组时，会造成绕过正常身份验证要求的直接账户接管途径", "status": "machine-draft" },
+    "recommendedValue": { "value": "ForceChangePassword 仅限于授权的服务台和管理组；不授予非特权账户", "status": "machine-draft" },
+    "remediationSteps": { "value": "枚举对用户对象拥有 User-Force-Change-Password 扩展权限的所有主体。核实每个委派都是有意的且范围恰当。为任何没有记录在案的运营需求的主体删除该权限。使用限定 OU 范围的委派，而非域范围的授权。", "status": "machine-draft" }
+  },
+  "ADACL-007": {
+    "name": { "value": "向宽泛组的过度委派", "status": "machine-draft" },
+    "description": { "value": "将敏感权限委派给 Authenticated Users、Domain Users 或 Everyone 等宽泛组，会造成广阔的攻击面，任何被攻陷的账户都可以滥用被委派的权限。这是一种常见的错误配置，会大幅降低权限提升所需的成本", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有将敏感权限委派给 Authenticated Users、Domain Users、Everyone 或其他宽泛组", "status": "machine-draft" },
+    "remediationSteps": { "value": "审计所有 ACL，查找授予知名宽泛组（S-1-5-11 Authenticated Users、Domain Users、Everyone、Domain Computers）的 ACE。用仅包含所需主体的特定安全组替换宽泛组委派。在尽可能最窄的 OU 范围内应用委派。", "status": "machine-draft" }
+  },
+  "ADACL-008": {
+    "name": { "value": "OU 委派分析", "status": "machine-draft" },
+    "description": { "value": "组织单位委派是在 Active Directory 中授予管理权限的推荐方法，但错误配置的 OU 委派可能造成意外的访问路径。此检查分析所有 OU 级别的权限委派，以识别过于宽松的授权、绕过预期范围限定的继承权限，以及可能已经失效的委派", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 OU 委派均记录在案、限定到特定对象类型，并使用最小权限", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 dsacls.exe 或 PowerShell 审查每个 OU 上的所有非默认 ACE。核实委派使用 InheritedObjectType 将权限限定到特定对象类。删除不再需要的委派。在授权矩阵中记录所有有意的委派。", "status": "machine-draft" }
+  },
+  "ADACL-009": {
+    "name": { "value": "计算机账户配额", "status": "machine-draft" },
+    "description": { "value": "域根上的 ms-DS-MachineAccountQuota 属性决定了任何经过身份验证的用户可以创建多少个计算机账户。默认值 10 允许任何域用户将计算机加入域，从而创建可被滥用于基于资源的约束委派攻击、中继攻击及其他权限提升技术的计算机账户", "status": "machine-draft" },
+    "recommendedValue": { "value": "ms-DS-MachineAccountQuota 设置为 0", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Set-ADDomain -Identity (Get-ADDomain) -Replace @{'ms-DS-MachineAccountQuota'=0} 将域根上的 ms-DS-MachineAccountQuota 设置为 0。将计算机账户创建委派给特定的管理组，或使用预暂存工作流。审查由非管理员用户创建的现有计算机账户。", "status": "machine-draft" }
+  },
+  "ADACL-010": {
+    "name": { "value": "扩展权限审计", "status": "machine-draft" },
+    "description": { "value": "Active Directory 中的扩展权限包括强大的操作，例如 DS-Replication-Get-Changes（DCSync）、User-Force-Change-Password 和 DS-Replication-Get-Changes-All。未经授权地授予这些权限可能通过凭据窃取或直接账户接管导致整个域被攻陷", "status": "machine-draft" },
+    "recommendedValue": { "value": "扩展权限仅限于默认和明确授权的主体；DCSync 权限仅授予域控制器", "status": "machine-draft" },
+    "remediationSteps": { "value": "枚举域根和关键对象上的所有扩展权限 ACE。核实 DS-Replication-Get-Changes 和 DS-Replication-Get-Changes-All 仅授予域控制器和授权的复制账户。删除任何非默认的扩展权限授权。监视事件 ID 4662 中的扩展权限使用情况。", "status": "machine-draft" }
+  },
+  "ADACL-011": {
+    "name": { "value": "关键对象的所有权", "status": "machine-draft" },
+    "description": { "value": "无论显式 ACL 条目如何，AD 对象的所有者都隐式拥有修改该对象 DACL 的权限。如果域根、AdminSDHolder、特权组或 GPO 等关键对象由非特权或意外的账户拥有，则这些账户就拥有通向完全控制的隐藏途径", "status": "machine-draft" },
+    "recommendedValue": { "value": "关键对象仅由 Domain Admins、Enterprise Admins 或 SYSTEM 拥有", "status": "machine-draft" },
+    "remediationSteps": { "value": "枚举所有关键对象的所有权，包括域根、AdminSDHolder、架构容器、配置容器、特权组对象和 GPO 对象。使用 Set-Acl 或 ADUC 中的安全选项卡，将任何所有权不正确的对象的所有权转移给 Domain Admins。启用所有权更改审核。", "status": "machine-draft" }
+  },
+  "ADACL-012": {
+    "name": { "value": "非默认的域根权限", "status": "machine-draft" },
+    "description": { "value": "域根对象位于 AD 层次结构的顶端，在此处设置的权限可以继承到整个目录。域根上向意外主体授予写入、修改或扩展权限的非默认 ACE 代表重大风险，因为它们可能影响域中的每一个对象", "status": "machine-draft" },
+    "recommendedValue": { "value": "域根上仅有默认的 Microsoft ACE；所有自定义 ACE 均记录在案并有正当理由", "status": "machine-draft" },
+    "remediationSteps": { "value": "将当前的域根 ACL 与您的域功能级别的默认 ACL 进行比较。记录任何非默认 ACE 并验证其运营必要性。删除不再需要或授予过度权限的 ACE。特别注意应用于“此对象及全部后代对象”的 ACE。", "status": "machine-draft" }
+  },
+  "ADACL-013": {
+    "name": { "value": "GPO 链接权限", "status": "machine-draft" },
+    "description": { "value": "将组策略对象链接到站点、域或 OU 的能力控制着哪些策略应用于哪些对象。未经授权的 GPO 链接权限允许攻击者将恶意 GPO 应用于目标 OU，从而可能部署恶意软件、修改安全设置或在受影响的计算机上创建计划任务", "status": "machine-draft" },
+    "recommendedValue": { "value": "GPO 链接权限仅限于授权的组策略管理员", "status": "machine-draft" },
+    "remediationSteps": { "value": "审计所有 OU、域根和站点对象上的 gPLink 和 gPOptions 写入权限。为非管理主体删除 GPO 链接权限。使用组策略建模验证当前 GPO 链接的影响。对 GPO 链接操作实施变更控制。", "status": "machine-draft" }
+  },
+  "ADACL-014": {
+    "name": { "value": "GPO 编辑权限", "status": "machine-draft" },
+    "description": { "value": "编辑组策略对象的权限允许修改域范围的安全设置、软件部署、登录脚本和计划任务。未经授权的 GPO 编辑访问权是攻击者的高价值目标，因为它使得能够在整个环境中广泛地执行代码和更改配置", "status": "machine-draft" },
+    "recommendedValue": { "value": "GPO 编辑权限仅限于 Group Policy Creator Owners 和授权的管理员", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查每个 GPO 上的安全筛选和委派选项卡。核实只有授权主体拥有编辑设置、删除或修改安全权限。为非管理组删除 GPO 编辑权限。使用组策略管理控制台系统地审计 GPO 权限。", "status": "machine-draft" }
+  },
+  "ADACL-015": {
+    "name": { "value": "影子管理员检测", "status": "machine-draft" },
+    "description": { "value": "影子管理员是指通过 ACL 链条拥有通向等同于域管理员访问权的间接路径，但并不属于任何特权组的账户。这些账户会绕过 AdminSDHolder 保护和传统的特权访问监视。例如，对 Domain Admins 组拥有 WriteDACL 的账户可以为自己授予成员身份，而不会被组成员身份监视所标记", "status": "machine-draft" },
+    "recommendedValue": { "value": "未发现任何影子管理员路径；所有等同于管理员的访问权均通过显式的特权组成员身份获得", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 BloodHound 或类似工具识别通向等同于域管理员访问权的、基于 ACL 的攻击路径。删除造成间接权限提升路径的不必要 ACE。确保所有管理访问权均通过受保护的组成员身份授予。将定期的攻击路径分析纳入安全运营的一部分。", "status": "machine-draft" }
+  },
+  "ADACL-016": {
+    "name": { "value": "攻击路径枚举", "status": "machine-draft" },
+    "description": { "value": "Active Directory 攻击路径是由权限、组成员身份和信任关系组成的链条，可被遍历以从低权限账户提升到域管理员。全面的攻击路径枚举可识别单个 ACL 检查可能遗漏的风险，例如穿过中间对象的多跳提升链条", "status": "machine-draft" },
+    "recommendedValue": { "value": "从非特权用户到 Tier Zero 资产没有可行的攻击路径；所有已识别的路径均已修复或以可接受风险记录在案", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 BloodHound 等工具执行攻击路径分析。重点关注从 Domain Users 或 Authenticated Users 到 Domain Admins、Enterprise Admins 和域控制器的最短路径。通过删除每条路径中最薄弱的环节来切断已识别的攻击链。优先处理无需任何特殊工具或提升访问权即可利用的路径。", "status": "machine-draft" }
+  }
+}
