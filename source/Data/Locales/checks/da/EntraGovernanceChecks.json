@@ -1,0 +1,33 @@
+{
+  "_family": "EntraGovernanceChecks.json",
+  "EIDGOV-001": {
+    "name": { "value": "Tildelingspolitikker for adgangspakker kræver godkendelse", "status": "machine-draft" },
+    "description": { "value": "Tildelingspolitikker for rettighedsstyring i Entra ID Governance styrer, hvordan brugere får adgangspakker (bundter af gruppe-, program- og SharePoint-adgang). En politik, hvor indstillingen for anmodningsgodkendelse er deaktiveret, tildeler den bundtede adgang uden nogen menneskelig involvering, hvilket gør en adgangspakke til vedvarende selvbetjeningsadgang. Denne kontrol inspicerer hver tildelingspolitik og markerer dem, der ikke kræver godkendelse, så de kan gennemgås. Tomme resultater behandles som 'ingen rettighedsstyring i brug' (intet at styre) kun når indsamlingen lykkedes; en mislykket indsamling er Ikke vurderet.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Hver tildelingspolitik for adgangspakker kræver godkendelse, eller de automatisk godkendte pakker tildeler kun lavrisikoadgang med internt omfang, der er gennemgået bevidst", "status": "machine-draft" },
+    "remediationSteps": { "value": "I Microsoft Entra admin center > Identity Governance > Entitlement management > Access packages skal du åbne hver pakkes politikker og aktivere 'Require approval' for politikker, der tildeler følsom adgang eller adgang med eksternt omfang. Reservér automatisk godkendelse til lavrisiko-selvbetjeningspakker med internt omfang, og dokumentér den beslutning. Kombinér godkendelse med adgangsgennemgange, så vedvarende tildelinger begrundes på ny.", "status": "machine-draft" }
+  },
+  "EIDGOV-002": {
+    "name": { "value": "Tildelingspolitikker for adgangspakker håndhæver adgangsgennemgange", "status": "machine-draft" },
+    "description": { "value": "En tildelingspolitik for adgangspakker uden adgangsgennemgange tildeler adgang, der aldrig begrundes på ny med jævne mellemrum, hvilket ophober vedvarende rettigheder over tid. Entra ID Governance kan knytte tilbagevendende adgangsgennemgange til hver politik, så tildelte brugere (eller deres ledere) skal genbekræfte behovet. Denne kontrol markerer tildelingspolitikker, hvor indstillingen for adgangsgennemgang ikke er aktiveret.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Hver tildelingspolitik for adgangspakker har tilbagevendende adgangsgennemgange aktiveret", "status": "machine-draft" },
+    "remediationSteps": { "value": "For hver tildelingspolitik for adgangspakker skal du aktivere adgangsgennemgange under politikkens livscyklusindstillinger: vælg en gentagelse (for eksempel kvartalsvis), gennemgangsansvarlige (selv, leder eller en navngiven gennemgangsansvarlig) og en handling for automatisk fjernelse af afviste eller ikke-gennemgåede tildelinger, så ubrugt adgang tilbagekaldes automatisk.", "status": "machine-draft" }
+  },
+  "EIDGOV-003": {
+    "name": { "value": "Tildelinger af adgangspakker er tidsbegrænsede", "status": "machine-draft" },
+    "description": { "value": "En tildelingspolitik for adgangspakker konfigureret uden udløb tildeler evig adgang, det modsatte af just-in-time. Tidsbegrænsning af tildelinger fremtvinger fornyet anmodning og fornyet godkendelse, hvilket begrænser, hvor længe en tildeling overlever uden gennemgang. Denne kontrol markerer tildelingspolitikker, hvor udløbet er sat til aldrig.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Tildelingspolitikker for adgangspakker lader tildelinger udløbe efter en afgrænset periode i stedet for at tildele evig adgang", "status": "machine-draft" },
+    "remediationSteps": { "value": "I hver tildelingspolitiks livscyklusindstillinger skal du angive et udløb for tildelingen (et antal dage eller en fast slutdato) i stedet for 'Assignments never expire'. Brugere anmoder på ny via adgangspakkeforløbet, når de fortsat har brug for adgangen, hvilket holder tildelinger bevidste.", "status": "machine-draft" }
+  },
+  "EIDGOV-004": {
+    "name": { "value": "Ekstern berettigelse til adgangspakker er kontrolleret", "status": "machine-draft" },
+    "description": { "value": "Rettighedsstyring kan udvide adgangspakker til brugere uden for lejeren (gæster og brugere fra forbundne organisationer). En politik, der både tillader eksterne mål og ikke kræver godkendelse, lader udefrakommende brugere selv provisionere intern adgang, en direkte sti til ekstern eksponering. Denne kontrol FEJLER, når en politik tillader ekstern berettigelse uden godkendelse, ADVARER, når ekstern berettigelse er underlagt godkendelse, og består, når politikker har internt omfang.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen tildelingspolitik tillader ekstern berettigelse eller berettigelse for alle brugere uden godkendelse; ekstern berettigelse er afgrænset til specifikke forbundne organisationer og underlagt godkendelse", "status": "machine-draft" },
+    "remediationSteps": { "value": "For politikker, hvis tilladte målomfang omfatter eksterne brugere eller alle brugere, skal du enten indsnævre omfanget til specifikke forbundne organisationer eller kræve godkendelse (og helst adgangsgennemgange) på politikken. Efterlad aldrig en bredt afgrænset politik for ekstern berettigelse automatisk godkendt.", "status": "machine-draft" }
+  },
+  "EIDGOV-005": {
+    "name": { "value": "Ekstern synlighed af adgangspakkekatalog gennemgået", "status": "machine-draft" },
+    "description": { "value": "Et rettighedsstyringskatalog, der er markeret som eksternt synligt, kan vise sine adgangspakker til brugere uden for lejeren i My Access-portalen. Eksternt synlige kataloger er passende til bevidst B2B-samarbejde, men er værd at bekræfte, da de udvider, hvem der kan opdage og anmode om adgang. Denne kontrol markerer eksternt synlige kataloger til gennemgang.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Eksternt synlige kataloger er tilsigtede og begrænset til dem, der er nødvendige for B2B-samarbejde", "status": "machine-draft" },
+    "remediationSteps": { "value": "I Identity Governance > Entitlement management > Catalogs skal du gennemgå hvert katalog, hvor ekstern synlighed er aktiveret. Deaktivér ekstern synlighed på kataloger, der kun betjener interne adgangspakker, så ekstern synlighed begrænses til kataloger, der bevidst er bygget til partner- eller gæstesamarbejde.", "status": "machine-draft" }
+  }
+}

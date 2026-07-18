@@ -1,0 +1,111 @@
+{
+  "_family": "EntraCAChecks.json",
+  "EIDCA-001": {
+    "name": { "value": "Fuld oversigt over CA-politikker", "status": "machine-draft" },
+    "description": { "value": "Der bør opretholdes en komplet oversigt over alle politikker for betinget adgang med deres indstillinger. Dette giver indsigt i sikkerhedssituationen og muliggør gapanalyse, sporing af ændringer og overholdelsesrevision på tværs af lejeren.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle politikker for betinget adgang dokumenteret med tilstand, betingelser, tildelingskontroller og sessionskontroller", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gå til bladet Conditional Access i Entra-administrationscenteret, og eksportér alle politikker. Gennemgå hver politik for korrekte navngivningskonventioner, beskrivelser og en passende tilstand (aktiveret, deaktiveret eller kun rapportering). Oprethold en versioneret registrering af alle politikkonfigurationer til revisionsformål.", "status": "machine-draft" }
+  },
+  "EIDCA-002": {
+    "name": { "value": "Gapanalyse af CA-politikkers dækning", "status": "machine-draft" },
+    "description": { "value": "Alle brugere og programmer bør være dækket af mindst én politik for betinget adgang. Huller i dækningen efterlader brugere eller programmer uden sikkerhedskontroller som MFA, enhedsoverholdelse eller placeringsbegrænsninger og skaber angrebsvektorer for uautoriseret adgang.", "status": "machine-draft" },
+    "recommendedValue": { "value": "100 % af aktive brugere og kritiske programmer dækket af mindst én CA-politik", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå alle politikker for betinget adgang for at identificere brugere og programmer, der ikke er omfattet af nogen politik. Opret politikker, der dækker udækkede brugere og programmer med passende tildelings- og sessionskontroller. Prioritér dækning af priviligerede konti og forretningskritiske programmer.", "status": "machine-draft" }
+  },
+  "EIDCA-003": {
+    "name": { "value": "CA-politikker i tilstanden Kun rapportering", "status": "machine-draft" },
+    "description": { "value": "Politikker for betinget adgang, der er efterladt i tilstanden Kun rapportering, håndhæver ikke sikkerhedskontroller og logger blot, hvad der ville være sket. Politikker, der har gennemført test, bør skiftes til tilstanden aktiveret for aktivt at beskytte miljøet.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingen politikker i tilstanden Kun rapportering, medmindre de aktivt testes med en defineret overgangstidsplan", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå alle politikker for betinget adgang, der i øjeblikket er i tilstanden Kun rapportering, og vurder deres virkningsdata fra logføring af logon. For politikker, der er valideret og viser acceptabel virkning, skal du ændre tilstanden fra Kun rapportering til aktiveret. Etablér en livscyklusproces for politikker, der definerer maksimal varighed for Kun rapportering, før håndhævelse.", "status": "machine-draft" }
+  },
+  "EIDCA-004": {
+    "name": { "value": "Analyse af CA-udelukkelsesgrupper", "status": "machine-draft" },
+    "description": { "value": "Brugere og grupper, der er udelukket fra politikker for betinget adgang, omgår kritiske sikkerhedskontroller. Udelukkelser bør minimeres, dokumenteres med en forretningsmæssig begrundelse og gennemgås regelmæssigt for at forhindre gradvis ophobning af rettigheder og uautoriseret adgang.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle udelukkelser dokumenteret med en forretningsmæssig begrundelse og gennemgået kvartalsvis", "status": "machine-draft" },
+    "remediationSteps": { "value": "Revidér alle politikker for betinget adgang for at identificere udelukkede brugere og grupper. Dokumentér den forretningsmæssige begrundelse for hver udelukkelse, og udpeg en ejer, der er ansvarlig for periodisk gennemgang. Fjern eventuelle udelukkelser, der ikke længere har et gyldigt forretningsmæssigt behov, og indfør kompenserende kontroller, hvor udelukkelser er nødvendige.", "status": "machine-draft" }
+  },
+  "EIDCA-005": {
+    "name": { "value": "Ubeskyttede grupper i CA-udelukkelser", "status": "machine-draft" },
+    "description": { "value": "Grupper, der anvendes i udelukkelser for betinget adgang, og som mangler ejerskab, medlemskabsgennemgange eller adgangsbegrænsninger, kan udnyttes af angribere til at omgå sikkerhedspolitikker. En angriber, der føjer sig selv til en ubeskyttet udelukkelsesgruppe, omgår reelt alle CA-kontroller rettet mod den pågældende gruppe.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle CA-udelukkelsesgrupper har tildelte ejere, begrænset medlemskabsstyring og regelmæssige adgangsgennemgange aktiveret", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificer alle grupper, der refereres i CA-politikudelukkelser, og kontrollér, at hver gruppe har en tildelt ejer, begrænsede indstillinger for at tilslutte/forlade og en aktiv tidsplan for adgangsgennemgang. Aktivér funktioner for Privileged Access Groups, eller begræns ændringer af gruppemedlemskab til udelukkende autoriserede administratorer. Fjern straks eventuelle uadministrerede eller forældreløse grupper fra CA-udelukkelser.", "status": "machine-draft" }
+  },
+  "EIDCA-006": {
+    "name": { "value": "Validering af break-glass-kontos CA-udelukkelse", "status": "machine-draft" },
+    "description": { "value": "Konti til nødadgang (break-glass) skal udelukkes fra politikker for betinget adgang for at sikre adgang under nedbrud eller fejlkonfigurationer, men disse udelukkelser skal styres stramt. Undladelse af at konfigurere break-glass-udelukkelser korrekt kan medføre fuldstændig udelukkelse under kritiske hændelser eller skabe uovervågede bagdørskonti.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Præcis to break-glass-konti udelukket fra alle CA-politikker med overvågning, beskeder og regelmæssig validering", "status": "machine-draft" },
+    "remediationSteps": { "value": "Kontrollér, at der findes dedikerede break-glass-konti, at de er udelukket fra alle politikker for betinget adgang, og at de ikke anvendes til daglig drift. Konfigurer Azure Monitor-beskeder, så de udløses ved enhver logonaktivitet fra break-glass-konti. Test break-glass-kontoadgang kvartalsvis, og opbevar legitimationsoplysningerne sikkert i et fysisk pengeskab eller et hardwaresikkerhedsmodul.", "status": "machine-draft" }
+  },
+  "EIDCA-007": {
+    "name": { "value": "Håndhævelse af MFA via betinget adgang", "status": "machine-draft" },
+    "description": { "value": "Multifaktorgodkendelse bør kræves for alle brugere via politikker for betinget adgang for at forhindre legitimationsbaserede angreb. Uden håndhævelse af MFA giver kompromitterede adgangskoder alene fuld adgang til organisationens ressourcer, hvilket gør dette til den enkeltstående mest virkningsfulde kontrol mod kontoovertagelse.", "status": "machine-draft" },
+    "recommendedValue": { "value": "MFA påkrævet for 100 % af brugerne på tværs af alle skyprogrammer via betinget adgang", "status": "machine-draft" },
+    "remediationSteps": { "value": "Opret en politik for betinget adgang rettet mod alle brugere og alle skyprogrammer med en tildelingskontrol, der kræver multifaktorgodkendelse. Kontrollér, at politikken dækker alle brugertyper, herunder gæster og eksterne samarbejdspartnere. Overvåg logføringen af logon for at bekræfte, at der bliver bedt om MFA, og gennemgå projektmappen med CA-indsigter for dækningshuller.", "status": "machine-draft" }
+  },
+  "EIDCA-008": {
+    "name": { "value": "Blokering af ældre godkendelse via CA", "status": "machine-draft" },
+    "description": { "value": "Ældre godkendelsesprotokoller som IMAP, POP3, SMTP og ActiveSync understøtter ikke moderne godkendelse eller MFA, hvilket gør dem til en primær angrebsvektor for adgangskodespray og brute force-angreb. Blokering af ældre godkendelse via betinget adgang er afgørende for at forhindre disse protokoller i at omgå MFA-kontroller.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle ældre godkendelsesprotokoller blokeret via betinget adgang for alle brugere", "status": "machine-draft" },
+    "remediationSteps": { "value": "Opret en politik for betinget adgang rettet mod alle brugere og alle skyprogrammer med betingelsen for klientapps sat til Exchange ActiveSync-klienter og andre klienter, og sæt derefter tildelingskontrollen til at blokere adgang. Kontrollér, at politikken er i tilstanden aktiveret, og overvåg logføringen af logon for eventuelle resterende forsøg på ældre godkendelse. Koordinér med programejere for at migrere eventuelle resterende afhængigheder af ældre protokoller til moderne godkendelse.", "status": "machine-draft" }
+  },
+  "EIDCA-009": {
+    "name": { "value": "Krav om enhedsoverholdelse i CA", "status": "machine-draft" },
+    "description": { "value": "Politikker for betinget adgang bør kræve enhedsoverholdelse for at sikre, at kun administrerede og sunde enheder kan få adgang til organisationens ressourcer. Uden krav om enhedsoverholdelse kan uadministrerede eller kompromitterede enheder få adgang til følsomme data, hvilket øger risikoen for dataeksfiltrering og udbredelse af malware.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Enhedsoverholdelse eller hybrid Azure AD-tilknytning påkrævet for adgang til alle skyprogrammer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Opret eller opdater politikker for betinget adgang, så de kræver enhedsoverholdelse eller hybrid Azure AD-tilknytning som en tildelingskontrol for alle skyprogrammer. Sørg for, at Intune-politikker for enhedsoverholdelse er konfigureret med passende sikkerhedsbaselinjer, før dette krav håndhæves. Brug indledningsvis tilstanden Kun rapportering til at vurdere virkningen, og gå derefter over til håndhævelse, når du har bekræftet, at dækningen af administrerede enheder er tilstrækkelig.", "status": "machine-draft" }
+  },
+  "EIDCA-010": {
+    "name": { "value": "Revision af placeringsbaserede CA-politikker", "status": "machine-draft" },
+    "description": { "value": "Placeringsbaserede politikker for betinget adgang begrænser adgang på grundlag af IP-adresseintervaller, lande eller navngivne placeringer. Uden placeringskontroller kan angribere godkende sig fra enhver geografisk placering, hvilket gør det sværere at opdage og forhindre uautoriseret adgang fra mistænkelige eller højrisikoregioner.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Placeringsbaserede politikker konfigureret til at blokere eller kræve yderligere kontroller for adgang fra ikke-betroede placeringer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå eksisterende navngivne placeringer, og sørg for, at betroede virksomheds-IP-intervaller og lande er defineret præcist. Opret politikker for betinget adgang, der kræver MFA eller blokerer adgang fra ikke-betroede placeringer, især for priviligerede konti og følsomme programmer. Opdater regelmæssigt definitionerne af navngivne placeringer, efterhånden som virksomhedens netværksinfrastruktur ændrer sig.", "status": "machine-draft" }
+  },
+  "EIDCA-011": {
+    "name": { "value": "Gennemgang af konfiguration af navngivne placeringer", "status": "machine-draft" },
+    "description": { "value": "Navngivne placeringer definerer betroede og ikke-betroede netværksgrænser, der anvendes af politikker for betinget adgang. Fejlkonfigurerede navngivne placeringer kan medføre alt for tilladende adgang fra ikke-betroede netværk eller unødigt begrænset adgang fra legitime virksomhedsplaceringer.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle navngivne placeringer afspejler præcist de aktuelle virksomhedsnetværksgrænser, hvor betroede placeringer er markeret korrekt", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gå til bladet Navngivne placeringer i Entra-administrationscenteret, og gennemgå alle konfigurerede placeringer for nøjagtighed. Kontrollér, at betroede virksomheds-IP-intervaller er opdaterede, og at landebaserede placeringer stemmer overens med organisationens tilstedeværelse. Fjern eventuelle forældede eller ubrugte navngivne placeringer, og sørg for, at flag for betroet placering kun anvendes på verificerede virksomhedsnetværk.", "status": "machine-draft" }
+  },
+  "EIDCA-012": {
+    "name": { "value": "Logonrisikobaserede CA-politikker", "status": "machine-draft" },
+    "description": { "value": "Logonrisikobaserede politikker for betinget adgang anvender signaler fra Azure AD Identity Protection til at registrere unormal logonadfærd som umulig rejse, brug af anonyme IP-adresser og registrering af lækkede legitimationsoplysninger. Uden risikobaserede politikker kan kompromitterede legitimationsoplysninger anvendes fra mistænkelige placeringer eller mønstre uden at udløse yderligere verifikation.", "status": "machine-draft" },
+    "recommendedValue": { "value": "CA-politikker konfigureret til at kræve MFA eller blokere adgang for mellem og høje logonrisikoniveauer", "status": "machine-draft" },
+    "remediationSteps": { "value": "Opret politikker for betinget adgang, der er rettet mod alle brugere med logonrisikobetingelsen sat til mellem og høj, og som kræver multifaktorgodkendelse som tildelingskontrol. Sørg for, at Azure AD Identity Protection er aktiveret og korrekt licenseret (kræver Entra ID P2). Overvåg regelmæssigt rapporten over risikofyldte logon, og finjuster følsomheden af risikoregistrering på grundlag af organisationens mønstre.", "status": "machine-draft" }
+  },
+  "EIDCA-013": {
+    "name": { "value": "Brugerrisikobaserede CA-politikker", "status": "machine-draft" },
+    "description": { "value": "Brugerrisikobaserede politikker for betinget adgang reagerer på kumulative risikosignaler, der indikerer, at en brugerkonto kan være kompromitteret, som lækkede legitimationsoplysninger eller unormale aktivitetsmønstre. Uden brugerrisikopolitikker fortsætter konti, der er markeret som kompromitterede af Identity Protection, med at fungere normalt uden krav om ændring af adgangskode eller yderligere verifikation.", "status": "machine-draft" },
+    "recommendedValue": { "value": "CA-politikker konfigureret til at kræve ændring af adgangskode ved høj brugerrisiko og MFA ved mellem brugerrisiko", "status": "machine-draft" },
+    "remediationSteps": { "value": "Opret politikker for betinget adgang rettet mod alle brugere med brugerrisikobetingelser sat til mellem og høj, og som kræver en sikker ændring af adgangskode som tildelingskontrol ved høj risiko og MFA ved mellem risiko. Sørg for, at selvbetjent nulstilling af adgangskode (SSPR) er aktiveret og registreret for alle brugere for at muliggøre automatiseret afhjælpning. Gennemgå regelmæssigt rapporten over risikofyldte brugere, og undersøg konti, der forbliver på et forhøjet risikoniveau.", "status": "machine-draft" }
+  },
+  "EIDCA-014": {
+    "name": { "value": "Revision af sessionskontroller", "status": "machine-draft" },
+    "description": { "value": "Sessionskontroller i betinget adgang styrer logonfrekvens og vedvarende browsersessioner. Uden korrekte sessionskontroller kan brugere forblive godkendt på ubestemt tid, hvilket øger vinduet for muligheden for sessionskapring og tokentyveri.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Logonfrekvens sat til højst 24 timer for følsomme programmer med vedvarende browsersessioner deaktiveret", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gennemgå politikker for betinget adgang for konfigurationer af sessionskontroller, herunder logonfrekvens og indstillinger for vedvarende browsersessioner. Konfigurer logonfrekvens til passende intervaller på grundlag af programmets følsomhed, med kortere intervaller for priviligeret adgang. Deaktivér vedvarende browsersessioner for følsomme programmer for at sikre, at tokens udløber og kræver fornyet godkendelse.", "status": "machine-draft" }
+  },
+  "EIDCA-015": {
+    "name": { "value": "CA-hvad-hvis-simulering af angrebsscenarier", "status": "machine-draft" },
+    "description": { "value": "Hvad-hvis-værktøjet til betinget adgang gør det muligt at simulere logonscenarier for at validere politikkens adfærd i forhold til almindelige angrebsmønstre. Uden regelmæssig hvad-hvis-test kan fejlkonfigurationer eller huller i politikker forblive uopdagede, indtil de udnyttes af en angriber.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kvartalsvise hvad-hvis-simuleringer, der dækker almindelige angrebsscenarier, herunder ekstern angriber, kompromitteret enhed og forsøg på ældre godkendelse", "status": "machine-draft" },
+    "remediationSteps": { "value": "Brug hvad-hvis-værktøjet til betinget adgang til at simulere logonscenarier for almindelige angrebsmønstre som ekstern MFA-omgåelse, forsøg på ældre godkendelse, adgang fra uadministrerede enheder og brug af kompromitterede legitimationsoplysninger. Dokumentér resultaterne af hver simulering, og afhjælp eventuelle politikker, der ikke formår at blokere det simulerede angreb. Indarbejd hvad-hvis-test i ændringsstyringsprocessen for alle ændringer af CA-politikker.", "status": "machine-draft" }
+  },
+  "EIDCA-016": {
+    "name": { "value": "Eksport af CA-politikdokumentation", "status": "machine-draft" },
+    "description": { "value": "Der bør genereres en komplet eksport af alle politikker for betinget adgang til dokumentation, katastrofeberedskab og overholdelsesrevision. Uden dokumenterede politikeksporter kræver genopbygning af CA-politikker efter en lejerkompromittering eller utilsigtet sletning en betydelig indsats og kan medføre sikkerhedshuller.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Fuld eksport af CA-politikker genereret og gemt i et sikkert, versioneret lager, der opdateres efter hver politikændring", "status": "machine-draft" },
+    "remediationSteps": { "value": "Eksportér alle politikker for betinget adgang ved hjælp af Microsoft Graph API eller Entra-administrationscenteret, og gem output i et sikkert, versionsstyret lager. Etablér en automatiseret proces til at registrere politikøjebliksbilleder efter en regelmæssig tidsplan eller udløst af politikændringer. Medtag eksporten i din lejers katastrofeberedskabsplan, og valider, at politikker kan gendannes fra eksporten.", "status": "machine-draft" }
+  },
+  "EIDCA-017": {
+    "name": { "value": "Besked til administratorer om højrisikobrugere", "status": "machine-draft" },
+    "description": { "value": "Identity Protection kan sende e-mail til administratorer, når brugere markeres som højrisiko, hvilket muliggør proaktiv undersøgelse og inddæmning af sandsynlig kontokompromittering, efterhånden som den opstår. SCuBA anbefaler, at en sådan besked sendes til administratorer, når højrisikobrugere registreres. Konfigurationen af modtager af Identity Protection-beskeden 'Users at risk detected' er ikke tilgængelig via et stabilt skrivebeskyttet Microsoft Graph-endpoint, så en agentløs vurdering kan ikke bekræfte den positivt; denne kontrol fremlægger kravet ærligt og rapporterer, om den understøttende telemetri for risikoregistrering overhovedet er tilgængelig i lejeren, i stedet for at hævde en overholdelse, den ikke kan verificere.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Identity Protection konfigureret til at sende e-mail til administratorer, når højrisikobrugere registreres", "status": "machine-draft" },
+    "remediationSteps": { "value": "Konfigurer beskeden om højrisikobrugere, hvilket opfylder SCuBA MS.AAD.2.2. I Entra ID skal du gå til Protection > Identity Protection > Notifications og sætte 'Users at risk detected'-beskeder til at sende e-mail til de relevante sikkerhedsadministratorer eller en overvåget distributionsliste for sikkerhedsoperationer. Denne kontrol kræver Entra ID P2 (Identity Protection). Da modtagerlisten for beskeden ikke kan læses agentløst via Microsoft Graph, skal du verificere indstillingen manuelt i portalen.", "status": "machine-draft" }
+  },
+  "EIDCA-018": {
+    "name": { "value": "Administreret enhed påkrævet for MFA-registrering", "status": "machine-draft" },
+    "description": { "value": "At kræve en myndighedsadministreret (kompatibel eller hybrid Entra-tilknyttet) enhed for registreringshandlingen af sikkerhedsoplysninger reducerer risikoen for, at en modstander bruger stjålne legitimationsoplysninger til at tilmelde sin egen MFA-metode og etablere persistens. SCuBA anbefaler, at administrerede enheder kræves for at registrere MFA. Dette implementeres som en politik for betinget adgang, der er rettet mod brugerhandlingen 'Register security information' og kræver en kompatibel enhed eller en hybrid Entra ID-tilknyttet enhed som tildelingskontrol. Denne kontrol inspicerer aktiverede politikker for betinget adgang for den pågældende konfiguration.", "status": "machine-draft" },
+    "recommendedValue": { "value": "En aktiveret politik for betinget adgang er rettet mod brugerhandlingen for registrering af sikkerhedsoplysninger og kræver en kompatibel eller hybrid Entra ID-tilknyttet enhed", "status": "machine-draft" },
+    "remediationSteps": { "value": "Opret en politik for betinget adgang, der kræver en administreret enhed for MFA-registrering, hvilket opfylder SCuBA MS.AAD.3.8. Ret den mod brugerhandlingen 'Register security information', afgræns den til alle brugere (undtagen break-glass-konti), og sæt tildelingskontrollen til at kræve en kompatibel enhed eller en hybrid Entra ID-tilknyttet enhed. Pilottest i tilstanden Kun rapportering, sørg for, at der findes en opstartssti for nye enheder (for eksempel Temporary Access Pass), og aktivér derefter håndhævelse.", "status": "machine-draft" }
+  }
+}
