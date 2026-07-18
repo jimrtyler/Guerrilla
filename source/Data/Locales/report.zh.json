@@ -1,0 +1,1476 @@
+{
+  "_language": {
+    "code": "zh",
+    "name": "简体中文"
+  },
+  "common": {
+    "domain": {
+      "value": "域",
+      "status": "machine-draft"
+    },
+    "tenant": {
+      "value": "租户",
+      "status": "machine-draft"
+    },
+    "generated": {
+      "value": "生成时间",
+      "status": "machine-draft"
+    },
+    "reportGenerated": {
+      "value": "报告生成时间",
+      "status": "machine-draft"
+    },
+    "checksSummary": {
+      "value": "已评估 {0} 项检查 &middot; {1} 项通过, {2} 项失败, {3} 项警告, {4} 项跳过",
+      "status": "machine-draft"
+    },
+    "summaryCounts": {
+      "value": "{0} 项检查 &middot; 通过:{1} 失败:{2} 警告:{3}",
+      "status": "machine-draft"
+    },
+    "totalChecks": {
+      "value": "检查总数",
+      "status": "machine-draft"
+    },
+    "passed": {
+      "value": "通过",
+      "status": "machine-draft"
+    },
+    "failed": {
+      "value": "失败",
+      "status": "machine-draft"
+    },
+    "warnings": {
+      "value": "警告",
+      "status": "machine-draft"
+    },
+    "skipped": {
+      "value": "跳过",
+      "status": "machine-draft"
+    },
+    "pass": {
+      "value": "通过",
+      "status": "machine-draft"
+    },
+    "fail": {
+      "value": "失败",
+      "status": "machine-draft"
+    },
+    "warn": {
+      "value": "警告",
+      "status": "machine-draft"
+    },
+    "skip": {
+      "value": "跳过",
+      "status": "machine-draft"
+    },
+    "passLabel": {
+      "value": "通过:",
+      "status": "machine-draft"
+    },
+    "failLabel": {
+      "value": "失败:",
+      "status": "machine-draft"
+    },
+    "warnLabel": {
+      "value": "警告:",
+      "status": "machine-draft"
+    },
+    "skipLabel": {
+      "value": "跳过:",
+      "status": "machine-draft"
+    },
+    "critical": {
+      "value": "严重",
+      "status": "machine-draft"
+    },
+    "high": {
+      "value": "高",
+      "status": "machine-draft"
+    },
+    "medium": {
+      "value": "中",
+      "status": "machine-draft"
+    },
+    "low": {
+      "value": "低",
+      "status": "machine-draft"
+    },
+    "executiveSummary": {
+      "value": "执行摘要",
+      "status": "machine-draft"
+    },
+    "categoryBreakdown": {
+      "value": "分类明细",
+      "status": "machine-draft"
+    },
+    "categoryScores": {
+      "value": "分类评分",
+      "status": "machine-draft"
+    },
+    "detailedByCategory": {
+      "value": "按类别的详细发现",
+      "status": "machine-draft"
+    },
+    "complianceMapping": {
+      "value": "合规映射",
+      "status": "machine-draft"
+    },
+    "complianceCrossReference": {
+      "value": "合规交叉引用",
+      "status": "machine-draft"
+    },
+    "allFindings": {
+      "value": "全部发现",
+      "status": "machine-draft"
+    },
+    "thId": {
+      "value": "ID",
+      "status": "machine-draft"
+    },
+    "thSeverity": {
+      "value": "严重性",
+      "status": "machine-draft"
+    },
+    "thStatus": {
+      "value": "状态",
+      "status": "machine-draft"
+    },
+    "thCategory": {
+      "value": "类别",
+      "status": "machine-draft"
+    },
+    "thCheck": {
+      "value": "检查",
+      "status": "machine-draft"
+    },
+    "thCheckName": {
+      "value": "检查名称",
+      "status": "machine-draft"
+    },
+    "thCheckId": {
+      "value": "检查 ID",
+      "status": "machine-draft"
+    },
+    "thFinding": {
+      "value": "发现",
+      "status": "machine-draft"
+    },
+    "thRemediation": {
+      "value": "修复",
+      "status": "machine-draft"
+    },
+    "thCurrentValue": {
+      "value": "当前值",
+      "status": "machine-draft"
+    },
+    "thRecommended": {
+      "value": "建议值",
+      "status": "machine-draft"
+    },
+    "thRecommendedValue": {
+      "value": "建议值",
+      "status": "machine-draft"
+    },
+    "thRemediationSteps": {
+      "value": "修复步骤",
+      "status": "machine-draft"
+    },
+    "thName": {
+      "value": "名称",
+      "status": "machine-draft"
+    },
+    "thDescription": {
+      "value": "说明",
+      "status": "machine-draft"
+    },
+    "thPlatform": {
+      "value": "平台",
+      "status": "machine-draft"
+    },
+    "thTimestamp": {
+      "value": "时间戳",
+      "status": "machine-draft"
+    },
+    "thScore": {
+      "value": "评分",
+      "status": "machine-draft"
+    },
+    "thLabel": {
+      "value": "标签",
+      "status": "machine-draft"
+    },
+    "thDelta": {
+      "value": "差异",
+      "status": "machine-draft"
+    },
+    "thProfile": {
+      "value": "配置文件",
+      "status": "machine-draft"
+    },
+    "thMitre": {
+      "value": "MITRE ATT&CK",
+      "status": "machine-draft"
+    },
+    "thNist": {
+      "value": "NIST SP 800-53",
+      "status": "machine-draft"
+    },
+    "thCisAd": {
+      "value": "CIS AD",
+      "status": "machine-draft"
+    },
+    "thCisBenchmark": {
+      "value": "CIS Benchmark",
+      "status": "machine-draft"
+    },
+    "thAnssi": {
+      "value": "ANSSI",
+      "status": "machine-draft"
+    },
+    "accepted": {
+      "value": "已接受",
+      "status": "machine-draft"
+    }
+  },
+  "sections": {
+    "affectedItems": {
+      "value": "受影响的项目",
+      "status": "machine-draft"
+    }
+  },
+  "maturity": {
+    "heading": {
+      "value": "安全成熟度",
+      "status": "machine-draft"
+    },
+    "overall": {
+      "value": "整体成熟度: 第 {0} 级 (共 5 级) &middot; {1}",
+      "status": "machine-draft"
+    },
+    "anchorNote": {
+      "value": "评级由最低的未满足控制项决定 (采用 CMMI 式量表: 1 级初始至 5 级优化), 因此单个严重暴露会锁定评分上限, 直至该问题得到解决。",
+      "status": "machine-draft"
+    },
+    "toReach": {
+      "value": "要达到 <strong>第 {0} 级</strong>, 请处理:",
+      "status": "machine-draft"
+    },
+    "thCategory": {
+      "value": "类别",
+      "status": "machine-draft"
+    },
+    "thLevel": {
+      "value": "级别",
+      "status": "machine-draft"
+    },
+    "thMaturity": {
+      "value": "成熟度",
+      "status": "machine-draft"
+    },
+    "levelCell": {
+      "value": "第 {0} 级",
+      "status": "machine-draft"
+    },
+    "na": {
+      "value": "不适用",
+      "status": "machine-draft"
+    }
+  },
+  "ioe": {
+    "heading": {
+      "value": "暴露指标",
+      "status": "machine-draft"
+    },
+    "note": {
+      "value": "{0} 个开放暴露, 按严重性和影响范围排序。",
+      "status": "machine-draft"
+    },
+    "critical": {
+      "value": "严重",
+      "status": "machine-draft"
+    },
+    "high": {
+      "value": "高",
+      "status": "machine-draft"
+    },
+    "medium": {
+      "value": "中",
+      "status": "machine-draft"
+    },
+    "low": {
+      "value": "低",
+      "status": "machine-draft"
+    },
+    "affected": {
+      "value": "{0} 个受影响",
+      "status": "machine-draft"
+    },
+    "warning": {
+      "value": "警告",
+      "status": "machine-draft"
+    },
+    "more": {
+      "value": "下方详细发现中还有 {0} 个暴露。",
+      "status": "machine-draft"
+    }
+  },
+  "attackpath": {
+    "heading": {
+      "value": "通往 Tier-0 的攻击路径",
+      "status": "machine-draft"
+    },
+    "noneRan": {
+      "value": "在已采集的 ACL 范围内未发现通往 Tier-0 的提权路径。深层低权限链需要采集完整域的 ACL &middot; 请使用 <code>-FullDomainAcl</code> 重新运行以扩大覆盖范围。",
+      "status": "machine-draft"
+    },
+    "noneNotRun": {
+      "value": "未运行攻击路径分析。请启用 <code>ACLDelegation</code> + <code>PrivilegedAccounts</code> 类别 (或 <code>All</code>), 并添加 <code>-FullDomainAcl</code> 以分析深层传递链。",
+      "status": "machine-draft"
+    },
+    "summary": {
+      "value": "{0} 条到达 Tier-0 的提权路径 &middot; 其中 {1} 条源自非特权主体 (优先显示, 风险最高)。每个箭头都是攻击者可以遍历的控制项或成员关系边。",
+      "status": "machine-draft"
+    },
+    "hop": {
+      "value": "跳",
+      "status": "machine-draft"
+    },
+    "hops": {
+      "value": "跳",
+      "status": "machine-draft"
+    },
+    "nonPrivSource": {
+      "value": "非特权源",
+      "status": "machine-draft"
+    },
+    "privSource": {
+      "value": "已特权源",
+      "status": "machine-draft"
+    }
+  },
+  "cartography": {
+    "heading": {
+      "value": "攻击路径图谱",
+      "status": "machine-draft"
+    },
+    "legend": {
+      "value": "通往 Tier-0 的提权路线可视化图。<span style='color:var(--g-sev-critical)'>&#9873; 红色</span> = 非特权起点, <span style='color:var(--g-sev-high)'>橙色</span> = 已特权, <span style='color:var(--g-accent)'>&#9733; 蓝色</span> = Tier-0 目标。请从左到右跟随箭头。",
+      "status": "machine-draft"
+    },
+    "showingFirst": {
+      "value": " 显示前 {0} 条路径。",
+      "status": "machine-draft"
+    }
+  },
+  "comparison": {
+    "heading": {
+      "value": "自上次运行以来的变化",
+      "status": "machine-draft"
+    },
+    "firstRun": {
+      "value": "这是此范围内记录的首次运行。运行历史从本版本的统一比较引擎开始,\n因此不会读取更早的差异文件; 比较将从您的下次评估开始,\n届时本次运行将成为基线。",
+      "status": "machine-draft"
+    },
+    "previousRun": {
+      "value": "上次运行: {0}, 模块版本 {1}",
+      "status": "machine-draft"
+    },
+    "versionSkew": {
+      "value": " (本次运行: {0}; 检查目录不同, 因此下方出现的新增和已停用条目属于预期)",
+      "status": "machine-draft"
+    },
+    "scoreLabel": {
+      "value": "评分 (现为 {0}, 原为 {1})",
+      "status": "machine-draft"
+    },
+    "notAssessedLabel": {
+      "value": "未评估数量",
+      "status": "machine-draft"
+    },
+    "pillarsMoved": {
+      "value": "发生变化的零信任支柱:",
+      "status": "machine-draft"
+    },
+    "newlyFailing": {
+      "value": "新增失败",
+      "status": "machine-draft"
+    },
+    "lostVisibility": {
+      "value": "可见性丧失 (此前已评估, 现为未评估)",
+      "status": "machine-draft"
+    },
+    "stillNotAssessed": {
+      "value": "仍未评估 (本次运行和上次运行均无数据)",
+      "status": "machine-draft"
+    },
+    "newlyPassing": {
+      "value": "新增通过 (修复已确认)",
+      "status": "machine-draft"
+    },
+    "regressed": {
+      "value": "回退为警告",
+      "status": "machine-draft"
+    },
+    "improved": {
+      "value": "改善为警告 (尚未通过)",
+      "status": "machine-draft"
+    },
+    "restoredVisibility": {
+      "value": "可见性已恢复",
+      "status": "machine-draft"
+    },
+    "newChecks": {
+      "value": "本次运行中的新增检查 (非状态转变)",
+      "status": "machine-draft"
+    },
+    "retiredChecks": {
+      "value": "已停用的检查 (此前存在, 现已缺失; 非状态转变)",
+      "status": "machine-draft"
+    },
+    "noChange": {
+      "value": "自上次运行以来没有任何判定发生变化。{0} 项检查保持不变。{1}",
+      "status": "machine-draft"
+    },
+    "unchanged": {
+      "value": "{0} 项检查保持不变。{1}",
+      "status": "machine-draft"
+    }
+  },
+  "filter": {
+    "status": {
+      "value": "状态",
+      "status": "machine-draft"
+    },
+    "severity": {
+      "value": "严重性",
+      "status": "machine-draft"
+    },
+    "all": {
+      "value": "全部",
+      "status": "machine-draft"
+    },
+    "searchPlaceholder": {
+      "value": "搜索发现 (ID、名称、值)...",
+      "status": "machine-draft"
+    },
+    "empty": {
+      "value": "没有发现符合当前筛选条件。",
+      "status": "machine-draft"
+    },
+    "platform": {
+      "value": "平台",
+      "status": "machine-draft"
+    },
+    "showingAll": {
+      "value": "显示全部发现",
+      "status": "machine-draft"
+    }
+  },
+  "ad": {
+    "title": {
+      "value": "Active Directory 报告",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Active Directory 评估",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Active Directory 报告",
+      "status": "machine-draft"
+    },
+    "postureDesc": {
+      "value": "Active Directory 安全态势评分 (0-100)",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Active Directory 审计",
+      "status": "machine-draft"
+    },
+    "verdict90": {
+      "value": "该 Active Directory 环境表现出强劲的安全态势, 发现极少。",
+      "status": "machine-draft"
+    },
+    "verdict75": {
+      "value": "该 AD 环境具有良好的安全态势, 部分方面需要关注。",
+      "status": "machine-draft"
+    },
+    "verdict60": {
+      "value": "该 AD 环境安全态势尚可。若干重要发现需要修复。",
+      "status": "machine-draft"
+    },
+    "verdict40": {
+      "value": "该 AD 环境安全态势较差。多项严重和高严重性发现需要立即关注。",
+      "status": "machine-draft"
+    },
+    "verdict0": {
+      "value": "该 AD 环境存在严重的安全缺陷。必须立即修复以防止遭到入侵。",
+      "status": "machine-draft"
+    },
+    "sevSummary": {
+      "value": "严重: <strong>{0}</strong> &middot; 高: <strong>{1}</strong> &middot;\n     中: <strong>{2}</strong> &middot; 低: <strong>{3}</strong>",
+      "status": "machine-draft"
+    },
+    "bloodhoundHeading": {
+      "value": "BloodHound 导出",
+      "status": "machine-draft"
+    },
+    "bloodhoundExport": {
+      "value": "已将采集到的 AD 攻击图的 OpenGraph 导出文件写入 <code>{0}</code>。",
+      "status": "machine-draft"
+    },
+    "bloodhoundImport": {
+      "value": "在 BloodHound CE 中导入: <strong>Administration &rarr; File Ingest</strong> &rarr; 上传该文件, 然后运行内置的路径查找查询。节点以 SID 为键 (可叠加到原生 SharpHound 数据上), 边使用原生 BloodHound 类型。",
+      "status": "machine-draft"
+    },
+    "findingsByPriority": {
+      "value": "按优先级排列的发现",
+      "status": "machine-draft"
+    }
+  },
+  "entra": {
+    "title": {
+      "value": "Entra ID / M365 报告",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Entra ID / M365 评估",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Entra ID / M365 报告",
+      "status": "machine-draft"
+    },
+    "postureDesc": {
+      "value": "Entra ID / Azure / M365 安全态势评分 (0-100)",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Entra ID / M365 审计",
+      "status": "machine-draft"
+    },
+    "zeroTrust": {
+      "value": "零信任态势",
+      "status": "machine-draft"
+    },
+    "openInPortal": {
+      "value": "在管理门户中打开",
+      "status": "machine-draft"
+    }
+  },
+  "gws": {
+    "title": {
+      "value": "Google Workspace 报告",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Google Workspace 评估",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Google Workspace 报告",
+      "status": "machine-draft"
+    },
+    "postureDesc": {
+      "value": "Google Workspace 安全态势评分 (0-100)",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Google Workspace 审计",
+      "status": "machine-draft"
+    },
+    "configChecksEvaluated": {
+      "value": "已评估 {0} 项配置检查",
+      "status": "machine-draft"
+    },
+    "verdictCrit": {
+      "value": "需要立即采取行动。检测到 {0} 项严重级别的配置失败, 使租户面临重大风险。",
+      "status": "machine-draft"
+    },
+    "verdictHigh": {
+      "value": "建议修复。发现 {0} 项高严重性问题, 应尽快处理。",
+      "status": "machine-draft"
+    },
+    "verdictMed": {
+      "value": "监控并改进。{0} 项中等严重性发现需要审查和加固。",
+      "status": "machine-draft"
+    },
+    "verdictLow": {
+      "value": "检测到轻微缺口。存在 {0} 项低严重性发现。整体态势良好。",
+      "status": "machine-draft"
+    },
+    "verdictPass": {
+      "value": "所有检查均已通过。租户配置符合基线安全预期。",
+      "status": "machine-draft"
+    },
+    "assessmentLabel": {
+      "value": "评估:",
+      "status": "machine-draft"
+    },
+    "scopeLabel": {
+      "value": "范围:",
+      "status": "machine-draft"
+    },
+    "resultsLabel": {
+      "value": "结果:",
+      "status": "machine-draft"
+    },
+    "scope": {
+      "value": "跨 {1} 个类别的 {0} 项配置检查。",
+      "status": "machine-draft"
+    },
+    "results": {
+      "value": "{0} 项通过, {1} 项失败, {2} 项警告, {3} 项跳过。",
+      "status": "machine-draft"
+    },
+    "criticalRequire": {
+      "value": "{0} 项严重发现需要立即修复。",
+      "status": "machine-draft"
+    },
+    "priorityCritHigh": {
+      "value": "优先发现 &middot; 严重 &amp; 高",
+      "status": "machine-draft"
+    },
+    "fixInConsole": {
+      "value": "在管理控制台中修复",
+      "status": "machine-draft"
+    },
+    "whyUnsafe": {
+      "value": "为何不安全",
+      "status": "machine-draft"
+    },
+    "whyUnsafeDefault": {
+      "value": "为何这样不安全",
+      "status": "machine-draft"
+    },
+    "whyUnsafeArticle": {
+      "value": "为何这样不安全: {0}",
+      "status": "machine-draft"
+    }
+  },
+  "campaign": {
+    "title": {
+      "value": "Campaign 报告",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "统一 Campaign 评估",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Campaign 报告",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "统一 Campaign 审计",
+      "status": "machine-draft"
+    },
+    "subtitleLead": {
+      "value": "统一安全态势评估",
+      "status": "machine-draft"
+    },
+    "subtitleChecks": {
+      "value": "跨 {1} 个平台的 {0} 项检查 ({2})",
+      "status": "machine-draft"
+    },
+    "scanId": {
+      "value": "扫描 ID",
+      "status": "machine-draft"
+    },
+    "duration": {
+      "value": "时长",
+      "status": "machine-draft"
+    },
+    "scoreDesc": {
+      "value": "Campaign 评分 (0-100) &middot; 对跨 {1} 个平台的 {0} 项检查进行加权评估",
+      "status": "machine-draft"
+    },
+    "platformSummary": {
+      "value": "平台摘要",
+      "status": "machine-draft"
+    },
+    "categoryScoresByPlatform": {
+      "value": "按平台的分类评分",
+      "status": "machine-draft"
+    },
+    "checksWord": {
+      "value": "项检查",
+      "status": "machine-draft"
+    },
+    "categoriesWord": {
+      "value": "个类别",
+      "status": "machine-draft"
+    },
+    "unknown": {
+      "value": "未知",
+      "status": "machine-draft"
+    },
+    "descriptionLabel": {
+      "value": "说明",
+      "status": "machine-draft"
+    },
+    "affectedEntities": {
+      "value": "受影响的实体",
+      "status": "machine-draft"
+    },
+    "currentValueLabel": {
+      "value": "当前值",
+      "status": "machine-draft"
+    },
+    "recommendedValueLabel": {
+      "value": "建议值",
+      "status": "machine-draft"
+    },
+    "remediationStepsLabel": {
+      "value": "修复步骤",
+      "status": "machine-draft"
+    },
+    "remediationUrlLabel": {
+      "value": "修复 URL",
+      "status": "machine-draft"
+    },
+    "complianceMappingsLabel": {
+      "value": "合规映射",
+      "status": "machine-draft"
+    },
+    "showingAllFindings": {
+      "value": "显示全部 {0} 项发现",
+      "status": "machine-draft"
+    },
+    "showingSome": {
+      "value": "显示 {1} 项发现中的 {0} 项",
+      "status": "machine-draft"
+    }
+  },
+  "technical": {
+    "title": {
+      "value": "技术安全评估报告",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "技术报告",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "技术安全报告",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "技术报告",
+      "status": "machine-draft"
+    },
+    "thTotal": {
+      "value": "总计",
+      "status": "machine-draft"
+    },
+    "detailedFindings": {
+      "value": "详细发现 ({0})",
+      "status": "machine-draft"
+    },
+    "descriptionLabel": {
+      "value": "说明",
+      "status": "machine-draft"
+    },
+    "recommendedLabel": {
+      "value": "建议值",
+      "status": "machine-draft"
+    },
+    "remediationStepsLabel": {
+      "value": "修复步骤",
+      "status": "machine-draft"
+    },
+    "referenceLabel": {
+      "value": "参考",
+      "status": "machine-draft"
+    },
+    "riskAcceptanceLabel": {
+      "value": "风险接受",
+      "status": "machine-draft"
+    },
+    "acceptedBy": {
+      "value": "接受人 {0} &middot; {1}",
+      "status": "machine-draft"
+    },
+    "complianceLabel": {
+      "value": "合规",
+      "status": "machine-draft"
+    },
+    "noFindings": {
+      "value": "没有可用的审计发现。请先运行一次扫描。",
+      "status": "machine-draft"
+    }
+  },
+  "exec": {
+    "title": {
+      "value": "安全执行摘要",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "执行摘要",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla 执行摘要",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "执行摘要",
+      "status": "machine-draft"
+    },
+    "profileSuffix": {
+      "value": "配置文件",
+      "status": "machine-draft"
+    },
+    "securityPosture": {
+      "value": "安全态势: {0}",
+      "status": "machine-draft"
+    },
+    "verdictNoScore": {
+      "value": "无法根据现有发现计算评分。请运行一次扫描以建立基线。",
+      "status": "machine-draft"
+    },
+    "verdict75": {
+      "value": "贵组织拥有稳固的安全基础。请继续监控并处理剩余的缺口。",
+      "status": "machine-draft"
+    },
+    "verdict50": {
+      "value": "贵组织的安全态势尚有改进空间。建议优先处理严重发现。",
+      "status": "machine-draft"
+    },
+    "verdict0": {
+      "value": "需要立即关注。严重的安全缺口使贵组织面临较高风险。",
+      "status": "machine-draft"
+    },
+    "passRate": {
+      "value": "通过率",
+      "status": "machine-draft"
+    },
+    "criticalIssues": {
+      "value": "严重问题",
+      "status": "machine-draft"
+    },
+    "highIssues": {
+      "value": "高严重性问题",
+      "status": "machine-draft"
+    },
+    "maturityStat": {
+      "value": "成熟度 ({0})",
+      "status": "machine-draft"
+    },
+    "maturityHeading": {
+      "value": "安全成熟度",
+      "status": "machine-draft"
+    },
+    "maturityOverall": {
+      "value": "整体成熟度: <strong style=\"color:{0}\">第 {1} 级 (共 5 级): {2}</strong>。评级由最低的未满足控制项决定, 因此单个严重暴露会锁定评分上限, 直至该问题得到解决 (采用 CMMI 式量表: 1 级初始至 5 级优化)。",
+      "status": "machine-draft"
+    },
+    "maturityToReach": {
+      "value": "要达到 <strong>第 {0} 级</strong>, 请处理:",
+      "status": "machine-draft"
+    },
+    "thCategory": {
+      "value": "类别",
+      "status": "machine-draft"
+    },
+    "thLevel": {
+      "value": "级别",
+      "status": "machine-draft"
+    },
+    "thMaturity": {
+      "value": "成熟度",
+      "status": "machine-draft"
+    },
+    "matLevelCell": {
+      "value": "第 {0} 级",
+      "status": "machine-draft"
+    },
+    "keyFindings": {
+      "value": "需要关注的关键发现",
+      "status": "machine-draft"
+    },
+    "complianceImpact": {
+      "value": "合规影响",
+      "status": "machine-draft"
+    },
+    "complianceIntro": {
+      "value": "以下合规框架已识别出缺口:",
+      "status": "machine-draft"
+    },
+    "gaps": {
+      "value": "{0} 个缺口",
+      "status": "machine-draft"
+    },
+    "quickWins": {
+      "value": "建议的速赢措施 (无成本)",
+      "status": "machine-draft"
+    },
+    "quickWinsIntro": {
+      "value": "这些措施可使用现有工具在无成本的情况下完成:",
+      "status": "machine-draft"
+    },
+    "quickWinItem": {
+      "value": "({0}, 约需 {1} 小时)",
+      "status": "machine-draft"
+    },
+    "nextSteps": {
+      "value": "后续步骤",
+      "status": "machine-draft"
+    },
+    "nextStep1": {
+      "value": "立即处理严重发现 &middot; 它们代表着对贵组织的最高风险。",
+      "status": "machine-draft"
+    },
+    "nextStep2": {
+      "value": "实施上述速赢措施, 以最小的投入提升您的安全评分。",
+      "status": "machine-draft"
+    },
+    "nextStep3": {
+      "value": "查阅详细的技术报告以获取完整的修复指南。",
+      "status": "machine-draft"
+    },
+    "nextStep4": {
+      "value": "在 30 天后安排一次后续扫描以衡量改进情况。",
+      "status": "machine-draft"
+    },
+    "disclaimer": {
+      "value": "本报告提供用于内部规划的时点安全评估。发现应根据组织的风险承受能力进行验证和修复。",
+      "status": "machine-draft"
+    }
+  },
+  "playbook": {
+    "title": {
+      "value": "修复手册",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "修复手册",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla 修复手册",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "修复手册",
+      "status": "machine-draft"
+    },
+    "subtitle": {
+      "value": "{0} 个可执行项 &middot; 最高成本: {1}",
+      "status": "machine-draft"
+    },
+    "phase1": {
+      "value": "第 1 阶段: 严重修复",
+      "status": "machine-draft"
+    },
+    "phase2": {
+      "value": "第 2 阶段: 高优先级",
+      "status": "machine-draft"
+    },
+    "phase3": {
+      "value": "第 3 阶段: 中优先级",
+      "status": "machine-draft"
+    },
+    "phase4": {
+      "value": "第 4 阶段: 低优先级",
+      "status": "machine-draft"
+    },
+    "phaseItems": {
+      "value": "{0} ({1} 项)",
+      "status": "machine-draft"
+    },
+    "idLabel": {
+      "value": "ID:",
+      "status": "machine-draft"
+    },
+    "costLabel": {
+      "value": "成本:",
+      "status": "machine-draft"
+    },
+    "effortLabel": {
+      "value": "投入:",
+      "status": "machine-draft"
+    },
+    "categoryLabel": {
+      "value": "类别:",
+      "status": "machine-draft"
+    },
+    "stepsLabel": {
+      "value": "步骤:",
+      "status": "machine-draft"
+    },
+    "targetLabel": {
+      "value": "目标:",
+      "status": "machine-draft"
+    },
+    "noteLabel": {
+      "value": "备注:",
+      "status": "machine-draft"
+    },
+    "disclaimer": {
+      "value": "在实施前请审查每个修复步骤。请先在非生产环境中测试更改。",
+      "status": "machine-draft"
+    }
+  },
+  "budget": {
+    "title": {
+      "value": "安全预算论证",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "预算论证",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla 预算论证",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "预算论证",
+      "status": "machine-draft"
+    },
+    "profileLabel": {
+      "value": "配置文件",
+      "status": "machine-draft"
+    },
+    "executiveSummary": {
+      "value": "执行摘要",
+      "status": "machine-draft"
+    },
+    "guerrillaScore": {
+      "value": "Guerrilla 评分",
+      "status": "machine-draft"
+    },
+    "criticalFailures": {
+      "value": "严重失败",
+      "status": "machine-draft"
+    },
+    "highFailures": {
+      "value": "高严重性失败",
+      "status": "machine-draft"
+    },
+    "totalChecksBreakdown": {
+      "value": "检查总数 ({0} 通过 / {1} 失败 / {2} 警告)",
+      "status": "machine-draft"
+    },
+    "complianceImpact": {
+      "value": "合规影响",
+      "status": "machine-draft"
+    },
+    "complianceIntro": {
+      "value": "根据当前审计发现, 以下合规框架存在缺口:",
+      "status": "machine-draft"
+    },
+    "thFramework": {
+      "value": "框架",
+      "status": "machine-draft"
+    },
+    "thGapsFound": {
+      "value": "发现的缺口",
+      "status": "machine-draft"
+    },
+    "gaps": {
+      "value": "{0} 个缺口",
+      "status": "machine-draft"
+    },
+    "investmentPhases": {
+      "value": "建议的投资阶段",
+      "status": "machine-draft"
+    },
+    "phase1Title": {
+      "value": "第 1 阶段: 速赢 (无成本)",
+      "status": "machine-draft"
+    },
+    "phase1Desc": {
+      "value": "使用现有工具进行配置更改 &middot; 最高投资回报率, 立即改善安全性。",
+      "status": "machine-draft"
+    },
+    "phase2Title": {
+      "value": "第 2 阶段: 低成本改进",
+      "status": "machine-draft"
+    },
+    "phase2Desc": {
+      "value": "在现有预算内进行小额采购或许可证附加项。",
+      "status": "machine-draft"
+    },
+    "phase3Title": {
+      "value": "第 3 阶段: 适度投资",
+      "status": "machine-draft"
+    },
+    "phase3Desc": {
+      "value": "升级许可证或采购附加产品以增强安全能力。",
+      "status": "machine-draft"
+    },
+    "phase4Title": {
+      "value": "第 4 阶段: 战略投资",
+      "status": "machine-draft"
+    },
+    "phase4Desc": {
+      "value": "进行重大采购或基础设施变更, 以长期改善安全态势。",
+      "status": "machine-draft"
+    },
+    "phase4Body": {
+      "value": "已识别出 <strong>{0} 个项目</strong> 需要重大投资。请联系您的安全顾问以获取详细的范围界定。",
+      "status": "machine-draft"
+    },
+    "thCheck": {
+      "value": "检查",
+      "status": "machine-draft"
+    },
+    "thFinding": {
+      "value": "发现",
+      "status": "machine-draft"
+    },
+    "thSeverity": {
+      "value": "严重性",
+      "status": "machine-draft"
+    },
+    "thEffort": {
+      "value": "投入",
+      "status": "machine-draft"
+    },
+    "thTime": {
+      "value": "时间",
+      "status": "machine-draft"
+    },
+    "actions": {
+      "value": "{0} 个操作",
+      "status": "machine-draft"
+    },
+    "estimatedEffort": {
+      "value": "估计总投入: {0} 小时",
+      "status": "machine-draft"
+    },
+    "noFree": {
+      "value": "未识别出免费修复项。",
+      "status": "machine-draft"
+    },
+    "noLow": {
+      "value": "未识别出低成本修复项。",
+      "status": "machine-draft"
+    },
+    "noMed": {
+      "value": "未识别出中等成本修复项。",
+      "status": "machine-draft"
+    },
+    "disclaimer": {
+      "value": "本报告仅用于内部规划目的。",
+      "status": "machine-draft"
+    }
+  },
+  "dashboard": {
+    "title": {
+      "value": "安全仪表板",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "仪表板",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "安全仪表板",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "统一仪表板",
+      "status": "machine-draft"
+    },
+    "scoreDesc": {
+      "value": "Guerrilla 评分 (0-100)",
+      "status": "machine-draft"
+    },
+    "checksSummary": {
+      "value": "已评估 {0} 项检查 &middot; {1} 项通过, {2} 项失败, {3} 项警告",
+      "status": "machine-draft"
+    },
+    "scoreComponents": {
+      "value": "评分构成",
+      "status": "machine-draft"
+    },
+    "passRate": {
+      "value": "通过率",
+      "status": "machine-draft"
+    },
+    "failures": {
+      "value": "失败",
+      "status": "machine-draft"
+    },
+    "platformOverview": {
+      "value": "平台概览",
+      "status": "machine-draft"
+    },
+    "checks": {
+      "value": "检查: {0}",
+      "status": "machine-draft"
+    },
+    "failuresLabel": {
+      "value": "失败: {0}",
+      "status": "machine-draft"
+    },
+    "notScanned": {
+      "value": "未扫描",
+      "status": "machine-draft"
+    },
+    "topFindings": {
+      "value": "主要发现",
+      "status": "machine-draft"
+    },
+    "showingTop50": {
+      "value": "显示前 50 项发现。完整列表请参阅详细报告。",
+      "status": "machine-draft"
+    },
+    "posture": {
+      "value": "态势",
+      "status": "machine-draft"
+    },
+    "threats": {
+      "value": "威胁",
+      "status": "machine-draft"
+    },
+    "coverage": {
+      "value": "覆盖范围",
+      "status": "machine-draft"
+    },
+    "trend": {
+      "value": "趋势",
+      "status": "machine-draft"
+    }
+  },
+  "trend": {
+    "title": {
+      "value": "安全趋势报告",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "评分趋势",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "安全趋势报告",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "评分趋势",
+      "status": "machine-draft"
+    },
+    "scansCount": {
+      "value": "{0} 次扫描",
+      "status": "machine-draft"
+    },
+    "currentScore": {
+      "value": "当前评分",
+      "status": "machine-draft"
+    },
+    "averageScore": {
+      "value": "平均评分",
+      "status": "machine-draft"
+    },
+    "trendLabel": {
+      "value": "趋势 ({0})",
+      "status": "machine-draft"
+    },
+    "improving": {
+      "value": "改善中",
+      "status": "machine-draft"
+    },
+    "declining": {
+      "value": "下降中",
+      "status": "machine-draft"
+    },
+    "stable": {
+      "value": "稳定",
+      "status": "machine-draft"
+    },
+    "highestLowest": {
+      "value": "最高 / 最低",
+      "status": "machine-draft"
+    },
+    "scoreHistory": {
+      "value": "评分历史",
+      "status": "machine-draft"
+    },
+    "scanLog": {
+      "value": "扫描日志",
+      "status": "machine-draft"
+    },
+    "defaultProfile": {
+      "value": "默认",
+      "status": "machine-draft"
+    }
+  },
+  "category": {
+    "adacldelegation": {
+      "value": "AD ACL 与委派",
+      "status": "machine-draft"
+    },
+    "adadversarytradecraftindicators": {
+      "value": "AD 对手技战术指标",
+      "status": "machine-draft"
+    },
+    "adcertificateservices": {
+      "value": "AD 证书服务",
+      "status": "machine-draft"
+    },
+    "addomainforestconfiguration": {
+      "value": "AD 域与林配置",
+      "status": "machine-draft"
+    },
+    "adgrouppolicy": {
+      "value": "AD 组策略",
+      "status": "machine-draft"
+    },
+    "adkerberossecurity": {
+      "value": "AD Kerberos 安全",
+      "status": "machine-draft"
+    },
+    "adloggingedrposture": {
+      "value": "AD 日志与 EDR 态势",
+      "status": "machine-draft"
+    },
+    "adlogonscriptsnetworkshares": {
+      "value": "AD 登录脚本与网络共享",
+      "status": "machine-draft"
+    },
+    "adnetworkrelaypreconditions": {
+      "value": "AD 网络与中继前置条件",
+      "status": "machine-draft"
+    },
+    "adpasswordlockoutpolicies": {
+      "value": "AD 密码与锁定策略",
+      "status": "machine-draft"
+    },
+    "adprivilegedaccountsecurity": {
+      "value": "AD 特权账户安全",
+      "status": "machine-draft"
+    },
+    "adstaleobsoleteobjects": {
+      "value": "AD 过期与废弃对象",
+      "status": "machine-draft"
+    },
+    "adtrustrelationships": {
+      "value": "AD 信任关系",
+      "status": "machine-draft"
+    },
+    "adminusermanagement": {
+      "value": "管理员与用户管理",
+      "status": "machine-draft"
+    },
+    "adversarytradecraft": {
+      "value": "对手技战术",
+      "status": "machine-draft"
+    },
+    "attackpaths": {
+      "value": "攻击路径",
+      "status": "machine-draft"
+    },
+    "authenticationaccesscontrols": {
+      "value": "身份验证与访问控制",
+      "status": "machine-draft"
+    },
+    "azureiamresourcesecurity": {
+      "value": "Azure IAM 与资源安全",
+      "status": "machine-draft"
+    },
+    "collaborationcommunicationsecurity": {
+      "value": "协作与通信安全",
+      "status": "machine-draft"
+    },
+    "copilotstudioaiagentgovernance": {
+      "value": "Copilot Studio AI 代理治理",
+      "status": "machine-draft"
+    },
+    "defenderforoffice365": {
+      "value": "Defender for Office 365",
+      "status": "machine-draft"
+    },
+    "deviceendpointmanagement": {
+      "value": "设备与终结点管理",
+      "status": "machine-draft"
+    },
+    "drivesecuritydataprotection": {
+      "value": "Drive 安全与数据保护",
+      "status": "machine-draft"
+    },
+    "eidscabaseline": {
+      "value": "EIDSCA 基线",
+      "status": "machine-draft"
+    },
+    "emailsecurity": {
+      "value": "电子邮件安全",
+      "status": "machine-draft"
+    },
+    "entraidapplicationserviceprincipalsecurity": {
+      "value": "Entra ID 应用程序与服务主体安全",
+      "status": "machine-draft"
+    },
+    "entraidauthenticationmethodsmfa": {
+      "value": "Entra ID 身份验证方法与 MFA",
+      "status": "machine-draft"
+    },
+    "entraidconditionalaccess": {
+      "value": "Entra ID 条件访问",
+      "status": "machine-draft"
+    },
+    "entraidfederationhybrididentity": {
+      "value": "Entra ID 联合与混合标识",
+      "status": "machine-draft"
+    },
+    "entraidgovernance": {
+      "value": "Entra ID 治理",
+      "status": "machine-draft"
+    },
+    "entraidprivilegedidentitymanagement": {
+      "value": "Entra ID 特权标识管理",
+      "status": "machine-draft"
+    },
+    "entraidtenantconfiguration": {
+      "value": "Entra ID 租户配置",
+      "status": "machine-draft"
+    },
+    "exchangeonlinesecurity": {
+      "value": "Exchange Online 安全",
+      "status": "machine-draft"
+    },
+    "intuneendpointmanagement": {
+      "value": "Intune / 终结点管理",
+      "status": "machine-draft"
+    },
+    "k12baseline": {
+      "value": "K12 基线",
+      "status": "machine-draft"
+    },
+    "loggingalertingmonitoring": {
+      "value": "日志、告警与监控",
+      "status": "machine-draft"
+    },
+    "microsoftteamssecurity": {
+      "value": "Microsoft Teams 安全",
+      "status": "machine-draft"
+    },
+    "oauthapisecurity": {
+      "value": "OAuth 与 API 安全",
+      "status": "machine-draft"
+    },
+    "powerplatformsecurity": {
+      "value": "Power Platform 安全",
+      "status": "machine-draft"
+    },
+    "sharepointonedrivesecurity": {
+      "value": "SharePoint 与 OneDrive 安全",
+      "status": "machine-draft"
+    },
+    "tier0hygienehybrididentitysurface": {
+      "value": "Tier-0 卫生与混合标识面",
+      "status": "machine-draft"
+    },
+    "unifiedauditlogging": {
+      "value": "统一审计与日志",
+      "status": "machine-draft"
+    },
+    "workspaceservicesecuritysitesclassroomgemini": {
+      "value": "Workspace 服务安全 (Sites / Classroom / Gemini)",
+      "status": "machine-draft"
+    }
+  }
+}
