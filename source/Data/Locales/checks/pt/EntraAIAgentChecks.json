@@ -1,0 +1,27 @@
+{
+  "_family": "EntraAIAgentChecks.json",
+  "AIAGENT-001": {
+    "name": { "value": "Os agentes Copilot restringem quem pode interagir (sem acesso alargado)", "status": "machine-draft" },
+    "description": { "value": "Um agente do Copilot Studio cuja política de controlo de acesso seja 'Any' ou 'Any multitenant' pode ser utilizado por qualquer utilizador do inquilino, ou por utilizadores de qualquer inquilino, sem restrição. Para um agente ligado a dados e ferramentas organizacionais, isto constitui um caminho de acesso a dados sem autenticação e de injeção de prompts. Esta verificação assinala os agentes cujo controlo de acesso está definido como Any / Any multitenant. Quando os dados dos agentes não são recolhidos, o resultado é Não Avaliado; um inquilino sem agentes passa (nada há a governar).", "status": "machine-draft" },
+    "recommendedValue": { "value": "Nenhum agente publicado utiliza o controlo de acesso 'Any' ou 'Any multitenant'; o acesso está restringido a utilizadores autenticados específicos ou a grupos de segurança", "status": "machine-draft" },
+    "remediationSteps": { "value": "No Copilot Studio, abra as definições Security > Authentication and access de cada agente assinalado e altere o controlo de acesso de 'Any' / 'Any multitenant' para acesso autenticado restringido à sua organização (e, idealmente, a grupos de segurança específicos). Volte a publicar o agente depois de restringir o acesso.", "status": "machine-draft" }
+  },
+  "AIAGENT-002": {
+    "name": { "value": "Os agentes Copilot exigem autenticação", "status": "machine-draft" },
+    "description": { "value": "Um agente do Copilot Studio com o tipo de autenticação de utilizador 'None' aceita interação anónima; um agente que autentica apenas 'As Needed' deixa a autenticação opcional. Qualquer uma das situações permite que utilizadores não autenticados alcancem um agente capaz de expor dados organizacionais ou de invocar ferramentas, possibilitando abuso, exfiltração de dados e injeção de prompts. Esta verificação reprova os agentes sem autenticação e emite aviso para os agentes cuja autenticação só é acionada conforme necessário.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todos os agentes publicados exigem autenticação (o tipo de autenticação de utilizador não é 'None' e a autenticação é sempre imposta, não 'As Needed')", "status": "machine-draft" },
+    "remediationSteps": { "value": "No Copilot Studio, defina a autenticação de cada agente para exigir início de sessão (autenticação do Microsoft Entra ID) em vez de 'No authentication', e garanta que a autenticação é sempre imposta e não apenas acionada conforme necessário. Volte a publicar após a alteração.", "status": "machine-draft" }
+  },
+  "AIAGENT-003": {
+    "name": { "value": "Os agentes Copilot publicados são mantidos (não estão dormentes)", "status": "machine-draft" },
+    "description": { "value": "Um agente do Copilot Studio publicado que não é modificado há muito tempo continua a expor funcionalidades e acesso enquanto ninguém mantém a respetiva configuração, permissões ou ferramentas ligadas. Os agentes publicados dormentes acumulam risco de forma silenciosa. Esta verificação assinala os agentes publicados cuja última modificação é mais antiga do que o limiar de dormência (predefinição de 90 dias) para revisão ou desativação.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Os agentes publicados são mantidos ativamente; os agentes publicados obsoletos são revistos ou desativados", "status": "machine-draft" },
+    "remediationSteps": { "value": "Reveja cada agente publicado dormente. Desative os agentes que já não são necessários (anule a publicação e elimine) e, para os agentes ainda em uso, confirme que os respetivos controlos de acesso, autenticação e ferramentas ligadas continuam a ser adequados e, em seguida, atualize-os para reiniciar o relógio de manutenção.", "status": "machine-draft" }
+  },
+  "AIAGENT-004": {
+    "name": { "value": "O acesso ao agente Copilot está limitado a grupos de segurança", "status": "machine-draft" },
+    "description": { "value": "Um agente do Copilot Studio autenticado sem grupos de segurança autorizados é acessível a qualquer utilizador autenticado do inquilino. Limitar um agente a grupos de segurança específicos restringe a sua audiência aos que têm necessidade de negócio, aplicando o privilégio mínimo a quem pode invocar um agente e aos dados que este disponibiliza. Esta verificação assinala os agentes autenticados que não têm grupos de segurança autorizados configurados.", "status": "machine-draft" },
+    "recommendedValue": { "value": "Os agentes autenticados que disponibilizam dados sensíveis estão limitados a grupos de segurança autorizados específicos, em vez de a todos os utilizadores autenticados", "status": "machine-draft" },
+    "remediationSteps": { "value": "Para os agentes que disponibilizam dados sensíveis, configure grupos de segurança autorizados nas definições de acesso do agente, de modo que apenas os membros desses grupos possam interagir com o agente. Deixe o acesso a nível de todo o inquilino apenas para os agentes deliberadamente destinados a todo o pessoal.", "status": "machine-draft" }
+  }
+}

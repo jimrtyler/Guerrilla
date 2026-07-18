@@ -1,0 +1,795 @@
+{
+  "_family": "EidscaChecks.json",
+  "EIDSCA-AP01": {
+    "name": {
+      "value": "EIDSCA AP01: Definições de Autorização Predefinidas - Reposição self-service de palavra-passe ativada para administradores",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP01): avalia 'allowedToUseSSPR' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'allowedToUseSSPR' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP04": {
+    "name": {
+      "value": "EIDSCA AP04: Definições de Autorização Predefinidas - Restrições de convite de convidados",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP04): avalia 'allowInvitesFrom' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "in adminsAndGuestInviters, none",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'allowInvitesFrom' esteja definido como um de adminsAndGuestInviters, none. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP04.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP05": {
+    "name": {
+      "value": "EIDSCA AP05: Definições de Autorização Predefinidas - Inscrição em subscrição baseada em email",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP05): avalia 'allowedToSignUpEmailBasedSubscriptions' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'allowedToSignUpEmailBasedSubscriptions' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP05.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP06": {
+    "name": {
+      "value": "EIDSCA AP06: Definições de Autorização Predefinidas - Utilizador pode aderir ao inquilino por validação de email",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP06): avalia 'allowEmailVerifiedUsersToJoinOrganization' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'allowEmailVerifiedUsersToJoinOrganization' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP06.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP07": {
+    "name": {
+      "value": "EIDSCA AP07: Definições de Autorização Predefinidas - Acesso de utilizador convidado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP07): avalia 'guestUserRoleId' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq 2af84b1e-32c8-42b7-82bc-daa82404023b",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'guestUserRoleId' esteja definido como 2af84b1e-32c8-42b7-82bc-daa82404023b. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP07.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP08": {
+    "name": {
+      "value": "EIDSCA AP08: Definições de Autorização Predefinidas - Política de consentimento de utilizador atribuída às aplicações",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP08): avalia 'permissionGrantPolicyIdsAssignedToDefaultUserRole' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "clike-any ManagePermissionGrantsForSelf",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'permissionGrantPolicyIdsAssignedToDefaultUserRole' inclua ManagePermissionGrantsForSelf. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP08.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP09": {
+    "name": {
+      "value": "EIDSCA AP09: Definições de Autorização Predefinidas - Permitir consentimento de utilizador em aplicações baseadas em risco",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP09): avalia 'allowUserConsentForRiskyApps' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'allowUserConsentForRiskyApps' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP09.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP10": {
+    "name": {
+      "value": "EIDSCA AP10: Definições de Autorização Predefinidas - Permissões da Função de Utilizador Predefinida - Autorizado a criar aplicações",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP10): avalia 'defaultUserRolePermissions.allowedToCreateApps' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'defaultUserRolePermissions.allowedToCreateApps' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP10.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AP14": {
+    "name": {
+      "value": "EIDSCA AP14: Definições de Autorização Predefinidas - Permissões da Função de Utilizador Predefinida - Autorizado a ler outros utilizadores",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AP14): avalia 'defaultUserRolePermissions.allowedToReadOtherUsers' na política de autorização do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de autorização do Entra ID de modo que 'defaultUserRolePermissions.allowedToReadOtherUsers' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AP14.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CP01": {
+    "name": {
+      "value": "EIDSCA CP01: Definições Predefinidas - Definições da Política de Consentimento - Consentimento do proprietário de grupo para aplicações que acedem a dados",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CP01): avalia a definição 'EnableGroupSpecificConsent' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq False",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'EnableGroupSpecificConsent' esteja definida como False. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CP01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CP03": {
+    "name": {
+      "value": "EIDSCA CP03: Definições Predefinidas - Definições da Política de Consentimento - Bloquear consentimento de utilizador para aplicações de risco",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CP03): avalia a definição 'BlockUserConsentForRiskyApps' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'BlockUserConsentForRiskyApps' esteja definida como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CP03.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CP04": {
+    "name": {
+      "value": "EIDSCA CP04: Definições Predefinidas - Definições da Política de Consentimento - Os utilizadores podem solicitar consentimento de administrador para aplicações às quais não podem dar consentimento",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CP04): avalia a definição 'EnableAdminConsentRequests' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'EnableAdminConsentRequests' esteja definida como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CP04.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-PR01": {
+    "name": {
+      "value": "EIDSCA PR01: Definições Predefinidas - Definições de Regras de Palavra-passe - Proteção de Palavra-passe - Modo",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA PR01): avalia a definição 'BannedPasswordCheckOnPremisesMode' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq Enforce",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'BannedPasswordCheckOnPremisesMode' esteja definida como Enforce. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA PR01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-PR02": {
+    "name": {
+      "value": "EIDSCA PR02: Definições Predefinidas - Definições de Regras de Palavra-passe - Proteção de Palavra-passe - Ativar proteção de palavra-passe no Windows Server Active Directory",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA PR02): avalia a definição 'EnableBannedPasswordCheckOnPremises' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq True",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'EnableBannedPasswordCheckOnPremises' esteja definida como True. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA PR02.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-PR03": {
+    "name": {
+      "value": "EIDSCA PR03: Definições Predefinidas - Definições de Regras de Palavra-passe - Impor lista personalizada",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA PR03): avalia a definição 'EnableBannedPasswordCheck' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq True",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'EnableBannedPasswordCheck' esteja definida como True. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA PR03.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-PR05": {
+    "name": {
+      "value": "EIDSCA PR05: Definições Predefinidas - Definições de Regras de Palavra-passe - Bloqueio Inteligente - Duração do bloqueio em segundos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA PR05): avalia a definição 'LockoutDurationInSeconds' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "ge 60",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'LockoutDurationInSeconds' seja no mínimo 60. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA PR05.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-PR06": {
+    "name": {
+      "value": "EIDSCA PR06: Definições Predefinidas - Definições de Regras de Palavra-passe - Bloqueio Inteligente - Limiar de bloqueio",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA PR06): avalia a definição 'LockoutThreshold' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "le 10",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'LockoutThreshold' seja no máximo 10. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA PR06.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-ST08": {
+    "name": {
+      "value": "EIDSCA ST08: Definições Predefinidas - Classificação e Grupos M365 - Grupos M365 - Permitir que convidados se tornem proprietários de grupo",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA ST08): avalia a definição 'AllowGuestsToBeGroupOwner' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'AllowGuestsToBeGroupOwner' esteja definida como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA ST08.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-ST09": {
+    "name": {
+      "value": "EIDSCA ST09: Definições Predefinidas - Classificação e Grupos M365 - Grupos M365 - Permitir que convidados tenham acesso ao conteúdo dos grupos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA ST09): avalia a definição 'AllowGuestsToAccessGroups' nas definições de diretório (grupo) do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq True",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure as definições de diretório (grupo) do Entra ID de modo que a definição 'AllowGuestsToAccessGroups' esteja definida como True. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA ST09.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AG01": {
+    "name": {
+      "value": "EIDSCA AG01: Método de Autenticação - Definições Gerais - Gerir migração",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AG01): avalia 'policyMigrationState' na política de métodos de autenticação do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "in migrationComplete, ",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de métodos de autenticação do Entra ID de modo que 'policyMigrationState' esteja definido como um de migrationComplete, . (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AG01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AG02": {
+    "name": {
+      "value": "EIDSCA AG02: Método de Autenticação - Definições Gerais - Comunicar atividade suspeita - Estado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AG02): avalia 'reportSuspiciousActivitySettings.state' na política de métodos de autenticação do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de métodos de autenticação do Entra ID de modo que 'reportSuspiciousActivitySettings.state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AG02.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AG03": {
+    "name": {
+      "value": "EIDSCA AG03: Método de Autenticação - Definições Gerais - Comunicar atividade suspeita - Utilizadores/grupos incluídos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AG03): avalia 'reportSuspiciousActivitySettings.includeTarget.id' na política de métodos de autenticação do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq all_users",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de métodos de autenticação do Entra ID de modo que 'reportSuspiciousActivitySettings.includeTarget.id' esteja definido como all_users. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AG03.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM01": {
+    "name": {
+      "value": "EIDSCA AM01: Método de Autenticação - Microsoft Authenticator - Estado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM01): avalia 'state' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM02": {
+    "name": {
+      "value": "EIDSCA AM02: Método de Autenticação - Microsoft Authenticator - Permitir utilização de OTP do Microsoft Authenticator",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM02): avalia 'isSoftwareOathEnabled' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'isSoftwareOathEnabled' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM02.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM03": {
+    "name": {
+      "value": "EIDSCA AM03: Método de Autenticação - Microsoft Authenticator - Exigir correspondência de números para notificações push",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM03): avalia 'featureSettings.numberMatchingRequiredState.state' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'featureSettings.numberMatchingRequiredState.state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM03.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM04": {
+    "name": {
+      "value": "EIDSCA AM04: Método de Autenticação - Microsoft Authenticator - Utilizadores/grupos incluídos na correspondência de números para notificações push",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM04): avalia 'featureSettings.numberMatchingRequiredState.includeTarget.id' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq all_users",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'featureSettings.numberMatchingRequiredState.includeTarget.id' esteja definido como all_users. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM04.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM06": {
+    "name": {
+      "value": "EIDSCA AM06: Método de Autenticação - Microsoft Authenticator - Mostrar nome da aplicação nas notificações push e sem palavra-passe",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM06): avalia 'featureSettings.displayAppInformationRequiredState.state' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'featureSettings.displayAppInformationRequiredState.state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM06.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM07": {
+    "name": {
+      "value": "EIDSCA AM07: Método de Autenticação - Microsoft Authenticator - Utilizadores/grupos incluídos para mostrar o nome da aplicação nas notificações push e sem palavra-passe",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM07): avalia 'featureSettings.displayAppInformationRequiredState.includeTarget.id' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq all_users",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'featureSettings.displayAppInformationRequiredState.includeTarget.id' esteja definido como all_users. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM07.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM09": {
+    "name": {
+      "value": "EIDSCA AM09: Método de Autenticação - Microsoft Authenticator - Mostrar localização geográfica nas notificações push e sem palavra-passe",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM09): avalia 'featureSettings.displayLocationInformationRequiredState.state' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'featureSettings.displayLocationInformationRequiredState.state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM09.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AM10": {
+    "name": {
+      "value": "EIDSCA AM10: Método de Autenticação - Microsoft Authenticator - Utilizadores/grupos incluídos para mostrar a localização geográfica nas notificações push e sem palavra-passe",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AM10): avalia 'featureSettings.displayLocationInformationRequiredState.includeTarget.id' no método de autenticação MicrosoftAuthenticator face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq all_users",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação MicrosoftAuthenticator de modo que 'featureSettings.displayLocationInformationRequiredState.includeTarget.id' esteja definido como all_users. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AM10.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AF01": {
+    "name": {
+      "value": "EIDSCA AF01: Método de Autenticação - Chave de segurança FIDO2 - Estado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AF01): avalia 'state' no método de autenticação Fido2 face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação Fido2 de modo que 'state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AF01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AF02": {
+    "name": {
+      "value": "EIDSCA AF02: Método de Autenticação - Chave de segurança FIDO2 - Permitir configuração self-service",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AF02): avalia 'isSelfServiceRegistrationAllowed' no método de autenticação Fido2 face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação Fido2 de modo que 'isSelfServiceRegistrationAllowed' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AF02.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AF03": {
+    "name": {
+      "value": "EIDSCA AF03: Método de Autenticação - Chave de segurança FIDO2 - Impor atestação",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AF03): avalia 'isAttestationEnforced' no método de autenticação Fido2 face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação Fido2 de modo que 'isAttestationEnforced' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AF03.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AF04": {
+    "name": {
+      "value": "EIDSCA AF04: Método de Autenticação - Chave de segurança FIDO2 - Impor restrições de chave",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AF04): avalia 'keyRestrictions.isEnforced' no método de autenticação Fido2 face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação Fido2 de modo que 'keyRestrictions.isEnforced' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AF04.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AF05": {
+    "name": {
+      "value": "EIDSCA AF05: Método de Autenticação - Chave de segurança FIDO2 - Restringido",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AF05): avalia 'keyRestrictions.aaGuids' no método de autenticação Fido2 face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "notempty ",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Garanta que 'keyRestrictions.aaGuids' no método de autenticação Fido2 está configurado (não vazio). (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AF05.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AF06": {
+    "name": {
+      "value": "EIDSCA AF06: Método de Autenticação - Chave de segurança FIDO2 - Restringir chaves específicas",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AF06): avalia 'keyRestrictions' no método de autenticação Fido2 face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "fido2-aaguid-enforced ",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Garanta que 'keyRestrictions' no método de autenticação Fido2 é imposto com uma lista de permissão/bloqueio de AAGUID. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AF06.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AT01": {
+    "name": {
+      "value": "EIDSCA AT01: Método de Autenticação - Temporary Access Pass - Estado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AT01): avalia 'state' no método de autenticação TemporaryAccessPass face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq enabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação TemporaryAccessPass de modo que 'state' esteja definido como enabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AT01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AT02": {
+    "name": {
+      "value": "EIDSCA AT02: Método de Autenticação - Temporary Access Pass - Utilização única",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AT02): avalia 'isUsableOnce' no método de autenticação TemporaryAccessPass face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação TemporaryAccessPass de modo que 'isUsableOnce' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AT02.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AV01": {
+    "name": {
+      "value": "EIDSCA AV01: Método de Autenticação - Chamada de voz - Estado",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AV01): avalia 'state' no método de autenticação Voice face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq disabled",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação Voice de modo que 'state' esteja definido como disabled. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AV01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-AS04": {
+    "name": {
+      "value": "EIDSCA AS04: Método de Autenticação - SMS - Utilizar para início de sessão",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA AS04): avalia 'includeTargets.isUsableForSignIn' no método de autenticação Sms face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq false",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure o método de autenticação Sms de modo que 'includeTargets.isUsableForSignIn' esteja definido como false. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA AS04.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CR01": {
+    "name": {
+      "value": "EIDSCA CR01: Estrutura de Consentimento - Pedido de Consentimento de Administrador - Política para ativar ou desativar a funcionalidade de pedido de consentimento de administrador",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CR01): avalia 'isEnabled' na política de pedidos de consentimento de administrador do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de pedidos de consentimento de administrador do Entra ID de modo que 'isEnabled' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CR01.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CR02": {
+    "name": {
+      "value": "EIDSCA CR02: Estrutura de Consentimento - Pedido de Consentimento de Administrador - Os revisores receberão notificações por email dos pedidos",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CR02): avalia 'notifyReviewers' na política de pedidos de consentimento de administrador do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de pedidos de consentimento de administrador do Entra ID de modo que 'notifyReviewers' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CR02.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CR03": {
+    "name": {
+      "value": "EIDSCA CR03: Estrutura de Consentimento - Pedido de Consentimento de Administrador - Os revisores receberão notificações por email quando os pedidos de consentimento de administrador estiverem prestes a expirar",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CR03): avalia 'remindersEnabled' na política de pedidos de consentimento de administrador do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "eq true",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de pedidos de consentimento de administrador do Entra ID de modo que 'remindersEnabled' esteja definido como true. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CR03.)",
+      "status": "machine-draft"
+    }
+  },
+  "EIDSCA-CR04": {
+    "name": {
+      "value": "EIDSCA CR04: Estrutura de Consentimento - Pedido de Consentimento de Administrador - Duração do pedido de consentimento (dias)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Controlo de configuração de segurança do Entra ID (EIDSCA CR04): avalia 'requestDurationInDays' na política de pedidos de consentimento de administrador do Entra ID face ao valor seguro recomendado.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "le 30",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Configure a política de pedidos de consentimento de administrador do Entra ID de modo que 'requestDurationInDays' seja no máximo 30. (Linha de base de configuração de segurança do Entra ID, controlo EIDSCA CR04.)",
+      "status": "machine-draft"
+    }
+  }
+}
