@@ -1,0 +1,69 @@
+{
+  "_family": "ADTrustChecks.json",
+  "ADTRUST-001": {
+    "name": { "value": "Enumeração de relações de confiança", "status": "machine-draft" },
+    "description": { "value": "Todas as relações de confiança devem ser inventariadas para estabelecer uma imagem completa do limite de autenticação. As confianças não documentadas expandem a superfície de ataque ao permitir que utilizadores de domínios externos acedam a recursos", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas as relações de confiança documentadas com justificação de negócio, direção, tipo e proprietário", "status": "machine-draft" },
+    "remediationSteps": { "value": "Execute Get-ADTrust -Filter * para enumerar todas as confianças. Documente cada confiança com a sua direção, tipo (floresta, externa, de atalho, realm), transitividade e justificação de negócio. Reveja e remova quaisquer confianças que já não sirvam uma necessidade de negócio", "status": "machine-draft" }
+  },
+  "ADTRUST-002": {
+    "name": { "value": "Análise da direção das confianças", "status": "machine-draft" },
+    "description": { "value": "As confianças de entrada permitem que utilizadores de domínios externos se autentiquem no seu domínio. Cada confiança de entrada ou bidirecional deve ser revista para garantir que o domínio confiável mantém controlos de segurança adequados. Um domínio confiável comprometido pode ser utilizado para atacar o seu ambiente", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas as direções de confiança justificadas e documentadas. Confianças bidirecionais convertidas em unidirecionais sempre que possível para reduzir a superfície de ataque", "status": "machine-draft" },
+    "remediationSteps": { "value": "Reveja a direção de cada confiança utilizando Get-ADTrust -Filter *. Para as confianças bidirecionais, avalie se ambas as direções são necessárias. Converta em confianças unidirecionais quando a necessidade de negócio exigir apenas uma direção. Documente a justificação de todos os caminhos de confiança de entrada", "status": "machine-draft" }
+  },
+  "ADTRUST-003": {
+    "name": { "value": "Análise da transitividade das confianças", "status": "machine-draft" },
+    "description": { "value": "As confianças transitivas estendem os caminhos de autenticação para além dos parceiros de confiança diretos, podendo criar caminhos de acesso não intencionais através de cadeias de domínios confiáveis. Cada confiança transitiva deve ser avaliada quanto à superfície de ataque alargada que cria", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas as confianças transitivas documentadas com análise completa do caminho de transitividade. Confianças externas preferidas em relação a confianças de floresta quando a transitividade não é necessária", "status": "machine-draft" },
+    "remediationSteps": { "value": "Mapeie todos os caminhos de confiança transitiva para identificar rotas de autenticação indiretas. No caso das confianças de floresta, tenha presente que todos os domínios subordinados são confiáveis de forma transitiva. Considere utilizar confianças externas (não transitivas) quando apenas é necessário o acesso a um domínio específico", "status": "machine-draft" }
+  },
+  "ADTRUST-004": {
+    "name": { "value": "Estado da filtragem de SID", "status": "machine-draft" },
+    "description": { "value": "A filtragem de SID remove os SID de domínios estrangeiros nos tokens de autenticação, impedindo ataques de injeção de SID history. Sem filtragem de SID, um atacante que comprometa um domínio confiável pode forjar tickets que contêm SID privilegiados (como os de Enterprise Admins) do seu domínio, alcançando o comprometimento total", "status": "machine-draft" },
+    "recommendedValue": { "value": "Filtragem de SID (quarentena) ativada em todas as confianças externas e de floresta", "status": "machine-draft" },
+    "remediationSteps": { "value": "Verifique o estado da filtragem de SID utilizando 'netdom trust /domain:trusted.domain /Quarantine'. Ative a filtragem de SID com 'netdom trust /domain:trusted.domain /Quarantine:Yes'. Nota: a filtragem de SID está ativada por predefinição nas confianças externas, mas deve ser verificada nas confianças de floresta, onde pode ter sido desativada deliberadamente", "status": "machine-draft" }
+  },
+  "ADTRUST-005": {
+    "name": { "value": "Deteção de abuso de SID history", "status": "machine-draft" },
+    "description": { "value": "O SID history destina-se a migrações de domínio, mas pode ser abusado para injetar SID privilegiados nos tokens de utilizador através dos limites de confiança. Os atacantes que comprometem um domínio confiável podem adicionar SID de Enterprise Admin ou Domain Admin ao SID history de qualquer conta que controlem", "status": "machine-draft" },
+    "recommendedValue": { "value": "Nenhuma conta com valores de SID history que referenciem grupos privilegiados. SID history limpo após a conclusão de todas as migrações", "status": "machine-draft" },
+    "remediationSteps": { "value": "Procure contas com SID history utilizando Get-ADUser -Filter {SIDHistory -like '*'} -Properties SIDHistory. Identifique quaisquer entradas de SID history que referenciem grupos privilegiados (Domain Admins, Enterprise Admins, etc.). Limpe o SID history após a migração utilizando Remove-ADUser com o parâmetro SIDHistory. Ative a filtragem de SID nas confianças", "status": "machine-draft" }
+  },
+  "ADTRUST-006": {
+    "name": { "value": "Estado da autenticação seletiva", "status": "machine-draft" },
+    "description": { "value": "A autenticação seletiva restringe quais os utilizadores de um domínio confiável que se podem autenticar em recursos do seu domínio, exigindo permissões explícitas em cada recurso. Sem ela, todos os utilizadores autenticados do domínio confiável podem aceder a qualquer recurso para o qual tenham permissões, expandindo significativamente a superfície de ataque", "status": "machine-draft" },
+    "recommendedValue": { "value": "Autenticação seletiva ativada em todas as confianças de floresta. Permissões 'Allowed to Authenticate' concedidas apenas nos recursos necessários", "status": "machine-draft" },
+    "remediationSteps": { "value": "Ative a autenticação seletiva nas confianças de floresta através de Active Directory Domains and Trusts > Propriedades da confiança > separador Autenticação > selecione 'Autenticação seletiva'. Em seguida, conceda a permissão 'Allowed to Authenticate' em objetos de computador específicos aos quais os utilizadores externos necessitam de aceder", "status": "machine-draft" }
+  },
+  "ADTRUST-007": {
+    "name": { "value": "Segurança da confiança híbrida do Azure AD", "status": "machine-draft" },
+    "description": { "value": "As configurações de identidade híbrida que ligam o AD no local ao Azure AD criam caminhos de ataque adicionais. O Azure AD Connect, os agentes de autenticação pass-through e os serviços de federação podem ser visados para fazer pivô entre os ambientes de cloud e no local", "status": "machine-draft" },
+    "recommendedValue": { "value": "Azure AD Connect a executar a versão mais recente num servidor dedicado e protegido. PHS preferido em relação a PTA/federação. Seamless SSO desativado se não for necessário. Contas break-glass exclusivas da cloud configuradas", "status": "machine-draft" },
+    "remediationSteps": { "value": "Reveja a configuração do Azure AD Connect e garanta que é executado num servidor Tier 0 protegido. Avalie a mudança de federação ou PTA para Password Hash Sync (PHS) para reduzir a superfície de ataque. Se utilizar Seamless SSO, garanta que a palavra-passe da conta de computador AZUREADSSOACC é rodada. Verifique se existem contas de acesso de emergência exclusivas da cloud", "status": "machine-draft" }
+  },
+  "ADTRUST-008": {
+    "name": { "value": "Enumeração de confianças com domínios estrangeiros", "status": "machine-draft" },
+    "description": { "value": "As confianças com domínios externos à organização estendem o limite de segurança a entidades com normas de segurança potencialmente diferentes. As confianças com domínios estrangeiros devem ser sujeitas a escrutínio adicional, uma vez que a organização confiante não pode controlar a postura de segurança do domínio externo", "status": "machine-draft" },
+    "recommendedValue": { "value": "Todas as confianças com domínios estrangeiros documentadas com avaliação de segurança externa, requisitos de segurança contratuais e revisão anual", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identifique as confianças com domínios externos à organização utilizando Get-ADTrust -Filter *. Para cada confiança externa, verifique se existe um acordo de segurança, se a filtragem de SID está ativada, se a autenticação seletiva está configurada e se a confiança é revista anualmente", "status": "machine-draft" }
+  },
+  "ADTRUST-009": {
+    "name": { "value": "Deteção de confianças órfãs", "status": "machine-draft" },
+    "description": { "value": "As confianças órfãs referenciam domínios que já não existem ou já não estão acessíveis. Estes objetos de confiança obsoletos podem reter credenciais e criar confusão durante as auditorias de segurança. Devem ser removidos para reduzir a superfície de ataque desnecessária e manter uma topologia de confiança limpa", "status": "machine-draft" },
+    "recommendedValue": { "value": "Nenhuma relação de confiança órfã ou não resolúvel presente", "status": "machine-draft" },
+    "remediationSteps": { "value": "Enumere todas as confianças e tente validar cada uma resolvendo o nome do domínio confiável e testando a confiança com 'netdom trust /verify'. Remova as confianças órfãs em que o domínio parceiro já não existe ou está inacessível utilizando 'netdom trust /Remove' ou Active Directory Domains and Trusts", "status": "machine-draft" }
+  },
+  "ADTRUST-010": {
+    "name": { "value": "Idade e rotação da chave de confiança", "status": "machine-draft" },
+    "description": { "value": "As palavras-passe de confiança (chaves inter-realm) devem ser rodadas regularmente. As chaves de confiança obsoletas aumentam a janela para ataques baseados em credenciais. Por predefinição, as palavras-passe de confiança são rodadas a cada 30 dias, mas isto deve ser verificado, pois as rotações falhadas podem passar despercebidas", "status": "machine-draft" },
+    "recommendedValue": { "value": "Palavras-passe de confiança rodadas nos últimos 30 dias. Rotação automática da palavra-passe de confiança não desativada", "status": "machine-draft" },
+    "remediationSteps": { "value": "Verifique a data da última definição da palavra-passe de confiança examinando o atributo trustAuthOutgoing ou executando 'netdom trust /domain:trusted.domain /verify'. Se a palavra-passe de confiança estiver obsoleta, redefina-a utilizando 'netdom trust /domain:trusted.domain /Reset'. Verifique que nenhuma definição de GPO ou de registo desativou a rotação automática da palavra-passe de confiança", "status": "machine-draft" }
+  },
+  "ADTRUST-011": {
+    "name": { "value": "Visualização da hierarquia de confianças", "status": "machine-draft" },
+    "description": { "value": "Deve ser mantido um mapa completo da topologia de confianças que mostre todas as relações de confiança, direções, tipos e caminhos de transitividade. Esta visualização é essencial para compreender o limite de autenticação completo e identificar caminhos de acesso inesperados", "status": "machine-draft" },
+    "recommendedValue": { "value": "Diagrama da topologia de confianças atualizado, mantido e revisto trimestralmente", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gere um mapa da topologia de confianças utilizando ferramentas automatizadas ou documente manualmente todas as relações de confiança, incluindo direção, tipo, transitividade, estado da filtragem de SID e estado da autenticação seletiva. Atualize o diagrama sempre que forem adicionadas, modificadas ou removidas confianças. Inclua o mapa na documentação de segurança e reveja-o trimestralmente", "status": "machine-draft" }
+  }
+}
