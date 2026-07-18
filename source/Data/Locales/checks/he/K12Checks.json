@@ -1,0 +1,63 @@
+{
+  "_family": "K12Checks.json",
+  "GWS-K12-001": {
+    "name": { "value": "שיתוף ב-OU של תלמידים אינו בירושה מהצוות", "status": "machine-draft" },
+    "description": { "value": "מחוזות בית ספר מגדירים לעתים קרובות שיתוף חיצוני ב-Drive לצורכי הצוות ומאפשרים ל-OU של התלמידים לרשת תצורה זו. הירושה בלתי נראית בניהול היומיומי: ה-OU של התלמידים מציג ערך, אך איש לא בחר אותו עבור התלמידים. תצורת שיתוף חיצוני ב-OU של תלמידים צריכה להיות החלטה מקומית מפורשת, או ערך בירושה שהושבת לחלוטין.", "status": "machine-draft" },
+    "recommendedValue": { "value": "תצורת השיתוף החיצוני ב-Drive מיושמת מקומית בכל OU של תלמידים, או שהערך בירושה הוא DISALLOWED", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Drive and Docs > Sharing settings. בחר את היחידה הארגונית של התלמידים בלוח השמאלי והגדר את 'Sharing outside of your organization' במפורש עבור אותו OU (ההגדרה מציגה 'Locally applied' כאשר מדובר בהחלטה מקומית, אחרת 'Inherited').", "status": "machine-draft" }
+  },
+  "GWS-K12-002": {
+    "name": { "value": "שיתוף חיצוני של תלמידים ב-Drive מוגבל", "status": "machine-draft" },
+    "description": { "value": "יהא אשר יהא מצב הצוות, OU של תלמידים לא אמור להתיר שיתוף שקט ובלתי מוגבל מחוץ לארגון. מצבים סבירים עבור תלמידים נעים בין השבתה מלאה ובין דומיינים ברשימת היתר; שיתוף המופעל עם הודעת אזהרה הוא הרצפה החלשה ביותר המקובלת וצריך להיות החלטה מכוונת של המחוז עבור טווח הגילאים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "שיתוף חיצוני ב-Drive ב-OU של תלמידים הוא DISALLOWED או מוגבל לדומיינים ברשימת היתר; אם ALLOWED, אזהרת השיתוף החיצוני מופעלת והבחירה מתועדת", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Drive and Docs > Sharing settings. בחר את היחידה הארגונית של התלמידים והגדר את 'Sharing outside of your organization' ל-Off או ל-Allowlisted domains. אם המחוז מתיר במכוון שיתוף חיצוני עבור OU של תלמידים, הפעל לכל הפחות את 'Warn when files owned by users in your organization are shared outside'.", "status": "machine-draft" }
+  },
+  "GWS-K12-003": {
+    "name": { "value": "תלמידים אינם יכולים להרשות אפליקציות צד שלישי", "status": "machine-draft" },
+    "description": { "value": "תלמיד הלוחץ על 'Sign in with Google' באתר כלשהו יכול להעניק לאותו אתר גישה לנתוני חשבון בית הספר שלו, אלא אם המחוז מגביל את גישת ה-API של צד שלישי עבור OU של תלמידים. לתלמידים לא צריכה להיות גישה לאפליקציות צד שלישי שאינן מוגדרות, או רק רשימת היתר שנאספה על ידי המחוז. זוהי אחת ההגדרות הבודדות בעלות המנוף הגבוה ביותר בדייר של בית ספר.", "status": "machine-draft" },
+    "recommendedValue": { "value": "אפליקציות צד שלישי שאינן מוגדרות חסומות (BLOCK_ALL_SCOPES) עבור OU של תלמידים; אפליקציות שנבחנו על ידי המחוז מוכנסות לרשימת ההיתר בנפרד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > Access and data control > API controls > App access control > Manage Third-Party App Access. בחר את היחידה הארגונית של התלמידים, הגדר אפליקציות צד שלישי שאינן מוגדרות ל-'Block all third-party API access', והכנס לרשימת ההיתר את האפליקציות הספציפיות שהמחוז בחן.", "status": "machine-draft" }
+  },
+  "GWS-K12-004": {
+    "name": { "value": "בחינת גישה מואצלת של ספקים", "status": "machine-draft" },
+    "description": { "value": "הרשאות האצלה כלל-דומיינית מעניקות לחשבון השירות של ספק גישה קבועה לנתוני המשתמשים ברחבי הדייר, לרבות נתוני תלמידים. פלטפורמות SIS, כלי ניהול רשימות תלמידים וספקי EdTech צוברים הרשאות אלה במשך שנים, והרשאות מיושנות מוסרות לעתים רחוקות. כל הרשאה בעלת היקפים רגישים צריכה להתאים לחוזה ספק עדכני ולמערך ההיקפים המצומצם ביותר האפשרי.", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל הרשאת האצלה כלל-דומיינית מתאימה לספק עדכני ונושאת רק את ההיקפים שאותו ספק צריך", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > Access and data control > API controls > Domain-wide delegation. עבור כל client ID, ודא איזה ספק הוא בעליו ושהחוזה עדכני; הסר הרשאות עבור ספקים שעזבו; צמצם מערכי היקפים החורגים מתפקוד הספק (היקפי mail, Drive, directory ו-contacts ראויים לבחינה מיוחדת).", "status": "machine-draft" }
+  },
+  "GWS-K12-005": {
+    "name": { "value": "הרשאות מזעריות למנהלים מואצלים", "status": "machine-draft" },
+    "description": { "value": "מחוזות מעניקים באופן שגרתי ליועצים, למזכירות ולמנהלי בניין תפקידי ניהול מואצלים למשימות לגיטימיות, תוך שימוש בתפקידים רחבים הרבה יותר מהמשימה. תפקיד מואצל הנושא הרשאות ניהול משתמשים או אבטחה על פני כל הדומיין מגיע לכל חשבון תלמיד; היקוף אותו תפקיד ליחידה ארגונית מכיל אותו. בדיקה זו מציפה לבחינה הקצאות מואצלות כלל-דומייניות; אם כל בעל תפקיד צריך את ההיקף הזה הוא עניין לקביעת המחוז.", "status": "machine-draft" },
+    "recommendedValue": { "value": "תפקידי ניהול מואצלים בעלי הרשאות ניהול משתמשים או אבטחה מוקפים ליחידות הארגוניות שבעל התפקיד תומך בהן, ולא לכל הדומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Account > Admin roles. עבור כל הקצאת תפקיד מותאם או מובנה שסומנה בראיות, צמצם את ההקצאה ליחידה הארגונית הרלוונטית (ערוך את היקף ההקצאה) או החלף את התפקיד בתפקיד הנושא רק את ההרשאות הנדרשות לתפקידיו של בעל התפקיד.", "status": "machine-draft" }
+  },
+  "GWS-K12-006": {
+    "name": { "value": "גבולות תקשורת של תלמידים", "status": "machine-draft" },
+    "description": { "value": "ל-Chat ול-Meet יש הגדרות עצמאיות הקובעות אם חשבונות יכולים לתקשר עם אנשים מחוץ לארגון. עבור OU של תלמידים הגדרות אלה הן גבול בטיחות: הן קובעות אם חשבון מחוץ למחוז יכול ליזום קשר עם תלמיד באמצעות כלים שהמחוז מספק. FAIL כאן משמעו שהגדרה מתירה סוג של קשר חיצוני שהמחוז לא החליט באופן חיובי להתיר; אין משמעו שקשר כזה התרחש. הגבלות דואר חיצוני של Gmail נמצאות בכללי ניתוב שבדיקה זו אינה יכולה לקרוא ומצוינות לבחינה ידנית.", "status": "machine-draft" },
+    "recommendedValue": { "value": "צ'אט חיצוני ב-OU של תלמידים כבוי או מוגבל לדומיינים מהימנים; תלמידים מצטרפים רק לפגישות המתארחות על ידי המחוז", "status": "machine-draft" },
+    "remediationSteps": { "value": "Chat: Admin Console > Apps > Google Workspace > Google Chat > External chat settings; בחר את ה-OU של התלמידים וכבה צ'אט חיצוני או הגבל לדומיינים ברשימת היתר. Meet: Admin Console > Apps > Google Workspace > Google Meet > Meet safety settings; בחר את ה-OU של התלמידים והגבל את הפגישות שמשתמשים יכולים להצטרף אליהן לארגון שלך. Gmail: בחן הגבלות דואר חיצוני של תלמידים תחת Apps > Google Workspace > Gmail > Routing.", "status": "machine-draft" }
+  },
+  "GWS-K12-007": {
+    "name": { "value": "שלמות גישת אפוטרופוסים", "status": "machine-draft" },
+    "description": { "value": "סיכומי דואר לאפוטרופוסים קיימים כדי שהורים יראו את פעילות התלמיד שלהם. תכונת השלמות הניתנת להערכה אוטומטית היא מי יכול לרשום ולהסיר אפוטרופוסים: domain admins בלבד הוא המשטח המצומצם; מורים מאומתים מרחיבים אותו ומחייבים נוהל בדיקת זהות מתועד. כיצד המחוז מאמת את זהות האפוטרופוס לפני שהוא מזמין אותו הוא פריט לבחינת מדיניות שבדיקה זו אינה יכולה לקרוא. הממצאים מתארים מצב תצורה, לא אירועים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "אם גישת אפוטרופוסים מופעלת, ניהול האפוטרופוסים מוגבל ל-domain admins, או שקיים נוהל אימות מתועד בצד המורים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Classroom > Guardian access. בחר את היחידה הארגונית של התלמידים. אם סיכומי האפוטרופוסים בשימוש, הגדר את 'Who can manage guardians' ל-domain admins בלבד, או תעד את נוהל האימות שהמורים חייבים לבצע לפני הזמנת אפוטרופוס.", "status": "machine-draft" }
+  },
+  "GWS-K12-008": {
+    "name": { "value": "מצב ניהול של Chromebook לתלמידים", "status": "machine-draft" },
+    "description": { "value": "מכשירי Chromebook של תלמידים הם הצי הגדול ביותר של המחוז והנבחן ביותר מבחינת גבולות. המצב השומר על ניהול הצי: מכשירים שנמחקו נרשמים מחדש אוטומטית (תלמידים אינם יכולים לחמוק מהניהול באמצעות מחיקה), הרחבות מותקנות מרשימת היתר של המחוז ולא מחנות פתוחה עם רשימת חסימה, והרחבות שהוטענו מבחוץ (sideloaded) מחוץ ל-Web Store חסומות.", "status": "machine-draft" },
+    "recommendedValue": { "value": "רישום מחדש כפוי אוטומטי לאחר מחיקה; התקנות הרחבות מרשימת היתר בלבד; הרחבות חיצוניות (sideloaded) חסומות ב-OU של תלמידים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Devices > Chrome > Settings. בחר את היחידה הארגונית של התלמידים. תחת Device settings > Enrollment and access, הגדר את Forced re-enrollment ל-'Force device to automatically re-enroll after wiping'. תחת Users and browsers > Apps and extensions, הגדר את מדיניות ההתקנה של Chrome Web Store לחסום את כל האפליקציות עם רשימת היתר מנוהלת על ידי מנהל, וחסום הרחבות חיצוניות.", "status": "machine-draft" }
+  },
+  "GWS-K12-009": {
+    "name": { "value": "טיפול בחשבונות תלמידים שעזבו", "status": "machine-draft" },
+    "description": { "value": "סיום לימודים ופרישה מייצרים חשבונות שאין להם בעלים. חשבון פעיל השייך לתלמיד שעזב הוא זהות בלתי מנוטרת שעדיין מקבלת דואר ועדיין מחזיקה נתונים. בדיקה זו מציפה חשבונות ב-OU של תלמידים שהם פעילים אך לא נכנסו במשך שנה או יותר, ומזכירה למחוז שחשבונות מושהים עדיין מחזיקים נתוני Drive שיש לפתור את הבעלות עליהם לפני המחיקה.", "status": "machine-draft" },
+    "recommendedValue": { "value": "תלמידים שעזבו מושהים או מועברים לארכיון עם עזיבתם; אף חשבון תלמיד אינו נשאר פעיל עם שנה ללא כניסות", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Directory > Users. סנן ליחידה הארגונית של התלמידים ומיין לפי Last sign-in. השהה או העבר לארכיון חשבונות השייכים לתלמידים שפרשו או סיימו לימודים. לפני מחיקת חשבונות מושהים, העבר את הבעלות על Drive (Admin Console > Directory > Users > בחר משתמש > Delete > transfer content) או ייצא באמצעות Takeout/Vault כפי שמדיניות השמירה שלך דורשת.", "status": "machine-draft" }
+  },
+  "GWS-K12-010": {
+    "name": { "value": "רצפת אבטחה לחשבונות תלמידים", "status": "machine-draft" },
+    "description": { "value": "רצפת אבטחה כנה לתלמידים מדורגת לפי גיל: מדיניות סיסמאות חזקה ושחזור בשליטת המחוז בכל מקום; אימות דו-שלבי (2-Step Verification) נאכף עבור OU המשרתים תלמידים מבוגרים דיים כדי להחזיק גורם שני. שחזור עצמי של חשבון בשליטת התלמיד הוא נתיב להשתלטות על חשבון בכל גיל ונכשל בבדיקה זו; היעדר אכיפת 2SV מדווח כהקשר להחלטת המחוז על טווח הגילאים, לעולם לא ככישלון עיוור של OU יסודי.", "status": "machine-draft" },
+    "recommendedValue": { "value": "שחזור עצמי מושבת עבור OU של תלמידים; מדיניות סיסמאות STRONG עם אורך מזערי של 12+; 2SV נאכף היכן שטווח הגילאים תומך בכך, עם חריגים מתועדים במקומות אחרים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > Authentication. בחר את היחידה הארגונית של התלמידים. תחת Account recovery, כבה שחזור עצמי של חשבון משתמש עבור OU של תלמידים (השחזור מתבצע דרך מוקד התמיכה של המחוז). תחת Password management, אכוף סיסמאות חזקות עם אורך מזערי של 12 ומעלה. תחת 2-step verification, אכוף 2SV עבור טווחי גילאים שיכולים להחזיק גורם שני ותעד את החריג עבור OU של גילאים צעירים יותר.", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "_family": "GwsServiceChecks.json",
+  "GWS-SITES-001": {
+    "name": { "value": "שירות Sites מושבת", "status": "machine-draft" },
+    "description": { "value": "יש להשבית את שירות Google Sites עבור כל המשתמשים כדי לצמצם את משטח התקיפה, בהתאם לעיקרון ההרשאות המזעריות. ניתן להפעיל את Sites באופן סלקטיבי לכל יחידה ארגונית או קבוצה כאשר קיים צורך מתועד.", "status": "machine-draft" },
+    "recommendedValue": { "value": "שירות Sites כבוי (OFF) עבור כולם (הפעל באופן סלקטיבי לכל OU/קבוצה רק לפי הצורך)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Sites > Service status > הגדר ל-OFF עבור כולם. הפעל באופן סלקטיבי לכל יחידה ארגונית או קבוצה רק כאשר קיים צורך עסקי מתועד.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-001": {
+    "name": { "value": "חברות ב-Classroom - מי יכול להצטרף לכיתות", "status": "machine-draft" },
+    "description": { "value": "יש להגביל את מי שיכול להצטרף לכיתות בדומיין שלך למשתמשים בדומיין שלך בלבד, כדי למנוע מחשבונות חיצוניים להצטרף לכיתות פנימיות.", "status": "machine-draft" },
+    "recommendedValue": { "value": "מי שיכול להצטרף לכיתות מוגדר ל-'Users in your domain only'", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Classroom > Class settings > About class membership > Who can join classes in your domain > הגדר ל-'Users in your domain only'.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-002": {
+    "name": { "value": "חברות ב-Classroom - לאילו כיתות משתמשים יכולים להצטרף", "status": "machine-draft" },
+    "description": { "value": "יש להגביל את הכיתות שמשתמשים בדומיין שלך יכולים להצטרף אליהן לכיתות בדומיין שלך בלבד, כדי למנוע ממשתמשים פנימיים להצטרף לכיתות חיצוניות העלולות להדליף נתונים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "הכיתות שמשתמשים יכולים להצטרף אליהן מוגדרות ל-'Classes in your domain only'", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Classroom > Class settings > About class membership > Which classes users in your domain can join > הגדר ל-'Classes in your domain only'.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-003": {
+    "name": { "value": "גישת נתוני API של Classroom מוגבלת", "status": "machine-draft" },
+    "description": { "value": "משתמשים לא אמורים להיות מסוגלים להרשות לאפליקציות צד שלישי לגשת לנתוני Google Classroom שלהם, כדי למנוע גישת נתונים בלתי מבוקרת של אינטגרציות חיצוניות.", "status": "machine-draft" },
+    "recommendedValue": { "value": "משתמשים אינם יכולים להרשות לאפליקציות לגשת לנתוני Classroom (גישת נתוני API מושבתת)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Classroom > Data access > בטל את הסימון של 'Users can authorize apps to access their Google Classroom data'.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-004": {
+    "name": { "value": "ייבוא רשימת תלמידים ב-Classroom מושבת", "status": "machine-draft" },
+    "description": { "value": "יש לכבות ייבוא רשימת תלמידים באמצעות אינטגרציית צד שלישי כך שרשימות התלמידים של כיתות לא יסונכרנו ממערכות חיצוניות ללא ממשל מפורש.", "status": "machine-draft" },
+    "recommendedValue": { "value": "ייבוא רשימת תלמידים כבוי (OFF)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Classroom > Roster import > בחר OFF.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-005": {
+    "name": { "value": "ביטול רישום תלמידים ב-Classroom מוגבל", "status": "machine-draft" },
+    "description": { "value": "רק מורים אמורים להיות רשאים לבטל את רישום התלמידים מכיתות, כדי למנוע מתלמידים להסיר את עצמם או אחרים ולפגוע בשלמות החברות בכיתה.", "status": "machine-draft" },
+    "recommendedValue": { "value": "ביטול רישום תלמידים מוגבל למורים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Classroom > Student unenrollment > בחר 'Teachers only'.", "status": "machine-draft" }
+  },
+  "GWS-CLASS-006": {
+    "name": { "value": "יצירת כיתות ב-Classroom מוגבלת למורים מאומתים", "status": "machine-draft" },
+    "description": { "value": "יש להגביל את יצירת הכיתות למורים מאומתים בלבד, כדי למנוע ממשתמשים בלתי מורשים ליצור כיתות ולאסוף חברים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "יצירת כיתות מוגבלת למורים מאומתים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Classroom > General settings > Teacher permissions > בחר 'Verified teachers only'.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-001": {
+    "name": { "value": "גישה לאפליקציית Gemini מוגבלת למשתמשים בעלי רישיון", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את גישת המשתמשים לאפליקציית Gemini ל-OFF עבור כל מי שאין לו רישיון, כדי להבטיח שהגישה ל-AI יוצר תנוהל לפי הקצאת רישיון ולא תהיה פתוחה לכל המשתמשים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "גישה לאפליקציית Gemini כבויה (OFF) עבור משתמשים ללא רישיון", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Generative AI > Gemini app > User access > בטל את הסימון של 'Allow all users to access the Gemini app, regardless of license'.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-002": {
+    "name": { "value": "תכונות Alpha של Gemini מושבתות", "status": "machine-draft" },
+    "description": { "value": "יש להשבית את תכונות ה-Alpha של Gemini. תכונות טרום-שחרור עשויות שלא לעבור ביקורת אבטחה מלאה ועלולות לחשוף נתונים ארגוניים לעיבוד שלא נבדק.", "status": "machine-draft" },
+    "recommendedValue": { "value": "הגישה לתכונות Alpha ב-Gemini for Workspace כבויה", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Generative AI > Gemini for Workspace > Alpha features > בחר 'Turn off access to Alpha features in Gemini for Google Workspace'.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-003": {
+    "name": { "value": "היסטוריית שיחות Gemini מופעלת", "status": "machine-draft" },
+    "description": { "value": "יש להפעיל את היסטוריית השיחות של Gemini כך שאינטראקציות ה-AI יישמרו לצורכי ביקורת ותאימות. היסטוריה מושבתת עלולה להסתיר טיפול בנתונים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "היסטוריית שיחות Gemini מופעלת", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Generative AI > Gemini app > Gemini conversation history > ודא שהיסטוריית השיחות מופעלת.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-004": {
+    "name": { "value": "שמירת שיחות Gemini למינימום 18 חודשים", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את שמירת השיחות של Gemini למינימום של 18 חודשים כדי לתמוך בדרישות ביקורת, השהיה משפטית וחקירת אירועים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "שמירת שיחות מוגדרת ל-18 חודשים לפחות", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Generative AI > Gemini app > Gemini conversation history > הגדר את תקופת השמירה ל-18 חודשים לפחות.", "status": "machine-draft" }
+  },
+  "GWS-GEMINI-005": {
+    "name": { "value": "שיתוף שיחות Gemini מושבת", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את שיתוף השיחות של Gemini באמצעות קישור ל-OFF כדי למנוע מתוכן שיחות ה-AI, שעשוי לכלול הנחיות ופלטים רגישים, להיות משותף מחוץ לנמענים המיועדים.", "status": "machine-draft" },
+    "recommendedValue": { "value": "שיתוף שיחות באמצעות קישור מוגדר ל-OFF", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Generative AI > Gemini app > Sharing > הגדר את 'Allow conversation sharing via link' ל-OFF.", "status": "machine-draft" }
+  }
+}

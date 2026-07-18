@@ -1,0 +1,63 @@
+{
+  "_family": "OAuthSecurityChecks.json",
+  "OAUTH-001": {
+    "name": { "value": "רשימת היתר/רשימת חסימה של אפליקציות OAuth", "status": "machine-draft" },
+    "description": { "value": "יש לנהל את גישת אפליקציות ה-OAuth באמצעות רשימת היתר או רשימת חסימה כדי למנוע מאפליקציות בלתי מורשות לגשת לנתונים ארגוניים", "status": "machine-draft" },
+    "recommendedValue": { "value": "רשימת היתר של אפליקציות OAuth מוגדרת עם אפליקציות מאושרות בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > App access control > Manage third-party app access > הגדר אפליקציות מהימנות/חסומות", "status": "machine-draft" }
+  },
+  "OAUTH-002": {
+    "name": { "value": "מצאי אפליקציות OAuth מותקנות", "status": "machine-draft" },
+    "description": { "value": "יש למנות ולבחון את כל אפליקציות ה-OAuth המותקנות על ידי משתמשים כדי לזהות אפליקציות בלתי מורשות או מסוכנות הניגשות לנתונים ארגוניים", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל אפליקציות ה-OAuth המותקנות נבחנו ואושרו על ידי צוות האבטחה", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > App access control > בחן אפליקציות מותקנות ובטל גישה עבור אפליקציות בלתי מורשות", "status": "machine-draft" }
+  },
+  "OAUTH-003": {
+    "name": { "value": "ניתוח היקפי OAuth", "status": "machine-draft" },
+    "description": { "value": "אפליקציות OAuth בעלות היקפים בסיכון גבוה (Gmail, Drive, Admin) מהוות סיכון משמעותי לדליפת נתונים וחייבות להיבחן ולהיות מוגבלות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין אפליקציות בלתי מורשות בעלות היקפים בסיכון גבוה (gmail, drive, admin)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > App access control > בחן אפליקציות בעלות היקפים רגישים > בטל או הגבל לפי הצורך", "status": "machine-draft" }
+  },
+  "OAUTH-004": {
+    "name": { "value": "ניקוד סיכון של אפליקציות OAuth", "status": "machine-draft" },
+    "description": { "value": "יש לנקד את אפליקציות ה-OAuth לפי סיכון על בסיס ההיקפים שהוענקו להן ומהימנות המפרסם כדי לתעדף את ביקורת האבטחה", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל האפליקציות בסיכון גבוה נבחנו ואושרו; אין אפליקציות שלא נבחנו בעלות היקפים רחבים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > App access control > בחן אפליקציות ממוינות לפי רוחב ההיקף > טפל באפליקציות בסיכון גבוה", "status": "machine-draft" }
+  },
+  "OAUTH-005": {
+    "name": { "value": "מדיניות גישה לאפליקציות לא מאומתות", "status": "machine-draft" },
+    "description": { "value": "יש להגביל את הגישה לאפליקציות צד שלישי לא מאומתות כדי למנוע ממשתמשים להעניק הרשאות לאפליקציות שעלולות להיות זדוניות", "status": "machine-draft" },
+    "recommendedValue": { "value": "גישה לאפליקציות לא מאומתות חסומה עבור כל המשתמשים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > App access control > Settings > חסום אפליקציות לא מאומתות", "status": "machine-draft" }
+  },
+  "OAUTH-006": {
+    "name": { "value": "בקרת גישת API", "status": "machine-draft" },
+    "description": { "value": "יש לבקר את גישת ה-API עם היקוף והגבלות מתאימים כדי למנוע גישה תוכניתית בלתי מורשית לנתונים ארגוניים", "status": "machine-draft" },
+    "recommendedValue": { "value": "גישת API מוגבלת לאפליקציות ולהיקפים מאושרים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > Manage Google Services > הגבל את גישת ה-API לאפליקציות מהימנות בלבד", "status": "machine-draft" }
+  },
+  "OAUTH-007": {
+    "name": { "value": "הגבלות התקנת אפליקציות מ-Marketplace", "status": "machine-draft" },
+    "description": { "value": "יש להגביל את התקנת האפליקציות מ-Google Workspace Marketplace כדי למנוע ממשתמשים להתקין אפליקציות בלתי מורשות", "status": "machine-draft" },
+    "recommendedValue": { "value": "התקנת אפליקציות מ-Marketplace מוגבלת לאפליקציות שאושרו על ידי מנהל או לאפליקציות ברשימת ההיתר בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace Marketplace apps > Settings > הגבל את התקנת האפליקציות מ-Marketplace", "status": "machine-draft" }
+  },
+  "OAUTH-008": {
+    "name": { "value": "ביקורת הרשאות האצלה כלל-דומיינית", "status": "machine-draft" },
+    "description": { "value": "האצלה כלל-דומיינית מאפשרת לחשבונות שירות להתחזות לכל משתמש ולגשת לנתונים שלו. הרשאות בלתי מורשות או מתירניות מדי מהוות סיכון אבטחה קריטי", "status": "machine-draft" },
+    "recommendedValue": { "value": "הרשאות האצלה כלל-דומיינית מזעריות עם הרשאות מוגבלות בהיקף; כל ההרשאות נבחנו ואושרו", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > Domain-wide delegation > בחן את כל ההרשאות, הסר את המיותרות והגבל את ההיקפים למינימום הנדרש", "status": "machine-draft" }
+  },
+  "OAUTH-009": {
+    "name": { "value": "מניית מפתחות של חשבונות שירות", "status": "machine-draft" },
+    "description": { "value": "יש למנות ולהחליף באופן סדיר את מפתחות חשבונות השירות. מפתחות שדלפו או מיושנים מספקים גישה בלתי מורשית מתמשכת", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל מפתחות חשבונות השירות ממופים, מוחלפים בתוך 90 ימים, ומפתחות שאינם בשימוש מוסרים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Google Cloud Console > IAM & Admin > Service accounts > בחן והחלף מפתחות > הסר מפתחות חשבון שירות שאינם בשימוש", "status": "machine-draft" }
+  },
+  "OAUTH-010": {
+    "name": { "value": "אפליקציות מחוברות בעלות היקפים רגישים", "status": "machine-draft" },
+    "description": { "value": "יש למנות ולאמת אפליקציות בעלות גישה לנתוני Drive, Gmail או Calendar כדי למנוע דליפת נתונים באמצעות אפליקציות מחוברות", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל האפליקציות בעלות היקפים רגישים (Drive, Gmail, Calendar) נבחנו ואושרו", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > App access control > סנן לפי היקף (Drive, Gmail, Calendar) > בחן והגבל אפליקציות בלתי מורשות", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "_family": "GoogleTradecraftChecks.json",
+  "GTRADE-001": {
+    "name": { "value": "חשיפה להשתלטות ארגונית באמצעות האצלה כלל-דומיינית", "status": "machine-draft" },
+    "description": { "value": "האצלה כלל-דומיינית קושרת התחזות למזהה OAuth client ID של חשבון שירות, ולא למפתח שלו, כך שכל מי שיכול לייצר מפתח על חשבון שירות מואצל המחזיק בהיקפים רחבים משיג התחזות כלל-ארגונית ללא super admin (טכניקת DeleFriend). הרשאות מואצלות הנושאות היקפי Gmail/Drive/Directory/cloud-platform מלאים הן התנאי המקדים להשתלטות.", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין חשבון שירות עם היקפי התחזות כלל-ארגונית מואצלים (Gmail/Drive/Directory/cloud-platform מלאים); היקפי קריאה-בלבד מצומצמים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Security > API controls > Domain-wide delegation: הסר או צמצם כל הרשאה המחזיקה בהיקפי mail.google.com מלא, drive מלא, admin.directory או cloud-platform; הגבל להיקפי קריאה-בלבד המזעריים הנדרשים. ב-GCP, מנע יצירת מפתחות בחשבונות שירות מואצלים (iam.disableServiceAccountKeyCreation).", "status": "machine-draft" }
+  },
+  "GTRADE-002": {
+    "name": { "value": "קבוצות Google הניתנות לקריאה מהאינטרנט", "status": "machine-draft" },
+    "description": { "value": "קבוצות שהנושאים שלהן ניתנים לצפייה על ידי 'anyone on the internet' מדליפות בשקט את כל היסטוריית ההודעות שלהן, סוג חשיפה שחשף את הדואר הפנימי של אלפי ארגונים (נתונים פיננסיים, פרטי הזדהות, PII). Google אינה מספקת התראה מובנית לחשיפה זו.", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין קבוצה הניתנת לצפייה על ידי כל אדם באינטרנט (whoCanViewGroup אינו ANYONE_CAN_VIEW)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Apps > Google Workspace > Groups for Business > Sharing settings, ובהגדרות הגישה של כל קבוצה: שנה את 'Who can view conversations' מ-'Anyone on the internet' לחברים/ארגון בלבד.", "status": "machine-draft" }
+  },
+  "GTRADE-003": {
+    "name": { "value": "קבוצות בהצטרפות פתוחה / בעלות חברים חיצוניים", "status": "machine-draft" },
+    "description": { "value": "קבוצות שכל אחד (או כל אחד בדומיין) יכול להצטרף אליהן, או שמתירות חברים חיצוניים, מרחיבות את גבול האמון ומאפשרות גישה בשירות עצמי. אם קבוצה כזו מחזיקה גם בגישת משאבים או IAM, ההצטרפות אליה יורשת גישה זו (נתיב הסלמת הרשאות ש-Google מסווגת כהתנהגות מכוונת).", "status": "machine-draft" },
+    "recommendedValue": { "value": "קבוצות מוגבלות לחברים מוזמנים; ללא הצטרפות פתוחה לכול וללא חברים חיצוניים אלא אם נדרש במפורש", "status": "machine-draft" },
+    "remediationSteps": { "value": "Apps > Google Workspace > Groups for Business: הגדר את ברירת המחדל של 'Who can join' ל-'Only invited users' והשבת את 'Allow external members' אלא אם קבוצה דורשת אותם במפורש; בחן קבוצות המעניקות גישת משאבים/IAM.", "status": "machine-draft" }
+  },
+  "GTRADE-004": {
+    "name": { "value": "התפשטות super admin", "status": "machine-draft" },
+    "description": { "value": "מנהלי super admin עוקפים SSO ואת רוב הבקרות; אוכלוסיית super admin גדולה מרחיבה את משטח התקיפה בעל הערך הגבוה ביותר של הארגון. שיטת העבודה המומלצת של Google היא לשמור על מספר קטן (פחות מחמישה) כאשר העבודה השוטפת מתבצעת תחת תפקידים בעלי הרשאות מזעריות.", "status": "machine-draft" },
+    "recommendedValue": { "value": "פחות מ-5 מנהלי super admin פעילים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Account > Admin roles > Super Admin: צמצם את החברות למערך break-glass המזערי; העבר משימות שגרתיות לתפקידים מותאמים/מובנים בעלי הרשאות מזעריות; אכוף 2SV עמיד לדיוג על כל ה-super admin הנותרים.", "status": "machine-draft" }
+  },
+  "GTRADE-005": {
+    "name": { "value": "תפקידים מותאמים שווי-ערך ל-super admin", "status": "machine-draft" },
+    "description": { "value": "תפקידי ניהול מותאמים הנושאים הרשאות רבות עוצמה (ניהול משתמשים, הגדרות אבטחה, ניהול תפקידים, ייצוא נתונים/Takeout) יכולים להתקרב ליכולת super admin תוך התחמקות מספירת ראשים פשוטה של super admin, וקטור שקט של ריכוז הרשאות והתמדה.", "status": "machine-draft" },
+    "recommendedValue": { "value": "אף תפקיד מותאם אינו נושא הרשאות שוות-ערך ל-super admin (ניהול משתמשים/אבטחה/תפקידים או ייצוא נתונים) מחוץ לשימוש break-glass", "status": "machine-draft" },
+    "remediationSteps": { "value": "Account > Admin roles: בחן תפקידים מותאמים המחזיקים בהרשאות ניהול משתמשים, הגדרות אבטחה, ניהול תפקידים או ייצוא נתונים/Takeout; פצל לתפקידים בעלי היקף מצומצם והגבל את בעלי ההקצאה.", "status": "machine-draft" }
+  },
+  "GTRADE-006": {
+    "name": { "value": "הרשאות OAuth מתמשכות / בעלות היקף רחב מדי", "status": "machine-draft" },
+    "description": { "value": "הרשאות OAuth של צד שלישי המחזיקות בהיקפי Gmail/Drive/admin מלאים עוקפות MFA ושורדות איפוס סיסמה (הפעלות Apps Script, סיסמאות אפליקציה והפעלות IMAP-OAuth אינן מבוטלות באיפוס), ערוץ התמדה עמיד. Google מתעדת הרשאות אך אינה כוללת מסווג ברירת מחדל להרשאות זדוניות.", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין אפליקציית OAuth של צד שלישי המחזיקה בהיקפי mail/drive/admin מלאים; הרשאות מתמשכות נבחנות ומבוטלות במפורש", "status": "machine-draft" },
+    "remediationSteps": { "value": "Security > API controls > App access control: בחן אפליקציות בעלות היקפי Gmail/Drive/Directory מלאים, הגבל לאפליקציות ברשימת ההיתר ובטל במפורש הרשאות מיותרות (איפוס סיסמה בלבד אינו מבטל גישת OAuth, סיסמת אפליקציה או Apps Script).", "status": "machine-draft" }
+  }
+}

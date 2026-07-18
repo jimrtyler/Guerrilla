@@ -1,0 +1,39 @@
+{
+  "_family": "LoggingAlertingChecks.json",
+  "LOG-001": {
+    "name": { "value": "הגדרות שמירת יומני ביקורת", "status": "machine-draft" },
+    "description": { "value": "יש לשמור יומני ביקורת לתקופה מספקת כדי לתמוך בחקירת אירועים ובדרישות תאימות. שמירת ברירת המחדל משתנה לפי מהדורת Workspace", "status": "machine-draft" },
+    "recommendedValue": { "value": "שמירת יומני ביקורת של 12 חודשים או יותר; מורחבת באמצעות ייצוא ל-BigQuery לשמירה לטווח ארוך", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Reporting > Audit and investigation > בחן את זמינות היומנים. הגדר ייצוא ל-BigQuery באמצעות Admin Console > Reporting > BigQuery export לשמירה לטווח ארוך", "status": "machine-draft" }
+  },
+  "LOG-002": {
+    "name": { "value": "מצאי כללי Alert Center", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את כללי Alert Center כדי לזהות אירועים רלוונטיים לאבטחה ולהתריע עליהם, לרבות כניסות חשודות, דליפת נתונים והפרות מדיניות", "status": "machine-draft" },
+    "recommendedValue": { "value": "כללי התראה מוגדרים עבור אירועי אבטחה מרכזיים (כניסה חשודה, דליפת נתונים, שינויי הרשאות)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > Alert center > בחן כללים קיימים > צור כללים עבור קטגוריות אירועי אבטחה חסרות", "status": "machine-draft" }
+  },
+  "LOG-003": {
+    "name": { "value": "ניתוח כיסוי כללי פעילות", "status": "machine-draft" },
+    "description": { "value": "כללי פעילות אמורים לספק כיסוי הולם על פני תחומי אבטחה, לרבות אירועי כניסה, Drive, Admin ודואר אלקטרוני", "status": "machine-draft" },
+    "recommendedValue": { "value": "כללי פעילות המכסים כניסה, שיתוף ב-Drive, שינויי admin, העברת דואר ואירועי OAuth", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > Alert center > Rules > בחן את הכיסוי על פני קטגוריות אירועים > הוסף כללים עבור תחומי אבטחה בלתי מכוסים", "status": "machine-draft" }
+  },
+  "LOG-004": {
+    "name": { "value": "הגדרות ייצוא נתונים", "status": "machine-draft" },
+    "description": { "value": "יש לבקר את Google Takeout (ייצוא נתונים) כדי למנוע ממשתמשים לייצא בכמות גדולה נתונים ארגוניים מחוץ לדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "Google Takeout מושבת או מוגבל עבור רוב המשתמשים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Additional Google services > Google Takeout > השבת או הגבל עבור היחידות הארגוניות הרלוונטיות", "status": "machine-draft" }
+  },
+  "LOG-005": {
+    "name": { "value": "תצורת התראות דואר למנהלים", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר התראות דואר עבור פעולות admin קריטיות, לרבות שינויי super admin, שינויי הגדרות אבטחה ופעולות בכמות גדולה", "status": "machine-draft" },
+    "recommendedValue": { "value": "התראות דואר מופעלות עבור פעולות admin קריטיות ואירועי אבטחה", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > Alert center > הגדר נמעני התראות דואר עבור סוגי התראות קריטיים", "status": "machine-draft" }
+  },
+  "LOG-006": {
+    "name": { "value": "גישה ל-Reporting API", "status": "machine-draft" },
+    "description": { "value": "יש לבחון את הגישה ל-Reports API כדי להבטיח שרק חשבונות שירות ואפליקציות מורשים יכולים לאחזר נתוני ביקורת ושימוש", "status": "machine-draft" },
+    "recommendedValue": { "value": "גישה ל-Reports API מוגבלת לחשבונות שירות מורשים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Security > API controls > Domain-wide delegation > בחן הרשאות בעלות היקפי Reports API > הסר גישה בלתי מורשית", "status": "machine-draft" }
+  }
+}

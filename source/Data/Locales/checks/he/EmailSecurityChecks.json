@@ -1,0 +1,189 @@
+{
+  "_family": "EmailSecurityChecks.json",
+  "EMAIL-001": {
+    "name": { "value": "אימות רשומת SPF", "status": "machine-draft" },
+    "description": { "value": "רשומות Sender Policy Framework (SPF) חייבות להתקיים ולהיות תקפות עבור כל הדומיינים. SPF מונע זיוף דואר אלקטרוני באמצעות ציון שרתי הדואר המורשים לשלוח דואר בשם הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "רשומת v=spf1 תקפה מפורסמת עבור כל הדומיינים עם המסייג -all או ~all", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Authenticate email > פרסם רשומת SPF: v=spf1 include:_spf.google.com ~all עבור כל דומיין", "status": "machine-draft" }
+  },
+  "EMAIL-002": {
+    "name": { "value": "חתימת DKIM מופעלת", "status": "machine-draft" },
+    "description": { "value": "חתימת DomainKeys Identified Mail (DKIM) חייבת להיות מופעלת ותקפה עבור כל הדומיינים. DKIM מספק הוכחה קריפטוגרפית לכך שתוכן הדואר לא שונה במעבר", "status": "machine-draft" },
+    "recommendedValue": { "value": "חתימת DKIM מופעלת עם מפתח תקף המפורסם עבור כל הדומיינים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Authenticate email > צור מפתח DKIM ופרסם רשומת DNS עבור כל דומיין", "status": "machine-draft" }
+  },
+  "EMAIL-003": {
+    "name": { "value": "ביקורת מדיניות DMARC", "status": "machine-draft" },
+    "description": { "value": "מדיניות Domain-based Message Authentication, Reporting and Conformance (DMARC) חייבת להיות מוגדרת לדחייה או להסגר עבור כל הדומיינים. מדיניות DMARC של none אינה מספקת כל הגנה מפני זיוף", "status": "machine-draft" },
+    "recommendedValue": { "value": "מדיניות DMARC מוגדרת לדחייה או להסגר עבור כל הדומיינים", "status": "machine-draft" },
+    "remediationSteps": { "value": "פרסם רשומת TXT של DMARC בכתובת _dmarc.<domain> עם p=reject או p=quarantine. התחל עם p=none לצורך ניטור, לאחר מכן הסלם להסגר ולבסוף לדחייה", "status": "machine-draft" }
+  },
+  "EMAIL-004": {
+    "name": { "value": "מדיניות MTA-STS", "status": "machine-draft" },
+    "description": { "value": "Mail Transfer Agent Strict Transport Security (MTA-STS) מונע התקפות הנמכת TLS ויירוט אדם-בתווך של דואר במעבר באמצעות דרישה לחיבורי TLS מאומתים", "status": "machine-draft" },
+    "recommendedValue": { "value": "רשומת TXT של MTA-STS מפורסמת ומדיניות מתארחת בכתובת https://mta-sts.<domain>/.well-known/mta-sts.txt", "status": "machine-draft" },
+    "remediationSteps": { "value": "פרסם רשומת TXT בכתובת _mta-sts.<domain> עם v=STSv1; id=<unique_id> ואחסן את קובץ מדיניות MTA-STS בכתובת https://mta-sts.<domain>/.well-known/mta-sts.txt", "status": "machine-draft" }
+  },
+  "EMAIL-005": {
+    "name": { "value": "אכיפת TLS", "status": "machine-draft" },
+    "description": { "value": "יש לדרוש Transport Layer Security (TLS) לשידור דואר אלקטרוני כדי למנוע ציתות. הגדרות TLS לתאימות מבטיחות חיבורים מוצפנים עם דומייני שותפים מוגדרים", "status": "machine-draft" },
+    "recommendedValue": { "value": "נדרש TLS עבור כל החיבורים היוצאים והנכנסים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Compliance > Secure transport (TLS) compliance > הוסף כלל הדורש TLS עבור כל הדומיינים או עבור דומייני שותפים מסוימים", "status": "machine-draft" }
+  },
+  "EMAIL-006": {
+    "name": { "value": "בחינת רשימת היתר/רשימת חסימה של דואר", "status": "machine-draft" },
+    "description": { "value": "יש לבחון רשימות היתר ורשימות חסימה של דואר לאיתור רשומות מתירניות מדי. שולחים ברשימת ההיתר עוקפים את סינון הספאם וניתן לנצלם אם הוגדרו בטעות", "status": "machine-draft" },
+    "recommendedValue": { "value": "רשומות מזעריות ברשימת ההיתר ללא דומייני תווים כלליים; רשימת החסימה מתוחזקת באופן פעיל", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > בחן את רשימות ההיתר של הדואר ואת רשימות השולחים החסומים לאיתור רשומות רחבות מדי", "status": "machine-draft" }
+  },
+  "EMAIL-007": {
+    "name": { "value": "תצורת שער נכנס", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את שערי הדואר הנכנס כראוי כדי לשמר את תוצאות אימות השולח. שערים שהוגדרו בטעות עלולים להסיר כותרות SPF/DKIM/DMARC או לעקוף סינון אבטחה", "status": "machine-draft" },
+    "recommendedValue": { "value": "שערים נכנסים מוגדרים עם טווחי IP נכונים ועם שימור כותרות", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > Inbound gateway > ודא את כתובות ה-IP של השער ואת שימור כותרות האימות", "status": "machine-draft" }
+  },
+  "EMAIL-008": {
+    "name": { "value": "ביקורת כללי ניתוב דואר", "status": "machine-draft" },
+    "description": { "value": "יש לבחון את כללי ניתוב הדואר לאיתור תצורות חשודות או בלתי מורשות. כללי ניתוב זדוניים עלולים להפנות דואר ליעדים בשליטת תוקף", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל כללי הניתוב נבחנו ותועדו בהצדקה עסקית", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Routing > בחן את כל כללי הניתוב, ניתוב ברירת המחדל ומיפויי הנמענים לאיתור רשומות בלתי מורשות", "status": "machine-draft" }
+  },
+  "EMAIL-009": {
+    "name": { "value": "מדיניות העברה אוטומטית", "status": "machine-draft" },
+    "description": { "value": "יש להשבית העברה אוטומטית של דואר לכתובות חיצוניות כדי למנוע דליפת נתונים. תוקפים מגדירים לעתים קרובות כללי העברה לאחר פריצה לחשבון", "status": "machine-draft" },
+    "recommendedValue": { "value": "העברה אוטומטית מושבתת עבור כל היחידות הארגוניות", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > השבת העברה אוטומטית עבור כל היחידות הארגוניות. בחן כללי העברה קיימים באמצעות Gmail API", "status": "machine-draft" }
+  },
+  "EMAIL-010": {
+    "name": { "value": "הגדרות גישת נציג", "status": "machine-draft" },
+    "description": { "value": "האצלת דואר מאפשרת למשתמשים להעניק למשתמשים אחרים גישת קריאה ושליחה לתיבת הדואר שלהם. האצלה מופרזת עלולה להוביל לגישה בלתי מורשית והתחזות", "status": "machine-draft" },
+    "recommendedValue": { "value": "האצלת דואר מוגבלת ונבחנת מעת לעת; אין נציגים בלתי צפויים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > בחן את הגדרות האצלת הדואר. בדוק אם למשתמשים בודדים יש נציגים בלתי מורשים באמצעות Gmail API", "status": "machine-draft" }
+  },
+  "EMAIL-011": {
+    "name": { "value": "הגדרות גישת POP/IMAP", "status": "machine-draft" },
+    "description": { "value": "יש להשבית גישת POP ו-IMAP אלא אם היא נדרשת במפורש. פרוטוקולים מדור קודם אלה עוקפים בקרות אבטחה מודרניות וניתן להשתמש בהם בהתקפות מבוססות פרטי הזדהות", "status": "machine-draft" },
+    "recommendedValue": { "value": "POP ו-IMAP מושבתים עבור כל המשתמשים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > השבת גישת POP ו-IMAP. בחן הגדרות של משתמשים בודדים באמצעות Gmail API", "status": "machine-draft" }
+  },
+  "EMAIL-012": {
+    "name": { "value": "הגדרות מסנן ספאם ודיוג", "status": "machine-draft" },
+    "description": { "value": "יש להפעיל מסנני ספאם ודיוג משופרים כדי לספק הגנה מרבית מפני התקפות הנדסה חברתית ומסעות דואר זדוניים", "status": "machine-draft" },
+    "recommendedValue": { "value": "סינון ספאם משופר וזיהוי דיוג אגרסיבי מופעלים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > הפעל את 'Be more aggressive when filtering spam' ואת כל אפשרויות ההגנה מפני דיוג", "status": "machine-draft" }
+  },
+  "EMAIL-013": {
+    "name": { "value": "סריקת הודעות משופרת לפני מסירה", "status": "machine-draft" },
+    "description": { "value": "סריקת הודעות משופרת לפני מסירה משתמשת בהיוריסטיקות מתקדמות ובארגז חול כדי לזהות תוכנות זדוניות ואיומים לפני מסירת ההודעות לתיבות הדואר של המשתמשים", "status": "machine-draft" },
+    "recommendedValue": { "value": "סריקת הודעות משופרת לפני מסירה מופעלת", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > הפעל את 'Enhanced pre-delivery message scanning' לזיהוי תוכן חשוד", "status": "machine-draft" }
+  },
+  "EMAIL-014": {
+    "name": { "value": "אזהרת נמען חיצוני", "status": "machine-draft" },
+    "description": { "value": "יש להזהיר את המשתמשים בעת שליחת דואר לנמענים מחוץ לארגון כדי למנוע חשיפת נתונים בשוגג והנדסה חברתית", "status": "machine-draft" },
+    "recommendedValue": { "value": "אזהרת נמען חיצוני מופעלת עבור כל המשתמשים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > הפעל את 'Warn users when they send messages outside the domain'", "status": "machine-draft" }
+  },
+  "EMAIL-015": {
+    "name": { "value": "הגדרות בטיחות קבצים מצורפים", "status": "machine-draft" },
+    "description": { "value": "יש להפעיל את כל הגנות בטיחות הקבצים המצורפים כדי לזהות ולחסום קבצים מצורפים זדוניים, לרבות ארכיונים מוצפנים, סוגי קבצים חריגים וסקריפטים", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל אפשרויות ההגנה על קבצים מצורפים מופעלות עם פעולת הסגר", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Safety > Attachments > הפעל את כל ההגנות: קבצים מצורפים מוצפנים, סקריפטים משולחים לא מהימנים וסוגי קבצים מצורפים חריגים", "status": "machine-draft" }
+  },
+  "EMAIL-016": {
+    "name": { "value": "הגנה על קישורים ותמונות חיצוניות", "status": "machine-draft" },
+    "description": { "value": "יש להפעיל הגנה על קישורים כדי לסרוק כתובות URL לאיתור דיוג ותוכנות זדוניות. שרת proxy לתמונות חיצוניות מונע פיקסלים למעקב וחשיפת כתובות IP", "status": "machine-draft" },
+    "recommendedValue": { "value": "סריקת URL, אזהרות בעת לחיצה ושרת proxy לתמונות חיצוניות מופעלים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Safety > Links and external images > הפעל את 'Identify links behind shortened URLs', את 'Scan linked images' ואת 'Show warning prompt for click on links to untrusted domains'", "status": "machine-draft" }
+  },
+  "EMAIL-017": {
+    "name": { "value": "הגנה מפני זיוף ואימות", "status": "machine-draft" },
+    "description": { "value": "הגנות מפני זיוף ואימות מגוננות מפני זיוף דומיין, זיוף שמות עובדים ודואר בלתי מאומת מדומיינים הנראים דומים לארגון", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל ההגנות מפני זיוף ואימות מופעלות עם פעולת הסגר", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Safety > Spoofing and authentication > הפעל את כל ההגנות: זיוף דומיין, זיוף שמות עובדים, זיוף דואר נכנס ודואר בלתי מאומת", "status": "machine-draft" }
+  },
+  "EMAIL-018": {
+    "name": { "value": "ביקורת כללי תאימות", "status": "machine-draft" },
+    "description": { "value": "יש לבחון את כללי תאימות התוכן כדי להבטיח טיפול הולם בנתונים רגישים. כללים יכולים לאכוף הצפנה, הסגר או דחייה על בסיס דפוסי תוכן", "status": "machine-draft" },
+    "recommendedValue": { "value": "כללי תאימות תוכן מוגדרים עבור סוגי נתונים רגישים עם פעולות מתאימות", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > Compliance > Content compliance > בחן כללים קיימים וצור כללים עבור סוגי תוכן רגישים (PII, נתונים פיננסיים, רשומות בריאות)", "status": "machine-draft" }
+  },
+  "EMAIL-019": {
+    "name": { "value": "תצורת כללי DLP", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר כללי מניעת אובדן נתונים (DLP) כדי לזהות ולמנוע יציאת נתונים רגישים מהארגון בדואר אלקטרוני. DLP מספק בדיקת תוכן אוטומטית ואכיפת מדיניות", "status": "machine-draft" },
+    "recommendedValue": { "value": "כללי DLP מוגדרים עבור סוגי נתונים מרכזיים (כרטיסי אשראי, מספרי ביטוח לאומי, רשומות בריאות) עם פעולת חסימה או אזהרה", "status": "machine-draft" },
+    "remediationSteps": { "value": "Security > Data protection > Manage rules: צור כלל DLP של Gmail המזהה דפוסי תוכן רגיש (כרטיסי אשראי, מספרי ביטוח לאומי, רשומות בריאות) ומחיל פעולת חסימה או אזהרה", "status": "machine-draft" }
+  },
+  "EMAIL-020": {
+    "name": { "value": "מצב סודי של Gmail", "status": "machine-draft" },
+    "description": { "value": "מצב סודי של Gmail מאפשר לשולחים להגדיר תאריכי תפוגה ולבטל גישה להודעות. בחן אם תכונה זו מופעלת או מוגבלת בהתאם למדיניות הארגונית", "status": "machine-draft" },
+    "recommendedValue": { "value": "מצב סודי של Gmail מופעל עבור משתמשים המטפלים בנתונים רגישים", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > בחן את הגדרות המצב הסודי של Gmail והפעל או הגבל בהתאם לדרישות הארגוניות", "status": "machine-draft" }
+  },
+  "EMAIL-021": {
+    "name": { "value": "הגדרות S/MIME", "status": "machine-draft" },
+    "description": { "value": "S/MIME מספק הצפנת דואר מקצה לקצה וחתימות דיגיטליות. אם נדרש לפי תאימות, יש להגדיר ולנהל תעודות S/MIME כראוי", "status": "machine-draft" },
+    "recommendedValue": { "value": "S/MIME מופעל אם נדרש לפי תאימות; התעודות מנוהלות כראוי", "status": "machine-draft" },
+    "remediationSteps": { "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > S/MIME > הפעל S/MIME מתארח אם נדרש וודא שהתעודות הועלו ותקפות", "status": "machine-draft" }
+  },
+  "EMAIL-022": {
+    "name": { "value": "מניית כללי העברת דואר", "status": "machine-draft" },
+    "description": { "value": "יש למנות ולבחון את כל כללי העברת הדואר ברמת המשתמש. תוקפים מגדירים לעתים קרובות כללי העברה כדי לשמר גישה מתמשכת לדואר לאחר פריצה לחשבון", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין כללי העברה בלתי מורשים; כל כללי ההעברה מתועדים ומאושרים", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה כללי העברה באמצעות Gmail API עבור כל המשתמשים. הסר כתובות העברה בלתי מורשות. השבת העברה אוטומטית ברמת ה-OU כדי למנוע ניצול לרעה בעתיד", "status": "machine-draft" }
+  },
+  "EMAIL-023": {
+    "name": { "value": "שערים יוצאים לכל משתמש מושבתים (GWS.GMAIL.12.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.12.1 דורש להשבית שערים יוצאים לכל משתמש. כאשר הם מופעלים, משתמשים יכולים לנתב דואר יוצא דרך שרתי SMTP חיצוניים משלהם, לעקוף את בקרות אבטחת הדואר של הארגון וליצור נתיב לדליפת נתונים ולזיוף. בדיקה זו קוראת את מדיניות gmail.per_user_outbound_gateway מ-Cloud Identity Policy API ומסמנת כל יחידה ארגונית שבה מותר ניתוב SMTP חיצוני. כאשר המדיניות אינה מוחזרת, התוצאה היא Not Assessed.", "status": "machine-draft" },
+    "recommendedValue": { "value": "שערים יוצאים לכל משתמש (SMTP חיצוני) מושבתים עבור כל היחידות הארגוניות", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Google Admin console תחת Apps > Google Workspace > Gmail > Routing, ודא ששערים יוצאים לכל משתמש אינם מותרים כך שמשתמשים לא יוכלו לנתב דואר דרך שרתי SMTP חיצוניים. שמור על ניתוב יוצא מרוכז דרך שערים מאושרים בלבד.", "status": "machine-draft" }
+  },
+  "EMAIL-024": {
+    "name": { "value": "ארגז חול לאבטחת Gmail מופעל (GWS.GMAIL.16.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.16.1 ממליץ להפעיל את ארגז החול לאבטחת Gmail, המפעיל קבצים מצורפים נכנסים בסביבה וירטואלית כדי לזהות תוכנות זדוניות של יום אפס שסריקת חתימות מפספסת. בדיקה זו קוראת את מדיניות gmail.security_sandbox מ-Cloud Identity Policy API ומסמנת יחידות ארגוניות שבהן ארגז החול מושבת. שדה המדיניות המדויק הוא מיטבי עד לאישור על דייר מורשה; כאשר המדיניות אינה מוחזרת, התוצאה היא Not Assessed במקום פסיקה מומצאת.", "status": "machine-draft" },
+    "recommendedValue": { "value": "ארגז חול לאבטחה מופעל (הפעלת קבצים מצורפים וירטואלית) עבור כל היחידות הארגוניות", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Google Admin console תחת Apps > Google Workspace > Gmail > Safety > Attachments, הפעל את ארגז החול לאבטחה כך שקבצים מצורפים נכנסים יופעלו בסביבה וירטואלית לפני המסירה. שים לב שארגז החול לאבטחה דורש את מהדורת Google Workspace המתאימה.", "status": "machine-draft" }
+  },
+  "EMAIL-025": {
+    "name": { "value": "האצלת דואר של Gmail מושבתת (GWS.GMAIL.1.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.1.1: האצלת דואר מאפשרת למשתמש להעניק לחשבון אחר גישת קריאה/שליחה לתיבת הדואר שלו, נתיב גישת נתונים קבוע השורד את מטרת ההאצלה. קורא את gmail.mail_delegation; מזהיר כאשר enableMailDelegation מופעל.", "status": "machine-draft" },
+    "recommendedValue": { "value": "האצלת דואר מושבתת אלא אם היא נדרשת במכוון", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Gmail settings > User settings, השבת את האצלת הדואר אלא אם קיים צורך עסקי שנבחן.", "status": "machine-draft" }
+  },
+  "EMAIL-026": {
+    "name": { "value": "גישת POP ו-IMAP של Gmail מושבתת (GWS.GMAIL.9.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.9.1: פרוטוקולי POP ו-IMAP מדור קודם עוקפים אימות מודרני והם וקטור למילוי פרטי הזדהות / עקיפת MFA. קורא את gmail.imap_access ואת gmail.pop_access; נכשל כאשר אחד מהם מופעל.", "status": "machine-draft" },
+    "recommendedValue": { "value": "גישת POP ו-IMAP מושבתת", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Gmail settings > End User Access, השבת את POP ו-IMAP כך שלקוחות דואר יחויבו להשתמש בפרוטוקולים מאומתים מודרניים.", "status": "machine-draft" }
+  },
+  "EMAIL-027": {
+    "name": { "value": "ייבוא דואר/אנשי קשר של משתמשי Gmail מושבת (GWS.GMAIL.8.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.8.1: העלאות דואר של משתמשים (ייבוא דואר ואנשי קשר מחשבונות חיצוניים) מושכות נתונים חיצוניים לתוך הדייר ויכולות לדלוף בכיוון ההפוך. קורא את gmail.user_email_uploads; מזהיר כאשר enableMailAndContactsImport מופעל.", "status": "machine-draft" },
+    "recommendedValue": { "value": "ייבוא דואר/אנשי קשר של משתמשים מושבת", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Gmail settings, השבת את היכולת של משתמשים לייבא דואר ואנשי קשר מחשבונות אחרים אלא אם נדרש.", "status": "machine-draft" }
+  },
+  "EMAIL-028": {
+    "name": { "value": "Google Workspace Sync for Outlook מושבת (GWS.GMAIL.10.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.10.1: Google Workspace Sync for Microsoft Outlook (GWSMO) מגשר נתוני תיבת דואר ללקוח Outlook, מרחיב את משטח הנתונים ועוקף חלק מהגנות הרשת. קורא את gmail.workspace_sync_for_outlook; מזהיר כאשר הוא מופעל.", "status": "machine-draft" },
+    "recommendedValue": { "value": "GWSMO מושבת אלא אם נדרש", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Gmail end-user access settings, השבת את Google Workspace Sync for Microsoft Outlook אלא אם קיים צורך שנבחן.", "status": "machine-draft" }
+  },
+  "EMAIL-029": {
+    "name": { "value": "רשימות שולחים לעקיפת ספאם של Gmail נבחנות (GWS.GMAIL.18.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.18.1: רשימות שולחים מאושרים / עקיפת ספאם גורמות לדואר מדומיינים ברשימה לעקוף את סינון הספאם, עקיפת דיוג אם הן רחבות מדי. קורא את gmail.spam_override_lists; מזהיר כאשר מוגדרים דומייני שולחים לעקיפה.", "status": "machine-draft" },
+    "recommendedValue": { "value": "רשימות שולחים לעקיפת ספאם נעדרות או מזעריות ונבחנות", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Gmail spam settings, בחן וצמצם רשימות שולחים מאושרים / עקיפה כך שדואר מדומיינים מהימנים לא יופטר כליל מסינון ספאם.", "status": "machine-draft" }
+  },
+  "EMAIL-030": {
+    "name": { "value": "העברת דואר אוטומטית מושבתת (GWS.GMAIL.11.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.11.1 ממליץ להשבית העברת דואר אוטומטית, במיוחד לדומיינים חיצוניים. העברה אוטומטית היא ערוץ נפוץ לדליפת נתונים ומנגנון התמדה לאחר השתלטות על חשבון, משום שהיא מעתיקה בשקט דואר נכנס לכתובת בשליטת תוקף. בדיקה זו קוראת את מדיניות gmail.auto_forwarding של Cloud Identity ומסמנת כל יחידה ארגונית שבה מופעלת העברה אוטומטית.", "status": "machine-draft" },
+    "recommendedValue": { "value": "העברת דואר אוטומטית מושבתת (enableAutoForwarding = false) בכל היחידות הארגוניות.", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Google Admin console, תחת Apps > Google Workspace > Gmail > End User Access, השבת את 'Allow users to automatically forward incoming email to another address', תוך מתן עדיפות ליעדים חיצוניים. בחן כללי העברה קיימים לאיתור נמענים חיצוניים בלתי צפויים.", "status": "machine-draft" }
+  },
+  "EMAIL-031": {
+    "name": { "value": "סריקת הודעות משופרת לפני מסירה מופעלת (GWS.GMAIL.15.1)", "status": "machine-draft" },
+    "description": { "value": "SCuBA GWS.GMAIL.15.1 דורש סריקת הודעות משופרת לפני מסירה, המשפרת את זיהוי התוכן החשוד והדיוג לפני שהודעה מגיעה לתיבת הדואר. בדיקה זו קוראת את מדיניות gmail.enhanced_pre_delivery_message_scanning של Cloud Identity ומסמנת כל יחידה ארגונית שבה זיהוי תוכן חשוד משופר אינו מופעל.", "status": "machine-draft" },
+    "recommendedValue": { "value": "סריקת הודעות משופרת לפני מסירה מופעלת (enableImprovedSuspiciousContentDetection = true) בכל היחידות הארגוניות.", "status": "machine-draft" },
+    "remediationSteps": { "value": "ב-Google Admin console, תחת Apps > Google Workspace > Gmail > Spam, Phishing, and Malware, הפעל סריקת הודעות משופרת לפני מסירה כך ש-Gmail יבצע ניתוח נוסף של תוכן חשוד לפני המסירה.", "status": "machine-draft" }
+  }
+}
