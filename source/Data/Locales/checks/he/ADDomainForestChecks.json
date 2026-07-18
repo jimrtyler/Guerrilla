@@ -1,0 +1,123 @@
+{
+  "_family": "ADDomainForestChecks.json",
+  "ADDOM-001": {
+    "name": { "value": "רמת תפקוד של היער", "status": "machine-draft" },
+    "description": { "value": "רמת התפקוד של יער ה-Active Directory צריכה להיות Windows Server 2016 ומעלה כדי לאפשר תכונות אבטחה מודרניות כגון Privileged Access Management והגנות Kerberos משופרות. הרצת רמות תפקוד ישנות חושפת את הסביבה להתקפות המנצלות חולשות בפרוטוקולים מדור קודם", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 ומעלה", "status": "machine-draft" },
+    "remediationSteps": { "value": "העלה את רמת התפקוד של היער באמצעות Active Directory Domains and Trusts > לחיצה ימנית על שורש היער > Raise Forest Functional Level. ודא שכל בקרי הדומיין מריצים גרסת מערכת הפעלה נתמכת לפני ההעלאה", "status": "machine-draft" }
+  },
+  "ADDOM-002": {
+    "name": { "value": "רמת תפקוד של הדומיין", "status": "machine-draft" },
+    "description": { "value": "רמת התפקוד של דומיין ה-Active Directory צריכה להיות Windows Server 2016 ומעלה. רמות תפקוד נמוכות יותר מונעות שימוש בתכונות אבטחה קריטיות כולל תפקודיות קבוצת Protected Users, מדיניויות אימות ו-Kerberos armoring מודרני", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 ומעלה", "status": "machine-draft" },
+    "remediationSteps": { "value": "העלה את רמת התפקוד של הדומיין באמצעות Active Directory Domains and Trusts > לחיצה ימנית על הדומיין > Raise Domain Functional Level. ודא תחילה שכל בקרי הדומיין בדומיין מריצים גרסת מערכת הפעלה תואמת", "status": "machine-draft" }
+  },
+  "ADDOM-003": {
+    "name": { "value": "זיהוי גרסת ה-Schema", "status": "machine-draft" },
+    "description": { "value": "יש לתעד את גרסת ה-schema של AD ולוודא שהיא תואמת לגרסה הנתמכת האחרונה. schema מיושן עשוי לחסר תכונות הנדרשות על ידי תכונות אבטחה ויישומים מודרניים", "status": "machine-draft" },
+    "recommendedValue": { "value": "גרסת schema התואמת ל-Windows Server 2022 (גרסה 88) ומעלה", "status": "machine-draft" },
+    "remediationSteps": { "value": "הרץ adprep /forestprep ו-adprep /domainprep ממדיית ההתקנה האחרונה של Windows Server כדי לעדכן את ה-schema. ודא את התכונה objectVersion ב-CN=Schema,CN=Configuration,DC=domain", "status": "machine-draft" }
+  },
+  "ADDOM-004": {
+    "name": { "value": "מלאי בקרי דומיין", "status": "machine-draft" },
+    "description": { "value": "יש למפות את כל בקרי הדומיין עם גרסת מערכת ההפעלה, רמת העדכונים והמיקום שלהם. בקרי דומיין שאינם במעקב מהווים סיכון אבטחה משמעותי משום שהם עשויים להחמיץ עדכונים או להיפרץ ללא זיהוי", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל בקרי הדומיין מתועדים עם גרסת מערכת ההפעלה הנוכחית, חברות באתר ומצב העדכונים", "status": "machine-draft" },
+    "remediationSteps": { "value": "תשאל את כל אובייקטי המחשב של בקרי הדומיין מה-OU של Domain Controllers. ודא שכל בקר דומיין נספר, מריץ מערכת הפעלה נתמכת ומקבל עדכונים סדירים. הסר או הורד מיד כל בקר דומיין בלתי מורשה", "status": "machine-draft" }
+  },
+  "ADDOM-005": {
+    "name": { "value": "מערכת הפעלה מיושנת על בקרי דומיין", "status": "machine-draft" },
+    "description": { "value": "בקרי דומיין המריצים מערכות הפעלה שהגיעו לסוף חייהן (Windows Server 2012 R2 ומטה) אינם מקבלים עדכוני אבטחה ופגיעים לניצולים ידועים. אלו מהווים סיכון תשתיתי קריטי משום שפריצה לבקר דומיין מעניקה שליטה מלאה על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל בקרי הדומיין מריצים Windows Server 2019 ומעלה עם עדכונים עדכניים", "status": "machine-draft" },
+    "remediationSteps": { "value": "תכנן העברה של בקרי דומיין המריצים גרסאות מערכת הפעלה מיושנות. בנה בקרי דומיין חדשים על Windows Server 2022, העבר תפקידי FSMO במידת הצורך, בצע שכפול, ואז הורד ופרק את בקרי הדומיין הישנים. תעדף תיקון זה משום שבקרי דומיין מדור קודם מהווים יעד פעיל להתקפות", "status": "machine-draft" }
+  },
+  "ADDOM-006": {
+    "name": { "value": "זיהוי מחזיקי תפקידי FSMO", "status": "machine-draft" },
+    "description": { "value": "יש לתעד את חמשת תפקידי ה-FSMO (Schema Master, Domain Naming Master, RID Master, PDC Emulator, Infrastructure Master) ולמקם אותם על בקרי דומיין מתאימים. הכרת מיקום התפקידים חיונית להתאוששות מאסון ולמודעות תפעולית", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל תפקידי ה-FSMO מתועדים, ממוקמים על בקרי דומיין אמינים ונכללים בתכנון התאוששות מאסון", "status": "machine-draft" },
+    "remediationSteps": { "value": "הרץ 'netdom query fsmo' או תשאל את ה-schema ומחיצות הדומיין של AD כדי לזהות את מחזיקי התפקידים. תעד את התפקידים וודא שהם נמצאים על בקרי דומיין בעלי זמינות גבוהה. העבר תפקידים אם המחזיקים הנוכחיים אינם מתאימים", "status": "machine-draft" }
+  },
+  "ADDOM-007": {
+    "name": { "value": "תקינות שכפול AD", "status": "machine-draft" },
+    "description": { "value": "כשלי שכפול ב-Active Directory עלולים להוביל להחלה לא עקבית של מדיניות אבטחה, לפרטי הזדהות מיושנים שנשארים בתוקף ולתרחישי split-brain. כשלי שכפול מתמשכים עשויים גם להצביע על בקר דומיין שנפרץ או בלתי מורשה", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל בקרי הדומיין משכפלים בהצלחה ללא שגיאות ב-24 השעות האחרונות", "status": "machine-draft" },
+    "remediationSteps": { "value": "הרץ 'repadmin /replsummary' ו-'repadmin /showrepl' כדי לזהות כשלים. חקור ופתור בעיות DNS, בעיות קישוריות רשת או מצבי USN rollback. נטר את מצב השכפול כחלק מהפעולות השגרתיות", "status": "machine-draft" }
+  },
+  "ADDOM-008": {
+    "name": { "value": "תצורת Tombstone Lifetime", "status": "machine-draft" },
+    "description": { "value": "ה-tombstone lifetime מגדיר כמה זמן אובייקטים שנמחקו נשמרים לפני הסרה קבועה, וקובע את זמן ההשבתה המרבי של בקר דומיין לפני שיש לבנותו מחדש. ערך נמוך מדי עלול לגרום לאובייקטים משתהים; יש להגדיל את ברירת המחדל של 60 ימים ל-180 ימים עבור סביבות מודרניות", "status": "machine-draft" },
+    "recommendedValue": { "value": "180 ימים", "status": "machine-draft" },
+    "remediationSteps": { "value": "שנה את התכונה tombstoneLifetime ב-CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=domain. הגדר ל-180 באמצעות ADSIEdit או PowerShell. ודא ש-AD Recycle Bin מופעל לפני השינוי", "status": "machine-draft" }
+  },
+  "ADDOM-009": {
+    "name": { "value": "מצב AD Recycle Bin", "status": "machine-draft" },
+    "description": { "value": "ה-Active Directory Recycle Bin מאפשר שחזור של אובייקטים שנמחקו עם כל התכונות שלמות. בלעדיו, שחזור אובייקטים שנמחקו בשוגג או בזדון דורש authoritative restore מגיבוי, מה שגורם להשבתה משמעותית", "status": "machine-draft" },
+    "recommendedValue": { "value": "מופעל", "status": "machine-draft" },
+    "remediationSteps": { "value": "הפעל את AD Recycle Bin באמצעות Active Directory Administrative Center > לחיצה ימנית על הדומיין > Enable Recycle Bin, או הרץ Enable-ADOptionalFeature 'Recycle Bin Feature' ב-PowerShell. הערה: פעולה זו בלתי הפיכה", "status": "machine-draft" }
+  },
+  "ADDOM-010": {
+    "name": { "value": "תצורת אתרים ורשתות משנה", "status": "machine-draft" },
+    "description": { "value": "יש להקצות את כל רשתות המשנה של IP שבשימוש לאתרי AD. מיפויי רשת משנה-לאתר חסרים גורמים ללקוחות לאמת מול בקרי דומיין תת-אופטימליים, ובכך עלולים לשלוח פרטי הזדהות דרך קישורי WAN בטקסט גלוי ולפגוע במצב האבטחה", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל רשתות המשנה של IP ממופות לאתרי AD מתאימים ללא רשתות משנה יתומות", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את AD Sites and Services > מכל Subnets. הצלב מול תיעוד הרשת כדי לזהות רשתות משנה שאינן ממופות. צור אובייקטי רשת משנה עבור כל רשתות הייצור ושייך אותם לאתר הנכון", "status": "machine-draft" }
+  },
+  "ADDOM-011": {
+    "name": { "value": "תצורת Site Link", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את קישורי האתרים של AD עם עלות, מרווח שכפול ותזמון מתאימים כדי להבטיח שכפול בזמן תוך התחשבות במגבלות הרשת. קישורי אתרים שגויים עלולים לעכב את הפצת מדיניות האבטחה", "status": "machine-draft" },
+    "recommendedValue": { "value": "קישורי אתרים מוגדרים עם עלויות מתאימות ומרווחי שכפול של 15 עד 60 דקות בהתאם לקיבולת הקישור", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את AD Sites and Services > Inter-Site Transports > IP. ודא שלכל קישור אתר יש ערכי עלות מתאימים, מרווח שכפול (ברירת המחדל של 180 דקות היא לעתים קרובות ארוכה מדי) ותזמון. התאם על בסיס טופולוגיית הרשת", "status": "machine-draft" }
+  },
+  "ADDOM-012": {
+    "name": { "value": "אבטחת אזור DNS", "status": "machine-draft" },
+    "description": { "value": "אזורי DNS המשולבים ב-AD צריכים להשתמש בעדכונים דינמיים מאובטחים בלבד. התרת עדכונים לא מאובטחים מאפשרת לתוקפים להרעיל רשומות DNS, להסיט תעבורת אימות ולבצע התקפות adversary-in-the-middle נגד מערכות המצורפות לדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "עדכונים דינמיים מאובטחים בלבד בכל אזורי ה-DNS המשולבים ב-AD", "status": "machine-draft" },
+    "remediationSteps": { "value": "פתח את DNS Manager > לחיצה ימנית על כל אזור המשולב ב-AD > Properties > לשונית General > שנה את Dynamic Updates ל-'Secure only'. בחן את כל אזורי החיפוש קדימה ולאחור. ודא חתימת DNSSEC אם רלוונטי", "status": "machine-draft" }
+  },
+  "ADDOM-013": {
+    "name": { "value": "דרישות חתימת LDAP", "status": "machine-draft" },
+    "description": { "value": "יש לדרוש חתימת LDAP בכל בקרי הדומיין כדי למנוע התקפות adversary-in-the-middle על תעבורת LDAP. ללא חתימה, תוקפים יכולים ליירט ולשנות שאילתות ותגובות LDAP, ובכך עלולים להסלים הרשאות או לחלץ נתונים", "status": "machine-draft" },
+    "recommendedValue": { "value": "דרישת חתימת שרת LDAP מוגדרת ל-'Require signing' בכל בקרי הדומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Domain controller: LDAP server signing requirements' = 'Require signing'. החל על ה-OU של Domain Controllers", "status": "machine-draft" }
+  },
+  "ADDOM-014": {
+    "name": { "value": "LDAP Channel Binding", "status": "machine-draft" },
+    "description": { "value": "אסימוני channel binding של LDAP מונעים התקפות relay על ידי קשירה קריפטוגרפית של הפעלת ה-LDAP לערוץ ה-TLS. ללא channel binding, תוקפים יכולים להעביר אימות LDAP כדי להשיג גישה בלתי מורשית", "status": "machine-draft" },
+    "recommendedValue": { "value": "LDAP channel binding מוגדר ל-'Always' בכל בקרי הדומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר את ערך הרישום LdapEnforceChannelBinding ל-2 (Always) ב-HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters בכל בקרי הדומיין. בדוק תחילה עם ערך 1 (When Supported) כדי לזהות לקוחות בלתי תואמים", "status": "machine-draft" }
+  },
+  "ADDOM-015": {
+    "name": { "value": "דרישות חתימת SMB", "status": "machine-draft" },
+    "description": { "value": "יש לדרוש חתימת SMB בכל בקרי הדומיין כדי למנוע התקפות adversary-in-the-middle ו-relay על תעבורת SMB. התקפות SMB relay ניתנות לשימוש להשגת גישה ברמת SYSTEM על בקרי דומיין, מה שמוביל להשתלטות מלאה על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "חתימת SMB נדרשת בכל בקרי הדומיין ובשרתי החברים", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Microsoft network server: Digitally sign communications (always)' = Enabled. החל על ה-OU של Domain Controllers ועל כל ה-OU של השרתים", "status": "machine-draft" }
+  },
+  "ADDOM-016": {
+    "name": { "value": "זיהוי שימוש ב-NTLMv1", "status": "machine-draft" },
+    "description": { "value": "NTLMv1 הוא פרוטוקול אימות מוחלש באופן חמור הניתן לפיצוח בשניות בחומרה מודרנית. יש לזהות ולבטל כל שימוש ב-NTLMv1 בסביבה משום שהוא חושף פרטי הזדהות להתקפות לא מקוונות טריוויאליות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אפס אירועי אימות NTLMv1 מזוהים; רמת אימות LAN Manager מוגדרת לסרב ל-NTLMv1", "status": "machine-draft" },
+    "remediationSteps": { "value": "הפעל ביקורת NTLM באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > הגדרות 'Network security: Restrict NTLM'. בחן את יומני האירועים לאיתור שימוש ב-NTLMv1 ותקן את היישומים, ואז הגדר את 'Network security: LAN Manager authentication level' ל-'Send NTLMv2 response only. Refuse LM & NTLM'", "status": "machine-draft" }
+  },
+  "ADDOM-017": {
+    "name": { "value": "אכיפת NTLMv2", "status": "machine-draft" },
+    "description": { "value": "יש להגדיר את רמת האימות של LAN Manager לשליחת תגובות NTLMv2 בלבד ולסירוב ל-LM ו-NTLMv1. אף ש-NTLMv2 עדיין פחות מאובטח מ-Kerberos, הוא חזק באופן משמעותי מ-NTLMv1 וצריך להיות תקן ה-NTLM המזערי", "status": "machine-draft" },
+    "recommendedValue": { "value": "רמת אימות LAN Manager מוגדרת ל-'Send NTLMv2 response only. Refuse LM & NTLM' (רמה 5)", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Network security: LAN Manager authentication level' = 'Send NTLMv2 response only. Refuse LM & NTLM'. בדוק ביסודיות לפני האכיפה", "status": "machine-draft" }
+  },
+  "ADDOM-018": {
+    "name": { "value": "מיפוי Null Session", "status": "machine-draft" },
+    "description": { "value": "גישה אנונימית (null session) ל-Active Directory מאפשרת לתוקפים לא מאומתים למפות משתמשים, קבוצות, שיתופים ומידע דומיין. נתוני איסוף מודיעין אלו משמשים לתכנון התקפות פרטי הזדהות ותנועה רוחבית", "status": "machine-draft" },
+    "recommendedValue": { "value": "מיפוי null session מושבת; RestrictAnonymous ו-RestrictAnonymousSAM מוגדרים למניעת גישה אנונימית", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > הגדר 'Network access: Restrict anonymous access to Named Pipes and Shares' = Enabled, 'Network access: Do not allow anonymous enumeration of SAM accounts' = Enabled, 'Network access: Do not allow anonymous enumeration of SAM accounts and shares' = Enabled", "status": "machine-draft" }
+  },
+  "ADDOM-019": {
+    "name": { "value": "Print Spooler על בקרי דומיין", "status": "machine-draft" },
+    "description": { "value": "שירות Print Spooler על בקרי דומיין מאפשר את התקפות PrintNightmare (CVE-2021-34527) ו-SpoolSample/PrinterBug. תוקף יכול לכפות על בקר דומיין לאמת אל שרת בשליטת התוקף, ובכך לאפשר relay של פרטי הזדהות וניצול האצלה בלתי מוגבלת", "status": "machine-draft" },
+    "recommendedValue": { "value": "שירות Print Spooler מושבת בכל בקרי הדומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "השבת את שירות Print Spooler בכל בקרי הדומיין באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > System Services > Print Spooler > Startup Mode = Disabled. החל על ה-OU של Domain Controllers. ודא שאין תפקודיות הדפסה התלויה בבקרי דומיין", "status": "machine-draft" }
+  },
+  "ADDOM-020": {
+    "name": { "value": "תצורת סיסמת DSRM", "status": "machine-draft" },
+    "description": { "value": "סיסמת Directory Services Restore Mode (DSRM) מספקת גישת מנהל מקומי לבקר דומיין כאשר הוא מאותחל במצב שחזור. תוקף בעל גישה פיזית או מרחוק היודע את סיסמת ה-DSRM יכול לחלץ את מסד הנתונים המלא של AD. סיסמת ה-DSRM צריכה להיות ייחודית לכל בקר דומיין ולהתחלף באופן סדיר", "status": "machine-draft" },
+    "recommendedValue": { "value": "סיסמת DSRM ייחודית לכל בקר דומיין, מוחלפת מדי שנה ומאוחסנת באופן מאובטח. DsrmAdminLogonBehavior מוגדר ל-0 למניעת כניסת DSRM ברשת", "status": "machine-draft" },
+    "remediationSteps": { "value": "אפס סיסמאות DSRM באמצעות 'ntdsutil > set dsrm password' בכל בקר דומיין. הגדר את ערך הרישום DsrmAdminLogonBehavior ל-0 ב-HKLM\\System\\CurrentControlSet\\Control\\Lsa כדי למנוע שימוש בחשבון ה-DSRM לכניסה ברשת. תעד ואחסן את הסיסמאות באופן מאובטח", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "_family": "ADCertificateServicesChecks.json",
+  "ADCS-001": {
+    "name": { "value": "מלאי שרתי רשות אישורים", "status": "machine-draft" },
+    "description": { "value": "מלאי של כל שרתי רשות האישורים (CA) בסביבה מספק את הבסיס להערכת אבטחת AD CS. זה כולל Enterprise CA, Standalone CA, תפקידיהם (Root מול Subordinate), גרסאות מערכת ההפעלה ותבניות האישורים שפורסמו. הבנת היררכיית ה-PKI חיונית לזיהוי משטח ההתקפה", "status": "machine-draft" },
+    "recommendedValue": { "value": "מלאי CA מלא מתועד עם סוג ה-CA, תפקידו, גרסת מערכת ההפעלה והתבניות שפורסמו עבור כל שרת CA", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את כל שרתי ה-CA על ידי תשאול מכל PKI Enrollment Services ב-AD (CN=Enrollment Services,CN=Public Key Services,CN=Services,CN=Configuration). תעד עבור כל CA את סוגו (Enterprise/Standalone), תפקידו (Root/Subordinate), שם המארח, גרסת מערכת ההפעלה ותבניות האישורים שפורסמו. ודא שכל שרתי ה-CA מריצים גרסאות מערכת הפעלה נתמכות ובעלי עדכונים עדכניים.", "status": "machine-draft" }
+  },
+  "ADCS-002": {
+    "name": { "value": "ESC1 - הנרשם מספק Subject Alternative Name", "status": "machine-draft" },
+    "description": { "value": "ESC1 מתרחש כאשר תבנית אישור מאפשרת לנרשם לציין Subject Alternative Name (SAN) בבקשת האישור, כוללת Client Authentication או כל EKU המתיר אימות, ומאפשרת רישום על ידי משתמשים בעלי הרשאות נמוכות. תוקף יכול לבקש אישור עם SAN עבור כל משתמש דומיין כולל Domain Admins, ואז להשתמש באישור כדי לאמת כאותו משתמש", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין תבניות אישורים עם CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT המאפשרות רישום בעל הרשאות נמוכות ובעלות EKU של אימות", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה תבניות שבהן msPKI-Certificate-Name-Flag כולל CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT (0x1), לתבנית יש EKU של Client Authentication או Smart Card Logon, והרישום מותר למשתמשים שאינם מנהלים. הסר את הדגל CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT, הגבל את הרשאות הרישום לקבוצות מורשות, או הסר את ה-EKU של האימות. אם ציון SAN נדרש מבחינה תפעולית, הטמע אישור CA Manager.", "status": "machine-draft" }
+  },
+  "ADCS-003": {
+    "name": { "value": "ESC2 - Extended Key Usage לכל מטרה", "status": "machine-draft" },
+    "description": { "value": "ESC2 מתרחש כאשר תבנית אישור מציינת את ה-EKU של Any Purpose (OID 2.5.29.37.0) או ללא EKU כלל (שווה ערך לתבנית SubCA). אישורים עם EKU של Any Purpose ניתנים לשימוש לכל מטרה כולל client authentication, server authentication וחתימת קוד. בשילוב עם SAN בשליטת הנרשם או דרישות רישום נמוכות, הדבר מאפשר השתלטות על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין תבניות אישורים עם EKU של Any Purpose או EKU ריק המאפשרות רישום בעל הרשאות נמוכות", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה תבניות שבהן pKIExtendedKeyUsage מכיל את ה-OID של Any Purpose (2.5.29.37.0) או ריק, והרישום מותר למשתמשים שאינם מנהלים. החלף את ה-EKU של Any Purpose ב-EKU ספציפיים נדרשים (למשל Client Authentication בלבד). אם מדובר בתבנית SubCA, הגבל את הרישום ל-Enterprise Admins בלבד. הטמע אישור CA Manager עבור כל תבנית נותרת בעלת EKU רחבים.", "status": "machine-draft" }
+  },
+  "ADCS-004": {
+    "name": { "value": "ESC3 - ניצול תבנית Enrollment Agent תנאי 1", "status": "machine-draft" },
+    "description": { "value": "ESC3 תנאי 1 מזהה תבניות אישורים בעלות ה-EKU של Certificate Request Agent (OID 1.3.6.1.4.1.311.20.2.1) המאפשרות רישום על ידי משתמשים בעלי הרשאות נמוכות. אישור Enrollment Agent מאפשר למחזיק בו להירשם לתבניות אחרות בשם כל משתמש, כולל אפשרות לתבניות בעלות EKU של אימות הדורשות בדרך כלל אישור CA Manager", "status": "machine-draft" },
+    "recommendedValue": { "value": "תבניות Certificate Request Agent מוגבלות לסוכני רישום מורשים בלבד; אינן ניתנות לרישום על ידי משתמשים בעלי הרשאות נמוכות", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה תבניות בעלות ה-EKU של Certificate Request Agent המאפשרות רישום על ידי משתמשים שאינם ניהוליים. הגבל את הרשאות הרישום בתבניות אלו לקבוצת אבטחה ייעודית של Enrollment Agent. הגדר הגבלות Enrollment Agent על ה-CA כדי להגביל אילו תבניות ומשתמשים סוכני הרישום יכולים להירשם עבורם. נטר הנפקת אישורי Certificate Request Agent.", "status": "machine-draft" }
+  },
+  "ADCS-005": {
+    "name": { "value": "ESC3 - ניצול תבנית Enrollment Agent תנאי 2", "status": "machine-draft" },
+    "description": { "value": "ESC3 תנאי 2 מזהה תבניות אישורים המקבלות רישום בשם משתמשים אחרים (הדורשות חתימת enrollment agent) ובעלות EKU של אימות. בשילוב עם ESC3 תנאי 1, תוקף המשיג אישור Enrollment Agent יכול להירשם לאישורי אימות בשם כל משתמש, כולל Domain Admins", "status": "machine-draft" },
+    "recommendedValue": { "value": "תבניות הדורשות חתימות enrollment agent מוגבלות למשתמשי יעד ספציפיים באמצעות הגבלות enrollment agent על ה-CA", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה תבניות הדורשות חתימה מורשית עם מדיניות היישום Certificate Request Agent ובעלות EKU של Client Authentication או Smart Card Logon. הגדר הגבלות Enrollment Agent על ה-CA כדי להגביל אילו תבניות סוכני רישום אלו יכולים להירשם עבורן ובשם אילו משתמשים. הדבר מוגדר במאפייני ה-CA תחת הגבלות Enrollment Agents.", "status": "machine-draft" }
+  },
+  "ADCS-006": {
+    "name": { "value": "ESC4 - ACL פגיעים של תבנית אישור", "status": "machine-draft" },
+    "description": { "value": "ESC4 מתרחש כאשר למשתמשים בעלי הרשאות נמוכות יש הרשאות כתיבה על אובייקטי תבנית אישור ב-AD, מה שמאפשר להם לשנות תכונות תבנית כדי ליצור תנאי ESC1, ESC2 או ESC3. תוקף בעל גישת כתיבה יכול להוסיף CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT, לשנות את ה-EKU, לשנות הרשאות רישום או לשנות תכונות רלוונטיות אחרות לאבטחה כדי לאפשר הסלמת הרשאות מבוססת אישורים", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין הרשאות כתיבה על אובייקטי תבנית אישור עבור ישויות שאינן ניהוליות", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את ה-ACL על כל אובייקטי תבנית האישור ב-CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration. הסר ACE מסוג WriteDACL, WriteOwner, WriteProperty ו-GenericAll/GenericWrite עבור ישויות שאינן ניהוליות. רק ל-Enterprise Admins ולמנהלי PKI ייעודיים צריכה להיות גישת כתיבה לאובייקטי תבנית. נטר שינויי ACL על אובייקטי תבנית אישור.", "status": "machine-draft" }
+  },
+  "ADCS-007": {
+    "name": { "value": "ESC4 - בעלות פגיעה על תבנית אישור", "status": "machine-draft" },
+    "description": { "value": "אם אובייקט תבנית אישור נמצא בבעלות ישות שאינה ניהולית, אותה ישות יכולה לשנות את ה-DACL של התבנית כדי להעניק לעצמה גישת כתיבה ואז לשנות את התבנית כדי ליצור תנאים הניתנים לניצול. יש להגביל את הבעלות על תבניות ל-Enterprise Admins או לקבוצת ניהול ה-PKI של הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל אובייקטי תבנית האישור נמצאים בבעלות Enterprise Admins או מנהלי PKI ייעודיים", "status": "machine-draft" },
+    "remediationSteps": { "value": "בדוק את שדה Owner בכל אובייקט תבנית אישור ב-CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration. העבר את הבעלות על כל תבנית המצויה בבעלות שגויה ל-Enterprise Admins באמצעות Set-Acl או לשונית Security ב-adsiedit.msc. חקור כיצד חשבונות שאינם מנהלים הפכו לבעלים כדי למנוע הישנות.", "status": "machine-draft" }
+  },
+  "ADCS-008": {
+    "name": { "value": "ESC5 - ACL פגיעים של אובייקטי PKI", "status": "machine-draft" },
+    "description": { "value": "ESC5 מכסה הרשאות כתיבה על אובייקטי AD אחרים הקשורים ל-PKI מעבר לתבניות אישורים, כולל אובייקט ה-AD של שרת ה-CA, אובייקט NTAuthCertificates, מכל Enrollment Services ומכל Certificate Templates. גישת כתיבה לאובייקטים אלו עשויה לאפשר לתוקף להוסיף CA זדוניים, לשנות הגדרות רישום או לפרסם תבניות זדוניות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין הרשאות כתיבה על אובייקטי מכל PKI עבור ישויות שאינן ניהוליות; גישת כתיבה מוגבלת ל-Enterprise Admins", "status": "machine-draft" },
+    "remediationSteps": { "value": "בקר את ה-ACL על כל האובייקטים תחת CN=Public Key Services,CN=Services,CN=Configuration כולל מכל Enrollment Services, מכל AIA, אובייקט NTAuthCertificates ומכל Certificate Templates. הסר הרשאות כתיבה עבור ישויות שאינן ניהוליות. ודא שלאובייקט המחשב של ה-CA ב-AD אין הרשאות כתיבה עבור קבוצות רחבות. נטר אובייקטים אלו לאיתור שינויים בלתי מורשים.", "status": "machine-draft" }
+  },
+  "ADCS-009": {
+    "name": { "value": "ESC6 - דגל EDITF_ATTRIBUTESUBJECTALTNAME2", "status": "machine-draft" },
+    "description": { "value": "כאשר הדגל EDITF_ATTRIBUTESUBJECTALTNAME2 מופעל על CA, כל בקשת אישור יכולה לכלול Subject Alternative Name בהגדרת המשתמש ללא תלות בתצורת התבנית. הדבר הופך למעשה כל תבנית על ה-CA לפגיעה להתקפות בסגנון ESC1 שבהן תוקף מציין SAN עבור משתמש מורשה", "status": "machine-draft" },
+    "recommendedValue": { "value": "הדגל EDITF_ATTRIBUTESUBJECTALTNAME2 מושבת בכל שרתי ה-CA", "status": "machine-draft" },
+    "remediationSteps": { "value": "בדוק את תצורת ה-CA באמצעות certutil -getreg policy\\EditFlags בכל שרת CA. אם הדגל EDITF_ATTRIBUTESUBJECTALTNAME2 (0x00040000) מוגדר, הסר אותו באמצעות certutil -setreg policy\\EditFlags -EDITF_ATTRIBUTESUBJECTALTNAME2. הפעל מחדש את שירות CertSvc לאחר השינוי. בחן את כל האישורים שהונפקו לאחרונה לאיתור SAN בלתי צפויים העשויים להצביע על ניצול קודם.", "status": "machine-draft" }
+  },
+  "ADCS-010": {
+    "name": { "value": "ESC7 - ACL פגיעים של CA", "status": "machine-draft" },
+    "description": { "value": "ESC7 מתרחש כאשר לישות שאינה מנהל יש הרשאות ManageCA או ManageCertificates על ה-CA. ManageCA מאפשרת שינוי תצורת ה-CA כולל הפעלת EDITF_ATTRIBUTESUBJECTALTNAME2 (יצירת תנאי ESC6). ManageCertificates מאפשרת אישור בקשות אישור ממתינות, ובכך עוקפת דרישות אישור CA Manager על תבניות רגישות", "status": "machine-draft" },
+    "recommendedValue": { "value": "הרשאות ManageCA ו-ManageCertificates מוגבלות למנהלי CA ייעודיים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את הרשאות האבטחה של ה-CA באמצעות certsrv.msc > Properties > לשונית Security או certutil -getacl. הסר הרשאות ManageCA מישויות שאינן ניהוליות. הסר ManageCertificates מכל ישות שאינה מנהל אישורים מורשה. תעד את כל הישויות בעלות הרשאות ניהול CA. הטמע הפרדת תפקידים בין מנהלי CA למנהלי אישורים.", "status": "machine-draft" }
+  },
+  "ADCS-011": {
+    "name": { "value": "ESC8 - NTLM Relay לנקודות קצה HTTP של AD CS", "status": "machine-draft" },
+    "description": { "value": "ESC8 מנצל את נקודות הקצה של HTTP של רישום האינטרנט של AD CS (certsrv) ושל Certificate Enrollment Service (CES) המקבלות אימות NTLM. תוקף יכול לכפות אימות מבקר דומיין או מחשבון מורשה ולהעביר את אימות ה-NTLM אל נקודת הקצה HTTP של ה-CA כדי לבקש אישור כזהות המועברת, מה שמוביל להשתלטות על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין נקודות קצה של רישום מבוססות HTTP; אם נדרש, אכוף HTTPS עם Extended Protection for Authentication (EPA) מופעל", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה את כל נקודות הקצה של רישום האינטרנט של ה-CA באמצעות Get-CertificateEnrollmentService ובדיקת קישורי IIS. השבת נקודות קצה של רישום מבוססות HTTP ודרוש HTTPS. הפעל Extended Protection for Authentication ב-IIS כדי למנוע NTLM relay. לחלופין, השבת לחלוטין את תפקיד רישום האינטרנט והשתמש רק בממשק הרישום מבוסס DCOM. השבת אימות NTLM על שרתי CA היכן שאפשר.", "status": "machine-draft" }
+  },
+  "ADCS-012": {
+    "name": { "value": "ESC9 - ללא הרחבת אבטחה", "status": "machine-draft" },
+    "description": { "value": "ESC9 מנצל את היעדר הרחבת האבטחה szOID_NTDS_CA_SECURITY_EXT באישורים שהונפקו. ללא הרחבה זו וכאשר StrongCertificateBindingEnforcement אינו מוגדר ל-2, תוקף המסוגל לשנות את תכונת ה-UPN של משתמש (באמצעות GenericWrite על אובייקט המשתמש) יכול לבקש אישור, לשנות בחזרה את ה-UPN ולהשתמש באישור כדי לאמת כזהות ששונתה", "status": "machine-draft" },
+    "recommendedValue": { "value": "StrongCertificateBindingEnforcement מוגדר ל-2 בכל בקרי הדומיין; CT_FLAG_NO_SECURITY_EXTENSION אינו מוגדר בתבניות אימות", "status": "machine-draft" },
+    "remediationSteps": { "value": "בדוק אם יש תבניות עם CT_FLAG_NO_SECURITY_EXTENSION (0x80000) ב-msPKI-Enrollment-Flag. הסר דגל זה מכל התבניות בעלות יכולת אימות. הגדר את ערך הרישום StrongCertificateBindingEnforcement ל-2 תחת HKLM\\SYSTEM\\CurrentControlSet\\Services\\Kdc בכל בקרי הדומיין כדי לאכוף מיפוי אישורים חזק. בדוק אימות מבוסס אישורים לאחר הפעלת האכיפה.", "status": "machine-draft" }
+  },
+  "ADCS-013": {
+    "name": { "value": "ESC11 - RPC Relay ללא הצפנה", "status": "machine-draft" },
+    "description": { "value": "ESC11 מכוון לממשק רישום ה-RPC של AD CS (ICertPassage) כאשר ה-CA אינו אוכף הצפנה על חיבור ה-RPC. בדומה ל-ESC8 עבור HTTP, תוקף יכול להעביר אימות NTLM אל נקודת הקצה RPC הלא מוצפנת כדי לבקש אישורים כזהות המועברת. הדבר משפיע על ממשק הרישום מבוסס DCOM שהוא ברירת המחדל", "status": "machine-draft" },
+    "recommendedValue": { "value": "הדגל IF_ENFORCEENCRYPTICERTREQUEST מופעל בכל שרתי ה-CA כדי לדרוש הצפנת RPC", "status": "machine-draft" },
+    "remediationSteps": { "value": "בדוק את דגלי הממשק של ה-CA באמצעות certutil -getreg CA\\InterfaceFlags. הפעל את הדגל IF_ENFORCEENCRYPTICERTREQUEST באמצעות certutil -setreg CA\\InterfaceFlags +IF_ENFORCEENCRYPTICERTREQUEST. הפעל מחדש את שירות CertSvc. ודא שרישום האישורים עדיין פועל כראוי מלקוחות המצורפים לדומיין לאחר הפעלת אכיפת ההצפנה.", "status": "machine-draft" }
+  },
+  "ADCS-014": {
+    "name": { "value": "ESC13 - קישור קבוצה של Issuance Policy OID", "status": "machine-draft" },
+    "description": { "value": "ESC13 מנצל את הקישור בין OID של מדיניות הנפקת אישורים לקבוצות אבטחה ב-AD באמצעות התכונה msDS-OIDToGroupLink. כאשר לתבנית אישור יש מדיניות הנפקה הממופה לקבוצת אבטחה, כל מי שנרשם לאותה תבנית מקבל למעשה חברות בקבוצה המקושרת למשך האימות מבוסס האישורים", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין OID של מדיניות הנפקה המקושרים לקבוצות אבטחה מורשות; msDS-OIDToGroupLink רק על קבוצות שאינן רגישות", "status": "machine-draft" },
+    "remediationSteps": { "value": "תשאל את כל אובייקטי ה-OID ב-CN=OID,CN=Public Key Services,CN=Services,CN=Configuration עבור התכונה msDS-OIDToGroupLink. זהה כל OID המקושר לקבוצות מורשות (Domain Admins, Enterprise Admins וכו'). הסר את התכונה msDS-OIDToGroupLink מ-OID המקושרים לקבוצות רגישות. אם הקישור נדרש מבחינה תפעולית, הגבל את הרישום בתבניות המשתמשות במדיניות ההנפקה לישויות מורשות בלבד.", "status": "machine-draft" }
+  },
+  "ADCS-015": {
+    "name": { "value": "ESC15 - Application Policies בתבניות Schema v1", "status": "machine-draft" },
+    "description": { "value": "ESC15 (הידוע גם כ-EKUwu) מנצל תבניות אישורים של Schema Version 1 שבהן הרחבת Application Policies ניתנת לציון על ידי הנרשם בבקשת האישור. משום שתבניות Schema v1 אינן אוכפות את Application Policies מהתבנית, תוקף יכול להוסיף Client Authentication או כל EKU אחר לאישור שהונפק, ללא תלות בתצורת התבנית", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין תבניות Schema v1 שפורסמו המאפשרות רישום בעל הרשאות נמוכות; העבר את כל התבניות הנדרשות ל-Schema v2 ומעלה", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה את כל תבניות Schema v1 (msPKI-Template-Schema-Version = 1) שפורסמו על Enterprise CA. העבר תבניות Schema v1 ל-Schema v2 ומעלה על ידי יצירת תבניות חדשות המבוססות על תבנית ה-v1 עם אכיפת EKU מפורשת. הגבל את הרישום בכל תבנית v1 נותרת לחשבונות ניהוליים בלבד. בטל פרסום של תבניות v1 שאינן נדרשות עוד.", "status": "machine-draft" }
+  },
+  "ADCS-016": {
+    "name": { "value": "ESC16 - תצורה שגויה של UPN SAN", "status": "machine-draft" },
+    "description": { "value": "ESC16 מנצל תצורה שגויה שבה StrongCertificateBindingEnforcement מוגדר ל-1 (מצב תאימות) ותבניות אישורים עם CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT או CT_FLAG_SUBJECT_ALT_REQUIRE_UPN מאפשרות לנרשם להגדיר את ה-UPN ב-SAN. הקישור החלש מאפשר למפות אישורים למשתמשים על בסיס UPN בלבד ללא הרחבת האבטחה OID, ובכך מאפשר התחזות", "status": "machine-draft" },
+    "recommendedValue": { "value": "StrongCertificateBindingEnforcement מוגדר ל-2; אין תבניות המאפשרות UPN SAN בציון הנרשם עם רישום בעל הרשאות נמוכות", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר את StrongCertificateBindingEnforcement ל-2 בכל בקרי הדומיין תחת HKLM\\SYSTEM\\CurrentControlSet\\Services\\Kdc. בחן את כל התבניות המאפשרות subject בציון הנרשם או הדורשות UPN ב-SAN. הגבל את הרישום בתבניות אלו לישויות מורשות. בדוק אימות מבוסס אישורים לאחר אכיפת קישור חזק כדי לזהות אי-תאימויות לפני פריסה מלאה.", "status": "machine-draft" }
+  },
+  "ADCS-017": {
+    "name": { "value": "EKEUwu - ניצול Extended Key Usage", "status": "machine-draft" },
+    "description": { "value": "התקפת EKEUwu מכוונת לתבניות אישורים שבהן שדה ה-Extended Key Usage ניתן להשפעה על ידי הנרשם באמצעות בקשת האישור. הדבר מתרחש בתצורות תבנית מסוימות שבהן ה-EKU אינו נאכף באופן מחמיר על ידי התבנית, ומאפשר לתוקף להוסיף EKU של אימות לאישורים שלא נועדו למטרות אימות", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל תבניות האישורים אוכפות באופן מחמיר EKU מהגדרת התבנית; אין EKU הניתנים לשליטת הנרשם", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את כל תבניות האישורים לאיתור אכיפת EKU. ודא שהתבניות הן Schema v2 ומעלה שבהן אכיפת ה-EKU חזקה יותר. הסר תבניות מיותרות שאינן מגדירות ואוכפות EKU באופן מחמיר. בדוק בקשות אישורים כדי לוודא שה-EKU של האישור שהונפק תואם להגדרת התבנית. הטמע מודולי מדיניות הנפקה של CA המאמתים EKU בבקשות.", "status": "machine-draft" }
+  },
+  "ADCS-018": {
+    "name": { "value": "תצורת ביקורת של CA", "status": "machine-draft" },
+    "description": { "value": "ביקורת רשות האישורים של AD CS שולטת אילו אירועים הקשורים לאישורים נרשמים, כולל בקשות אישור, הנפקה, ביטול ושינויי תצורת CA. ללא ביקורת CA נאותה, לא ניתן לזהות או לחקור ניצול של וקטורי התקפה מבוססי אישורים (ESC1-ESC16), והנפקת אישורים בלתי מורשית אינה מורגשת", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל קטגוריות הביקורת של ה-CA מופעלות: התחלה/עצירה, גיבוי/שחזור, אישור הונפק, אישור בוטל, בקשת אישור, אבטחת CA, שינוי תצורת CA", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר ביקורת CA באמצעות certsrv.msc > CA Properties > לשונית Auditing. הפעל את כל קטגוריות הביקורת: גיבוי ושחזור של מסד הנתונים של ה-CA, שינוי תצורת CA, שינוי הגדרות אבטחת CA, הנפקה וניהול של בקשות אישור, ביטול אישורים ופרסום CRL, אחסון ואחזור של מפתחות בארכיון, התחלה ועצירה של AD CS. ודא שיומן אירועי האבטחה של Windows בעל גודל והגדרות שמירה מספיקים.", "status": "machine-draft" }
+  },
+  "ADCS-019": {
+    "name": { "value": "מיפוי תבניות אישורים", "status": "machine-draft" },
+    "description": { "value": "מיפוי מקיף של כל תבניות האישורים עם תכונותיהן הרלוונטיות לאבטחה מספק את קו הבסיס להערכת פגיעויות ESC. זה כולל את גרסת ה-schema של התבנית, הרשאות רישום, תצורת EKU, name flags, enrollment flags, דרישת חתימות מורשות ותקופת תוקף. מידע זה מזין את כל הבדיקות הספציפיות ל-ESC", "status": "machine-draft" },
+    "recommendedValue": { "value": "מלאי תבניות מלא עם תכונות אבטחה מתועד; כל התבניות נבחנו לרישום בעקרון ההרשאה המזערית ול-EKU מתאים", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את כל תבניות האישורים מ-CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration באמצעות certutil -template או PowerShell. עבור כל תבנית, תעד: שם תצוגה, גרסת schema, הרשאות רישום, EKU, name flags (ENROLLEE_SUPPLIES_SUBJECT), enrollment flags, דרישת חתימות מורשות, תקופת תוקף ותקופת חידוש. הצלב את התבניות שפורסמו בכל CA.", "status": "machine-draft" }
+  }
+}

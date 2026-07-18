@@ -1,0 +1,69 @@
+{
+  "_family": "ADKerberosChecks.json",
+  "ADKERB-001": {
+    "name": { "value": "חשבונות פגיעים ל-Kerberoasting", "status": "machine-draft" },
+    "description": { "value": "חשבונות משתמש המשויכים לשמות ראשיים של שירות (SPN) פגיעים ל-Kerberoasting: כל משתמש דומיין מאומת יכול לבקש כרטיס שירות המוצפן בגיבוב הסיסמה של החשבון ולנסות לפצח אותו במצב לא מקוון. התקפה זו אינה דורשת הרשאות מיוחדות וקשה לזהותה. כל חשבון משתמש הנושא SPN מהווה וקטור פוטנציאלי לחשיפת פרטי הזדהות", "status": "machine-draft" },
+    "recommendedValue": { "value": "מספר מזערי של חשבונות משתמש עם SPN. כל החשבונות הפגיעים ל-Kerberoasting מזוהים, מתועדים בהצדקה עסקית, ומוגנים בסיסמאות באורך 25 תווים ומעלה או מועברים ל-gMSA", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את החשבונות הפגיעים ל-Kerberoasting באמצעות Get-ADUser -Filter {ServicePrincipalName -ne '$null'} -Properties ServicePrincipalName. עבור כל חשבון: (1) הערך אם ה-SPN עדיין נחוץ, (2) הסר SPN מיותרים, (3) העבר לחשבונות שירות מנוהלים של קבוצה במידת האפשר, (4) עבור החשבונות הנותרים ודא שהסיסמאות באורך 25 תווים ומעלה ומוחלפות באופן סדיר. נטר בקשות TGS של Kerberos המכוונות לחשבונות רגישים באמצעות Event ID 4769", "status": "machine-draft" }
+  },
+  "ADKERB-002": {
+    "name": { "value": "חשבונות פגיעים ל-Kerberoasting עם הצפנה חלשה", "status": "machine-draft" },
+    "description": { "value": "חשבונות משתמש הנושאים SPN המוגדרים להשתמש בהצפנת RC4 או DES קלים בהרבה לפיצוח באמצעות Kerberoasting מאשר אלו המשתמשים ב-AES. כרטיסי RC4 (ARCFOUR-HMAC-MD5) ניתנים לפיצוח מהר בסדרי גודל מכרטיסי AES על גבי חומרת GPU מודרנית. חשבונות המוגדרים במפורש עם סוגי הצפנה חלשים או חסרי מפתחות AES מהווים את יעדי ה-Kerberoasting בעדיפות הגבוהה ביותר", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל החשבונות הנושאים SPN תומכים בהצפנת AES256. אין חשבונות המוגבלים לסוגי הצפנה RC4 או DES. msDS-SupportedEncryptionTypes כולל את דגלי AES בכל חשבונות השירות", "status": "machine-draft" },
+    "remediationSteps": { "value": "תשאל את חשבונות המשתמש הנושאים SPN ובדוק את התכונה msDS-SupportedEncryptionTypes שלהם. חשבונות בעלי ערך 0 (לא מוגדר) משתמשים ב-RC4 כברירת מחדל. חשבונות בעלי דגלי RC4 (0x4) או DES (0x1, 0x2, 0x3) בלבד פגיעים. החלף סיסמאות בכל החשבונות המושפעים לאחר הפעלת תמיכת AES בדומיין כדי לייצר מפתחות AES. הגדר את msDS-SupportedEncryptionTypes כך שיכלול את דגלי AES128 (0x8) ו-AES256 (0x10)", "status": "machine-draft" }
+  },
+  "ADKERB-003": {
+    "name": { "value": "חשבונות פגיעים ל-AS-REP Roasting", "status": "machine-draft" },
+    "description": { "value": "חשבונות שבהם מוגדר הדגל DONT_REQUIRE_PREAUTH מאפשרים לכל משתמש לבקש AS-REP המכיל חומר מוצפן הניתן לפיצוח במצב לא מקוון ללא כל אימות מוקדם. בניגוד ל-Kerberoasting, התקפת AS-REP Roasting אינה דורשת אפילו חשבון דומיין תקף בחלק מהתצורות, מה שהופך אותה לטכניקת גישה ראשונית אטרקטיבית עבור תוקפים בעלי גישת רשת בלבד לבקר דומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין חשבונות שבהם מוגדר הדגל 'אין לדרוש אימות מוקדם של Kerberos'. אפס חשבונות פגיעים ל-AS-REP Roasting", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה חשבונות באמצעות Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true -and Enabled -eq $true}. הפעל אימות מוקדם של Kerberos בכל החשבונות. לעתים נדירות קיימת סיבה לגיטימית לביטול אימות מוקדם בסביבות מודרניות. החלף סיסמאות בכל החשבונות שהיו פגיעים בעבר משום שייתכן שכבר היו יעד להתקפה. נטר את Event ID 4768 עם סוג אימות מוקדם 0", "status": "machine-draft" }
+  },
+  "ADKERB-004": {
+    "name": { "value": "האצלה בלתי מוגבלת - מחשבים", "status": "machine-draft" },
+    "description": { "value": "חשבונות מחשב עם האצלה בלתי מוגבלת (TrustedForDelegation) שומרים במטמון את ה-TGT של כל משתמש המאמת אליהם. אם תוקף פורץ למכונה כזו, הוא יכול לחלץ את ה-TGT השמורים במטמון ולהתחזות לכל משתמש, כולל Domain Admins. בשילוב עם התקפת ההכפייה SpoolSample או PrinterBug, תוקף יכול לאלץ בקר דומיין לאמת ולתפוס את ה-TGT שלו, מה שמוביל להשתלטות מלאה על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין חשבונות מחשב עם האצלה בלתי מוגבלת למעט בקרי דומיין (הזקוקים לה מעצם טבעם). כל האצלה אחרת מועברת להאצלה מוגבלת או להאצלה מוגבלת מבוססת משאבים", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה מחשבים עם האצלה בלתי מוגבלת באמצעות Get-ADComputer -Filter {TrustedForDelegation -eq $true} -Properties TrustedForDelegation. הוצא את בקרי הדומיין מהממצאים. עבור המחשבים הנותרים, העבר להאצלה מוגבלת על ידי זיהוי השירותים הספציפיים שאליהם הם צריכים להאציל, ולאחר מכן הגדר את msDS-AllowedToDelegateTo. הוסף חשבונות רגישים לקבוצת Protected Users כדי למנוע את שמירת ה-TGT שלהם במטמון. סמן חשבונות בעלי ערך גבוה כ'החשבון רגיש ולא ניתן להאצלה'", "status": "machine-draft" }
+  },
+  "ADKERB-005": {
+    "name": { "value": "האצלה בלתי מוגבלת - משתמשים", "status": "machine-draft" },
+    "description": { "value": "חשבונות משתמש עם האצלה בלתי מוגבלת מסוכנים אף יותר מחשבונות מחשב בעלי אותה הגדרה, משום שחשבונות משתמש נפרצים ביתר קלות באמצעות גניבת פרטי הזדהות, דיוג או התקפות סיסמה. כל שירות הפועל תחת חשבון משתמש עם האצלה בלתי מוגבלת יכול להתחזות לכל משתמש המאמת אליו, ובכך מספק נתיב ישיר להשתלטות על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין חשבונות משתמש עם האצלה בלתי מוגבלת. כל האצלה של חשבון משתמש מועברת להאצלה מוגבלת או להאצלה מוגבלת מבוססת משאבים", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה משתמשים עם האצלה בלתי מוגבלת באמצעות Get-ADUser -Filter {TrustedForDelegation -eq $true} -Properties TrustedForDelegation. כמעט אף פעם אין זו תצורה לגיטימית עבור חשבונות משתמש. הסר את דגל ההאצלה הבלתי מוגבלת והגדר האצלה מוגבלת לשירותים ספציפיים אם נדרשת האצלה. החלף מיד את סיסמת החשבון משום שייתכן שהחשבון היה יעד להתקפה", "status": "machine-draft" }
+  },
+  "ADKERB-006": {
+    "name": { "value": "ניתוח האצלה מוגבלת", "status": "machine-draft" },
+    "description": { "value": "האצלה מוגבלת מגבילה את השירותים שאליהם חשבון יכול להאציל באמצעות התכונה msDS-AllowedToDelegateTo, אך תצורה שגויה עדיין עשויה לאפשר הסלמת הרשאות. האצלה לשירותי LDAP, CIFS או HOST בבקרי דומיין ניתנת לניצול לביצוע התקפות DCSync, לגישה לשיתופי קבצים של בקר הדומיין או להרצת פקודות בשם המשתמש שהואצל. יש לבחון כל רשומת האצלה מוגבלת מבחינת השפעתה על האבטחה", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל רשומות ההאצלה המוגבלת מתועדות בהצדקה עסקית. אין האצלה לשירותים רגישים (LDAP, CIFS, HOST, WSMAN) בבקרי דומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את ההאצלה המוגבלת באמצעות Get-ADObject -Filter {msDS-AllowedToDelegateTo -ne '$null'} -Properties msDS-AllowedToDelegateTo. בחן כל יעד האצלה. סמן כל האצלה לשירותי בקר דומיין (במיוחד LDAP, CIFS, HOST, HTTP, WSMAN) כבעלת סיכון גבוה. הסר רשומות האצלה מיותרות ותעד את הלגיטימיות בהצדקה עסקית. שקול מעבר להאצלה מוגבלת מבוססת משאבים לשיפור האבטחה", "status": "machine-draft" }
+  },
+  "ADKERB-007": {
+    "name": { "value": "האצלה מוגבלת מבוססת משאבים", "status": "machine-draft" },
+    "description": { "value": "האצלה מוגבלת מבוססת משאבים (RBCD) מאפשרת למשאב היעד לשלוט אילו חשבונות יכולים להאציל אליו באמצעות התכונה msDS-AllowedToActOnBehalfOfOtherIdentity. אף שהיא בטוחה יותר בעיצובה מהאצלה מוגבלת מסורתית, ניתן לנצל את RBCD אם תוקף משיג גישת כתיבה לאובייקט מחשב כדי להגדיר נתיבי האצלה בלתי מורשים. זוהי טכניקה נפוצה שלאחר ניצול", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל תצורות ה-RBCD מתועדות ומבוקרות. אין רשומות בלתי מורשות ב-msDS-AllowedToActOnBehalfOfOtherIdentity. גישת כתיבה לאובייקטי מחשב מוגבלת למנהלים מורשים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את תצורות ה-RBCD באמצעות Get-ADComputer -Filter {msDS-AllowedToActOnBehalfOfOtherIdentity -ne '$null'} -Properties msDS-AllowedToActOnBehalfOfOtherIdentity. בחן כל רשומה מבחינת הצדקה עסקית. בקר מי מחזיק בגישת כתיבה לאובייקטי מחשב ב-AD כדי לזהות נתיבי ניצול פוטנציאליים של RBCD. הסר רשומות RBCD בלתי מורשות. הטמע ניטור לשינויים בתכונה msDS-AllowedToActOnBehalfOfOtherIdentity", "status": "machine-draft" }
+  },
+  "ADKERB-008": {
+    "name": { "value": "נתיבי ניצול של מעבר פרוטוקול", "status": "machine-draft" },
+    "description": { "value": "חשבונות המוגדרים להאצלה מוגבלת עם מעבר פרוטוקול (דגל TrustedToAuthForDelegation / T2A4D) יכולים להשיג כרטיסי שירות בשם כל משתמש מבלי שאותו משתמש יאמת בפועל באמצעות Kerberos. יכולת S4U2Self זו מאפשרת לחשבון להתחזות לכל משתמש מול השירותים שאליהם מותר לו להאציל, מה שהופך אותה לווקטור עוצמתי להסלמת הרשאות בשילוב עם האצלה לשירותים רגישים", "status": "machine-draft" },
+    "recommendedValue": { "value": "מעבר פרוטוקול (TrustedToAuthForDelegation) מושבת בכל החשבונות אלא אם נדרש ומתועד במפורש. אין חשבונות עם מעבר פרוטוקול המסוגלים להאציל לשירותי בקר דומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה חשבונות עם מעבר פרוטוקול באמצעות Get-ADObject -Filter {TrustedToAuthForDelegation -eq $true} -Properties TrustedToAuthForDelegation,msDS-AllowedToDelegateTo. עבור כל חשבון, הערך אם מעבר פרוטוקול באמת נדרש (נחוץ רק כאשר האימות הראשוני אינו משתמש ב-Kerberos). השבת מעבר פרוטוקול היכן שאינו נחוץ. עבור החשבונות הנותרים, הגבל באופן מחמיר את יעדי ההאצלה וודא שאין שירותי בקר דומיין בהיקף", "status": "machine-draft" }
+  },
+  "ADKERB-009": {
+    "name": { "value": "סוגי הצפנה של Kerberos", "status": "machine-draft" },
+    "description": { "value": "סוגי ההצפנה של Kerberos קובעים את חוזק הצפנת הכרטיסים. DES ו-RC4 (ARCFOUR-HMAC-MD5) חלשים מבחינה קריפטוגרפית ויש להשביתם לטובת AES128 ו-AES256. RC4 בפרט מהווה יעד להתקפות Kerberoasting משום שהוא מהיר לפיצוח באופן משמעותי מכרטיסים המוצפנים ב-AES. אכיפת הצפנת AES בלבד מגדילה במידה ניכרת את הקושי בהתקפות לא מקוונות על פרטי הזדהות", "status": "machine-draft" },
+    "recommendedValue": { "value": "AES256_HMAC_SHA1 ו-AES128_HMAC_SHA1 כסוגי ההצפנה הנתמכים היחידים. DES ו-RC4 מושבתים באמצעות מדיניות קבוצתית ורמת התפקוד של הדומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר באמצעות מדיניות קבוצתית: Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > 'Network security: Configure encryption types allowed for Kerberos' = AES128_HMAC_SHA1, AES256_HMAC_SHA1, Future encryption types. בקר חשבונות באמצעות msDS-SupportedEncryptionTypes כדי לזהות את אלו המוגבלים ל-RC4. ודא שלכל חשבונות השירות נוצרו מפתחות AES באמצעות החלפת סיסמאות לאחר הפעלת תמיכת AES ברמת הדומיין", "status": "machine-draft" }
+  },
+  "ADKERB-010": {
+    "name": { "value": "משך חיים של כרטיסי Kerberos", "status": "machine-draft" },
+    "description": { "value": "משך החיים של כרטיסי Kerberos קובע כמה זמן כרטיסי האימות נשארים בתוקף. משך חיים ארוך מדי של TGT או של כרטיסי שירות מאריך את חלון הזמן שבו ניתן להשתמש בכרטיסים גנובים להתקפות pass-the-ticket. יש לבחון מחדש את משך החיים המוגדר כברירת מחדל של TGT בן 10 שעות ואת החידוש המרבי בן 7 ימים כדי לאזן בין אבטחה לדרישות תפעוליות", "status": "machine-draft" },
+    "recommendedValue": { "value": "משך חיים מרבי של TGT: 4 עד 10 שעות. משך חיים מרבי של כרטיס שירות: 600 דקות. חידוש מרבי של כרטיס: 7 ימים. סטיית שעון מרבית: 5 דקות", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר את מדיניות Kerberos ב-Default Domain Policy: Computer Configuration > Policies > Windows Settings > Security Settings > Account Policies > Kerberos Policy. הגדר את משך החיים המרבי של כרטיס שירות (600 דקות), משך החיים המרבי של כרטיס משתמש (10 שעות או פחות) ומשך החיים המרבי לחידוש כרטיס משתמש (7 ימים). עבור חשבונות Tier 0, הוסף אותם לקבוצת Protected Users האוכפת אוטומטית משך חיים של TGT בן 4 שעות", "status": "machine-draft" }
+  },
+  "ADKERB-011": {
+    "name": { "value": "ביקורת SPN של מחשבים", "status": "machine-draft" },
+    "description": { "value": "שמות ראשיים של שירות בחשבונות מחשב מגדירים את השירותים הרשומים לפעול בכל מכונה. SPN כפולים גורמים לכשלי אימות של Kerberos, ואילו SPN בלתי מורשים עשויים להצביע על שירותים זדוניים או מכונות שנפרצו. תצורת SPN נקייה חיונית לתפקוד תקין של Kerberos ולשמירה על מלאי שירותים מדויק", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין SPN כפולים ברחבי הדומיין. כל ה-SPN בחשבונות מחשב תואמים לשירותים לגיטימיים ומתועדים", "status": "machine-draft" },
+    "remediationSteps": { "value": "סרוק אחר SPN כפולים באמצעות setspn -X ביער או באמצעות שאילתות Get-ADObject. הסר או הקצה מחדש SPN כפולים לחשבונות המתאימים. בחן את ה-SPN באובייקטי מחשב כדי לזהות שירותים בלתי מורשים או בלתי צפויים. השתמש ב-setspn -L <computername> כדי לרשום את ה-SPN לכל מחשב. תעד את כל ה-SPN שאינם ברירת מחדל עם מטרתם העסקית", "status": "machine-draft" }
+  }
+}

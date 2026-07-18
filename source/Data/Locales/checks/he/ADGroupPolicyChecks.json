@@ -1,0 +1,147 @@
+{
+  "_family": "ADGroupPolicyChecks.json",
+  "ADGPO-001": {
+    "name": { "value": "מלאי GPO עם מצב קישור", "status": "machine-draft" },
+    "description": { "value": "מלאי מקיף של כל אובייקטי המדיניות הקבוצתית עם מצב הקישור, ההיקף ומצב האכיפה שלהם מספק את הבסיס לניתוח אבטחת GPO. הבנה אילו GPO מקושרים, נאכפים או מושבתים חיונית להערכת מצב האבטחה האפקטיבי המסופק באמצעות מדיניות קבוצתית", "status": "machine-draft" },
+    "recommendedValue": { "value": "מלאי GPO מלא מתועד עם מצב קישור, היקף ובעלים עבור כל GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "צור מלאי GPO מלא באמצעות Get-GPO -All ו-Get-GPOReport. תעד עבור כל GPO את מטרתו, בעליו, מיקומי הקישור ומצב האכיפה. קבע מוסכמת מתן שמות ל-GPO וודא שכל ה-GPO תואמים לה. הטמע תהליך ניהול שינויים ל-GPO.", "status": "machine-draft" }
+  },
+  "ADGPO-002": {
+    "name": { "value": "GPO ריקים", "status": "machine-draft" },
+    "description": { "value": "GPO שאינם מכילים הגדרות מוגדרות (הן מדורי Computer Configuration והן User Configuration ריקים) מוסיפים מורכבות מיותרת לעיבוד המדיניות הקבוצתית ועשויים להצביע על מאמצי תצורה שננטשו או שרידי בדיקה שמעולם לא נוקו", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין GPO ריקים בדומיין; כל GPO מכיל לפחות הגדרה מוגדרת אחת", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה GPO ללא הגדרות מוגדרות באמצעות Get-GPOReport בתבנית XML ובדיקת רכיבי ExtensionData ריקים. ודא ש-GPO ריקים אינם משמשים כמצייני מקום לשימוש עתידי. מחק GPO ריקים באמת לאחר אישור שאינם מוזכרים בשום אוטומציה או תיעוד.", "status": "machine-draft" }
+  },
+  "ADGPO-003": {
+    "name": { "value": "GPO לא מקושרים", "status": "machine-draft" },
+    "description": { "value": "GPO שאינם מקושרים לאף אתר, דומיין או OU אינם מוחלים ומהווים תצורה שאינה בשימוש. GPO לא מקושרים עשויים להכיל הגדרות רגישות, פרטי הזדהות ב-GPP או סקריפטים הניתנים לניצול אם תוקף יקשר אותם מאוחר יותר ל-OU יעד", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין GPO לא מקושרים אלא אם מתועדים כתבניות או גיבויים עם בקרות גישה מתאימות", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה GPO לא מקושרים על ידי השוואת כל ה-GUID של ה-GPO מול תכונות gPLink בכל ה-OU, האתרים ושורש הדומיין. בחן כל GPO לא מקושר כדי לקבוע אם יש לקשרו, לארכבו או למחקו. הסר תוכן רגיש מ-GPO לא מקושרים הנשמרים כתבניות.", "status": "machine-draft" }
+  },
+  "ADGPO-004": {
+    "name": { "value": "GPO מושבתים עם תוכן", "status": "machine-draft" },
+    "description": { "value": "GPO שבהם מדור User Configuration או Computer Configuration מושבת אך עדיין מכיל הגדרות מוגדרות עשויים להצביע על הוצאה משירות לא שלמה או השבתה לא מכוונת. אם יופעלו מחדש על ידי תוקף בעל הרשאות עריכת GPO, ההגדרות הרדומות ייכנסו לתוקף", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין GPO עם מדורים מושבתים המכילים הגדרות מוגדרות; מדורים מושבתים צריכים להיות ריקים", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את כל ה-GPO שבהם GpoStatus הוא UserSettingsDisabled או ComputerSettingsDisabled. ודא שהמדור המושבת אינו מכיל הגדרות פעילות. הפעל מחדש את המדור אם ההגדרות נחוצות, או הסר את ההגדרות מהמדור המושבת. תעד את הסיבה לכל מדור שהושבת בכוונה.", "status": "machine-draft" }
+  },
+  "ADGPO-005": {
+    "name": { "value": "GPO משוכפלים", "status": "machine-draft" },
+    "description": { "value": "GPO מרובים עם הגדרות דומות במידה ניכרת או זהות יוצרים תקורת ניהול, מגבירים את הסיכון לסחיפת תצורה ומסבכים את פתרון הבעיות. GPO משוכפלים עשויים גם לגרום להגדרות סותרות המפיקות התנהגות בלתי צפויה", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין GPO משוכפלים; לכל GPO מטרה ייחודית והגדרות שאינן חופפות", "status": "machine-draft" },
+    "remediationSteps": { "value": "ייצא את כל דוחות ה-GPO בתבנית XML והשווה הגדרות בין GPO כדי לזהות כפילויות. אחד GPO משוכפלים ל-GPO יחיד היכן שאפשר. עדכן את קישורי ה-OU כך שיפנו ל-GPO המאוחד. בדוק את ה-GPO המאוחד ב-OU בדיקה לפני הסרת הכפילויות.", "status": "machine-draft" }
+  },
+  "ADGPO-006": {
+    "name": { "value": "GPO עם קישורים שבורים", "status": "machine-draft" },
+    "description": { "value": "קישורי GPO המפנים ל-GPO שאינם קיימים או ל-GPO שנתוני ה-SYSVOL שלהם חסרים מצביעים על בעיות שכפול, מחיקה לא נאותה או שיבוש. קישורים שבורים עלולים לגרום לשגיאות עיבוד מדיניות קבוצתית ועשויים להסתיר את היעדרן של תצורות אבטחה מכוונות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין קישורי GPO שבורים; כל הפניות gPLink נפתרות ל-GPO תקפים עם נתוני SYSVOL שלמים", "status": "machine-draft" },
+    "remediationSteps": { "value": "נתח את תכונות gPLink בכל ה-OU, האתרים ושורש הדומיין כדי לחלץ את ה-GUID של ה-GPO המוזכרים. ודא שכל GUID קיים במכלי ה-GPC (AD) וה-GPT (SYSVOL). הסר קישורים שבורים באמצעות Set-GPLink או על ידי עריכה ישירה של תכונת gPLink. חקור את שורש הבעיה של כל נתוני GPO חסרים.", "status": "machine-draft" }
+  },
+  "ADGPO-007": {
+    "name": { "value": "אי-עקביות הרשאות GPO", "status": "machine-draft" },
+    "description": { "value": "לכל GPO יש הן הרשאות AD (על אובייקט ה-GPC) והן הרשאות NTFS (על תיקיית ה-GPT ב-SYSVOL). אי-עקביות בין קבוצות הרשאות אלו עלולה למנוע החלת GPO, לאפשר שינוי בלתי מורשה או ליצור פערי אבטחה שבהם תוכן ה-SYSVOL מתירני יותר מאובייקט ה-AD", "status": "machine-draft" },
+    "recommendedValue": { "value": "הרשאות עקביות בין אובייקטי GPC ב-AD לתיקיות GPT ב-SYSVOL עבור כל ה-GPO; ל-Authenticated Users יש גישת קריאה", "status": "machine-draft" },
+    "remediationSteps": { "value": "השווה את מתאר האבטחה בכל אובייקט GPC ב-AD מול ה-ACL של NTFS על תיקיית ה-GPT המתאימה ב-SYSVOL. ודא ששניהם מעניקים גישת קריאה ל-Authenticated Users (נדרש להחלת GPO). פתור כל אי-עקביות על ידי יישור הרשאות ה-SYSVOL עם אובייקט ה-AD. הרץ dcdiag /test:sysvolcheck כדי לזהות בעיות.", "status": "machine-draft" }
+  },
+  "ADGPO-008": {
+    "name": { "value": "GPO שאינם מוחלים עקב מסנני WMI", "status": "machine-draft" },
+    "description": { "value": "מסנני WMI יכולים למנוע החלת GPO על מערכות יעד על בסיס שאילתות WQL. מסנני WMI רחבים מדי או שגויים עלולים לחסום בטעות GPO קריטיים לאבטחה מלהיות מוחלים על מערכות הזקוקות להם, וליצור פערים בתצורת האבטחה המכוונת", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל ה-GPO הקריטיים לאבטחה מוחלים על היעדים המכוונים; מסנני WMI מאומתים מול תנאי הסביבה בפועל", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן מסנני WMI המקושרים ל-GPO קריטיים לאבטחה באמצעות Get-GPO ובחינת הקצאות מסנני WMI. בדוק שאילתות מסנן WMI מול מערכות יעד מייצגות כדי לוודא שהן מוערכות כראוי. השתמש ב-Group Policy Results (gpresult) על מערכות לדוגמה כדי לאשר שה-GPO מוחלים. החלף או תקן מסנני WMI החוסמים החלה מכוונת.", "status": "machine-draft" }
+  },
+  "ADGPO-009": {
+    "name": { "value": "GPO ללא הרשאת החלה", "status": "machine-draft" },
+    "description": { "value": "אם הרשאת Apply Group Policy (Read + Apply) אינה מוענקת לישויות האבטחה המתאימות, ה-GPO לא יעובד על ידי אותן מערכות גם כאשר הוא מקושר ל-OU הנכון. הדבר קורה בדרך כלל כאשר Authenticated Users מוסר מסינון האבטחה של ה-GPO מבלי להוסיף קבוצות ספציפיות", "status": "machine-draft" },
+    "recommendedValue": { "value": "לכל ה-GPO יש הרשאת Apply Group Policy המוענקת לקבוצות אבטחה מתאימות; אין GPO ללא יעדי החלה", "status": "machine-draft" },
+    "remediationSteps": { "value": "בדוק בכל GPO את הרשאות Apply Group Policy באמצעות Get-GPPermission. ודא שלפחות לקבוצת אבטחה אחת בעלת חברים יש את הרשאת Apply. עבור GPO שאמורים לחול על קבוצות ספציפיות בלבד, ודא שקבוצות היעד מכילות את החברים המכוונים. הוסף את Authenticated Users עם הרשאת קריאה בלבד (ללא Apply) אם נעשה שימוש בסינון אבטחה.", "status": "machine-draft" }
+  },
+  "ADGPO-010": {
+    "name": { "value": "אי-התאמת גרסת GPO בין SYSVOL ל-AD", "status": "machine-draft" },
+    "description": { "value": "כל GPO מנהל מספרי גרסה הן באובייקט ה-GPC ב-AD (תכונת versionNumber) והן בתיקיית ה-GPT ב-SYSVOL (gpt.ini). אי-התאמה בין גרסאות אלו מצביעה על כשל שכפול, שיבוש SYSVOL או עדכוני GPO לא שלמים. אי-התאמות גרסה עלולות לגרום ללקוחות להחיל מדיניויות מיושנות או לא שלמות", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל גרסאות ה-GPO תואמות בין אובייקטי GPC ב-AD לקובצי gpt.ini ב-SYSVOL GPT בכל בקרי הדומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "השווה את תכונת versionNumber ב-AD מול ערך Version ב-gpt.ini ב-SYSVOL עבור כל GPO בכל בקרי הדומיין. חקור ופתור כל בעיית שכפול DFSR או FRS הגורמת לאי-התאמות. אלץ שכפול באמצעות repadmin /syncall ו-DFSRDIAG. עבור אי-התאמות מתמשכות, השתמש בתהליך authoritative restore עבור SYSVOL.", "status": "machine-draft" }
+  },
+  "ADGPO-011": {
+    "name": { "value": "ניתוח אבטחה של הגדרות GPO", "status": "machine-draft" },
+    "description": { "value": "הגדרות GPO עלולות להחליש את מצב האבטחה אם הן משביתות הגנות, מרפות דרישות אימות או מגדירות ברירות מחדל לא מאובטחות. בדיקה זו מנתחת הגדרות מפתח הרלוונטיות לאבטחה בכל ה-GPO כולל מדיניויות סיסמה, נעילת חשבון, הקצאות זכויות משתמש, אפשרויות אבטחה ומדיניויות ביקורת", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל הגדרות ה-GPO תואמות לקו הבסיס הארגוני לאבטחה; אין GPO המחלישים תצורות אבטחה של ברירת מחדל", "status": "machine-draft" },
+    "remediationSteps": { "value": "ייצא את כל דוחות ה-GPO ונתח הגדרות הרלוונטיות לאבטחה כולל מדיניויות סיסמה, נעילת חשבון, הקצאות זכויות משתמש, קבוצות מוגבלות, אפשרויות אבטחה וכללי Windows Firewall. השווה את ההגדרות מול מדדי CIS או קווי בסיס ארגוניים. תקן GPO המגדירים הגדרות חלשות מקו הבסיס.", "status": "machine-draft" }
+  },
+  "ADGPO-012": {
+    "name": { "value": "זיהוי סיסמאות cPassword/GPP", "status": "machine-draft" },
+    "description": { "value": "סיסמאות המאוחסנות ב-Group Policy Preferences (cPassword) מוצפנות במפתח AES ידוע לציבור שפורסם על ידי Microsoft (MS14-025). כל משתמש דומיין יכול לקרוא את קובצי ה-XML ב-SYSVOL המכילים סיסמאות אלו ולפענחן באופן טריוויאלי. זוהי אחת מפגיעויות ה-Active Directory הנפוצות והניתנות לניצול בקלות ביותר", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין ערכי cPassword בשום קובץ GPP XML ב-SYSVOL", "status": "machine-draft" },
+    "remediationSteps": { "value": "חפש בכל תיקיות ה-GPO ב-SYSVOL קובצי XML המכילים תכונות cpassword ב-Groups.xml, Services.xml, Scheduledtasks.xml, DataSources.xml, Printers.xml ו-Drives.xml. הסר את כל פריטי ה-GPP המכילים סיסמאות מאוחסנות. השתמש ב-LAPS, gMSA או פתרונות ניהול פרטי הזדהות מודרניים אחרים במקום. החל את עדכון MS14-025 כדי למנוע יצירת cPassword חדשים.", "status": "machine-draft" }
+  },
+  "ADGPO-013": {
+    "name": { "value": "ניתוח סקריפטים ב-GPO", "status": "machine-draft" },
+    "description": { "value": "סקריפטי הפעלה, כיבוי, כניסה ויציאה של GPO מבוצעים בהרשאות המערכת או המשתמש ומאוחסנים בשיתוף ה-SYSVOL הנגיש. סקריפטים זדוניים הממוקמים ב-GPO יכולים להשיג הרצת קוד נרחבת ברחבי הדומיין. יש לבחון סקריפטים לאיתור בעיות אבטחה כולל פרטי הזדהות מוטמעים בקוד, פקודות לא בטוחות והפניות למיקומים שאינם מאובטחים", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל סקריפטי ה-GPO נבחנו, נחתמו היכן שאפשר, ונקיים מפרטי הזדהות מוטמעים בקוד או מפעולות לא בטוחות", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את כל הסקריפטים המוגדרים ב-GPO (Startup, Shutdown, Logon, Logoff) ממדור ה-Scripts בדוחות ה-GPO. בחן את תוכן הסקריפטים לאיתור פרטי הזדהות מוטמעים בקוד, שימוש ב-LOLBins, הפניות למשאבים חיצוניים ופעולות לא בטוחות. הטמע חתימת סקריפטים היכן שנתמך. ודא שהרשאות קובצי הסקריפט מגבילות שינוי למנהלים מורשים בלבד.", "status": "machine-draft" }
+  },
+  "ADGPO-014": {
+    "name": { "value": "חבילות MSI ב-GPO", "status": "machine-draft" },
+    "description": { "value": "הגדרות Software Installation ב-GPO פורסות חבילות MSI למחשבים ממוקדים. חבילות MSI שנפרצו או בלתי מורשות ב-GPO יכולות לפרוס תוכנות זדוניות ברחבי הדומיין. יש לאמת את מיקום המקור של חבילות ה-MSI ואת בקרות הגישה על מיקומים אלו", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל חבילות ה-MSI הנפרסות באמצעות GPO ממוקרות ממיקומים מאובטחים ומבוקרי גישה עם שלמות מאומתת", "status": "machine-draft" },
+    "remediationSteps": { "value": "זהה את כל הגדרות התקנת התוכנה ב-GPO. ודא שנתיבי מקור ה-MSI מפנים לשיתופים מאובטחים עם הרשאות NTFS ושיתוף מתאימות. אשר שחבילות ה-MSI מגיעות מספקים מהימנים ולא שובשו. שקול שימוש ב-WDAC או AppLocker כדי להגביל התקנת MSI לחבילות מאושרות.", "status": "machine-draft" }
+  },
+  "ADGPO-015": {
+    "name": { "value": "משימות מתוזמנות ב-GPO", "status": "machine-draft" },
+    "description": { "value": "Group Policy Preferences יכולות ליצור משימות מתוזמנות הפועלות עם פרטי הזדהות מצוינים או כ-SYSTEM על מחשבים ממוקדים. משימות מתוזמנות זדוניות הנפרסות באמצעות GPO מספקות הרצת קוד מתמשכת ברחבי הסביבה. זוהי טכניקה נפוצה שלאחר ניצול לשמירת התמדה ברחבי הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל המשימות המתוזמנות הנפרסות באמצעות GPO מתועדות, משתמשות בחשבונות בעקרון ההרשאה המזערית ומבצעות פעולות מורשות בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את כל פריטי המשימות המתוזמנות ב-GPO Preferences בכל ה-GPO. ודא שכל משימה מריצה פקודה לגיטימית ומורשית עם ההרשאות המזעריות הנדרשות. הסר כל משימה המאחסנת פרטי הזדהות (השתמש ב-gMSA או בהקשר SYSTEM במקום). ודא שקובצי ההרצה של המשימות מאוחסנים במיקומים מוגנים. תעד את המטרה העסקית לכל משימה מתוזמנת הנפרסת באמצעות GPO.", "status": "machine-draft" }
+  },
+  "ADGPO-016": {
+    "name": { "value": "בחינת אבטחה של הגדרות רישום", "status": "machine-draft" },
+    "description": { "value": "GPO יכולים לפרוס הגדרות רישום המשפיעות על תצורות אבטחה כולל השבתת תכונות אבטחה, החלשת פרוטוקולי אימות או הפעלת שירותים לא מאובטחים. יש לבחון הגדרות מבוססות רישום ב-GPO כדי לוודא שאינן מחלישות את מצב האבטחה של המערכות הממוקדות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין הגדרות רישום ב-GPO המחלישות ברירות מחדל של אבטחה; כל שינויי הרישום מתועדים ומוצדקים", "status": "machine-draft" },
+    "remediationSteps": { "value": "ייצא את הגדרות הרישום של ה-GPO מ-Administrative Templates ומ-Registry Preferences. בחן הגדרות המשפיעות על מפתחות רישום הרלוונטיים לאבטחה כולל HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa, HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies ומפתחות הקשורים לאימות. הסר או תקן הגדרות המחלישות את מצב האבטחה.", "status": "machine-draft" }
+  },
+  "ADGPO-017": {
+    "name": { "value": "ניתוח Restricted Groups", "status": "machine-draft" },
+    "description": { "value": "הגדרות Restricted Groups ב-GPO אוכפות חברות בקבוצות על מערכות יעד, ומשמשות בדרך כלל לניהול חברות בקבוצת Administrators המקומית. Restricted Groups שגויים עלולים להעניק בטעות גישת מנהל מקומי למשתמשים בלתי מורשים או להיכשל בהסרת חברים בלתי מורשים מקבוצות מקומיות מורשות", "status": "machine-draft" },
+    "recommendedValue": { "value": "Restricted Groups מוגדרים לאכיפת חברות מנהל מקומי בעקרון ההרשאה המזערית; רק קבוצות מורשות בקבוצת Administrators המקומית", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את הגדרות ה-Restricted Groups בכל ה-GPO. ודא שקבוצת Administrators המקומית מנוהלת כך שתכלול רק קבוצות מנהל מורשות. ודא ש-Restricted Groups אינם מוסיפים את Domain Users או קבוצות רחבות אחרות לקבוצות מקומיות מורשות. שקול שימוש ב-Group Policy Preferences לשליטה מפורטת יותר (הוספה/הסרה של חברים ללא החלפת החברות כולה).", "status": "machine-draft" }
+  },
+  "ADGPO-018": {
+    "name": { "value": "תצורת מדיניות ביקורת באמצעות GPO", "status": "machine-draft" },
+    "description": { "value": "מדיניויות ביקורת של Windows המוגדרות באמצעות מדיניות קבוצתית קובעות אילו אירועי אבטחה נרשמים על מערכות המצורפות לדומיין. תצורת ביקורת לא מספקת יוצרת נקודות עיוורון המאפשרות לתוקפים לפעול ללא זיהוי. קטגוריות ביקורת מפתח כוללות אירועי כניסה, ניהול חשבונות, גישה לשירותי הספרייה וגישה לאובייקטים", "status": "machine-draft" },
+    "recommendedValue": { "value": "Advanced Audit Policy מוגדר באמצעות GPO עם ביקורת הצלחה וכישלון לכל הקטגוריות הקריטיות בהתאם לדרישות הזיהוי הארגוניות", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר Advanced Audit Policy Configuration (לא מדיניות ביקורת מדור קודם) באמצעות GPO. הפעל לכל הפחות: Account Logon (Success/Failure), Account Management (Success/Failure), Directory Service Access (Success/Failure), Logon/Logoff (Success/Failure), Object Access (Success/Failure עבור משאבים רגישים), Policy Change (Success), Privilege Use (Success/Failure) ו-System (Success/Failure). פרוס על כל המערכות המצורפות לדומיין.", "status": "machine-draft" }
+  },
+  "ADGPO-019": {
+    "name": { "value": "תצורת Windows Firewall באמצעות GPO", "status": "machine-draft" },
+    "description": { "value": "הגדרות Windows Defender Firewall with Advanced Security הנפרסות באמצעות GPO שולטות בגישת הרשת על מערכות המצורפות לדומיין. GPO המשביתים את חומת האש, מתירים כללי כניסה מתירניים מדי או נכשלים בהגדרת חומת האש משאירים מערכות פגיעות לתנועה רוחבית ולהתקפות מבוססות רשת", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Firewall מופעל לכל הפרופילים (Domain, Private, Public) עם כללי כניסה של deny-by-default המוגדרים באמצעות GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את הגדרות Windows Firewall ב-GPO בכל ה-GPO הרלוונטיים. ודא שחומת האש מופעלת לפרופילי Domain, Private ו-Public. ודא שכללי הכניסה עוקבים אחר גישת deny-by-default עם כללי התרה ספציפיים לשירותים נדרשים בלבד. הסר כל הגדרת GPO המשביתה את Windows Firewall. בדוק כללי חומת אש ב-OU בדיקה לפני פריסה ברחבי הדומיין.", "status": "machine-draft" }
+  },
+  "ADGPO-020": {
+    "name": { "value": "מדיניות הרצה של PowerShell באמצעות GPO", "status": "machine-draft" },
+    "description": { "value": "מדיניות ההרצה של PowerShell שולטת אילו סקריפטים יכולים לפעול על מערכת. אף שמדיניות ההרצה אינה גבול אבטחה, הגדרתה ל-Unrestricted או Bypass באמצעות GPO מסירה שכבת הגנה ומקלה על תוקפים להריץ סקריפטים זדוניים ללא בקשות אישור מהמשתמש", "status": "machine-draft" },
+    "recommendedValue": { "value": "מדיניות ההרצה של PowerShell מוגדרת ל-AllSigned או RemoteSigned באמצעות GPO; אינה מוגדרת ל-Unrestricted או Bypass", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את הגדרות ה-GPO תחת Computer Configuration > Administrative Templates > Windows Components > Windows PowerShell > Turn on Script Execution. הגדר את מדיניות ההרצה ל-AllSigned עבור סביבות בעלות אבטחה גבוהה או ל-RemoteSigned עבור סביבות סטנדרטיות. הטמע חתימת קוד עבור סקריפטי PowerShell מורשים. הימנע מהגדרת Bypass או Unrestricted באמצעות GPO.", "status": "machine-draft" }
+  },
+  "ADGPO-021": {
+    "name": { "value": "תצורת רישום ביומן של PowerShell", "status": "machine-draft" },
+    "description": { "value": "PowerShell Module Logging, Script Block Logging ו-Transcription מספקים נראות קריטית להתקפות מבוססות PowerShell המשמשות ברוב פריצות ה-Active Directory המודרניות. ללא יכולות רישום ביומן אלו, מגינים אינם יכולים לזהות או לחקור איסוף מודיעין, גניבת פרטי הזדהות או תנועה רוחבית מבוססי PowerShell", "status": "machine-draft" },
+    "recommendedValue": { "value": "Module Logging, Script Block Logging ו-Transcription מופעלים באמצעות GPO בכל המערכות", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר את הגדרות ה-GPO תחת Computer Configuration > Administrative Templates > Windows Components > Windows PowerShell. הפעל Module Logging עם '*' כדי לרשום את כל המודולים. הפעל Script Block Logging עם 'Log script block invocation start/stop events'. הפעל PowerShell Transcription עם ספריית פלט מאובטחת. פרוס על כל המערכות המצורפות לדומיין וודא איסוף יומנים.", "status": "machine-draft" }
+  },
+  "ADGPO-022": {
+    "name": { "value": "הערכת מדיניות AppLocker/WDAC", "status": "machine-draft" },
+    "description": { "value": "מדיניויות בקרת יישומים כגון AppLocker ו-Windows Defender Application Control מגבילות אילו קובצי הרצה, סקריפטים ו-DLL יכולים לפעול על מערכות מנוהלות. ללא בקרת יישומים, תוקפים יכולים להריץ כלים ותוכנות זדוניות שרירותיים על מערכות שנפרצו כדי להקל על תנועה רוחבית והתמדה", "status": "machine-draft" },
+    "recommendedValue": { "value": "מדיניות AppLocker או WDAC נפרסת באמצעות GPO במצב אכיפה על כל תחנות העבודה והשרתים עם קו בסיס מתועד", "status": "machine-draft" },
+    "remediationSteps": { "value": "פרוס מדיניויות AppLocker או WDAC באמצעות GPO החל ממצב ביקורת. נתח את יומני הביקורת לבניית קו בסיס של יישומים מאושרים. צור כללי רשימת היתר על בסיס מפרסם, נתיב או גיבוב. עבור ממצב ביקורת למצב אכיפה לאחר אימות קו הבסיס. נטר אירועי הרצה שנחסמו ועדכן כללים לפי הצורך.", "status": "machine-draft" }
+  },
+  "ADGPO-023": {
+    "name": { "value": "תצורת GPO של LAPS", "status": "machine-draft" },
+    "description": { "value": "Local Administrator Password Solution (LAPS) מספק החלפה אוטומטית של סיסמאות מנהל מקומי על מערכות המצורפות לדומיין, ומונע תנועה רוחבית באמצעות פרטי הזדהות משותפים של מנהל מקומי. יש לפרוס את LAPS באמצעות GPO כדי שיהיה יעיל, והגדרות התצורה שלו קובעות את מורכבות הסיסמה, תדירות ההחלפה ואיזה חשבון מנוהל", "status": "machine-draft" },
+    "recommendedValue": { "value": "LAPS מופעל באמצעות GPO בכל המערכות המצורפות לדומיין עם סיסמאות באורך 24 תווים וגיל מרבי של 30 ימים", "status": "machine-draft" },
+    "remediationSteps": { "value": "התקן את ה-CSE של LAPS בכל המערכות המנוהלות באמצעות התקנת תוכנה של GPO או SCCM. הגדר את הגדרות ה-GPO של LAPS: הפעל ניהול סיסמת מנהל מקומי, הגדר את מורכבות הסיסמה לאותיות גדולות + אותיות קטנות + מספרים + תווים מיוחדים, הגדר את אורך הסיסמה ל-24 תווים ומעלה, והגדר את גיל הסיסמה ל-30 ימים או פחות. ודא ש-LAPS פועל על ידי בדיקת תכונות ms-Mcs-AdmPwdExpirationTime.", "status": "machine-draft" }
+  },
+  "ADGPO-024": {
+    "name": { "value": "בחינת מסנני WMI של GPO", "status": "machine-draft" },
+    "description": { "value": "מסנני WMI שולטים בהחלת GPO על בסיס שאילתות WQL המוערכות על מערכות יעד. מסנני WMI זדוניים או שגויים יכולים למנוע באופן סלקטיבי מ-GPO אבטחה מלהיות מוחלים על מערכות ספציפיות, וליצור פערי אבטחה ממוקדים. יש לבחון מסנני WMI לאיתור נכונות, השפעה על ביצועים וניצול פוטנציאלי", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל מסנני ה-WMI מתועדים, נבדקים ומפיקים תוצאות צפויות; אין מסנני WMI החוסמים GPO קריטיים לאבטחה", "status": "machine-draft" },
+    "remediationSteps": { "value": "מפה את כל מסנני ה-WMI באמצעות Get-ADObject -Filter 'objectClass -eq \"msWMI-Som\"'. בחן את שאילתת ה-WQL בכל מסנן לאיתור נכונות ובדוק אותה מול מערכות יעד מייצגות. ודא שמסנני ה-WMI אינם חוסמים GPO קריטיים לאבטחה מלהיות מוחלים. הסר מסנני WMI שאינם בשימוש. תעד את המטרה וההתנהגות הצפויה של כל מסנן WMI פעיל.", "status": "machine-draft" }
+  }
+}

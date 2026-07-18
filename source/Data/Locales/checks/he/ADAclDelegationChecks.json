@@ -1,0 +1,99 @@
+{
+  "_family": "ADAclDelegationChecks.json",
+  "ADACL-001": {
+    "name": { "value": "ביקורת ACL של אובייקטים קריטיים", "status": "machine-draft" },
+    "description": { "value": "יש לבקר את רשימות בקרת הגישה על אובייקטים קריטיים ב-AD (שורש הדומיין, AdminSDHolder, Schema, Configuration, ה-OU של Domain Controllers) לאיתור הרשאות בלתי מורשות או מופרזות. ACL שגויים על אובייקטים אלו עלולים לאפשר לתוקפים להסלים הרשאות, לשנות את שירותי הספרייה או להשתלט לחלוטין על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "רק ACE שהם ברירת מחדל או מורשים במפורש על אובייקטים קריטיים ב-AD; אין ישויות בלתי צפויות עם גישת שינוי או שליטה מלאה", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את ה-ACL על אובייקטים קריטיים באמצעות Get-Acl או dsacls.exe. הסר ACE שאינם ברירת מחדל המעניקים הרשאות כתיבה, שינוי או שליטה מלאה לישויות בלתי מורשות. השתמש ב-AdminSDHolder לאכיפת ACL עקביים על קבוצות מוגנות. תעד את כל ההאצלות המכוונות.", "status": "machine-draft" }
+  },
+  "ADACL-002": {
+    "name": { "value": "הרשאות GenericAll על אובייקטים קריטיים", "status": "machine-draft" },
+    "description": { "value": "GenericAll מעניקה שליטה מלאה על אובייקט AD, כולל היכולת לשנות תכונות, לאפס סיסמאות, לשנות חברות בקבוצות ולשנות את ה-DACL. ישויות שאינן ברירת מחדל בעלות GenericAll על אובייקטים קריטיים כגון domain admins, בקרי דומיין או שורש הדומיין מהוות נתיב ישיר להשתלטות על הדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין ישויות שאינן ברירת מחדל בעלות GenericAll על אובייקטים קריטיים ב-AD", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את ה-ACL על אובייקטים קריטיים באמצעות PowerShell או BloodHound. הסר ACE מסוג GenericAll עבור כל ישות שאינה זקוקה לשליטה מלאה. החלף בהרשאות מואצלות בעקרון ההרשאה המזערית היכן שקיים צורך תפעולי. נטר שינויי ACL באמצעות ביקורת Directory Service Changes (Event ID 5136).", "status": "machine-draft" }
+  },
+  "ADACL-003": {
+    "name": { "value": "הרשאות GenericWrite על אובייקטים קריטיים", "status": "machine-draft" },
+    "description": { "value": "GenericWrite מאפשרת שינוי של רוב התכונות באובייקט, ומאפשרת התקפות כגון Kerberoasting ממוקד (כתיבת SPN), האצלה מוגבלת מבוססת משאבים (כתיבת msDS-AllowedToActOnBehalfOfOtherIdentity) או Shadow Credentials (כתיבת msDS-KeyCredentialLink). יש לחקור ישויות שאינן ברירת מחדל בעלות GenericWrite על אובייקטים קריטיים", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין ישויות שאינן ברירת מחדל בעלות GenericWrite על אובייקטים קריטיים ב-AD", "status": "machine-draft" },
+    "remediationSteps": { "value": "בקר את ה-ACL על אובייקטי משתמש, מחשב וקבוצה לאיתור הרשאות GenericWrite. הסר ACE מסוג GenericWrite מיותרים והחלף בהרשאות כתיבה ספציפיות ברמת התכונה. שים לב מיוחדת לגישת כתיבה לתכונות msDS-AllowedToActOnBehalfOfOtherIdentity, servicePrincipalName ו-msDS-KeyCredentialLink.", "status": "machine-draft" }
+  },
+  "ADACL-004": {
+    "name": { "value": "הרשאות WriteDACL על אובייקטים קריטיים", "status": "machine-draft" },
+    "description": { "value": "הרשאת WriteDACL מאפשרת לישות לשנות את רשימת בקרת הגישה לפי שיקול דעת של אובייקט, ובכך מעניקה למעשה את היכולת להקצות כל הרשאה, כולל GenericAll, לעצמה או לאחרים. זהו וקטור קריטי להסלמת הרשאות משום שהוא מאפשר לתוקף להעניק לעצמו שליטה מלאה מבלי להחזיק בה ישירות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין ישויות שאינן ברירת מחדל בעלות WriteDACL על אובייקטים קריטיים ב-AD", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את הרשאות WriteDACL על כל האובייקטים הקריטיים כולל שורש הדומיין, AdminSDHolder, אובייקטי GPO ואובייקטי קבוצות מורשות. הסר WriteDACL עבור ישויות שאינן ברירת מחדל. הפעל ביקורת של שינויי ACL (Event ID 5136) לזיהוי שינויי DACL בלתי מורשים. בחן את השינויים באופן סדיר.", "status": "machine-draft" }
+  },
+  "ADACL-005": {
+    "name": { "value": "הרשאות WriteOwner על אובייקטים קריטיים", "status": "machine-draft" },
+    "description": { "value": "הרשאת WriteOwner מאפשרת שינוי של בעלים של אובייקט AD. לבעלים של אובייקט יש יכולת מרומזת לשנות את ה-DACL, מה שהופך את WriteOwner לשקולה מבחינה תפקודית ל-WriteDACL מנקודת מבט התקפית. תוקף יכול ליטול בעלות ואז להעניק לעצמו כל הרשאה רצויה", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין ישויות שאינן ברירת מחדל בעלות WriteOwner על אובייקטים קריטיים ב-AD", "status": "machine-draft" },
+    "remediationSteps": { "value": "בקר את הרשאות WriteOwner על אובייקטים קריטיים. הסר ACE מסוג WriteOwner עבור ישויות שאינן ברירת מחדל. ודא שבעלי האובייקטים הם חשבונות מורשים מתאימים. הפעל ביקורת של שינויי בעלות ונטר את Event ID 4662 עבור פעולות WriteOwner.", "status": "machine-draft" }
+  },
+  "ADACL-006": {
+    "name": { "value": "זכויות ForceChangePassword", "status": "machine-draft" },
+    "description": { "value": "הזכות המורחבת User-Force-Change-Password (הידועה גם כ-Reset Password) מאפשרת לישות לאפס את סיסמת משתמש אחר ללא ידיעת הסיסמה הנוכחית. כאשר היא מוענקת לחשבונות שאינם מורשים או לקבוצות רחבות, נוצר נתיב ישיר להשתלטות על חשבון העוקף את דרישות האימות הרגילות", "status": "machine-draft" },
+    "recommendedValue": { "value": "ForceChangePassword מוגבלת לקבוצות helpdesk ומנהלים מורשות בלבד; אינה מוענקת לחשבונות שאינם מורשים", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את כל הישויות בעלות הזכות המורחבת User-Force-Change-Password על אובייקטי משתמש. ודא שכל האצלה מכוונת ותחומה כראוי. הסר זכויות מכל ישות שאין לה צורך תפעולי מתועד. השתמש בהאצלה תחומה ברמת OU במקום הענקות ברחבי הדומיין.", "status": "machine-draft" }
+  },
+  "ADACL-007": {
+    "name": { "value": "האצלה מופרזת לקבוצות רחבות", "status": "machine-draft" },
+    "description": { "value": "האצלה של הרשאות רגישות לקבוצות רחבות כגון Authenticated Users, Domain Users או Everyone יוצרת משטח התקפה נרחב שבו כל חשבון שנפרץ יכול לנצל לרעה את הזכויות שהואצלו. זוהי תצורה שגויה נפוצה המפחיתה באופן דרמטי את המאמץ הנדרש להסלמת הרשאות", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין הרשאות רגישות המואצלות ל-Authenticated Users, Domain Users, Everyone או קבוצות רחבות אחרות", "status": "machine-draft" },
+    "remediationSteps": { "value": "בקר את כל ה-ACL לאיתור ACE המוענקים לקבוצות רחבות ידועות (S-1-5-11 Authenticated Users, Domain Users, Everyone, Domain Computers). החלף האצלות לקבוצות רחבות בקבוצות אבטחה ספציפיות המכילות רק את הישויות הנדרשות. החל האצלות בהיקף ה-OU הצר ביותר האפשרי.", "status": "machine-draft" }
+  },
+  "ADACL-008": {
+    "name": { "value": "ניתוח האצלת OU", "status": "machine-draft" },
+    "description": { "value": "האצלת יחידה ארגונית היא השיטה המומלצת להענקת הרשאות ניהוליות ב-Active Directory, אך האצלות OU שגויות עלולות ליצור נתיבי גישה בלתי מכוונים. בדיקה זו מנתחת את כל האצלות ההרשאות ברמת ה-OU כדי לזהות הענקות מתירניות מדי, הרשאות בירושה העוקפות את התיחום המכוון, והאצלות שאולי התיישנו", "status": "machine-draft" },
+    "recommendedValue": { "value": "כל האצלות ה-OU מתועדות, תחומות לסוגי אובייקטים ספציפיים ומשתמשות בהרשאות בעקרון ההרשאה המזערית", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את כל ה-ACE שאינם ברירת מחדל בכל OU באמצעות dsacls.exe או PowerShell. ודא שההאצלות משתמשות ב-InheritedObjectType לתיחום הרשאות למחלקות אובייקטים ספציפיות. הסר האצלות שאינן נדרשות עוד. תעד את כל ההאצלות המכוונות במטריצת הרשאה.", "status": "machine-draft" }
+  },
+  "ADACL-009": {
+    "name": { "value": "מכסת חשבונות מכונה", "status": "machine-draft" },
+    "description": { "value": "התכונה ms-DS-MachineAccountQuota על שורש הדומיין קובעת כמה חשבונות מחשב יכול ליצור כל משתמש מאומת. ערך ברירת המחדל 10 מאפשר לכל משתמש דומיין לצרף מחשבים לדומיין, וליצור חשבונות מכונה הניתנים לניצול להתקפות האצלה מוגבלת מבוססת משאבים, התקפות relay וטכניקות אחרות להסלמת הרשאות", "status": "machine-draft" },
+    "recommendedValue": { "value": "ms-DS-MachineAccountQuota מוגדר ל-0", "status": "machine-draft" },
+    "remediationSteps": { "value": "הגדר את ms-DS-MachineAccountQuota ל-0 על שורש הדומיין באמצעות Set-ADDomain -Identity (Get-ADDomain) -Replace @{'ms-DS-MachineAccountQuota'=0}. האצל את יצירת חשבונות המחשב לקבוצות מנהלים ספציפיות או השתמש בתהליך הכנה מוקדמת. בחן חשבונות מחשב קיימים שנוצרו על ידי משתמשים שאינם מנהלים.", "status": "machine-draft" }
+  },
+  "ADACL-010": {
+    "name": { "value": "ביקורת זכויות מורחבות", "status": "machine-draft" },
+    "description": { "value": "זכויות מורחבות ב-Active Directory כוללות פעולות עוצמתיות כגון DS-Replication-Get-Changes (DCSync), User-Force-Change-Password ו-DS-Replication-Get-Changes-All. הענקות בלתי מורשות של זכויות אלו עלולות להוביל להשתלטות מלאה על הדומיין באמצעות גניבת פרטי הזדהות או השתלטות ישירה על חשבון", "status": "machine-draft" },
+    "recommendedValue": { "value": "זכויות מורחבות מוגבלות לישויות ברירת מחדל ומורשות במפורש; זכויות DCSync רק בבקרי דומיין", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את כל ה-ACE של זכויות מורחבות על שורש הדומיין ועל אובייקטים קריטיים. ודא ש-DS-Replication-Get-Changes ו-DS-Replication-Get-Changes-All מוענקות רק לבקרי דומיין ולחשבונות שכפול מורשים. הסר כל הענקת זכויות מורחבות שאינה ברירת מחדל. נטר את Event ID 4662 עבור שימוש בזכויות מורחבות.", "status": "machine-draft" }
+  },
+  "ADACL-011": {
+    "name": { "value": "בעלות על אובייקטים קריטיים", "status": "machine-draft" },
+    "description": { "value": "לבעלים של אובייקט AD יש הרשאה מרומזת לשנות את ה-DACL של האובייקט ללא תלות ברשומות ה-ACL המפורשות. אם אובייקטים קריטיים כגון שורש הדומיין, AdminSDHolder, קבוצות מורשות או GPO נמצאים בבעלות חשבונות שאינם מורשים או בלתי צפויים, לחשבונות אלו יש נתיב נסתר לשליטה מלאה", "status": "machine-draft" },
+    "recommendedValue": { "value": "אובייקטים קריטיים בבעלות Domain Admins, Enterprise Admins או SYSTEM בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "מנה את הבעלות על כל האובייקטים הקריטיים כולל שורש הדומיין, AdminSDHolder, מכל Schema, מכל Configuration, אובייקטי קבוצות מורשות ואובייקטי GPO. העבר את הבעלות על כל אובייקט המצוי בבעלות שגויה ל-Domain Admins באמצעות Set-Acl או לשונית Security ב-ADUC. הפעל ביקורת עבור שינויי בעלות.", "status": "machine-draft" }
+  },
+  "ADACL-012": {
+    "name": { "value": "הרשאות שאינן ברירת מחדל על שורש הדומיין", "status": "machine-draft" },
+    "description": { "value": "אובייקט שורש הדומיין הוא ראש היררכיית ה-AD, והרשאות המוגדרות כאן עשויות לעבור בירושה לכל רחבי הספרייה. ACE שאינם ברירת מחדל על שורש הדומיין המעניקים זכויות כתיבה, שינוי או זכויות מורחבות לישויות בלתי צפויות מהווים סיכון משמעותי משום שהם עשויים להשפיע על כל אובייקט בדומיין", "status": "machine-draft" },
+    "recommendedValue": { "value": "רק ACE של ברירת מחדל של Microsoft על שורש הדומיין; כל ACE מותאם אישית מתועד ומוצדק", "status": "machine-draft" },
+    "remediationSteps": { "value": "השווה את ה-ACL הנוכחי של שורש הדומיין מול ה-ACL של ברירת המחדל עבור רמת התפקוד של הדומיין שלך. תעד כל ACE שאינו ברירת מחדל ואמת את נחיצותו התפעולית. הסר ACE שאינם נדרשים עוד או המעניקים הרשאות מופרזות. שים לב מיוחדת ל-ACE החלים על 'אובייקט זה וכל אובייקטי הצאצא'.", "status": "machine-draft" }
+  },
+  "ADACL-013": {
+    "name": { "value": "הרשאות קישור GPO", "status": "machine-draft" },
+    "description": { "value": "היכולת לקשר אובייקטי מדיניות קבוצתית לאתרים, לדומיינים או ל-OU שולטת אילו מדיניויות חלות על אילו אובייקטים. הרשאות קישור GPO בלתי מורשות מאפשרות לתוקף להחיל GPO זדוניים על OU ממוקדים, ובכך לפרוס תוכנות זדוניות, לשנות הגדרות אבטחה או ליצור משימות מתוזמנות על מחשבים מושפעים", "status": "machine-draft" },
+    "recommendedValue": { "value": "הרשאות קישור GPO מוגבלות למנהלי מדיניות קבוצתית מורשים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "בקר את הרשאות הכתיבה של gPLink ו-gPOptions על כל ה-OU, שורש הדומיין ואובייקטי האתרים. הסר הרשאות קישור GPO מישויות שאינן ניהוליות. השתמש ב-Group Policy Modeling לאימות השפעת קישורי ה-GPO הנוכחיים. הטמע בקרת שינויים עבור פעולות קישור GPO.", "status": "machine-draft" }
+  },
+  "ADACL-014": {
+    "name": { "value": "הרשאות עריכת GPO", "status": "machine-draft" },
+    "description": { "value": "הרשאות לעריכת אובייקטי מדיניות קבוצתית מאפשרות שינוי של הגדרות אבטחה ברחבי הדומיין, פריסת תוכנה, סקריפטי כניסה ומשימות מתוזמנות. גישת עריכת GPO בלתי מורשית היא יעד בעל ערך גבוה עבור תוקפים משום שהיא מאפשרת הרצת קוד נרחבת ושינויי תצורה ברחבי הסביבה", "status": "machine-draft" },
+    "recommendedValue": { "value": "הרשאות עריכת GPO מוגבלות ל-Group Policy Creator Owners ולמנהלים מורשים בלבד", "status": "machine-draft" },
+    "remediationSteps": { "value": "בחן את לשוניות סינון האבטחה וההאצלה בכל GPO. ודא שרק לישויות מורשות יש הרשאות Edit settings, Delete או Modify security. הסר הרשאות עריכת GPO מקבוצות שאינן ניהוליות. השתמש ב-Group Policy Management Console כדי לבקר את הרשאות ה-GPO באופן שיטתי.", "status": "machine-draft" }
+  },
+  "ADACL-015": {
+    "name": { "value": "זיהוי Shadow Admins", "status": "machine-draft" },
+    "description": { "value": "Shadow Admins הם חשבונות בעלי נתיבים עקיפים לגישה שקולת Domain Admin באמצעות שרשראות ACL, אך אינם חברים באף קבוצה מורשית. חשבונות אלו עוקפים את הגנת AdminSDHolder ואת הניטור המסורתי של גישה מורשית. לדוגמה, חשבון בעל WriteDACL על קבוצת Domain Admins יכול להעניק לעצמו חברות מבלי להיות מסומן על ידי ניטור חברות בקבוצות", "status": "machine-draft" },
+    "recommendedValue": { "value": "לא זוהו נתיבי shadow admin; כל הגישה השקולה למנהל היא באמצעות חברות מפורשת בקבוצה מורשית", "status": "machine-draft" },
+    "remediationSteps": { "value": "השתמש ב-BloodHound או בכלים דומים לזיהוי נתיבי התקפה מבוססי ACL לגישה שקולת Domain Admin. הסר ACE מיותרים היוצרים נתיבים עקיפים להסלמת הרשאות. ודא שכל הגישה הניהולית מוענקת באמצעות חברות בקבוצה מוגנת. הטמע ניתוח נתיבי התקפה סדיר כחלק מפעולות האבטחה.", "status": "machine-draft" }
+  },
+  "ADACL-016": {
+    "name": { "value": "מיפוי נתיבי התקפה", "status": "machine-draft" },
+    "description": { "value": "נתיבי התקפה ב-Active Directory הם שרשראות של הרשאות, חברויות בקבוצות ויחסי אמון הניתנות למעבר כדי להסלים מחשבון בעל הרשאות נמוכות למנהל דומיין. מיפוי מקיף של נתיבי התקפה מזהה סיכונים שבדיקות ACL בודדות עשויות להחמיץ, כגון שרשראות הסלמה מרובות קפיצות דרך אובייקטי ביניים", "status": "machine-draft" },
+    "recommendedValue": { "value": "אין נתיבי התקפה בני-ביצוע ממשתמשים לא מורשים לנכסי Tier 0; כל הנתיבים שזוהו טופלו או מתועדים כסיכון מקובל", "status": "machine-draft" },
+    "remediationSteps": { "value": "בצע ניתוח נתיבי התקפה באמצעות כלים כגון BloodHound. התמקד בנתיבים הקצרים ביותר מ-Domain Users או Authenticated Users אל Domain Admins, Enterprise Admins ובקרי דומיין. שבור את שרשראות ההתקפה שזוהו על ידי הסרת החוליה החלשה ביותר בכל נתיב. תעדף נתיבים הניתנים לניצול ללא כלים מיוחדים או גישה מוגברת.", "status": "machine-draft" }
+  }
+}
