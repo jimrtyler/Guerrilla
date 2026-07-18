@@ -1,0 +1,21 @@
+{
+  "_family": "M365PowerPlatformChecks.json",
+  "M365PP-001": {
+    "name": { "value": "环境创建限制", "status": "machine-draft" },
+    "description": { "value": "默认情况下，Microsoft 365 租户中的所有用户都可以创建新的 Power Platform 环境，这些环境会启动关联的 Dataverse 数据库，并可承载能够访问组织数据的 Power Apps 和 Power Automate 流。不受限制的环境创建会导致影子 IT 蔓延：构建出的未受治理的应用带有绕过 IT 安全控制的数据连接。将环境创建限制为仅管理员可用，可确保适当的治理并防止不受控的数据暴露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "环境创建仅限全局管理员和 Power Platform 管理员；所有生产环境均通过正式的预配流程进行管理", "status": "machine-draft" },
+    "remediationSteps": { "value": "进入 Power Platform 管理中心，通过配置租户级设置，将环境创建限制为仅全局管理员和 Power Platform 管理员。为新环境实施正式的申请与预配流程，在创建环境之前包含安全审查、数据分类和 DLP 策略分配。审计现有环境，识别并停用在实施限制之前创建的任何未受治理的环境。", "status": "machine-draft" }
+  },
+  "M365PP-002": {
+    "name": { "value": "DLP 策略配置", "status": "machine-draft" },
+    "description": { "value": "Power Platform 的数据丢失防护（DLP）策略控制哪些连接器可以在 Power Apps 和 Power Automate 流中一起使用，从而防止业务与非业务数据源之间的未授权数据流动。如果没有 DLP 策略，用户可以创建将企业数据从 SharePoint、Dynamics 365 或 Azure SQL 自动传输到个人邮箱、社交媒体或第三方云存储的流。DLP 连接器分类是防止通过公民开发者应用泄露数据的主要机制。", "status": "machine-draft" },
+    "recommendedValue": { "value": "租户级 DLP 策略将业务关键连接器（SharePoint、Outlook、Dataverse）分类为“业务”，并阻止其与非业务连接器组合使用；针对特定用例设置环境级策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "创建租户级 DLP 策略，将所有包含企业数据的连接器（如 SharePoint、Outlook、Dataverse、Azure SQL 和 OneDrive）归入“业务”组，并将已知的非业务连接器移入“已阻止”组。审查默认的连接器分类，确保新发布的连接器在经过审查和批准之前自动置于“非业务”组。为需要访问租户级策略之外额外连接器的环境创建特定于环境的 DLP 策略，确保其限制程度至少与租户级策略相当。", "status": "machine-draft" }
+  },
+  "M365PP-003": {
+    "name": { "value": "租户隔离设置", "status": "machine-draft" },
+    "description": { "value": "Power Platform 租户隔离控制您租户中的连接器能否与其他 Azure AD 租户建立连接，以及其他租户能否连接到您的租户。如果没有租户隔离，用户可以创建连接到外部组织数据源的流和应用，外部组织也可以构建访问您租户资源的自动化。启用租户隔离可防止可能导致数据泄露或供应链攻击的未授权跨租户数据流。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用租户隔离并施加入站和出站限制；仅对已批准的合作伙伴租户进行允许列表例外处理", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Power Platform 管理中心启用 Power Platform 租户隔离，以默认限制入站和出站的跨租户连接。配置一个允许列表，列出因合法业务场景需要跨租户连接的特定受信任合作伙伴租户 ID。每季度审查允许列表，移除不再需要跨租户访问的租户，并监视审计日志中被隔离策略阻止的任何跨租户连接尝试。", "status": "machine-draft" }
+  }
+}

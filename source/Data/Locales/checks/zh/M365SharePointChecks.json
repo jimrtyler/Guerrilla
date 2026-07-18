@@ -1,0 +1,33 @@
+{
+  "_family": "M365SharePointChecks.json",
+  "M365SPO-001": {
+    "name": { "value": "外部共享设置", "status": "machine-draft" },
+    "description": { "value": "SharePoint Online 的外部共享设置控制是否以及如何将内容共享给组织外部的用户。过于宽松的共享设置（例如允许匿名共享链接）可能导致不受控的数据暴露，并使得无法追踪谁访问过企业内容。将外部共享限制为身份经过验证的已认证来宾，对于维护数据治理至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "外部共享限制为现有来宾，或新来宾和现有来宾并要求进行身份验证；禁用匿名共享链接", "status": "machine-draft" },
+    "remediationSteps": { "value": "进入 SharePoint 管理中心的共享设置，根据协作需求将组织级共享配置为“新来宾和现有来宾”或“仅现有来宾”。禁用匿名访问链接（“任何人”链接），确保所有外部访问都需要身份验证且可被追踪。审查站点级的共享覆盖设置，确保没有任何单个站点的共享设置比组织默认设置更宽松。", "status": "machine-draft" }
+  },
+  "M365SPO-002": {
+    "name": { "value": "来宾访问过期", "status": "machine-draft" },
+    "description": { "value": "对 SharePoint 和 OneDrive 内容的来宾访问若没有过期策略，会导致外部访问长期存续，且很少被审查或撤销。前合作伙伴、供应商和协作者可能在业务关系结束后很久仍保留对敏感企业内容的访问权限。配置自动的来宾访问过期可确保外部共享有时间限制，并要求定期重新授权。", "status": "machine-draft" },
+    "recommendedValue": { "value": "来宾访问过期设置为 30 至 90 天；共享链接在 30 天内过期", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 SharePoint 管理中心配置来宾访问过期策略，根据组织的数据敏感度要求，在 30 至 90 天后自动使来宾权限过期。将外部共享链接的过期时间设置为最长 30 天，以防止长期有效的访问令牌。实施定期的来宾访问审查流程，审计活动的外部共享并移除不再需要的访问权限。", "status": "machine-draft" }
+  },
+  "M365SPO-003": {
+    "name": { "value": "默认共享链接类型", "status": "machine-draft" },
+    "description": { "value": "默认共享链接类型决定了用户创建共享链接时的初始权限级别，宽松的默认设置会增加意外过度共享的可能性。如果默认设置为“任何人”或“组织范围”，用户可能会无意中将敏感文档共享给比预期更广泛的受众。将默认设置为“特定人员”可确保用户对谁获得共享内容的访问权限做出明确的选择。", "status": "machine-draft" },
+    "recommendedValue": { "value": "默认共享链接类型设置为“特定人员”，权限级别为“查看”", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 SharePoint 管理中心将默认共享链接类型设置为“特定人员”，要求用户在共享时明确指定收件人。将默认链接权限配置为“查看”而非“编辑”，以对共享内容实施最小权限原则。向用户普及各种共享链接类型的差异，以及为其共享场景选择限制程度最高的合适链接类型的重要性。", "status": "machine-draft" }
+  },
+  "M365SPO-004": {
+    "name": { "value": "站点创建限制", "status": "machine-draft" },
+    "description": { "value": "SharePoint Online 中不受限制的站点创建允许任何用户在没有治理监督的情况下创建新站点、团队和关联资源。不受控的站点激增会导致安全设置不一致、数据存储库不受治理，并使分类和保留策略难以实施。将站点创建限制为授权人员，或要求审批工作流，可确保从创建之初即得到适当的治理。", "status": "machine-draft" },
+    "recommendedValue": { "value": "站点创建限制为授权管理员，或通过审批流程进行治理；限制 Microsoft 365 组的创建", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 SharePoint 管理中心禁用用户直接创建新站点的能力，从而限制自助式站点创建。实施站点预配申请流程，将创建请求通过审批工作流进行路由，确保建立适当的分类、共享设置和所有权。如果必须允许自助创建，请配置默认的敏感度标签和共享策略，使其自动应用于新创建的站点。", "status": "machine-draft" }
+  },
+  "M365SPO-005": {
+    "name": { "value": "DLP 策略配置", "status": "machine-draft" },
+    "description": { "value": "SharePoint Online 和 OneDrive 中的数据丢失防护（DLP）策略可检测并保护个人身份信息、财务数据和健康记录等敏感信息，防止其被不当共享。如果没有 DLP 策略，用户可能会无意中将包含敏感数据的文档共享给外部用户或通过未受监控的渠道共享。DLP 策略可对敏感数据暴露提供自动检测、用户通知和阻止。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有受监管的数据类型配置 DLP 策略，并对敏感内容的外部共享设置用户通知和共享阻止", "status": "machine-draft" },
+    "remediationSteps": { "value": "创建针对 SharePoint Online 和 OneDrive 位置的 DLP 策略，检测与您的监管要求相关的敏感信息类型，例如 PII、PCI 或 HIPAA 数据。配置策略规则，在检测到敏感内容时显示带有正确处理指引的用户通知，并阻止外部共享包含高敏感度数据的文档。启用事件报告以通知合规团队策略匹配情况，并审查 DLP 活动报告以调优策略准确性并减少误报。", "status": "machine-draft" }
+  }
+}

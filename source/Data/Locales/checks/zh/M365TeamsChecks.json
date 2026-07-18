@@ -1,0 +1,51 @@
+{
+  "_family": "M365TeamsChecks.json",
+  "M365TEAMS-001": {
+    "name": { "value": "外部访问设置", "status": "machine-draft" },
+    "description": { "value": "Microsoft Teams 中的外部访问（联合）控制用户能否与其他 Microsoft 365 组织中的人员或 Skype 用户进行通信。不受限制的外部访问允许任何外部组织向您的用户发起聊天和呼叫，为通过 Teams 客户端进行的社会工程和钓鱼创造了途径。将联合限制为特定的受信任域可缩小攻击面，同时保持必要的业务通信。", "status": "machine-draft" },
+    "recommendedValue": { "value": "外部访问限制为特定的允许域，而非开放式联合；禁用 Skype 消费者版访问", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置 Teams 外部访问，使用仅包含受信任合作伙伴组织域的域允许列表，而非允许与所有外部租户进行开放式联合。除非有特定业务需求，否则禁用与 Skype 消费者版用户的通信。每季度审查并更新允许域列表，移除不再需要联合访问的组织。", "status": "machine-draft" }
+  },
+  "M365TEAMS-002": {
+    "name": { "value": "来宾访问设置", "status": "machine-draft" },
+    "description": { "value": "Microsoft Teams 中的来宾访问允许将外部用户添加到团队和频道中，授予他们对对话、文件和共享资源的访问权限。过于宽松的来宾设置可能允许外部用户创建频道、修改团队设置，或访问本应仅限内部用户的敏感内容。必须将来宾功能配置为提供外部协作所需的最低访问权限。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用来宾访问但限制其功能；来宾不能创建或更新频道、参与私人聊天，或在未经批准的情况下共享文件", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Teams 来宾访问设置，限制来宾功能，防止来宾创建或删除频道、添加或移除应用，以及在会议中共享屏幕。如果不需要外部协作，则完全禁用来宾访问；或者以仍能支持业务需求的最严格设置进行配置。为 Teams 来宾账户实施 Azure AD 访问审查，定期验证来宾访问是否仍然适当。", "status": "machine-draft" }
+  },
+  "M365TEAMS-003": {
+    "name": { "value": "外部会议参与者设置", "status": "machine-draft" },
+    "description": { "value": "外部会议参与者设置控制外部用户在加入您组织托管的 Teams 会议时具有哪些功能。允许外部参与者担任演示者角色、绕过等候室或不受限制地共享屏幕，可能导致会议劫持、未授权内容共享和敏感信息暴露。限制外部参与者的功能可降低会议中断和数据泄露的风险。", "status": "machine-draft" },
+    "recommendedValue": { "value": "外部参与者默认为出席者角色；对外部用户禁用绕过等候室；屏幕共享仅限组织者和演示者", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置全局会议策略，要求外部参与者在等候室中等待，并在被允许进入会议时默认为出席者角色。将屏幕共享和内容共享限制为会议组织者和指定的演示者，以防止外部出席者进行未授权的内容共享。如果某些部门因经常进行外部协作而需要更宽松的设置，则为不同的用户组创建特定的会议策略。", "status": "machine-draft" }
+  },
+  "M365TEAMS-004": {
+    "name": { "value": "匿名加入会议设置", "status": "machine-draft" },
+    "description": { "value": "匿名加入会议允许任何持有会议链接的人无需身份验证即可加入 Teams 会议，使得无法核实参与者的身份。此设置经常在“会议轰炸”攻击中被利用：未受邀请的参与者加入会议以扰乱会议或窃听机密讨论。禁用匿名加入或要求所有参与者进行身份验证可显著提升会议安全性。", "status": "machine-draft" },
+    "recommendedValue": { "value": "禁用匿名加入会议；要求所有会议参与者进行身份验证；对未经身份验证的用户启用等候室", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Teams 会议策略中禁用匿名加入会议，要求所有参与者在加入会议前登录。如果特定用例（例如公开的网络研讨会）必须允许匿名加入，则创建一个启用匿名加入的单独会议策略，并仅将其分配给需要的用户。为所有外部和来宾参与者启用等候室，并配置会议组织者从等候室手动准许出席者进入。", "status": "machine-draft" }
+  },
+  "M365TEAMS-005": {
+    "name": { "value": "录制和转录策略", "status": "machine-draft" },
+    "description": { "value": "Teams 会议录制和转录功能会捕获会议的音频、视频和文本内容，其中可能包含敏感的业务讨论、战略规划或机密信息。不受限制的录制功能允许任何会议参与者在其他参与者不知情或未同意的情况下录制对话。录制和转录策略必须在业务需求与数据保护及隐私合规要求之间取得平衡。", "status": "machine-draft" },
+    "recommendedValue": { "value": "云录制仅限会议组织者；自动转录需征得同意；录制文件存储在已批准的位置并采用适当的保留策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置会议策略，将发起云录制限制为会议组织者和共同组织者，而非所有参与者。启用录制同意通知，使所有参与者在录制开始时都知情，并配置自动转录设置以遵守您所在司法管辖区的隐私法规。审查会议录制文件的存储位置和保留策略，确保将其存储在具有适当访问控制和生命周期管理的受治理位置。", "status": "machine-draft" }
+  },
+  "M365TEAMS-006": {
+    "name": { "value": "消息策略（外部通信）", "status": "machine-draft" },
+    "description": { "value": "Teams 消息策略控制用户在聊天和频道对话中的功能，包括通过聊天与外部用户通信的能力。不受限制地向外部用户发送消息，会通过聊天、文件共享和链接共享实现数据泄露，而这些行为不受电子邮件通信所应用的可见性和控制约束。必须配置消息策略以防止敏感数据通过 Teams 聊天渠道泄露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "外部聊天限制为特定域；对外部对话禁用 URL 预览；在外部聊天中限制文件共享", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Teams 消息策略，将与外部用户聊天的能力限制为仅有跨组织通信业务需求的人员。禁用与外部用户对话中的 URL 预览，以防止通过链接展开而意外暴露数据。考虑为 Teams 聊天实施 DLP 策略，以检测并阻止在外部对话中共享敏感信息类型。", "status": "machine-draft" }
+  },
+  "M365TEAMS-007": {
+    "name": { "value": "应用权限策略", "status": "machine-draft" },
+    "description": { "value": "Teams 应用权限策略控制哪些第三方和自定义应用可以在 Teams 环境中安装和使用。不受限制的应用安装允许用户添加可能请求过多权限、访问企业数据或引入安全漏洞的第三方应用。应用治理策略必须通过策划可用的应用目录，在用户生产力与安全性之间取得平衡。", "status": "machine-draft" },
+    "recommendedValue": { "value": "第三方应用限制为已批准列表；自定义应用上传限制为授权开发者；应用权限请求由管理员审查", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置 Teams 应用权限策略，默认阻止所有第三方应用，并有选择地仅允许已由安全团队审核的已批准应用。将自定义应用旁加载限制为授权开发者，并要求所有自定义应用在发布前经过审批流程。审查当前已安装的第三方应用列表，移除任何未获批准或不再需要的应用，并审计每个应用被授予的权限。", "status": "machine-draft" }
+  },
+  "M365TEAMS-008": {
+    "name": { "value": "Teams 中的文件共享设置", "status": "machine-draft" },
+    "description": { "value": "Microsoft Teams 中的文件共享由 SharePoint Online 和 OneDrive 支持，共享设置决定了在频道和聊天中共享的文件如何被内部和外部用户访问。配置错误的文件共享设置可能导致敏感文档可被来宾用户访问，或通过从 Teams 生成的过于宽松的共享链接被访问。使 Teams 文件共享设置与组织的数据保护策略保持一致，可防止意外的数据暴露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "与外部用户的文件共享限制为已认证的来宾；云存储提供商限制为 OneDrive 和 SharePoint；在私人频道中禁用外部文件共享", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Teams 文件共享配置，确保在频道和聊天中共享的文件继承在组织级别配置的 SharePoint Online 共享限制。在 Teams 中禁用第三方云存储集成（Citrix Files、Dropbox、Box、Google Drive、Egnyte），以防止数据上传到不受管理的存储服务。为 Teams 及关联的 SharePoint 站点配置敏感度标签，以实施在文档被共享或下载时仍持续有效的文件保护策略。", "status": "machine-draft" }
+  }
+}

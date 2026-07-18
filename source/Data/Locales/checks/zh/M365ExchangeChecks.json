@@ -1,0 +1,303 @@
+{
+  "_family": "M365ExchangeChecks.json",
+  "M365EXO-001": {
+    "name": { "value": "反垃圾邮件策略审计", "status": "machine-draft" },
+    "description": { "value": "Exchange Online Protection 中的反垃圾邮件策略过滤入站和出站电子邮件，以阻止不请自来的邮件和基于垃圾邮件的钓鱼活动。配置错误或使用默认的反垃圾邮件设置可能无法提供足够的防护，导致恶意邮件进入用户收件箱。带有适当阈值和处置操作的自定义垃圾邮件筛选器策略，对于减少送达最终用户的威胁数量至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "自定义反垃圾邮件策略，将高置信度垃圾邮件隔离；批量邮件阈值设置为 6 或更低；启用出站垃圾邮件警报", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Exchange Online 中的所有反垃圾邮件策略，确保将高置信度垃圾邮件和高置信度钓鱼邮件设置为隔离而非投递到垃圾邮件文件夹。将批量邮件阈值配置为 6 或更低以捕获激进的批量发件人，并为出站垃圾邮件检测启用通知。将自定义策略应用于所有收件人域，并核实没有用户级覆盖设置削弱组织策略。", "status": "machine-draft" }
+  },
+  "M365EXO-002": {
+    "name": { "value": "反钓鱼策略审计", "status": "machine-draft" },
+    "description": { "value": "反钓鱼策略使用邮箱智能和冒充检测来识别仿冒受信任发件人或域的邮件。如果没有正确配置反钓鱼策略，攻击者可以冒充高管、合作伙伴或受信任的域来实施商业电子邮件欺诈和凭据窃取攻击。包括用户和域冒充防护在内的高级反钓鱼设置，对于防御定向钓鱼活动至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为高管和 VIP 启用用户冒充防护；为所有组织域启用域冒充防护；启用邮箱智能", "status": "machine-draft" },
+    "remediationSteps": { "value": "为高价值目标（包括高管、财务团队成员和 IT 管理员）配置带有冒充防护的反钓鱼策略。为所有组织域和关键合作伙伴域启用域冒充防护，并将处置操作设置为隔离被冒充的邮件。启用邮箱智能和仿冒智能，并配置适当的安全提示，以警告用户可能被冒充的发件人。", "status": "machine-draft" }
+  },
+  "M365EXO-003": {
+    "name": { "value": "反恶意软件策略审计", "status": "machine-draft" },
+    "description": { "value": "Exchange Online 中的反恶意软件策略在投递前扫描邮件附件，查找已知的恶意软件、病毒和恶意内容。默认的反恶意软件设置可能无法阻止所有危险文件类型，某些常用于攻击的附件类型（如可执行文件和脚本）可能未经过滤即通过。带有常见附件类型过滤的全面反恶意软件策略，对于防止通过邮件投递恶意软件至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用常见附件类型筛选器，阻止可执行文件和脚本文件类型；启用零小时自动清除；为恶意软件检测启用管理员通知", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查反恶意软件策略，启用常见附件筛选器以阻止危险文件类型，包括 exe、vbs、js、ps1、bat、cmd 及其他可执行格式。启用零小时自动清除（ZAP），以追溯移除已投递邮件中检测到的恶意软件。配置管理员通知，在检测到恶意软件时提醒安全团队，并核实该策略已应用于组织中的所有收件人。", "status": "machine-draft" }
+  },
+  "M365EXO-004": {
+    "name": { "value": "安全附件策略", "status": "machine-draft" },
+    "description": { "value": "Microsoft Defender for Office 365 中的安全附件在沙盒环境中引爆邮件附件，以检测基于签名的扫描无法识别的零日恶意软件和高级威胁。如果未启用安全附件，作为邮件附件投递的新型恶意软件变种可能绕过传统的反恶意软件筛选器。对于成为使用自定义或多态恶意软件的老练攻击者目标的组织，这一防御层至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有用户以动态投递模式启用安全附件；为 SharePoint、OneDrive 和 Teams 启用全局设置", "status": "machine-draft" },
+    "remediationSteps": { "value": "创建或更新安全附件策略以使用动态投递模式，该模式在扫描附件的同时立即投递邮件正文，从而在保持防护的同时将对用户的影响降至最低。在全局设置中为 SharePoint、OneDrive 和 Teams 启用安全附件，将文件引爆防护扩展到邮件之外。将该策略分配给所有用户，并监视威胁资源管理器中的检测情况以验证策略有效性。", "status": "machine-draft" }
+  },
+  "M365EXO-005": {
+    "name": { "value": "安全链接策略", "status": "machine-draft" },
+    "description": { "value": "Microsoft Defender for Office 365 中的安全链接提供点击时 URL 验证，以保护用户免受邮件和 Office 文档中恶意链接的侵害。攻击者常使用延迟钓鱼技术：URL 在投递时是良性的，但在邮件通过初始扫描后被改为指向恶意站点。如果没有安全链接，用户在投递后点击这些被武器化的 URL 时将失去保护。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为邮件和 Office 应用启用安全链接；启用 URL 重写；不允许点击进入恶意 URL；启用实时扫描", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置一个应用于所有用户的安全链接策略，为邮件和 Microsoft Office 应用启用 URL 扫描。启用阻止用户点击进入已检测到的恶意 URL 的设置，并为可疑链接开启实时 URL 扫描。不要向“不重写”列表添加宽泛的 URL 例外，并审查任何现有例外，确保它们仍然必要且不会造成安全缺口。", "status": "machine-draft" }
+  },
+  "M365EXO-006": {
+    "name": { "value": "DKIM/DMARC/SPF 验证", "status": "machine-draft" },
+    "description": { "value": "DKIM、DMARC 和 SPF 是验证发件人身份并防止域欺骗的电子邮件身份验证协议。如果这三种协议未全部正确配置，攻击者可以发送看似来自您组织域的邮件，从而针对员工、客户和合作伙伴实施极具说服力的钓鱼活动。完整的电子邮件身份验证是防御商业电子邮件欺诈和域冒充的基础性防线。", "status": "machine-draft" },
+    "recommendedValue": { "value": "带 -all（硬失败）的 SPF 记录；为所有域启用 DKIM 签名；DMARC 策略设置为 reject 或 quarantine 并启用汇总报告", "status": "machine-draft" },
+    "remediationSteps": { "value": "核实每个组织域都有一条以 -all（硬失败）结尾、包含所有授权发送来源的有效 SPF 记录。在 Exchange Online 中为所有自定义域启用 DKIM 签名，并在 DNS 中发布 DKIM CNAME 记录。为每个域发布 DMARC 记录，先以 none 策略进行监控，然后逐步过渡到 quarantine，最终在确认合法发送来源后过渡到 reject，并配置汇总报告以持续获得可见性。", "status": "machine-draft" }
+  },
+  "M365EXO-007": {
+    "name": { "value": "自动转发策略", "status": "machine-draft" },
+    "description": { "value": "向外部地址自动转发邮件是攻击者在攻陷邮箱后常用的数据泄露技术。攻击者可以设置自动转发规则，将所有收到的邮件悄悄复制到外部地址，即使其访问权限被撤销后仍能持续访问敏感通信。组织应默认阻止外部自动转发，并审计任何现有的转发规则。", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过反垃圾邮件出站策略阻止外部自动转发；对现有转发规则进行审计和批准", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置出站垃圾邮件筛选器策略，将自动转发设置为“自动 - 系统控制”或“关闭”，以在传输层阻止外部自动转发。审计所有现有的邮箱转发规则和 SMTP 转发配置，以识别任何可能表明遭到攻陷的未授权外部转发。移除任何未经批准的转发规则，并使用统一审计日志实施监视警报，以检测新的转发规则创建。", "status": "machine-draft" }
+  },
+  "M365EXO-008": {
+    "name": { "value": "传输规则清单与分析", "status": "machine-draft" },
+    "description": { "value": "Exchange Online 传输规则（邮件流规则）处理传输中的邮件，可以修改标头、重定向邮件、添加免责声明或绕过安全控制。恶意或配置错误的传输规则可能悄悄重定向邮件、剥离安全标头，或为特定发件人绕过垃圾邮件筛选。对所有传输规则进行全面审计，是识别可能削弱安全性或助长数据泄露的规则所必需的。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有传输规则均记录业务理由；未经明确批准，没有任何规则绕过垃圾邮件筛选或安全控制", "status": "machine-draft" },
+    "remediationSteps": { "value": "导出并审查所有 Exchange Online 传输规则，特别注意绕过垃圾邮件筛选、将邮件重定向到外部地址或修改邮件标头的规则。移除或禁用任何缺乏记录在案的业务理由的规则，或由此后已被攻陷或注销的账户创建的规则。为传输规则的创建和修改实施变更管理流程，并为传输规则变更设置审计日志警报。", "status": "machine-draft" }
+  },
+  "M365EXO-009": {
+    "name": { "value": "已启用邮箱审计", "status": "machine-draft" },
+    "description": { "value": "邮箱审计记录邮箱所有者、委托人和管理员对邮箱内容执行的操作，在安全调查期间提供关键的取证证据。尽管 Microsoft 365 中默认启用了邮箱审计，但组织可能已为特定邮箱禁用它，或者可能未核实默认审计操作是否充分。如果没有邮箱审计，将无法检测或调查未授权的邮箱访问和数据泄露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有邮箱启用邮箱审计；默认审计操作对所有登录类型均包含 MailItemsAccessed、Send 和 SoftDelete", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过检查所有邮箱的 AuditDisabled 参数是否设置为 False，核实邮箱审计已在组织范围内启用。审查每种登录类型（Owner、Delegate、Admin）的受审计操作，确保正在记录 MailItemsAccessed、Send、SoftDelete、HardDelete 和 UpdateFolderPermissions 等关键操作。对于已禁用审计的邮箱，重新启用审计并调查其被禁用的原因，以排除恶意篡改。", "status": "machine-draft" }
+  },
+  "M365EXO-010": {
+    "name": { "value": "外部发件人警告", "status": "machine-draft" },
+    "description": { "value": "外部发件人标识帮助用户识别邮件何时来自组织外部，从而降低冒充和社会工程攻击的有效性。如果没有可见的外部发件人指示，用户可能无法区分内部同事与仿冒内部显示名称的外部发件人。配置外部发件人标记或邮件提示可提供视觉提示，促使用户格外谨慎。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用外部发件人标记或邮件提示，以直观标识来自外部发件人的邮件", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Exchange Online 反钓鱼策略中启用外部发件人标识功能，以在来自外部发件人的邮件上显示视觉指示。考虑实施一条传输规则，在来自组织外部的入站邮件主题行前面加上“[External]”作为附加的视觉警告。将此变更告知最终用户，并提供如何识别和应对可疑外部邮件的指导。", "status": "machine-draft" }
+  },
+  "M365EXO-011": {
+    "name": { "value": "OAuth/SMTP AUTH 逐邮箱审计", "status": "machine-draft" },
+    "description": { "value": "SMTP AUTH 等旧式身份验证协议允许仅使用用户名和密码进行邮箱身份验证，绕过多重身份验证和条件访问控制。通过钓鱼或密码喷洒获得邮箱凭据的攻击者，可以使用 SMTP AUTH 访问邮件而不触发 MFA 质询。在不需要的邮箱上禁用 SMTP AUTH 和旧式 OAuth 流，可堵住一条重要的身份验证绕过途径。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在组织范围内禁用 SMTP AUTH，仅对记录在案的服务账户设置逐邮箱例外；禁用旧式 OAuth", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Set-TransportConfig 在组织级别禁用 SMTP AUTH，然后仅为需要它进行应用集成的特定服务账户邮箱有选择地启用。审计所有启用了 SMTP AUTH 的邮箱，核实其具有记录在案的业务理由，且凭据得到安全管理。监视登录日志中的 SMTP AUTH 使用情况以检测潜在的凭据滥用，并计划将旧式应用迁移到新式身份验证方法。", "status": "machine-draft" }
+  },
+  "M365EXO-012": {
+    "name": { "value": "远程域自动转发设置", "status": "machine-draft" },
+    "description": { "value": "Exchange Online 中的远程域设置控制向外部域的邮件格式和外出答复投递，包括是否按域允许自动转发。默认远程域（*）可能被配置为允许自动转发，这会覆盖出站垃圾邮件策略并通过邮箱转发规则实现数据泄露。此设置必须独立于出站垃圾邮件筛选器进行审计，以确保一致的外部转发控制。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非明确需要，否则在默认远程域（*）和所有自定义远程域上禁用自动转发", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查默认远程域（*）配置，并将 AutoForwardEnabled 设置为 False，以防止向所有外部域自动转发。审计任何自定义远程域条目，除非有针对特定合作伙伴域的记录在案的业务需求，否则禁用自动转发。核实远程域设置与出站垃圾邮件策略的自动转发配置一致，以确保两个控制层的执行保持一致。", "status": "machine-draft" }
+  },
+  "M365EXO-013": {
+    "name": { "value": "禁用向外部域自动转发（MS.EXO.1.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.1.1 要求禁用向外部域的自动转发。Exchange Online 中的远程域配置控制邮件能否被自动转发出租户。当默认远程域（*）允许自动转发时，被攻陷的邮箱可以将所有入站邮件悄悄泄露到攻击者控制的外部地址，即使在重置凭据后仍能持续访问。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在默认远程域（*）和每个自定义远程域上将 AutoForwardEnabled 设置为 False，除非有记录在案的特定合作伙伴集成", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Exchange 管理中心的“邮件流”下，打开“远程域”并编辑“默认 (*)”条目，使其不允许自动转发（AutoForwardEnabled = False）。对每个没有记录在案的跨租户自动转发业务需求的自定义远程域重复此操作。确认出站垃圾邮件策略的自动转发设置保持一致，使两个控制层实施相同的限制。", "status": "machine-draft" }
+  },
+  "M365EXO-014": {
+    "name": { "value": "维护已批准的发送 IP 列表（MS.EXO.2.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.2.1 要求维护一份已批准的发送邮件 IP 地址列表，这构成了准确 SPF 记录的基础。已批准发件人列表是权威输入，决定了哪些主机可以合法地为每个域发送邮件。如果没有维护该列表，SPF 策略就无法正确界定范围，要么无法阻止欺骗者，要么会阻止合法发件人。", "status": "machine-draft" },
+    "recommendedValue": { "value": "一份记录在案的、最新的每域所有已批准发送来源列表（Exchange Online 的 include 加上任何第三方发件人），并反映在已发布的 SPF 记录中", "status": "machine-draft" },
+    "remediationSteps": { "value": "清点每个合法为各已接受域发送邮件的系统，包括 Exchange Online（spf.protection.outlook.com）、营销平台、工单系统和本地中继。将此已批准发件人列表记录为事实来源，并确保已发布的 SPF 记录精确引用这些来源。每当新增或停用发送服务时审查该列表，以使 SPF 记录保持准确。", "status": "machine-draft" }
+  },
+  "M365EXO-015": {
+    "name": { "value": "为每个域发布 SPF 策略（MS.EXO.2.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.2.2 要求为每个域发布 SPF 策略，仅将已批准的地址指定为发件人并使所有其他地址失败。SPF 以 DNS TXT 记录而非 Exchange Online 设置的形式发布。缺少 SPF 记录，或以 +all 或 ?all 结尾的记录，会允许攻击者伪造看似来自组织的邮件的 FROM 字段，从而实施极具说服力的钓鱼。", "status": "machine-draft" },
+    "recommendedValue": { "value": "每个域一条 SPF TXT 记录，列出所有已批准发件人并以 -all（硬失败）结尾", "status": "machine-draft" },
+    "remediationSteps": { "value": "为每个已接受的域发布一条 SPF TXT 记录，列举所有已批准的发送来源，并以 -all 结尾以对未授权发件人进行硬失败处理。移除任何重复的 SPF 记录，因为它们违反 RFC 7208 并会导致验证失败。避免使用 +all 和 ?all，它们会使 SPF 执行失效；发布后使用 DNS 查询验证该记录。", "status": "machine-draft" }
+  },
+  "M365EXO-016": {
+    "name": { "value": "为所有域启用 DKIM（MS.EXO.3.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.3.1 建议为所有域启用 DKIM。DKIM 在邮件标头中添加加密签名，使收件人能够验证邮件的完整性和真实性。如果没有 DKIM，收件人检测伪造邮件的信号就会减少一个，而且 DMARC 对齐无法依赖 DKIM，从而削弱整体的电子邮件身份验证。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为每个自定义域启用 DKIM 签名，并在 DNS 中发布相应的选择器 CNAME 记录", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Exchange Online 中为每个自定义域启用 DKIM 签名，并在该域的 DNS 中发布服务生成的两条选择器 CNAME 记录。核实一旦 CNAME 记录传播完成，签名配置即报告为已启用状态。定期轮换密钥，并确认在域上线时将 DKIM 启用作为其一部分。", "status": "machine-draft" }
+  },
+  "M365EXO-017": {
+    "name": { "value": "为每个域发布 DMARC 策略（MS.EXO.4.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.4.1 要求为每个二级域发布 DMARC 策略。DMARC 是位于 _dmarc.<domain> 的 DNS TXT 记录，用于告知接收方如何处理未通过 SPF 和 DKIM 的邮件以及将报告发送到何处。如果没有 DMARC 记录，接收方对身份验证失败的处理方式会不一致，从而允许伪造邮件到达收件箱。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为每个二级域在 _dmarc 处发布一条 DMARC TXT 记录", "status": "machine-draft" },
+    "remediationSteps": { "value": "为每个二级域在 _dmarc.<domain> 处发布一条 DMARC TXT 记录；二级域上的记录可保护其子域。先以 p=none 开始，在不影响投递的情况下收集汇总报告，验证合法来源在 SPF 或 DKIM 下对齐，然后再逐步提升执行级别。使用 DNS 查询确认该记录能正确解析。", "status": "machine-draft" }
+  },
+  "M365EXO-018": {
+    "name": { "value": "DMARC 执行设置为 p=reject（MS.EXO.4.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.4.2 要求将 DMARC 邮件拒绝选项设置为 p=reject。在三个策略值（none、quarantine、reject）中，reject 指示接收方直接丢弃未通过身份验证的邮件，从而提供最强的防护。none 或 quarantine 策略会给伪造邮件留下到达用户收件箱或落在其附近的空间。", "status": "machine-draft" },
+    "recommendedValue": { "value": "每个域的 DMARC 记录包含 p=reject", "status": "machine-draft" },
+    "remediationSteps": { "value": "在监控下确认所有合法发件人都通过 SPF 或 DKIM 对齐后，将每个域的 DMARC 记录更新为 p=reject，使接收方丢弃未通过身份验证的邮件。先经过 p=none 和 p=quarantine，以避免中断合法邮件。在实施 reject 后继续监视汇总报告，以捕获任何尚未对齐的新上线发件人。", "status": "machine-draft" }
+  },
+  "M365EXO-019": {
+    "name": { "value": "配置 DMARC 汇总报告联系人（MS.EXO.4.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.4.3 要求联邦行政部门机构的 DMARC 汇总报告联系人（RUA）包含 reports@dmarc.cyber.dhs.gov，更普遍地要求配置一个汇总报告目标。汇总报告使域所有者能够了解谁在以其域的名义发送邮件，这对于安全地推进到 p=reject 和检测欺骗活动至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "DMARC 记录包含 rua= 汇总报告目标；联邦行政部门机构包含 reports@dmarc.cyber.dhs.gov", "status": "machine-draft" },
+    "remediationSteps": { "value": "为每条 DMARC 记录添加一个指向受监控邮箱或报告处理服务的 rua= 标记，以便收集和审查汇总报告。根据 BOD 18-01，联邦行政部门的各部门和机构必须在 RUA 字段中包含 reports@dmarc.cyber.dhs.gov。确保接收邮箱或服务受到积极监控，以便对欺骗趋势采取行动。", "status": "machine-draft" }
+  },
+  "M365EXO-020": {
+    "name": { "value": "在组织范围内禁用 SMTP AUTH（MS.EXO.5.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.5.1 要求禁用 SMTP AUTH。SMTP AUTH 是一种使用用户名和密码进行身份验证的旧式提交协议，无法强制实施多重身份验证。将其作为租户默认设置保持启用，会给攻击者提供一条使用被盗凭据发送邮件、同时绕过 MFA 和条件访问的途径。", "status": "machine-draft" },
+    "recommendedValue": { "value": "将 SMTP AUTH 作为组织默认设置禁用（SmtpClientAuthenticationDisabled = True），仅对记录在案的服务账户设置逐邮箱例外", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过在传输配置上将 SmtpClientAuthenticationDisabled 设置为 True，将 SMTP AUTH 作为全局默认设置禁用。当特定服务账户确实需要 SMTP AUTH 时，仅在该单个邮箱上启用它并记录理由。监视登录遥测中的 SMTP AUTH 使用情况，并将旧式应用迁移到新式身份验证。", "status": "machine-draft" }
+  },
+  "M365EXO-021": {
+    "name": { "value": "联系人文件夹共享未向所有域开放（MS.EXO.6.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.6.1 要求联系人文件夹不得与所有域共享。Exchange Online 共享策略可以放宽对出站联系人共享的默认限制。将联系人与所有域共享的策略（“*”域条目）会广泛暴露目录和联系人数据，制造数据泄露途径并助长社会工程的侦察。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有共享策略规则将联系人共享授予通配符域（*）；共享仅限于特定的已批准域", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查每一条 Exchange Online 共享策略，移除任何将联系人文件夹与通配符域（*）共享的规则。当确实需要外部联系人共享时，将其范围限定为特定的命名合作伙伴域，而非所有域。验证默认共享策略不会悄悄重新启用向所有域的联系人共享。", "status": "machine-draft" }
+  },
+  "M365EXO-022": {
+    "name": { "value": "日历详情共享未向所有域开放（MS.EXO.6.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.6.2 要求日历详情不得与所有域共享。共享策略可以允许外部日历详情共享；覆盖通配符域（*）的规则会将会议主题、地点和与会者信息暴露给任何外部方。这会泄露支持定向钓鱼和物理侦察的组织活动。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有共享策略规则将日历详情共享（CalendarSharing*）授予通配符域（*）；共享仅限于特定的已批准域，理想情况下仅限空闲/繁忙", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查每一条 Exchange Online 共享策略，移除任何将日历详情与通配符域（*）共享的规则。如果需要外部日历共享，将其限制为特定的命名域，并优先使用仅空闲/繁忙级别而非完整详情。确认默认共享策略不会向所有域暴露日历详情。", "status": "machine-draft" }
+  },
+  "M365EXO-023": {
+    "name": { "value": "已实施外部发件人警告（MS.EXO.7.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.7.1 要求实施外部发件人警告。标记来自组织外部的邮件有助于用户识别冒充和社会工程企图。这可以通过原生的外部发件人标记（Set-ExternalInOutlook）或一条邮件流规则来实现，后者在入站外部邮件的主题前面加上诸如 [External] 之类的指示。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用原生外部发件人标识（Get-ExternalInOutlook Enabled = True）或一条在入站外部邮件前面加上外部标记的邮件流规则", "status": "machine-draft" },
+    "remediationSteps": { "value": "启用原生外部发件人标识功能，使 Outlook 在来自组织外部的邮件上显示外部标记。作为替代或补充，创建一条已启用的邮件流规则，在来自组织外部的邮件主题前面加上诸如 [External] 之类的标记。将此变更告知用户，使他们理解该指示的含义。", "status": "machine-draft" }
+  },
+  "M365EXO-024": {
+    "name": { "value": "正在使用数据丢失防护解决方案（MS.EXO.8.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.8.1 要求使用 DLP 解决方案，提供与原生 Microsoft 解决方案相当的服务。DLP 检测 Exchange Online 邮件中的敏感信息并防止未授权披露。如果没有 DLP，用户可能会无意或恶意地将敏感数据发送到组织外部，而没有自动检测或阻止。", "status": "machine-draft" },
+    "recommendedValue": { "value": "至少有一个作用于 Exchange Online 工作负载的活动 DLP 策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "部署一个覆盖 Exchange Online 邮件工作负载的 DLP 解决方案，并确认至少有一个策略已启用并应用。如果使用原生 Microsoft DLP 功能，请在合规门户中创建一个作用于 Exchange 邮件的策略。验证该策略处于强制模式而非仅测试模式，以便实际阻止披露。", "status": "machine-draft" }
+  },
+  "M365EXO-025": {
+    "name": { "value": "DLP 保护 PII 和敏感数据类型（MS.EXO.8.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.8.2 要求 DLP 解决方案保护 PII 和敏感信息，至少限制通过邮件共享信用卡号、纳税人识别号和社会安全号。一个存在但不检测这些高价值标识符的 DLP 解决方案，无法防止最具破坏性的意外披露类别。", "status": "machine-draft" },
+    "recommendedValue": { "value": "DLP 策略包含涵盖信用卡号、TIN 和 SSN 的敏感信息类型，并对邮件设置限制/阻止操作", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置覆盖 Exchange Online 的 DLP 策略，以检测信用卡号、纳税人识别号和社会安全号的敏感信息类型，以及任何其他机构定义的 PII。将规则操作设置为阻止或限制包含这些标识符的出站邮件。使用样本数据进行测试，以确认检测有效且会生成用户通知和事件报告。", "status": "machine-draft" }
+  },
+  "M365EXO-026": {
+    "name": { "value": "按附件文件类型筛选邮件（MS.EXO.9.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.9.1 要求按附件文件类型筛选邮件，与常见附件筛选器相当。许多恶意软件负载以点击即运行的附件形式到达。按附件类型筛选入站邮件可在危险文件类别到达用户之前将其阻止，降低意外执行的可能性。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用了常见附件类型筛选器（EnableFileFilter = True）的恶意软件/反恶意软件策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "在反恶意软件策略上启用常见附件筛选器，以便按附件文件类型筛选入站邮件。确认该策略应用于所有收件人，而不仅限于一部分。当有相当的第三方网关提供此筛选时，核实其已启用并涵盖相同的危险文件类别。", "status": "machine-draft" }
+  },
+  "M365EXO-027": {
+    "name": { "value": "附件筛选器评估真实文件类型（MS.EXO.9.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.9.2 建议附件筛选器尝试确定真实文件类型并评估文件扩展名。攻击者会重命名文件以伪装危险类型（例如，将可执行文件重命名为 .txt）。真实类型检测可捕获扩展名与实际文件内容不符的情况，堵住一种常见的规避技术。", "status": "machine-draft" },
+    "recommendedValue": { "value": "配置附件筛选以检查真实文件类型，而非仅依赖文件扩展名", "status": "machine-draft" },
+    "remediationSteps": { "value": "确保附件筛选解决方案检查实际文件内容以确定真实类型，而非信任文件扩展名。在原生解决方案中，这由常见附件筛选器的类型检测提供；核实其已启用。对于第三方网关，确认已配置真实类型或基于内容的检查，以便仍能捕获被重命名的危险文件。", "status": "machine-draft" }
+  },
+  "M365EXO-028": {
+    "name": { "value": "设置了不允许的附件文件类型（MS.EXO.9.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.9.3 要求确定并设置不允许的文件类型，至少阻止 .exe、.cmd 和 .vbe 等点击即运行的文件。一个已启用但阻止列表为空或不足的附件筛选器不提供任何真正的防护。组织必须根据其风险承受能力定义并维护被阻止扩展名的列表。", "status": "machine-draft" },
+    "recommendedValue": { "value": "附件筛选器阻止列表填充有可执行/点击即运行类型，至少包括 exe、cmd、vbe、vbs、js、ps1、bat", "status": "machine-draft" },
+    "remediationSteps": { "value": "用组织不会通过邮件接受的文件类型填充附件筛选器阻止列表，确保至少包含 exe、cmd、vbe、vbs、js、ps1 和 bat 等点击即运行的可执行文件。根据当前威胁趋势和组织的风险承受能力审查该列表。核实该列表非空并已应用于所有收件人。", "status": "machine-draft" }
+  },
+  "M365EXO-029": {
+    "name": { "value": "扫描邮件中的恶意软件（MS.EXO.10.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.10.1 要求扫描邮件中的恶意软件。电子邮件是主要的恶意软件投递渠道；扫描入站邮件可在已知恶意内容到达用户之前将其检测出来。没有活动反恶意软件策略的组织，会使用户直接暴露于携带恶意软件的附件之下。", "status": "machine-draft" },
+    "recommendedValue": { "value": "至少有一个应用于所有收件人的活动反恶意软件策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "确认至少有一个反恶意软件策略处于活动状态并应用于所有收件人，以便扫描入站邮件中的恶意软件。如果使用相当的第三方解决方案，核实其已启用并涵盖所有入站邮件。定期审查检测遥测，以确认扫描正常运行。", "status": "machine-draft" }
+  },
+  "M365EXO-030": {
+    "name": { "value": "隔离或丢弃恶意软件邮件（MS.EXO.10.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.10.2 要求将被识别为含有恶意软件的邮件隔离或丢弃。如果恶意邮件仍被投递，仅有检测是不够的。反恶意软件策略必须采取移除操作，使用户无法与被发现含有恶意软件的邮件进行交互。", "status": "machine-draft" },
+    "recommendedValue": { "value": "反恶意软件策略操作对被识别为恶意软件的邮件进行隔离或丢弃（无“投递并警告”操作）", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置反恶意软件策略，使被识别为含有恶意软件的邮件被隔离或丢弃，而非投递。核实没有任何策略被设置为仅带警告投递恶意软件阳性邮件。确认已启用管理员通知，以便在检测到时提醒安全团队。", "status": "machine-draft" }
+  },
+  "M365EXO-031": {
+    "name": { "value": "启用投递后恶意软件扫描（MS.EXO.10.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.10.3 要求邮件扫描能够在投递后审查邮件。恶意软件签名持续更新，因此投递时良性的邮件可能稍后被识别为恶意。零小时自动清除（ZAP）可追溯地从邮箱中移除此类邮件，缩短暴露窗口。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有反恶意软件策略上启用零小时自动清除（ZAP）（ZapEnabled = True）", "status": "machine-draft" },
+    "remediationSteps": { "value": "在每个反恶意软件策略上启用零小时自动清除（ZAP），以便稍后被识别为恶意软件的邮件在投递后从邮箱中移除。确认所有策略（而不仅是默认策略）都已启用 ZAP。当使用相当的第三方解决方案时，核实其提供等效的投递后修复。", "status": "machine-draft" }
+  },
+  "M365EXO-032": {
+    "name": { "value": "启用冒充防护检查（MS.EXO.11.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.11.1 建议使用冒充防护检查。冒充防护将发件人地址与已知用户和域进行比对，以标记形似地址（例如 exmple.com 与 example.com）。如果没有它，用户必须手动区分几乎相同的发件人地址，这既不可靠又会提高钓鱼的成功率。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用了用户和/或域冒充防护并应用于高价值目标的反钓鱼策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "在反钓鱼策略中启用用户和域冒充防护，并将其应用于高价值目标（如高管、财务和 IT），以及组织和关键合作伙伴域。将被冒充邮件的操作设置为隔离。请注意，冒充防护需要 Defender for Office 365 计划；如果不可用，请评估相当的第三方功能。", "status": "machine-draft" }
+  },
+  "M365EXO-033": {
+    "name": { "value": "显示用户安全提示/警告（MS.EXO.11.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.11.2 建议显示与 EOP 安全提示相当的用户警告。安全提示将自动化信号（FROM 地址中的异常字符、首次联系的发件人）直接呈现在客户端中，在风险时刻促使用户谨慎。这减轻了用户的检测工作，降低钓鱼的成功率。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用了首次联系安全提示以及仿冒/冒充安全提示的反钓鱼策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "在反钓鱼策略中启用安全提示选项，包括首次联系安全提示以及仿冒和冒充安全提示，使用户在客户端内收到警告。将该策略应用于所有用户。当使用相当的第三方解决方案时，确认其呈现等效的面向收件人的警告。", "status": "machine-draft" }
+  },
+  "M365EXO-034": {
+    "name": { "value": "正在使用基于 AI 的钓鱼检测（MS.EXO.11.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.11.3 建议使用与 EOP 邮箱智能相当的基于 AI 的钓鱼检测工具。邮箱智能构建用户正常通信者的模型，以检测基于规则的筛选器所遗漏的异常发件人。如果没有基于 AI 的层，新型或高度定向的钓鱼更可能逃避检测。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用了邮箱智能（EnableMailboxIntelligence = True）并配置了防护操作的反钓鱼策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "在反钓鱼策略中启用邮箱智能，并配置邮箱智能防护操作以处理检测到的冒充。将该策略应用于所有用户。邮箱智能需要 Defender for Office 365 计划；如不可用，请评估相当的基于 AI 的第三方钓鱼检测功能。", "status": "machine-draft" }
+  },
+  "M365EXO-035": {
+    "name": { "value": "连接筛选器中无 IP 允许列表（MS.EXO.12.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.12.1 建议不要创建 IP 允许列表。连接筛选器允许列表上的地址会绕过垃圾邮件筛选、SPF、DKIM、DMARC 和 FROM 地址执行。此列表上的任何条目都是一个漏洞：能从该地址发送邮件的攻击者可以投递跳过所有入站安全控制的邮件。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有策略的连接筛选器策略 IPAllowList 均为空", "status": "machine-draft" },
+    "remediationSteps": { "value": "编辑连接筛选器策略，从允许的 IP 地址列表中移除所有条目，使任何发件人都不会绕过垃圾邮件筛选和身份验证检查。如果必须允许某个发件人以避免误报，请优先使用范围狭窄的允许发件人条目，而非 IP 允许列表。核实没有任何自定义连接筛选器策略重新引入允许列表条目。", "status": "machine-draft" }
+  },
+  "M365EXO-036": {
+    "name": { "value": "禁用连接筛选器安全列表（MS.EXO.12.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.12.2 建议不要启用安全列表。连接筛选器安全列表是一个动态的、来源于第三方的“已知良好”发件人列表，其邮件会绕过垃圾邮件筛选和发件人身份验证。由于该列表由外部策划，启用它相当于将安全绕过决策让渡给组织无法控制的来源。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有策略的连接筛选器策略 EnableSafeList 均设置为 False", "status": "machine-draft" },
+    "remediationSteps": { "value": "编辑连接筛选器策略，确保关闭安全列表选项（EnableSafeList = False），使外部来源的“已知良好”发件人不会绕过垃圾邮件和身份验证检查。在默认以及任何自定义连接筛选器策略上核实该设置。仍可使用连接筛选器 IP 阻止列表来阻止已知的恶意发件人。", "status": "machine-draft" }
+  },
+  "M365EXO-037": {
+    "name": { "value": "在组织范围内启用邮箱审计（MS.EXO.13.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.13.1 要求启用邮箱审计。邮箱审计记录所有者、委托人和管理员对邮箱内容执行的操作，为调查攻陷提供必要的取证证据。尽管默认启用，此控制可防范在组织级别的意外或恶意禁用。", "status": "machine-draft" },
+    "recommendedValue": { "value": "组织 AuditDisabled = False，使邮箱审计在整个租户范围内启用", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过确认组织配置上的 AuditDisabled 为 False，核实邮箱审计已在组织范围内启用。如果审计被禁用，重新启用它并调查其被关闭的原因以排除篡改。确认默认审计操作在各登录类型中涵盖 MailItemsAccessed、Send、SoftDelete 和 HardDelete。", "status": "machine-draft" }
+  },
+  "M365EXO-038": {
+    "name": { "value": "启用入站垃圾邮件筛选器（MS.EXO.14.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.14.1 要求启用垃圾邮件筛选器，与原生垃圾邮件筛选相当。垃圾邮件会使邮箱杂乱、降低生产力，并常携带恶意链接或附件。没有活动入站垃圾邮件策略的组织，会使用户暴露于全部数量的不请自来且可能恶意的邮件之下。", "status": "machine-draft" },
+    "recommendedValue": { "value": "至少有一个应用于所有收件人的活动托管内容（反垃圾邮件）筛选器策略", "status": "machine-draft" },
+    "remediationSteps": { "value": "确认至少有一个入站反垃圾邮件（托管内容筛选器）策略处于活动状态并应用于所有收件人。如果使用相当的第三方网关，核实其已为所有入站邮件启用。审查垃圾邮件操作阈值，确保激进的批量和垃圾邮件发件人被筛选。", "status": "machine-draft" }
+  },
+  "M365EXO-039": {
+    "name": { "value": "将垃圾邮件路由至垃圾邮件文件夹或隔离区（MS.EXO.14.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.14.2 要求将垃圾邮件和高置信度垃圾邮件移至垃圾邮件文件夹或隔离区。将垃圾邮件投递到收件箱会使筛选失去意义，并增加对恶意内容的暴露。反垃圾邮件策略操作必须将检测到的垃圾邮件从收件箱移开，同时保留用户对误报的审查能力。", "status": "machine-draft" },
+    "recommendedValue": { "value": "SpamAction 和 HighConfidenceSpamAction 设置为 MoveToJmf（垃圾邮件文件夹）或 Quarantine；绝不设置为投递到收件箱", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置反垃圾邮件策略，使垃圾邮件和高置信度垃圾邮件的操作将邮件移至垃圾邮件文件夹或隔离区，而非投递到收件箱。核实两项操作均未设置为添加标头并投递。确认该策略应用于所有收件人，使垃圾邮件路由保持一致。", "status": "machine-draft" }
+  },
+  "M365EXO-040": {
+    "name": { "value": "反垃圾邮件策略中无允许的域（MS.EXO.14.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.14.3 要求不要将允许的域添加到入站反垃圾邮件策略。允许整个域会使该域的每个发件人绕过垃圾邮件防护，而常见域可能被欺骗以滥用该例外。允许单个发件人是可以接受的，但按域的允许条目会造成宽泛的绕过。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有反垃圾邮件（托管内容筛选器）策略上的 AllowedSenderDomains 均为空", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查每一条反垃圾邮件策略，从允许的发件人域列表中移除所有条目。当必须处理误报时，添加特定的允许发件人而非整个域。确认没有任何自定义反垃圾邮件策略重新引入允许域条目，尤其是常见域。", "status": "machine-draft" }
+  },
+  "M365EXO-041": {
+    "name": { "value": "启用 URL 阻止列表比对（MS.EXO.15.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.15.1 建议启用与阻止列表的 URL 比对。点击时 URL 防护将链接与阻止列表和已知恶意站点列表进行比对，使用户在到达危险目标之前被拦截。如果没有它，在投递后被武器化的链接仍可点击且不受保护。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为邮件启用安全链接（或相当的）策略并激活 URL 扫描（EnableSafeLinksForEmail = True）", "status": "machine-draft" },
+    "remediationSteps": { "value": "为邮件启用安全链接或相当的 URL 防护策略，使链接在点击时与阻止列表和已知恶意站点列表进行比对扫描。将该策略应用于所有用户，并避免宽泛的“不重写”URL 例外。安全链接需要 Defender for Office 365 计划；如不可用，请评估相当的第三方链接防护功能。", "status": "machine-draft" }
+  },
+  "M365EXO-042": {
+    "name": { "value": "扫描直接下载链接中的恶意软件（MS.EXO.15.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.15.2 建议扫描直接下载链接中的恶意软件。邮件中的链接可能直接指向恶意软件下载。当用户点击直接下载链接时，对目标文件进行实时扫描，如检测到恶意软件则阻止下载，从而防止设备感染。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用了实时 URL/文件扫描的安全链接（或相当的）策略（ScanUrls = True）", "status": "machine-draft" },
+    "remediationSteps": { "value": "在安全链接或相当的策略中启用对 URL 和直接下载目标的实时扫描，使链接背后的文件在点击时被扫描恶意软件。将该策略应用于所有用户。在适当情况下核实已配置“仅在扫描完成后投递”选项，以最大化防护。", "status": "machine-draft" }
+  },
+  "M365EXO-043": {
+    "name": { "value": "启用用户点击跟踪（MS.EXO.15.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.15.3 建议启用用户点击跟踪。点击跟踪记录用户点击邮件中链接的时间，为是否可能访问过恶意链接提供事后可见性。这对于界定和响应涉及钓鱼链接的事件至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用了点击跟踪的安全链接（或相当的）策略（DoNotTrackUserClicks = False）", "status": "machine-draft" },
+    "remediationSteps": { "value": "确保在安全链接或相当的策略中启用用户点击跟踪，以便记录对邮件中链接的点击（“不跟踪”选项应关闭）。将该策略应用于所有用户。确认相关报告界面中提供点击遥测，以供事件调查。", "status": "machine-draft" }
+  },
+  "M365EXO-044": {
+    "name": { "value": "启用所需的 Exchange Online 警报（MS.EXO.16.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.16.1 要求启用一组最低限度的警报，包括可疑的邮件发送模式、可疑的连接器活动、可疑的邮件转发活动、邮件已延迟、租户被限制发送未预配邮件、租户被限制发送邮件，以及检测到可能的恶意 URL 点击。这些警报使管理员能够实时洞察可能的安全事件。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用七项所需的警报策略：可疑发送模式、可疑连接器活动、可疑转发、邮件已延迟、租户被限制发送未预配邮件、租户被限制发送邮件、恶意 URL 点击", "status": "machine-draft" },
+    "remediationSteps": { "value": "核实七项所需的警报策略均已启用：可疑的邮件发送模式、可疑的连接器活动、可疑的邮件转发活动、邮件已被延迟、租户被限制发送未预配邮件、租户被限制发送邮件，以及检测到可能的恶意 URL 点击。启用任何被禁用的警报。当使用相当的第三方警报解决方案时，确认其涵盖等效的条件。", "status": "machine-draft" }
+  },
+  "M365EXO-045": {
+    "name": { "value": "将警报路由至受监控目标（MS.EXO.16.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.16.2 建议将警报发送到受监控的地址或纳入 SIEM。触发但被投递到无人监控之处的警报是不可操作的，会使可疑事件无人处理并加大事件影响。每项所需的警报策略都应通知受监控的收件人或馈送到 SIEM。", "status": "machine-draft" },
+    "recommendedValue": { "value": "每项已启用的警报策略都将通知收件人设置为受监控的邮箱，或由 SIEM 引入", "status": "machine-draft" },
+    "remediationSteps": { "value": "为每项已启用的警报策略配置一个或多个通知收件人，指向受监控的邮箱或通讯组，或将警报转发到 SIEM。确认目标受到积极监控，以便及时对警报进行分类处理。当使用第三方警报解决方案时，核实其警报到达相同的受监控目标或 SIEM。", "status": "machine-draft" }
+  },
+  "M365EXO-046": {
+    "name": { "value": "启用 Purview 审核（标准版）日志记录（MS.EXO.17.1）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.17.1 要求启用 Microsoft Purview 审核（标准版）日志记录，即统一审计日志。统一审计日志捕获 Microsoft 365 各处的用户和管理员活动，是事件响应和威胁检测的基础。如果统一审计日志引入被禁用，就不会收集活动证据，调查会受到严重阻碍。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用统一审计日志引入（UnifiedAuditLogIngestionEnabled = True）", "status": "machine-draft" },
+    "remediationSteps": { "value": "核实统一审计日志引入已启用（UnifiedAuditLogIngestionEnabled = True），以便在 Microsoft 365 审计日志中捕获用户和管理员活动。如果被禁用，通过审计日志配置将其启用。启用后通过查询近期事件确认日志记录处于活动状态。", "status": "machine-draft" }
+  },
+  "M365EXO-047": {
+    "name": { "value": "启用 Purview 审核（高级版）日志记录（MS.EXO.17.2）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.17.2 要求启用 Microsoft Purview 审核（高级版）日志记录。高级审核增加了标准版不包含的高价值事件类型（如 MailItemsAccessed）和更长的默认保留期，显著改善调查期间的可见性。高级审核需要 E5/G5 或等效的附加许可。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用高级审核事件类型（例如 MailItemsAccessed）和审核保留功能，需具备 E5/G5 或附加许可", "status": "machine-draft" },
+    "remediationSteps": { "value": "启用 Microsoft Purview 审核（高级版）功能，以便捕获诸如 MailItemsAccessed 之类的额外事件类型。确认租户具备所需的 E5/G5 许可或合规附加组件；如未获许可，则无法满足此控制，应作为“未评估”而非“通过”进行跟踪。启用后验证正在记录高价值审核事件。", "status": "machine-draft" }
+  },
+  "M365EXO-048": {
+    "name": { "value": "审计日志保留满足最低要求（MS.EXO.17.3）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.17.3 要求审计日志至少保留 OMB M-21-31（附录 C）所规定的最低时长，即在活动存储中至少保留十二个月。默认保留期可能短于要求，在需要时不可用的日志会妨碍对较早事件的调查。明确的审计日志保留策略可强制实施所需的时长。", "status": "machine-draft" },
+    "recommendedValue": { "value": "一项审计日志保留策略，将统一审计日志在活动存储中至少保留 12 个月（依据 OMB M-21-31 附录 C）", "status": "machine-draft" },
+    "remediationSteps": { "value": "创建一项审计日志保留策略，按照 OMB M-21-31 附录 C 的要求将统一审计日志在活动存储中至少保留十二个月，并在适用时增加冷存储保留。确认租户许可支持自定义审计保留（E5/G5 或附加组件）；如未获许可，将此作为“未评估”而非“通过”进行跟踪。验证策略范围涵盖相关的 Exchange 和统一审计日志记录类型。", "status": "machine-draft" }
+  },
+  "M365EXO-049": {
+    "name": { "value": "阻止可执行附件类型（MS.EXO.9.5）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.9.5 要求在邮件网关处阻止点击即运行的可执行文件类型（例如 .exe、.cmd 和 .vbe）。Microsoft Defender for Office 365 通过反恶意软件策略上的常见附件筛选器来实施这一点，无论内容扫描结果如何，都直接拒绝携带所列文件类型的邮件。可执行附件是主要的恶意软件投递途径；按扩展名阻止高风险类型可在需要任何引爆之前拦截最常见的负载。此检查检查每一条反恶意软件策略，确认常见附件筛选器已启用且至少涵盖 .exe、.cmd 和 .vbe。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有反恶意软件策略上启用常见附件筛选器，至少阻止 .exe、.cmd 和 .vbe", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Microsoft Defender 门户中，依次进入“电子邮件和协作 > 策略和规则 > 威胁策略 > 反恶意软件”，在每条策略上启用常见附件筛选器，并确保被阻止的文件类型列表包含点击即运行的可执行文件（.exe、.cmd、.vbe 及相关类型）。优先使用标准或严格预设安全策略，它们默认启用此功能。确认该策略应用于所有收件人。", "status": "machine-draft" }
+  },
+  "M365EXO-050": {
+    "name": { "value": "DLP 限制共享 SSN、ITIN 和信用卡号（MS.EXO.8.4）", "status": "machine-draft" },
+    "description": { "value": "SCuBA MS.EXO.8.4 要求数据丢失防护解决方案至少限制通过邮件共享信用卡号、美国个人纳税人识别号（ITIN）和美国社会安全号（SSN）。此检查检查从租户收集的 DLP 合规规则，确认至少有一条已启用的规则引用这三种敏感信息类型中的每一种。它读取的是 DLP 规则（而不仅是策略）；由于 Get-DlpComplianceRule 无法区分未配置的 DLP 解决方案与无法读取的解决方案，因此规则集缺失或为空会报告为“未评估”，而非失败或通过。仅当规则存在但明显未涵盖三种所需类型之一时，才返回 FAIL。", "status": "machine-draft" },
+    "recommendedValue": { "value": "至少各有一条已启用的 DLP 规则分别针对美国 SSN、美国 ITIN 和信用卡号敏感信息类型，作用于 Exchange 邮件", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Microsoft Purview 合规门户中，依次进入“数据丢失防护 > 策略”，创建或扩展一个作用于 Exchange 邮件位置的策略，其规则检测信用卡号、美国社会安全号（SSN）和美国个人纳税人识别号（ITIN）敏感信息类型，并将操作设置为阻止或限制外部共享。启用该策略（而非测试模式），以便强制执行规则。", "status": "machine-draft" }
+  }
+}
