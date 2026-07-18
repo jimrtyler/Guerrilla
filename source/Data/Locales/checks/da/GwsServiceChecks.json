@@ -1,0 +1,219 @@
+{
+  "_family": "GwsServiceChecks.json",
+  "GWS-SITES-001": {
+    "name": {
+      "value": "Sites-tjenesten deaktiveret",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Google Sites-tjenesten bør deaktiveres for alle brugere for at reducere angrebsfladen, i overensstemmelse med mindst mulige rettigheder. Sites kan aktiveres selektivt pr. organisationsenhed eller gruppe, hvor der er et dokumenteret behov.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Sites-tjenesten sat til Fra for alle (aktivér selektivt pr. OU/gruppe kun efter behov)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Sites > Service status > Sæt til Fra for alle. Aktivér selektivt pr. organisationsenhed eller gruppe kun, hvor der findes et dokumenteret forretningsmæssigt behov.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-CLASS-001": {
+    "name": {
+      "value": "Classroom-medlemskab - hvem kan tilmelde sig klasser",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Hvem der kan tilmelde sig klasser i dit domæne, bør begrænses til kun brugere i dit domæne, hvilket forhindrer eksterne konti i at tilmelde sig interne klasser.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Hvem der kan tilmelde sig klasser sat til 'Users in your domain only'",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Classroom > Class settings > About class membership > Who can join classes in your domain > Sæt til 'Users in your domain only'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-CLASS-002": {
+    "name": {
+      "value": "Classroom-medlemskab - hvilke klasser brugere kan tilmelde sig",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Hvilke klasser brugere i dit domæne kan tilmelde sig, bør begrænses til kun klasser i dit domæne, hvilket forhindrer interne brugere i at tilmelde sig eksterne klasser, der kunne eksfiltrere data.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Hvilke klasser brugere kan tilmelde sig sat til 'Classes in your domain only'",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Classroom > Class settings > About class membership > Which classes users in your domain can join > Sæt til 'Classes in your domain only'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-CLASS-003": {
+    "name": {
+      "value": "Classroom API-dataadgang begrænset",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Brugere bør ikke kunne autorisere tredjepartsapps til at få adgang til deres Google Classroom-data, hvilket forhindrer ukontrolleret dataadgang via eksterne integrationer.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Brugere kan ikke autorisere apps til at få adgang til Classroom-data (API-dataadgang deaktiveret)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Classroom > Data access > Fjern markeringen af 'Users can authorize apps to access their Google Classroom data'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-CLASS-004": {
+    "name": {
+      "value": "Classroom-import af klasselister deaktiveret",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Import af klasselister via tredjepartsintegration bør slås fra, så klasselister ikke synkroniseres fra eksterne systemer uden udtrykkelig styring.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Import af klasselister slået Fra",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Classroom > Roster import > Vælg Fra.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-CLASS-005": {
+    "name": {
+      "value": "Classroom-afmelding af elever begrænset",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Kun lærere bør have tilladelse til at afmelde elever fra klasser, hvilket forhindrer elever i at fjerne sig selv eller andre og forstyrre integriteten af klassemedlemskabet.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Afmelding af elever begrænset til kun lærere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Classroom > Student unenrollment > Vælg 'Teachers only'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-CLASS-006": {
+    "name": {
+      "value": "Oprettelse af Classroom-klasser begrænset til verificerede lærere",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Oprettelse af klasser bør begrænses til kun verificerede lærere, hvilket forhindrer uautoriserede brugere i at oprette klasser og samle medlemmer.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Oprettelse af klasser begrænset til kun verificerede lærere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Classroom > General settings > Teacher permissions > Vælg 'Verified teachers only'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-GEMINI-001": {
+    "name": {
+      "value": "Gemini-appadgang begrænset til licenserede brugere",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Brugeradgangen til Gemini-appen bør sættes til Fra for alle uden en licens, hvilket sikrer, at adgang til generativ AI styres af licenstildeling frem for at være åben for alle brugere.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Gemini-appadgang Fra for brugere uden en licens",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Generative AI > Gemini app > User access > Fjern markeringen af 'Allow all users to access the Gemini app, regardless of license'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-GEMINI-002": {
+    "name": {
+      "value": "Gemini Alpha-funktioner deaktiveret",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Gemini Alpha-funktioner bør deaktiveres. Funktioner før udgivelse har måske ikke gennemført sikkerhedsgennemgang og kan eksponere organisationens data for ikke-godkendt behandling.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Adgang til Alpha-funktioner i Gemini for Workspace slået fra",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Generative AI > Gemini for Workspace > Alpha features > Vælg 'Turn off access to Alpha features in Gemini for Google Workspace'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-GEMINI-003": {
+    "name": {
+      "value": "Gemini-samtalehistorik aktiveret",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Gemini-samtalehistorik bør aktiveres, så AI-interaktioner bevares til revisions- og complianceformål. Deaktiveret historik kan skjule datahåndtering.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Gemini-samtalehistorik aktiveret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Generative AI > Gemini app > Gemini conversation history > Sørg for, at samtalehistorik er slået til.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-GEMINI-004": {
+    "name": {
+      "value": "Gemini-samtaleopbevaring på mindst 18 måneder",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Gemini-samtaleopbevaring bør sættes til mindst 18 måneder for at understøtte krav om revision, legal hold og hændelsesundersøgelse.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Samtaleopbevaring sat til mindst 18 måneder",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Generative AI > Gemini app > Gemini conversation history > Sæt opbevaringsperioden til mindst 18 måneder.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-GEMINI-005": {
+    "name": {
+      "value": "Gemini-samtaledeling deaktiveret",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Gemini-samtaledeling via link bør sættes til Fra for at forhindre, at indhold i AI-samtaler, som kan indeholde følsomme prompts og output, deles uden for de tilsigtede modtagere.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Samtaledeling via link sat til Fra",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Generative AI > Gemini app > Sharing > Sæt 'Allow conversation sharing via link' til Fra.",
+      "status": "machine-draft"
+    }
+  }
+}

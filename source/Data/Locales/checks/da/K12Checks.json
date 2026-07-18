@@ -1,0 +1,183 @@
+{
+  "_family": "K12Checks.json",
+  "GWS-K12-001": {
+    "name": {
+      "value": "Elev-OU-deling ikke arvet fra personale",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Skoledistrikter konfigurerer ofte ekstern Drive-deling til personalets behov og lader elev-OU'er arve den konfiguration. Arv er usynlig i den daglige administration: elev-OU'en viser en værdi, men ingen har valgt den for eleverne. Konfiguration af ekstern deling på elev-OU'er bør være en eksplicit lokal beslutning eller en arvet værdi, der er fuldt deaktiveret.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Konfiguration af ekstern Drive-deling anvendes lokalt på hver elev-OU, eller den arvede værdi er DISALLOWED",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Drive and Docs > Sharing settings. Vælg elev-organisationsenheden i venstre panel, og angiv 'Sharing outside of your organization' eksplicit for den OU (indstillingen viser 'Locally applied', når det er en lokal beslutning, ellers 'Inherited').",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-002": {
+    "name": {
+      "value": "Elevers eksterne Drive-deling begrænset",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Uanset personalets opsætning bør elev-OU'er ikke tillade ubegrænset lydløs deling uden for organisationen. Forsvarlige elevopsætninger spænder fra fuldt deaktiveret til domæner på en tilladelsesliste; deling der er slået til med en advarselsmeddelelse er det svageste acceptable minimum og bør være en bevidst distriktsbeslutning for aldersgruppen.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Elev-OU'ens eksterne Drive-deling er DISALLOWED eller begrænset til domæner på en tilladelsesliste; hvis ALLOWED, er den eksterne delingsadvarsel aktiveret og valget dokumenteret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Drive and Docs > Sharing settings. Vælg elev-organisationsenheden, og sæt 'Sharing outside of your organization' til Off eller domæner på en tilladelsesliste. Hvis distriktet bevidst tillader ekstern deling for en elev-OU, skal du som minimum aktivere 'Warn when files owned by users in your organization are shared outside'.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-003": {
+    "name": {
+      "value": "Elever kan ikke autorisere tredjepartsapps",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "En elev, der klikker på 'Sign in with Google' på et vilkårligt websted, kan give det websted adgang til data på sin skolekonto, medmindre distriktet begrænser tredjeparts-API-adgang for elev-OU'er. Elever bør ikke have ukonfigureret tredjeparts-appadgang, kun en distriktskurateret tilladelsesliste. Dette er en af de mest virkningsfulde enkeltindstillinger i en skoletenant.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ukonfigurerede tredjepartsapps blokeret (BLOCK_ALL_SCOPES) for elev-OU'er; distriktsgennemgåede apps tilføjes individuelt til tilladelseslisten",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > Access and data control > API controls > App access control > Manage Third-Party App Access. Vælg elev-organisationsenheden, sæt ukonfigurerede tredjepartsapps til 'Block all third-party API access', og føj de specifikke apps, distriktet har gennemgået, til tilladelseslisten.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-004": {
+    "name": {
+      "value": "Gennemgang af leverandørers delegerede adgang",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Domænedækkende delegeringstildelinger giver en leverandørs tjenestekonto stående adgang til brugerdata på tværs af tenanten, herunder elevdata. SIS-platforme, værktøjer til klasselister og EdTech-leverandører ophober disse tildelinger gennem årene, og forældede tildelinger fjernes sjældent. Hver tildeling med følsomme scopes bør svare til en aktuel leverandørkontrakt og det snævrest mulige sæt scopes.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Hver domænedækkende delegeringstildeling svarer til en aktuel leverandør og har kun de scopes, den pågældende leverandør har brug for",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > Access and data control > API controls > Domain-wide delegation. For hvert klient-id skal du bekræfte, hvilken leverandør der ejer det, og at kontrakten er aktuel; fjern tildelinger for leverandører, der er ophørt; reducér sæt af scopes, der overstiger leverandørens funktion (scopes til mail, Drive, directory og kontakter fortjener særlig granskning).",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-005": {
+    "name": {
+      "value": "Mindst mulige rettigheder for delegerede administratorer",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Skoledistrikter giver rutinemæssigt vejledere, sekretærer og skoleledere delegerede administratorroller til legitime opgaver ved hjælp af roller, der er langt bredere end opgaven. En delegeret rolle med rettigheder til brugerhåndtering eller sikkerhed på tværs af hele domænet rækker til hver eneste elevkonto; at afgrænse den samme rolle til en organisationsenhed indeslutter den. Denne kontrol synliggør domænedækkende delegerede tildelinger til gennemgang; om hver indehaver har brug for den rækkevidde, er distriktets afgørelse.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Delegerede administratorroller med rettigheder til brugerhåndtering eller sikkerhed afgrænses til de organisationsenheder, indehaveren understøtter, ikke hele domænet",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Account > Admin roles. For hver brugerdefineret eller foruddefineret rolletildeling, der er markeret i beviserne, skal du enten indsnævre tildelingen til den relevante organisationsenhed (redigér tildelingens omfang) eller erstatte rollen med en, der kun har de rettigheder, indehaverens opgaver kræver.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-006": {
+    "name": {
+      "value": "Grænser for elevkommunikation",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Chat og Meet har hver især uafhængige indstillinger, der styrer, om konti kan kommunikere med personer uden for organisationen. For elev-OU'er er disse indstillinger en sikkerhedsgrænse: de afgør, om en konto uden for distriktet kan indlede kontakt med en elev gennem distriktets værktøjer. En FAIL her betyder, at en indstilling tillader en klasse af ekstern kontakt, som distriktet ikke aktivt har besluttet at tillade; det betyder ikke, at en sådan kontakt har fundet sted. Begrænsninger for ekstern Gmail-mail ligger i routingregler, som denne kontrol ikke kan læse, og noteres til manuel gennemgang.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ekstern chat for elev-OU slået fra eller begrænset til betroede domæner; elever deltager kun i distriktshostede møder",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Chat: Admin Console > Apps > Google Workspace > Google Chat > External chat settings; vælg elev-OU'en, og slå ekstern chat fra eller begræns til domæner på en tilladelsesliste. Meet: Admin Console > Apps > Google Workspace > Google Meet > Meet safety settings; vælg elev-OU'en, og begræns hvilke møder brugere kan deltage i til din organisation. Gmail: gennemgå eventuelle begrænsninger for elevers eksterne mail under Apps > Google Workspace > Gmail > Routing.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-007": {
+    "name": {
+      "value": "Integritet af værgeadgang",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Værge-e-mailoversigter findes, så forældre ser deres egen elevs aktivitet. Den integritetsegenskab, der er maskinvurderbar, er hvem der kan registrere og fjerne værger: kun domæneadministratorer er den snævre flade; verificerede lærere udvider den og kræver en dokumenteret procedure for identitetstjek. Hvordan distriktet verificerer en værges identitet, før den inviteres, er et politikgennemgangspunkt, som denne kontrol ikke kan læse. Fundene beskriver konfigurationsopsætning, ikke hændelser.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Hvis værgeadgang er aktiveret, er håndtering af værger begrænset til domæneadministratorer, eller der findes en dokumenteret lærerbaseret verifikationsprocedure",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Classroom > Guardian access. Vælg elev-organisationsenheden. Hvis værgeoversigter er i brug, skal du sætte 'Who can manage guardians' til kun domæneadministratorer eller dokumentere den verifikationsprocedure, lærere skal følge, før de inviterer en værge.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-008": {
+    "name": {
+      "value": "Sikkerhedsopsætning for administrerede elev-Chromebooks",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Elev-Chromebooks er distriktets største flåde og den mest grænsetestede. Den opsætning, der holder flåden administreret: nulstillede enheder gentilmelder sig automatisk (elever kan ikke undslippe administration ved at nulstille), udvidelser installeres fra en distriktstilladelsesliste frem for en åben butik med en blokeringsliste, og sideloadede udvidelser fra uden for Web Store blokeres.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Tvungen gentilmelding automatisk efter nulstilling; installation af udvidelser kun via tilladelsesliste; eksterne (sideloadede) udvidelser blokeret på elev-OU'er",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Devices > Chrome > Settings. Vælg elev-organisationsenheden. Under Device settings > Enrollment and access skal du sætte Forced re-enrollment til 'Force device to automatically re-enroll after wiping'. Under Users and browsers > Apps and extensions skal du sætte installationspolitikken for Chrome Web Store til at blokere alle apps med en admin-administreret tilladelsesliste og blokere eksterne udvidelser.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-009": {
+    "name": {
+      "value": "Håndtering af konti for elever, der er ophørt",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Dimission og udmeldelse skaber konti, som ingen ejer. En aktiv konto, der tilhører en elev, der er ophørt, er en uovervåget identitet, der stadig modtager mail og stadig indeholder data. Denne kontrol synliggør konti i elev-OU'erne, der er aktive, men ikke har logget ind i et år eller mere, og minder distriktet om, at suspenderede konti stadig indeholder Drive-data, hvis ejerskab bør afklares før sletning.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Elever, der er ophørt, suspenderes eller arkiveres ved ophør; ingen elevkonto forbliver aktiv med et år uden logins",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Directory > Users. Filtrér til elev-organisationsenheden, og sortér efter Last sign-in. Suspendér eller arkivér konti, der tilhører udmeldte eller dimitterede elever. Før du sletter suspenderede konti, skal du overføre Drive-ejerskab (Admin Console > Directory > Users > vælg bruger > Delete > overfør indhold) eller eksportere via Takeout/Vault, som din opbevaringspolitik kræver.",
+      "status": "machine-draft"
+    }
+  },
+  "GWS-K12-010": {
+    "name": {
+      "value": "Sikkerhedsminimum for elevkonti",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Et ærligt sikkerhedsminimum for elever er aldersinddelt: stærk adgangskodepolitik og distriktskontrolleret gendannelse overalt; 2-trinsbekræftelse håndhævet for OU'er, der betjener elever, som er gamle nok til at have en anden faktor. Elevkontrolleret selvgendannelse af konti er en vej til kontoovertagelse i enhver alder og fejler denne kontrol; en manglende håndhævelse af 2SV rapporteres som kontekst for distriktets aldersinddelte beslutning, aldrig som en blind fejl for en OU på indskolingsniveau.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Selvgendannelse deaktiveret for elev-OU'er; STRONG adgangskodepolitik med minimumslængde på 12 eller mere; 2SV håndhævet, hvor aldersgruppen understøtter det, med dokumenterede undtagelser andre steder",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > Authentication. Vælg elev-organisationsenheden. Under Account recovery skal du slå selvgendannelse af brugerkonti fra for elev-OU'er (gendannelse foregår gennem distriktets helpdesk). Under Password management skal du håndhæve stærke adgangskoder med en minimumslængde på 12 eller højere. Under 2-step verification skal du håndhæve 2SV for aldersgrupper, der kan have en anden faktor, og dokumentere undtagelsen for yngre OU'er.",
+      "status": "machine-draft"
+    }
+  }
+}

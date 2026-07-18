@@ -1,0 +1,111 @@
+{
+  "_family": "LoggingAlertingChecks.json",
+  "LOG-001": {
+    "name": {
+      "value": "Indstillinger for opbevaring af overvågningslog",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Overvågningslogge bør opbevares i en tilstrækkelig periode til at understøtte hændelsesundersøgelse og compliancekrav. Standardopbevaringen varierer efter Workspace-udgave",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Opbevaring af overvågningslog på 12 måneder eller længere; udvidet via BigQuery-eksport til langtidsopbevaring",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Reporting > Audit and investigation > Gennemgå logtilgængelighed. Konfigurér BigQuery-eksport via Admin Console > Reporting > BigQuery export til langtidsopbevaring",
+      "status": "machine-draft"
+    }
+  },
+  "LOG-002": {
+    "name": {
+      "value": "Oversigt over Alert Center-regler",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Alert Center-regler bør konfigureres til at registrere og give besked om sikkerhedsrelevante hændelser, herunder mistænkelige logins, dataeksfiltrering og politikovertrædelser",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Advarselsregler konfigureret for centrale sikkerhedshændelser (mistænkeligt login, dataeksfiltrering, rettighedsændringer)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > Alert center > Gennemgå eksisterende regler > Opret regler for manglende kategorier af sikkerhedshændelser",
+      "status": "machine-draft"
+    }
+  },
+  "LOG-003": {
+    "name": {
+      "value": "Analyse af dækning for aktivitetsregler",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Aktivitetsregler bør give tilstrækkelig dækning på tværs af sikkerhedsdomæner, herunder login-, Drive-, Admin- og e-mailhændelser",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Aktivitetsregler, der dækker login, Drive-deling, admin-ændringer, e-mailvideresendelse og OAuth-hændelser",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > Alert center > Rules > Gennemgå dækning på tværs af hændelseskategorier > Tilføj regler for udækkede sikkerhedsdomæner",
+      "status": "machine-draft"
+    }
+  },
+  "LOG-004": {
+    "name": {
+      "value": "Indstillinger for dataeksport",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Google Takeout (dataeksport) bør kontrolleres for at forhindre brugere i masse-eksport af organisationens data uden for domænet",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Google Takeout deaktiveret eller begrænset for de fleste brugere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Additional Google services > Google Takeout > Deaktivér eller begræns for relevante OU'er",
+      "status": "machine-draft"
+    }
+  },
+  "LOG-005": {
+    "name": {
+      "value": "Konfiguration af e-mailadvarsler til administratorer",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "E-mailadvarsler bør konfigureres for kritiske administratorhandlinger, herunder ændringer af super admin, ændringer af sikkerhedsindstillinger og masseoperationer",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "E-mailadvarsler aktiveret for kritiske administratorhandlinger og sikkerhedshændelser",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > Alert center > Konfigurér modtagere af e-mailnotifikationer for kritiske advarselstyper",
+      "status": "machine-draft"
+    }
+  },
+  "LOG-006": {
+    "name": {
+      "value": "Adgang til Reporting API",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Adgangen til Reports API bør gennemgås for at sikre, at kun autoriserede tjenestekonti og applikationer kan hente revisions- og forbrugsdata",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Adgang til Reports API begrænset til kun autoriserede tjenestekonti",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > Domain-wide delegation > Gennemgå tildelinger med Reports API-scopes > Fjern uautoriseret adgang",
+      "status": "machine-draft"
+    }
+  }
+}

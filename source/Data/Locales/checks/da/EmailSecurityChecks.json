@@ -1,0 +1,561 @@
+{
+  "_family": "EmailSecurityChecks.json",
+  "EMAIL-001": {
+    "name": {
+      "value": "Validering af SPF-post",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Sender Policy Framework-poster (SPF) skal findes og være gyldige for alle domæner. SPF forhindrer forfalskning af e-mail ved at angive, hvilke mailservere der er autoriseret til at sende e-mail på vegne af et domæne",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Gyldig v=spf1-post publiceret for alle domæner med kvalifikatoren -all eller ~all",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Authenticate email > Publicér SPF-post: v=spf1 include:_spf.google.com ~all for hvert domæne",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-002": {
+    "name": {
+      "value": "DKIM-signering aktiveret",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "DomainKeys Identified Mail-signering (DKIM) skal være aktiveret og gyldig for alle domæner. DKIM giver kryptografisk bevis for, at e-mailindholdet ikke er blevet manipuleret under transporten",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "DKIM-signering aktiveret med gyldig nøgle publiceret for alle domæner",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Authenticate email > Generér DKIM-nøgle og publicér DNS-post for hvert domæne",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-003": {
+    "name": {
+      "value": "Revision af DMARC-politik",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Domain-based Message Authentication, Reporting and Conformance-politikken (DMARC) skal være sat til at afvise eller sætte i karantæne for alle domæner. En DMARC-politik på none giver ingen beskyttelse mod forfalskning",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "DMARC-politik sat til afvis eller karantæne for alle domæner",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Publicér DMARC TXT-post ved _dmarc.<domain> med p=reject eller p=quarantine. Start med p=none til overvågning, eskalér derefter til karantæne og til sidst afvisning",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-004": {
+    "name": {
+      "value": "MTA-STS-politik",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Mail Transfer Agent Strict Transport Security (MTA-STS) forhindrer TLS-nedgraderingsangreb og man-in-the-middle-aflytning af e-mail under transporten ved at kræve godkendte TLS-forbindelser",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "MTA-STS TXT-post publiceret og politik hostet på https://mta-sts.<domain>/.well-known/mta-sts.txt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Publicér _mta-sts.<domain> TXT-post med v=STSv1; id=<unique_id> og host MTA-STS-politikfilen på https://mta-sts.<domain>/.well-known/mta-sts.txt",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-005": {
+    "name": {
+      "value": "Håndhævelse af TLS",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Transport Layer Security (TLS) bør kræves ved e-mailtransmission for at forhindre aflytning. Compliance-TLS-indstillinger sikrer krypterede forbindelser med angivne partnerdomæner",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "TLS påkrævet for alle udgående og indgående forbindelser",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Compliance > Secure transport (TLS) compliance > Tilføj regel, der kræver TLS for alle domæner eller bestemte partnerdomæner",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-006": {
+    "name": {
+      "value": "Gennemgang af e-mail-tilladelsesliste/blokeringsliste",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "E-mail-tilladelseslister og blokeringslister bør gennemgås for alt for tilladende poster. Tilladelseslistede afsendere omgår spamfiltrering og kan misbruges, hvis de er fejlkonfigureret",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Minimalt antal poster på tilladelseslisten uden wildcard-domæner; blokeringsliste vedligeholdes aktivt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > Gennemgå e-mail-tilladelseslister og lister over blokerede afsendere for alt for brede poster",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-007": {
+    "name": {
+      "value": "Konfiguration af indgående gateway",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Indgående e-mailgateways bør konfigureres korrekt, så resultaterne af afsendergodkendelse bevares. Fejlkonfigurerede gateways kan fjerne SPF/DKIM/DMARC-headere eller omgå sikkerhedsfiltrering",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Indgående gateways konfigureret med korrekte IP-intervaller og bevarelse af headere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > Inbound gateway > Kontrollér gateway-IP'er, og at godkendelsesheadere bevares",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-008": {
+    "name": {
+      "value": "Revision af e-mail-routingregler",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "E-mail-routingregler bør gennemgås for mistænkelige eller uautoriserede konfigurationer. Ondsindede routingregler kan omdirigere e-mail til destinationer, der kontrolleres af angribere",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle routingregler gennemgået og dokumenteret med forretningsmæssig begrundelse",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Routing > Gennemgå alle routingregler, standardrouting og modtagertilknytninger for uautoriserede poster",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-009": {
+    "name": {
+      "value": "Politik for automatisk videresendelse",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Automatisk videresendelse af e-mail til eksterne adresser bør deaktiveres for at forhindre dataeksfiltrering. Angribere opsætter ofte videresendelsesregler efter at have kompromitteret en konto",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Automatisk videresendelse deaktiveret for alle organisationsenheder",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > Deaktivér automatisk videresendelse for alle OU'er. Gennemgå eksisterende videresendelsesregler via Gmail API",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-010": {
+    "name": {
+      "value": "Indstillinger for delegeret adgang",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Maildelegering giver brugere mulighed for at give andre brugere læse- og sendeadgang til deres postkasse. Overdreven delegering kan føre til uautoriseret adgang og efterligning",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Maildelegering begrænset og gennemgået regelmæssigt; ingen uventede delegerede",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > Gennemgå indstillinger for maildelegering. Kontrollér individuelle brugere for uautoriserede delegerede via Gmail API",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-011": {
+    "name": {
+      "value": "Indstillinger for POP/IMAP-adgang",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "POP- og IMAP-adgang bør deaktiveres, medmindre det specifikt er påkrævet. Disse ældre protokoller omgår moderne sikkerhedskontroller og kan anvendes til legitimationsbaserede angreb",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "POP og IMAP deaktiveret for alle brugere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > Deaktivér POP- og IMAP-adgang. Gennemgå individuelle brugerindstillinger via Gmail API",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-012": {
+    "name": {
+      "value": "Indstillinger for spam- og phishingfilter",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Forbedrede spam- og phishingfiltre bør aktiveres for at give maksimal beskyttelse mod social engineering-angreb og ondsindede e-mailkampagner",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Forbedret spamfiltrering og aggressiv phishingregistrering aktiveret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > Aktivér 'Be more aggressive when filtering spam' og alle muligheder for phishingbeskyttelse",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-013": {
+    "name": {
+      "value": "Forbedret scanning af beskeder før levering",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Forbedret scanning af beskeder før levering anvender avancerede heuristikker og sandboxing til at registrere malware og trusler, før beskeder leveres til brugernes indbakker",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Forbedret scanning af beskeder før levering aktiveret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Spam, phishing and malware > Aktivér 'Enhanced pre-delivery message scanning' for at identificere mistænkeligt indhold",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-014": {
+    "name": {
+      "value": "Advarsel om ekstern modtager",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Brugere bør advares, når de sender e-mail til modtagere uden for organisationen, for at forhindre utilsigtet dataafsløring og social engineering",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Advarsel om ekstern modtager aktiveret for alle brugere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > Aktivér 'Warn users when they send messages outside the domain'",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-015": {
+    "name": {
+      "value": "Indstillinger for vedhæftningssikkerhed",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Alle beskyttelser for vedhæftningssikkerhed bør aktiveres for at registrere og blokere ondsindede filvedhæftninger, herunder krypterede arkiver, uregelmæssige filtyper og scripts",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle muligheder for vedhæftningsbeskyttelse aktiveret med karantænehandling",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Safety > Attachments > Aktivér alle beskyttelser: krypterede vedhæftninger, scripts fra ikke-betroede afsendere og uregelmæssige vedhæftningstyper",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-016": {
+    "name": {
+      "value": "Beskyttelse af links og eksterne billeder",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Linkbeskyttelse bør aktiveres for at scanne URL'er for phishing og malware. Proxyering af eksterne billeder forhindrer sporingspixels og afsløring af IP",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "URL-scanning, advarsler ved kliktidspunkt og proxyering af eksterne billeder aktiveret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Safety > Links and external images > Aktivér 'Identify links behind shortened URLs', 'Scan linked images' og 'Show warning prompt for click on links to untrusted domains'",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-017": {
+    "name": {
+      "value": "Beskyttelse mod forfalskning og godkendelse",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Beskyttelser mod forfalskning og godkendelse beskytter mod domæneforfalskning, forfalskning af medarbejdernavne og ugodkendt e-mail fra domæner, der ligner organisationens",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle beskyttelser mod forfalskning og godkendelse aktiveret med karantænehandling",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Safety > Spoofing and authentication > Aktivér alle beskyttelser: domæneforfalskning, forfalskning af medarbejdernavne, indgående e-mailforfalskning og ugodkendt e-mail",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-018": {
+    "name": {
+      "value": "Revision af overholdelsesregler",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Regler for indholdsoverholdelse bør gennemgås for at sikre, at følsomme data håndteres korrekt. Regler kan håndhæve kryptering, karantæne eller afvisning baseret på indholdsmønstre",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Regler for indholdsoverholdelse konfigureret for følsomme datatyper med passende handlinger",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > Compliance > Content compliance > Gennemgå eksisterende regler, og opret regler for følsomme indholdstyper (PII, finansielle data, sundhedsjournaler)",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-019": {
+    "name": {
+      "value": "Konfiguration af DLP-regler",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Regler for Data Loss Prevention (DLP) bør konfigureres til at registrere og forhindre, at følsomme data forlader organisationen via e-mail. DLP giver automatiseret indholdsinspektion og håndhævelse af politikker",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "DLP-regler konfigureret for centrale datatyper (kreditkort, personnumre, sundhedsjournaler) med blokerings- eller advarselshandling",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Security > Data protection > Manage rules: opret en Gmail DLP-regel, der registrerer mønstre for følsomt indhold (kreditkort, personnumre, sundhedsjournaler) og anvender en blokerings- eller advarselshandling",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-020": {
+    "name": {
+      "value": "Gmail fortrolig tilstand",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Gmail fortrolig tilstand giver afsendere mulighed for at angive udløbsdatoer og tilbagekalde adgang til beskeder. Gennemgå, om denne funktion er aktiveret eller begrænset i henhold til organisationens politik",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Gmail fortrolig tilstand aktiveret for brugere, der håndterer følsomme data",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > Gennemgå indstillinger for Gmail fortrolig tilstand, og aktivér eller begræns baseret på organisationens krav",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-021": {
+    "name": {
+      "value": "S/MIME-indstillinger",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "S/MIME giver end-to-end-e-mailkryptering og digitale signaturer. Hvis det kræves af compliance, bør S/MIME-certifikater konfigureres og administreres korrekt",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "S/MIME aktiveret, hvis det kræves af compliance; certifikater administreres korrekt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace > Gmail > End User Access > S/MIME > Aktivér hostet S/MIME, hvis det kræves, og sørg for, at certifikater er uploadet og gyldige",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-022": {
+    "name": {
+      "value": "Optælling af regler for mailvideresendelse",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Alle regler for mailvideresendelse på brugerniveau bør optælles og gennemgås. Angribere opsætter ofte videresendelsesregler for at bevare vedvarende adgang til e-mail efter kontokompromittering",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ingen uautoriserede videresendelsesregler; alle videresendelsesregler dokumenteret og godkendt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Optæl videresendelsesregler via Gmail API for alle brugere. Fjern uautoriserede videresendelsesadresser. Deaktivér automatisk videresendelse på OU-niveau for at forhindre fremtidigt misbrug",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-023": {
+    "name": {
+      "value": "Udgående gateways pr. bruger deaktiveret (GWS.GMAIL.12.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.12.1 kræver, at udgående gateways pr. bruger deaktiveres. Når det er aktiveret, kan brugere dirigere udgående mail gennem deres egne eksterne SMTP-servere, hvilket omgår organisationens mailsikkerhedskontroller og skaber en vej til dataeksfiltrering og forfalskning. Denne kontrol læser politikken gmail.per_user_outbound_gateway fra Cloud Identity Policy API og markerer enhver organisationsenhed, hvor ekstern SMTP-routing er tilladt. Når politikken ikke returneres, er resultatet Ikke vurderet.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Udgående gateways pr. bruger (ekstern SMTP) deaktiveret for alle organisationsenheder",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Google Admin Console under Apps > Google Workspace > Gmail > Routing skal du sikre, at udgående gateways pr. bruger ikke er tilladt, så brugere ikke kan dirigere mail gennem eksterne SMTP-servere. Hold udgående routing centraliseret gennem kun godkendte gateways.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-024": {
+    "name": {
+      "value": "Gmail Security Sandbox aktiveret (GWS.GMAIL.16.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.16.1 anbefaler at aktivere Gmail Security Sandbox, der detonerer indgående vedhæftninger i et virtuelt miljø for at registrere zero-day-malware, som signaturbaseret scanning overser. Denne kontrol læser politikken gmail.security_sandbox fra Cloud Identity Policy API og markerer organisationsenheder, hvor sandkassen er deaktiveret. Det præcise politikfelt er en bedste indsats, indtil det er bekræftet på en licenseret tenant; når politikken ikke returneres, er resultatet Ikke vurderet i stedet for en opdigtet vurdering.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Security Sandbox aktiveret (virtuel detonering af vedhæftninger) for alle organisationsenheder",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Google Admin Console under Apps > Google Workspace > Gmail > Safety > Attachments skal du aktivere Security Sandbox, så indgående vedhæftninger detoneres i et virtuelt miljø før levering. Bemærk, at Security Sandbox kræver den relevante Google Workspace-udgave.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-025": {
+    "name": {
+      "value": "Gmail-maildelegering deaktiveret (GWS.GMAIL.1.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.1.1: maildelegering lader en bruger give en anden konto læse-/sendeadgang til sin postkasse, en stående dataadgangsvej, der overlever delegeringens formål. Læser gmail.mail_delegation; advarer, hvor enableMailDelegation er slået til.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Maildelegering deaktiveret, medmindre det bevidst er påkrævet",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Gmail settings > User settings skal du deaktivere maildelegering, medmindre der findes et gennemgået forretningsmæssigt behov.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-026": {
+    "name": {
+      "value": "Gmail POP- og IMAP-adgang deaktiveret (GWS.GMAIL.9.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.9.1: ældre POP- og IMAP-protokoller omgår moderne godkendelse og er en vektor for credential stuffing / MFA-omgåelse. Læser gmail.imap_access og gmail.pop_access; fejler, hvor en af dem er aktiveret.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "POP- og IMAP-adgang deaktiveret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Gmail settings > End User Access skal du deaktivere POP og IMAP, så mailklienter skal anvende moderne godkendte protokoller.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-027": {
+    "name": {
+      "value": "Gmail-import af brugerens e-mail/kontakter deaktiveret (GWS.GMAIL.8.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.8.1: brugeruploads af e-mail (import af mail og kontakter fra eksterne konti) trækker eksterne data ind i tenanten og kan eksfiltrere i omvendt retning. Læser gmail.user_email_uploads; advarer, hvor enableMailAndContactsImport er slået til.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Import af brugerens e-mail/kontakter deaktiveret",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Gmail settings skal du deaktivere brugernes mulighed for at importere mail og kontakter fra andre konti, medmindre det er påkrævet.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-028": {
+    "name": {
+      "value": "Google Workspace Sync for Outlook deaktiveret (GWS.GMAIL.10.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.10.1: Google Workspace Sync for Microsoft Outlook (GWSMO) bygger bro mellem postkassedata og en Outlook-klient, hvilket udvider dataoverfladen og omgår visse webbeskyttelser. Læser gmail.workspace_sync_for_outlook; advarer, hvor det er aktiveret.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "GWSMO deaktiveret, medmindre det er påkrævet",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Gmail-indstillingerne for slutbrugeradgang skal du deaktivere Google Workspace Sync for Microsoft Outlook, medmindre der findes et gennemgået behov.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-029": {
+    "name": {
+      "value": "Gmail-lister til tilsidesættelse af spam gennemgået (GWS.GMAIL.18.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.18.1: lister over godkendte afsendere / tilsidesættelse af spam får mail fra angivne domæner til at omgå spamfiltrering, en phishingomgåelse hvis de er for brede. Læser gmail.spam_override_lists; advarer, hvor der er konfigureret afsenderdomæner til tilsidesættelse.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Lister til tilsidesættelse af spam fraværende eller minimale og gennemgået",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Gmail-spamindstillingerne skal du gennemgå og minimere lister over godkendte afsendere / omgåelse, så mail fra betroede domæner ikke generelt undtages fra spamfiltrering.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-030": {
+    "name": {
+      "value": "Automatisk videresendelse af e-mail deaktiveret (GWS.GMAIL.11.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.11.1 anbefaler at deaktivere automatisk videresendelse af e-mail, især til eksterne domæner. Automatisk videresendelse er en almindelig kanal til dataeksfiltrering og en persistensmekanisme efter kontoovertagelse, fordi den lydløst kopierer indgående mail til en adresse, der kontrolleres af en angriber. Denne kontrol læser Cloud Identity-politikken gmail.auto_forwarding og markerer enhver organisationsenhed, hvor automatisk videresendelse er aktiveret.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Automatisk videresendelse af e-mail deaktiveret (enableAutoForwarding = false) i alle organisationsenheder.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Google Admin Console under Apps > Google Workspace > Gmail > End User Access skal du deaktivere 'Allow users to automatically forward incoming email to another address' med prioritering af eksterne destinationer. Gennemgå eksisterende videresendelsesregler for uventede eksterne modtagere.",
+      "status": "machine-draft"
+    }
+  },
+  "EMAIL-031": {
+    "name": {
+      "value": "Forbedret scanning af beskeder før levering aktiveret (GWS.GMAIL.15.1)",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "SCuBA GWS.GMAIL.15.1 kræver forbedret scanning af beskeder før levering, hvilket forbedrer registreringen af mistænkeligt indhold og phishingindhold, før en besked når indbakken. Denne kontrol læser Cloud Identity-politikken gmail.enhanced_pre_delivery_message_scanning og markerer enhver organisationsenhed, hvor forbedret registrering af mistænkeligt indhold ikke er aktiveret.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Forbedret scanning af beskeder før levering aktiveret (enableImprovedSuspiciousContentDetection = true) i alle organisationsenheder.",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "I Google Admin Console under Apps > Google Workspace > Gmail > Spam, Phishing, and Malware skal du aktivere forbedret scanning af beskeder før levering, så Gmail udfører yderligere analyse af mistænkeligt indhold før levering.",
+      "status": "machine-draft"
+    }
+  }
+}

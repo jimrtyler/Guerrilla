@@ -1,0 +1,111 @@
+{
+  "_family": "GoogleTradecraftChecks.json",
+  "GTRADE-001": {
+    "name": {
+      "value": "Eksponering for org-overtagelse via domænedækkende delegering",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Domænedækkende delegering binder efterligning til en tjenestekontos OAuth-klient-id, ikke dens nøgle, så enhver, der kan oprette en nøgle på en delegeret tjenestekonto med brede scopes, opnår org-dækkende efterligning uden super admin (DeleFriend-teknikken). Delegerede tildelinger med fulde Gmail-/Drive-/Directory-/cloud-platform-scopes er forudsætningen for overtagelsen.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ingen tjenestekonto tildelt scopes til org-efterligning (fulde Gmail/Drive/Directory/cloud-platform); kun snævre skrivebeskyttede scopes",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Security > API controls > Domain-wide delegation: fjern eller indsnævr enhver tildeling med fulde mail.google.com-, fulde drive-, admin.directory- eller cloud-platform-scopes; begræns til de minimale skrivebeskyttede scopes, der kræves. I GCP skal du nægte oprettelse af nøgler på delegerede tjenestekonti (iam.disableServiceAccountKeyCreation).",
+      "status": "machine-draft"
+    }
+  },
+  "GTRADE-002": {
+    "name": {
+      "value": "Google Groups læsbare fra internettet",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Grupper, hvis emner kan ses af 'alle på internettet', lækker lydløst hele deres beskedhistorik, en klasse der har eksponeret tusindvis af organisationers interne mail (regnskaber, legitimationsoplysninger, PII). Google leverer ingen indbygget advarsel om denne eksponering.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ingen gruppe kan ses af alle på internettet (whoCanViewGroup ikke ANYONE_CAN_VIEW)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Apps > Google Workspace > Groups for Business > Sharing settings og adgangsindstillinger pr. gruppe: sæt 'Who can view conversations' væk fra 'Anyone on the internet' til kun medlemmer/organisation.",
+      "status": "machine-draft"
+    }
+  },
+  "GTRADE-003": {
+    "name": {
+      "value": "Grupper med åben tilmelding / eksterne medlemmer",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Grupper, som alle (eller alle i domænet) kan tilmelde sig, eller som tillader eksterne medlemmer, udvider tillidsgrænsen og muliggør selvbetjent adgang; hvis en sådan gruppe også har ressource- eller IAM-adgang, arver tilmelding den adgang (en vej til rettighedseskalering, som Google klassificerer som tilsigtet adfærd).",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Grupper begrænset til inviterede medlemmer; ingen alle-kan-tilmelde-sig og ingen eksterne medlemmer, medmindre det udtrykkeligt er påkrævet",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Apps > Google Workspace > Groups for Business: sæt standardindstillingen 'Who can join' til 'Only invited users', og deaktivér 'Allow external members', medmindre en gruppe udtrykkeligt kræver dem; gennemgå grupper, der giver ressource-/IAM-adgang.",
+      "status": "machine-draft"
+    }
+  },
+  "GTRADE-004": {
+    "name": {
+      "value": "Spredning af super admins",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Superadministratorer omgår SSO og de fleste kontroller; en stor population af super admins udvider organisationens mest værdifulde angrebsflade. Googles bedste praksis er at holde antallet lavt (færre end fem), hvor det daglige arbejde udføres under roller med mindst mulige rettigheder.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Færre end 5 aktive superadministratorer",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Account > Admin roles > Super Admin: reducér medlemskabet til det minimale break-glass-sæt; flyt rutineopgaver til brugerdefinerede/foruddefinerede roller med mindst mulige rettigheder; håndhæv phishingbestandig 2SV på alle resterende super admins.",
+      "status": "machine-draft"
+    }
+  },
+  "GTRADE-005": {
+    "name": {
+      "value": "Brugerdefinerede roller svarende til super admin",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Brugerdefinerede administratorroller med højeffektsrettigheder (brugerhåndtering, sikkerhedsindstillinger, rollehåndtering, dataeksport/Takeout) kan tilnærme sig super admin-kapabilitet, mens de undgår en simpel optælling af super admins, en stille vektor for rettighedskoncentration og persistens.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ingen brugerdefineret rolle har super admin-ækvivalente rettigheder (bruger-/sikkerheds-/rollehåndtering eller dataeksport) uden for break-glass-brug",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Account > Admin roles: gennemgå brugerdefinerede roller med rettigheder til brugerhåndtering, sikkerhedsindstillinger, rollehåndtering eller dataeksport/Takeout; opdel i snævert afgrænsede roller, og begræns antallet af tildelte.",
+      "status": "machine-draft"
+    }
+  },
+  "GTRADE-006": {
+    "name": {
+      "value": "Vedvarende / for brede OAuth-tildelinger",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Tredjeparts-OAuth-tildelinger med fulde Gmail-/Drive-/admin-scopes omgår MFA og overlever en nulstilling af adgangskode (Apps Script, appadgangskoder og IMAP-OAuth-sessioner tilbagekaldes ikke af en nulstilling), en holdbar persistenskanal. Google logger tildelinger, men leverer ingen standardklassifikator for ondsindede tildelinger.",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ingen tredjeparts-OAuth-app med fulde mail-/drive-/admin-scopes; vedvarende tildelinger gennemgået og udtrykkeligt tilbagekaldt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Security > API controls > App access control: gennemgå apps med fulde Gmail-/Drive-/Directory-scopes, begræns til apps på tilladelseslisten, og tilbagekald udtrykkeligt unødvendige tildelinger (en nulstilling af adgangskode alene tilbagekalder IKKE OAuth-, appadgangskode- eller Apps Script-adgang).",
+      "status": "machine-draft"
+    }
+  }
+}

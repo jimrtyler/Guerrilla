@@ -1,0 +1,183 @@
+{
+  "_family": "OAuthSecurityChecks.json",
+  "OAUTH-001": {
+    "name": {
+      "value": "OAuth-app-tilladelsesliste/blokeringsliste",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "OAuth-appadgang bør styres af en tilladelsesliste eller blokeringsliste for at forhindre uautoriserede applikationer i at få adgang til organisationens data",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "OAuth-app-tilladelsesliste konfigureret med kun godkendte applikationer",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > App access control > Manage third-party app access > Konfigurér betroede/blokerede apps",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-002": {
+    "name": {
+      "value": "Oversigt over installerede OAuth-apps",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Alle OAuth-applikationer installeret af brugere bør registreres og gennemgås for at identificere uautoriserede eller risikofyldte applikationer, der får adgang til organisationens data",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle installerede OAuth-apps gennemgået og godkendt af sikkerhedsteamet",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > App access control > Gennemgå installerede apps, og tilbagekald adgang for uautoriserede applikationer",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-003": {
+    "name": {
+      "value": "Analyse af OAuth-scopes",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "OAuth-applikationer med højrisiko-scopes (Gmail, Drive, Admin) udgør en betydelig risiko for dataeksfiltrering og skal gennemgås og begrænses",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Ingen uautoriserede apps med højrisiko-scopes (gmail, drive, admin)",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > App access control > Gennemgå apps med følsomme scopes > Tilbagekald eller begræns efter behov",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-004": {
+    "name": {
+      "value": "Risikovurdering af OAuth-apps",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "OAuth-applikationer bør risikovurderes baseret på deres tildelte scopes og udgivertillid for at prioritere sikkerhedsgennemgang",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle højrisikoapps gennemgået og godkendt; ingen ugennemgåede apps med brede scopes",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > App access control > Gennemgå apps sorteret efter scope-bredde > Håndtér højrisikoapplikationer",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-005": {
+    "name": {
+      "value": "Politik for adgang til uverificerede apps",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Adgang til uverificerede tredjepartsapps bør begrænses for at forhindre brugere i at give tilladelser til potentielt ondsindede applikationer",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Adgang til uverificerede apps blokeret for alle brugere",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > App access control > Settings > Blokér uverificerede apps",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-006": {
+    "name": {
+      "value": "Kontrol af API-adgang",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "API-adgang bør kontrolleres med passende afgrænsning og begrænsninger for at forhindre uautoriseret programmatisk adgang til organisationens data",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "API-adgang begrænset til godkendte applikationer og scopes",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > Manage Google Services > Begræns API-adgang til kun betroede apps",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-007": {
+    "name": {
+      "value": "Begrænsninger for installation af Marketplace-apps",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Installation af apps fra Google Workspace Marketplace bør begrænses for at forhindre brugere i at installere uautoriserede applikationer",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Installation af Marketplace-apps begrænset til kun admin-godkendte apps eller apps på tilladelseslisten",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Apps > Google Workspace Marketplace apps > Settings > Begræns installation af Marketplace-apps",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-008": {
+    "name": {
+      "value": "Revision af domænedækkende delegeringstildelinger",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Domænedækkende delegering giver tjenestekonti mulighed for at efterligne enhver bruger og få adgang til deres data. Uautoriserede eller alt for tilladende tildelinger udgør en kritisk sikkerhedsrisiko",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Minimale domænedækkende delegeringstildelinger med afgrænsede tilladelser; alle tildelinger gennemgået og godkendt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > Domain-wide delegation > Gennemgå alle tildelinger, fjern unødvendige, og begræns scopes til det minimalt påkrævede",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-009": {
+    "name": {
+      "value": "Optælling af tjenestekontonøgler",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Tjenestekontonøgler bør registreres og roteres regelmæssigt. Lækkede eller forældede nøgler giver vedvarende uautoriseret adgang",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle tjenestekontonøgler registreret, roteret inden for 90 dage, og ubrugte nøgler fjernet",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Google Cloud Console > IAM & Admin > Service accounts > Gennemgå og rotér nøgler > Fjern ubrugte tjenestekontonøgler",
+      "status": "machine-draft"
+    }
+  },
+  "OAUTH-010": {
+    "name": {
+      "value": "Forbundne apps med følsomme scopes",
+      "status": "machine-draft"
+    },
+    "description": {
+      "value": "Applikationer med adgang til Drive-, Gmail- eller Calendar-data bør registreres og valideres for at forhindre dataeksfiltrering via forbundne apps",
+      "status": "machine-draft"
+    },
+    "recommendedValue": {
+      "value": "Alle apps med følsomme scopes (Drive, Gmail, Calendar) gennemgået og godkendt",
+      "status": "machine-draft"
+    },
+    "remediationSteps": {
+      "value": "Admin Console > Security > API controls > App access control > Filtrér efter scope (Drive, Gmail, Calendar) > Gennemgå og begræns uautoriserede apps",
+      "status": "machine-draft"
+    }
+  }
+}
