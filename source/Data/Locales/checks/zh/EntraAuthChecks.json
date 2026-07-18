@@ -1,0 +1,111 @@
+{
+  "_family": "EntraAuthChecks.json",
+  "EIDAUTH-001": {
+    "name": { "value": "身份验证方法策略审计", "status": "machine-draft" },
+    "description": { "value": "身份验证方法策略定义了用户可用于登录和 MFA 的方法。配置错误的策略可能允许使用弱方法或已弃用的方法，从而扩大攻击面。此检查会对照公认的 Entra ID 安全基线审计当前的策略状态。", "status": "machine-draft" },
+    "recommendedValue": { "value": "已审查身份验证方法策略并使其与组织安全基线保持一致", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Authentication methods > Policies。审查每个已启用的方法，并禁用任何你的组织不需要的方法。确保 FIDO2 和 Microsoft Authenticator 等抗钓鱼方法优先于短信和语音。", "status": "machine-draft" }
+  },
+  "EIDAUTH-002": {
+    "name": { "value": "所有用户的 MFA 注册状态", "status": "machine-draft" },
+    "description": { "value": "所有用户都应注册多重身份验证，以防止通过被盗或猜测的凭据导致账户被攻陷。未注册 MFA 的账户是基于凭据的攻击（包括密码喷洒和钓鱼）的主要目标。未注册的用户是身份安全态势中的严重缺口。", "status": "machine-draft" },
+    "recommendedValue": { "value": "100% 的活动用户已注册 MFA", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Entra ID > Protection > Authentication methods > User registration details 审查 MFA 注册状态。通过要求所有用户进行 MFA 的条件访问策略强制执行 MFA 注册。设定注册截止日期，并将要求传达给未注册的用户。", "status": "machine-draft" }
+  },
+  "EIDAUTH-003": {
+    "name": { "value": "MFA 方法分布分析", "status": "machine-draft" },
+    "description": { "value": "了解各用户间 MFA 方法的分布有助于评估身份验证控制的整体强度。组织应跟踪 FIDO2 和 Authenticator 推送等抗钓鱼方法与短信等较弱方法的采用情况。这种可见性有助于开展有针对性的活动，将用户迁移到更强的方法。", "status": "machine-draft" },
+    "recommendedValue": { "value": "大多数用户已注册抗钓鱼 MFA 方法（FIDO2、Microsoft Authenticator、Windows Hello）", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Entra ID > Protection > Authentication methods > User registration details 审查方法分布。识别仅依赖较弱方法的用户并制定迁移计划。使用身份验证方法活动报告跟踪采用进度。", "status": "machine-draft" }
+  },
+  "EIDAUTH-004": {
+    "name": { "value": "仅使用短信/语音 MFA 方法的用户", "status": "machine-draft" },
+    "description": { "value": "仅依赖基于短信或语音 MFA 的用户容易遭受 SIM 卡交换攻击（攻击者通过社会工程手段诱使移动运营商转移受害者的电话号码），以及拦截传输中短信的 SS7 信令协议攻击。这些方法所提供的保护远弱于基于应用或硬件令牌的身份验证。组织应识别这些用户并将其迁移到抗钓鱼方法。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有用户将短信或语音作为其唯一的 MFA 方法而完全依赖", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Entra ID > Protection > Authentication methods > User registration details 识别仅使用短信/语音 MFA 的用户。制定迁移计划，将这些用户迁移到 Microsoft Authenticator 或 FIDO2 安全密钥。在迁移完成后，考虑在身份验证方法策略中禁用短信/语音作为允许的方法。", "status": "machine-draft" }
+  },
+  "EIDAUTH-005": {
+    "name": { "value": "未注册任何 MFA 方法的用户", "status": "machine-draft" },
+    "description": { "value": "未注册任何 MFA 方法的用户无法满足 MFA 质询，是严重的安全缺口。这些账户完全暴露于基于凭据的攻击之下，包括密码喷洒、钓鱼和暴力破解攻击。需要立即修正，以确保所有活动账户至少注册一种 MFA 方法。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有任何活动用户未注册至少一种 MFA 方法", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Entra ID > Protection > Authentication methods > User registration details 查询用户注册详细信息，识别未注册任何方法的用户。通过针对未注册用户的条件访问策略强制执行 MFA 注册。使用临时访问通行证协助需要引导完成 MFA 注册的用户。", "status": "machine-draft" }
+  },
+  "EIDAUTH-006": {
+    "name": { "value": "FIDO2 安全密钥清单与审计", "status": "machine-draft" },
+    "description": { "value": "FIDO2 安全密钥提供抗钓鱼的身份验证，但必须在其整个生命周期内进行清点和管理。未跟踪的密钥可能仍与已离职员工关联，或在未被发现的情况下丢失。定期审计可确保只有获授权的密钥处于活动状态并正确分配给当前用户。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有已注册的 FIDO2 密钥均已列入清单，并记录了所有者分配，且定期进行证明审查", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Entra ID > Protection > Authentication methods > FIDO2 security key 审查 FIDO2 密钥注册。将已注册的密钥与你的硬件资产清单进行交叉引用，并删除已离职用户的密钥。实施密钥注册策略，将允许的 AAGUID 值限制为经过批准的供应商型号。", "status": "machine-draft" }
+  },
+  "EIDAUTH-007": {
+    "name": { "value": "FIDO2 密钥 ROCA 漏洞检查", "status": "machine-draft" },
+    "description": { "value": "ROCA（Return of Coppersmith's Attack）漏洞（CVE-2017-15361）影响某些 FIDO2 安全密钥所用 Infineon TPM 固件中的 RSA 密钥生成，允许从公钥恢复私钥。受影响的密钥会生成可被因式分解的弱 RSA 密钥对，从而彻底破坏身份验证凭据的安全性。必须识别并立即更换使用易受攻击固件的密钥。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有使用 ROCA 易受攻击的 Infineon TPM 固件的 FIDO2 密钥在用", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过对照已知的易受攻击型号检查 AAGUID 值，识别使用 Infineon TPM 的 FIDO2 密钥。使用 ROCA 检测工具测试已注册的密钥以确认漏洞状态。用已修补固件版本或替代硬件更换所有受影响的密钥，并在 Entra ID 中撤销旧的密钥注册。", "status": "machine-draft" }
+  },
+  "EIDAUTH-008": {
+    "name": { "value": "无密码身份验证就绪情况", "status": "machine-draft" },
+    "description": { "value": "无密码身份验证消除了作为攻击途径的密码，从而消除了凭据窃取、钓鱼和密码喷洒的风险。组织应评估其部署无密码方法（例如 FIDO2、Windows Hello for Business 和 Microsoft Authenticator 电话登录）的就绪情况。此检查会评估当前的方法采用情况，并识别阻碍无密码部署的缺口。", "status": "machine-draft" },
+    "recommendedValue": { "value": "组织拥有无密码部署计划，且至少 50% 的用户能够进行无密码登录", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查身份验证方法注册，以确定有多少用户已注册支持无密码的方法。在身份验证方法策略中启用 FIDO2 和 Microsoft Authenticator 无密码登录。制定分阶段推出计划，从特权用户和 IT 人员开始，然后再扩展到更广泛的组织。", "status": "machine-draft" }
+  },
+  "EIDAUTH-009": {
+    "name": { "value": "Windows Hello for Business 配置", "status": "machine-draft" },
+    "description": { "value": "Windows Hello for Business 使用与设备 TPM 绑定的生物识别或 PIN 提供抗钓鱼的、硬件支持的身份验证。配置错误的 WHfB 部署可能在没有适当 TPM 证明的情况下回退到较弱的便利 PIN，从而降低安全保证。配置应强制使用 TPM 支持的密钥以及适当的生物识别策略。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用 Windows Hello for Business，强制实施 TPM 要求，并为敏感角色配置多重身份验证解锁", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Authentication methods > Windows Hello for Business。启用该方法并配置密钥限制以要求使用 TPM 支持的密钥。通过 Intune 部署 WHfB 配置文件，以在受管理设备上强制执行 TPM 证明和 PIN 复杂性要求。", "status": "machine-draft" }
+  },
+  "EIDAUTH-010": {
+    "name": { "value": "临时访问通行证 (TAP) 策略审计", "status": "machine-draft" },
+    "description": { "value": "临时访问通行证允许使用有时间限制的通行码来引导用户设置无密码凭据，但如果限制不当，它可能成为后门。配置了长生命周期或可重用设置的 TAP 可能被攻陷颁发流程的攻击者利用。TAP 策略应强制使用短生命周期、一次性限制，并将颁发权限限制在获授权的管理员范围内。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用 TAP，最长生命周期为 1 小时，仅一次性使用，并限制为获授权的引导管理员", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Entra ID > Protection > Authentication methods > Temporary Access Pass 中审查 TAP 策略。将最短和最长生命周期设置为切实可行的最短持续时间，并启用一次性使用。通过基于角色的访问控制，将 TAP 颁发权限限制在有限的一组管理员范围内。", "status": "machine-draft" }
+  },
+  "EIDAUTH-011": {
+    "name": { "value": "自助式密码重置 (SSPR) 配置", "status": "machine-draft" },
+    "description": { "value": "SSPR 允许用户在无需服务台介入的情况下重置自己的密码，但必须正确配置以防止账户被接管。配置错误的 SSPR 若采用弱验证方法或所需方法不足，会使攻击者能够利用被泄露的个人信息重置密码。SSPR 应要求多种强验证方法，并对所有用户启用。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有用户启用 SSPR，重置时至少要求两种身份验证方法", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Password reset > Properties，为所有用户启用 SSPR。将重置所需的方法数量设置为 2。在“身份验证方法”下，确保仅允许移动应用通知、移动应用代码和电子邮件等强方法，同时禁用安全问题。", "status": "machine-draft" }
+  },
+  "EIDAUTH-012": {
+    "name": { "value": "SSPR 方法与要求", "status": "machine-draft" },
+    "description": { "value": "SSPR 允许的具体方法以及所需的方法数量直接影响密码重置流程的安全性。允许安全问题等弱方法，或仅要求单一方法，会给攻击者创造通过社会工程或 OSINT 重置密码的机会。组织应要求所有密码重置至少使用两种强方法。", "status": "machine-draft" },
+    "recommendedValue": { "value": "密码重置需要两种或更多强身份验证方法，并禁用安全问题", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Password reset > Authentication methods。将所需的方法数量设置为 2，并从允许的方法列表中删除安全问题。优先使用移动应用通知和移动应用代码作为主要的 SSPR 方法，以确保强验证。", "status": "machine-draft" }
+  },
+  "EIDAUTH-013": {
+    "name": { "value": "密码保护（禁用密码）配置", "status": "machine-draft" },
+    "description": { "value": "Entra ID 密码保护通过对照由 Microsoft 维护的全局禁用密码列表进行检查，防止用户选择常见的已泄露密码。如果未启用密码保护，用户可能会选择出现在已知泄露数据库中的密码，使账户易受密码喷洒和字典攻击。应在云和本地环境中以强制模式启用此功能。", "status": "machine-draft" },
+    "recommendedValue": { "value": "以强制（Enforced）模式启用密码保护，并激活全局禁用密码列表", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Authentication methods > Password protection。将模式设置为“强制”（Enforced），并确保启用全局禁用密码列表。如果结合本地 Active Directory 使用混合标识，请部署 Entra ID 密码保护代理和 DC 代理，以将保护扩展到本地密码更改。", "status": "machine-draft" }
+  },
+  "EIDAUTH-014": {
+    "name": { "value": "自定义禁用密码列表状态", "status": "machine-draft" },
+    "description": { "value": "除全局禁用密码列表外，组织还应维护一个自定义禁用密码列表，其中包含公司特定的术语、产品名称、地点以及其他容易猜测的变体。如果没有自定义列表，用户可能会选择基于组织背景的密码，而攻击者可以通过定向攻击轻松猜出这些密码。自定义列表最多支持 1000 个条目，应定期更新。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用自定义禁用密码列表，包含组织特定术语，如公司名称、产品、地点及常见变体", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Authentication methods > Password protection。启用自定义禁用密码列表，并添加你的组织名称、产品名称、办公地点以及常用内部术语的条目。每季度审查和更新该列表，以纳入密码审计中发现的新术语和模式。", "status": "machine-draft" }
+  },
+  "EIDAUTH-015": {
+    "name": { "value": "旧版身份验证协议的使用", "status": "machine-draft" },
+    "description": { "value": "旧版身份验证协议（包括 POP3、IMAP4、SMTP AUTH 和 Exchange ActiveSync 基本身份验证）不支持新式身份验证或 MFA，允许攻击者使用被盗凭据完全绕过 MFA。这些协议以易被拦截的方式传输凭据，是针对 Microsoft 365 租户进行密码喷洒攻击的主要途径。应通过条件访问策略阻止所有旧版身份验证。", "status": "machine-draft" },
+    "recommendedValue": { "value": "通过条件访问阻止所有旧版身份验证协议，且在登录日志中未检测到活动使用", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Entra ID > Monitoring > Sign-in logs 中审查旧版身份验证的使用情况，按客户端应用（旧版协议）筛选。创建一个条件访问策略，为所有用户和所有云应用阻止旧版身份验证。监视被阻止的登录尝试，并与受影响的用户合作迁移到新式身份验证客户端。", "status": "machine-draft" }
+  },
+  "EIDAUTH-016": {
+    "name": { "value": "已启用 ROPC（资源所有者密码凭据）流", "status": "machine-draft" },
+    "description": { "value": "资源所有者密码凭据 (ROPC) 身份验证流将用户名和密码直接发送到令牌终结点，从而完全绕过多重身份验证和条件访问策略。使用 ROPC 授权类型的应用程序以无法受新式安全控制保护的方式暴露凭据，构成重大的安全缺口。除非有绝对的技术需求并配有补偿性控制，否则应对所有应用程序禁用 ROPC。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有应用程序注册禁用 ROPC 流，没有应用程序使用密码授权类型", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Entra ID > Applications > App registrations 中审查应用程序注册，查找任何配置为允许公共客户端流的应用。对不需要 ROPC 的应用程序禁用“允许公共客户端流”设置。将使用 ROPC 的应用程序迁移到受支持的交互式流，例如带 PKCE 的授权代码流或设备代码流。", "status": "machine-draft" }
+  },
+  "EIDAUTH-017": {
+    "name": { "value": "按用户 MFA 与条件访问 MFA 冲突检测", "status": "machine-draft" },
+    "description": { "value": "旧版的按用户 MFA 设置（在单个用户级别启用/强制）可能与基于条件访问的 MFA 策略冲突，造成不可预测的身份验证行为。当两者同时处于活动状态时，用户可能会遇到重复的 MFA 提示、身份验证失败，或因哪种机制先评估而导致的策略执行不一致。组织应完全迁移到基于条件访问的 MFA，并禁用按用户 MFA 设置，以确保一致的策略应用。", "status": "machine-draft" },
+    "recommendedValue": { "value": "为所有用户禁用按用户 MFA，并仅通过条件访问策略强制执行 MFA", "status": "machine-draft" },
+    "remediationSteps": { "value": "通过 Entra ID > Users > Per-user MFA 检查按用户 MFA 状态，识别已启用或强制按用户 MFA 的用户。在禁用按用户 MFA 之前，创建为所有用户强制执行 MFA 的等效条件访问策略。在确认条件访问 MFA 覆盖已完成后，将每个用户的状态设置为“已禁用”，从而禁用按用户 MFA。", "status": "machine-draft" }
+  },
+  "EIDAUTH-018": {
+    "name": { "value": "Microsoft Authenticator 登录上下文（应用程序名称和位置）", "status": "machine-draft" },
+    "description": { "value": "当启用 Microsoft Authenticator 身份验证方法时，在推送和无密码通知中显示登录上下文信息（应用程序名称和地理位置），可为用户提供识别并拒绝其未发起的 MFA 提示所需的态势感知。如果没有此上下文，用户在 MFA 疲劳或实时钓鱼攻击期间批准由攻击者发起的推送请求的可能性要大得多。此设置由 MicrosoftAuthenticator 方法配置上的 displayAppInformationRequiredState 和 displayLocationInformationRequiredState 功能设置控制。", "status": "machine-draft" },
+    "recommendedValue": { "value": "如果启用了 Microsoft Authenticator，则启用 displayAppInformationRequiredState（显示应用程序名称）；同时建议启用 displayLocationInformationRequiredState", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Protection > Authentication methods > Policies > Microsoft Authenticator。在“配置”选项卡下，为所有用户将“在推送和无密码通知中显示应用程序名称”设置为“已启用”，并启用“在推送和无密码通知中显示地理位置”。这满足 SCuBA MS.AAD.3.3，该控制项要求在启用 Microsoft Authenticator 时将其配置为显示登录上下文。", "status": "machine-draft" }
+  }
+}

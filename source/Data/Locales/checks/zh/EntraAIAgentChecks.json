@@ -1,0 +1,27 @@
+{
+  "_family": "EntraAIAgentChecks.json",
+  "AIAGENT-001": {
+    "name": { "value": "Copilot 代理限制可交互对象（无广泛访问）", "status": "machine-draft" },
+    "description": { "value": "访问控制策略为 'Any' 或 'Any multitenant' 的 Copilot Studio 代理可被租户中的任何用户或来自任何租户的用户无限制地交互。对于连接了组织数据和工具的代理而言，这是一条未经身份验证的数据访问和提示注入途径。此检查会标记访问控制设置为 Any / Any multitenant 的代理。当未收集代理数据时，结果为“未评估”；没有任何代理的租户则通过（无需治理）。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有已发布的代理使用 'Any' 或 'Any multitenant' 访问控制；访问权限限制为特定的经过身份验证的用户或安全组", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Copilot Studio 中，打开每个被标记代理的“安全 > 身份验证和访问设置”，将访问控制从 'Any' / 'Any multitenant' 更改为限于你的组织（最好限于特定安全组）的经过身份验证的访问。收紧访问权限后重新发布该代理。", "status": "machine-draft" }
+  },
+  "AIAGENT-002": {
+    "name": { "value": "Copilot 代理要求身份验证", "status": "machine-draft" },
+    "description": { "value": "用户身份验证类型为 'None' 的 Copilot Studio 代理接受匿名交互；仅在“按需”（As Needed）时进行身份验证的代理则使身份验证成为可选。两者都会让未经身份验证的用户能够访问可暴露组织数据或调用工具的代理，从而导致滥用、数据泄露和提示注入。此检查会将没有身份验证的代理判定为 FAIL，并将身份验证仅按需触发的代理判定为 WARN。", "status": "machine-draft" },
+    "recommendedValue": { "value": "每个已发布的代理都要求身份验证（用户身份验证类型不为 'None'，且身份验证始终强制执行，而非“按需”）", "status": "machine-draft" },
+    "remediationSteps": { "value": "在 Copilot Studio 中，将每个代理的身份验证设置为要求登录（Microsoft Entra ID 身份验证），而非“无身份验证”，并确保身份验证始终强制执行，而非仅在按需时触发。更改后重新发布。", "status": "machine-draft" }
+  },
+  "AIAGENT-003": {
+    "name": { "value": "已发布的 Copilot 代理得到维护（未休眠）", "status": "machine-draft" },
+    "description": { "value": "长期未修改的已发布 Copilot Studio 代理会在无人维护其配置、权限或连接工具的情况下持续暴露功能和访问权限。休眠的已发布代理会悄然累积风险。此检查会标记最后修改时间早于休眠阈值（默认 90 天）的已发布代理，以便审查或停用。", "status": "machine-draft" },
+    "recommendedValue": { "value": "已发布的代理得到积极维护；陈旧的已发布代理会被审查或停用", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查每个休眠的已发布代理。停用不再需要的代理（取消发布并删除），对于仍在使用的代理，确认其访问控制、身份验证和连接工具仍然适当，然后更新它们以重置维护计时。", "status": "machine-draft" }
+  },
+  "AIAGENT-004": {
+    "name": { "value": "Copilot 代理访问权限限定到安全组", "status": "machine-draft" },
+    "description": { "value": "没有授权安全组的、经过身份验证的 Copilot Studio 代理可被租户中的任何经过身份验证的用户访问。将代理限定到特定安全组可将其受众限制为具有业务需求的人员，从而对可调用代理的对象及其所面向的数据应用最小权限。此检查会标记未配置任何授权安全组的、经过身份验证的代理。", "status": "machine-draft" },
+    "recommendedValue": { "value": "面向敏感数据的、经过身份验证的代理应限定到特定的授权安全组，而不是所有经过身份验证的用户", "status": "machine-draft" },
+    "remediationSteps": { "value": "对于面向敏感数据的代理，在代理的访问设置中配置授权安全组，使只有这些组的成员才能与该代理交互。仅对有意面向所有员工的代理保留租户范围的访问权限。", "status": "machine-draft" }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "_family": "AzureIAMChecks.json",
+  "AZIAM-001": {
+    "name": { "value": "订阅级别角色分配审计", "status": "machine-draft" },
+    "description": { "value": "订阅级别的角色分配会授予对订阅内所有资源的广泛权限。在此范围内过度宽松或陈旧的分配可能导致横向移动以及对敏感工作负载的未授权访问。定期审计可确保只有获得授权的人员才保留订阅范围的权限。", "status": "machine-draft" },
+    "recommendedValue": { "value": "尽量减少订阅级别的角色分配；优先在资源组或资源级别限定范围", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Azure IAM 中的所有订阅级别角色分配，删除任何陈旧、不必要或过于宽泛的分配。在可能的情况下，将权限重新分配到资源组或单个资源级别。使用 Azure AD Access Reviews 对订阅范围的角色实施每季度一次的定期访问审查。", "status": "machine-draft" }
+  },
+  "AZIAM-002": {
+    "name": { "value": "在资源上直接拥有 Azure IAM 角色的用户", "status": "machine-draft" },
+    "description": { "value": "将角色直接分配给 Azure 资源上的单个用户会绕过基于组的访问治理，并使权限跟踪变得困难。这种做法会在用户更换职务或离开组织时增加权限成为孤立权限的风险。基于组的分配可提供更好的可审计性和生命周期管理。", "status": "machine-draft" },
+    "recommendedValue": { "value": "将角色分配给 Azure AD 组，而不是直接分配给单个用户", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Azure Resource Graph 或 IAM 边栏选项卡识别所有直接的用户到资源角色分配。为每种访问模式创建适当的 Azure AD 安全组，并将单个分配迁移到基于组的分配。在确认组成员身份可授予等效访问权限后，删除直接的用户分配。", "status": "machine-draft" }
+  },
+  "AZIAM-003": {
+    "name": { "value": "资源组权限分析", "status": "machine-draft" },
+    "description": { "value": "资源组充当 Azure 资源的逻辑容器，其 IAM 分配会向下级联到所有包含的资源。配置错误的资源组权限可能无意间授予对数据库、密钥保管库或虚拟机等敏感资源的访问权限。分析这些权限可确保始终如一地执行最小权限原则。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在资源组级别应用最小权限角色分配，并记录业务理由", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Get-AzRoleAssignment 枚举每个资源组的所有角色分配，并审查是否存在过度权限，例如授予广泛组的 Owner 或 Contributor 角色。将过于宽松的角色降级为更具体的内置角色，例如 Reader 或特定的资源提供程序角色。记录每项资源组角色分配的业务理由，并安排定期审查。", "status": "machine-draft" }
+  },
+  "AZIAM-004": {
+    "name": { "value": "Azure Key Vault 访问策略审计", "status": "machine-draft" },
+    "description": { "value": "Azure Key Vault 存储对应用程序安全和数据保护至关重要的加密密钥、机密和证书。过于宽松的访问策略可能将机密暴露给未授权的用户或服务主体，从而导致凭据窃取或数据泄露。必须审计访问策略和 RBAC 授权模型，以确保遵循最小权限原则。", "status": "machine-draft" },
+    "recommendedValue": { "value": "使用 Azure RBAC 进行 Key Vault 访问控制；将 Get/List/Set 权限限制在所需的最少主体范围内", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有 Key Vault 访问策略或 RBAC 分配，删除任何拥有不必要权限（例如 Purge 或完整密钥管理权限）的主体。从旧版访问策略模型迁移到基于 Azure RBAC 的授权，以实现更细粒度的控制和可审计性。启用 Key Vault 日志记录到 Log Analytics 工作区，并针对可疑访问模式设置警报。", "status": "machine-draft" }
+  },
+  "AZIAM-005": {
+    "name": { "value": "存储账户安全设置", "status": "machine-draft" },
+    "description": { "value": "Azure 存储账户通常包含必须在静态和传输过程中加以保护的敏感业务数据、备份和应用程序状态。配置错误的设置（例如允许公共 blob 访问、禁用 HTTPS 强制或使用旧版 TLS 版本）会造成重大的数据暴露风险。必须加固存储账户的安全设置，以防止未授权访问和数据泄露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "强制仅使用 HTTPS 传输，禁用公共 blob 访问，要求 TLS 1.2 最低版本，启用基础结构加密", "status": "machine-draft" },
+    "remediationSteps": { "value": "在所有存储账户上将最低 TLS 版本设置为 1.2，启用仅 HTTPS 传输，并禁用公共 blob 访问。启用基础结构加密以在静态时实现双重加密，并配置专用终结点以限制网络访问。审查共享访问签名和访问密钥，按固定计划轮换密钥，并优先使用 Azure AD 身份验证而非基于密钥的访问。", "status": "machine-draft" }
+  },
+  "AZIAM-006": {
+    "name": { "value": "网络安全组规则审计", "status": "machine-draft" },
+    "description": { "value": "网络安全组控制流向 Azure 资源的入站和出站流量，是一种主要的网络分段机制。过于宽松的 NSG 规则（例如允许从 Internet 无限制地入站访问管理端口）会使资源面临暴力破解攻击和漏洞利用。定期审计 NSG 规则对于维护安全的网络边界至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "默认拒绝所有入站 Internet 流量；仅允许来自特定源 IP 范围的所需端口", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有 NSG 规则中过于宽松的条目，尤其是任何允许来自 0.0.0.0/0 或 Any 的入站流量并使用 22、3389、445 或 1433 等端口的规则。用特定的源 IP 范围或服务标记替换宽泛的允许规则，并删除未使用的规则。启用 NSG 流日志并与 Azure Network Watcher 集成，以持续监视流量模式和检测异常。", "status": "machine-draft" }
+  },
+  "AZIAM-007": {
+    "name": { "value": "Azure Policy 合规状态", "status": "machine-draft" },
+    "description": { "value": "Azure Policy 强制执行组织标准，并大规模评估 Azure 资源的合规性。不合规的资源表明配置已偏离安全基线，可能使环境暴露于治理控制旨在防范的风险之中。监视策略合规性可确保已部署的资源始终满足安全和法规要求。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有已分配的策略应报告 95% 或更高的合规率；不合规的资源应有记录在案的例外", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Azure Policy 合规性仪表板以识别不合规的资源，并根据策略严重性对修正进行优先级排序。在策略效果支持的情况下（DeployIfNotExists、Modify），使用修正任务自动修复不合规的资源。对于无法变为合规的资源，创建记录在案的策略豁免，并附上到期日期和业务理由。", "status": "machine-draft" }
+  },
+  "AZIAM-008": {
+    "name": { "value": "管理组结构审查", "status": "machine-draft" },
+    "description": { "value": "管理组提供了一种分层结构，用于组织订阅并大规模应用治理控制。设计不佳或扁平化的管理组结构会使得难以为生产、开发和沙盒环境强制执行差异化策略。审查此层次结构可确保策略继承和角色分配与组织安全要求保持一致。", "status": "machine-draft" },
+    "recommendedValue": { "value": "实施将生产、开发和沙盒环境分开并配以适当策略分配的管理组层次结构", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查当前的管理组层次结构，确保其反映业务单位、环境和工作负载分类等组织边界。在较高的管理组级别应用限制性策略以实现广泛强制，仅在较低级别允许有记录在案理由的例外。确保根管理组的直接角色分配极少，并将敏感订阅置于受到适当治理的管理组中。", "status": "machine-draft" }
+  },
+  "AZIAM-009": {
+    "name": { "value": "自定义 RBAC 角色定义", "status": "machine-draft" },
+    "description": { "value": "自定义 Azure RBAC 角色可提供超出内置角色的定制权限，但也可能无意间授予过度或危险的操作组合。范围界定不当、带有通配符权限或可分配范围过于宽泛的自定义角色会造成权限提升途径。必须审查每个自定义角色，确保其遵循最小权限原则，且不组合敏感操作。", "status": "machine-draft" },
+    "recommendedValue": { "value": "尽量减少自定义角色定义；避免通配符操作；将可分配范围限制在特定的管理组或订阅", "status": "machine-draft" },
+    "remediationSteps": { "value": "列出所有自定义 RBAC 角色定义，审查其 actions、notActions、dataActions 和可分配范围是否存在过度宽松的配置。删除任何通配符权限（*/*、Microsoft.*/* 等），并替换为该角色功能所需的特定操作字符串。记录每个自定义角色的业务理由，并评估内置角色或内置角色的组合是否可以替代该自定义定义。", "status": "machine-draft" }
+  },
+  "AZIAM-010": {
+    "name": { "value": "资源锁配置", "status": "machine-draft" },
+    "description": { "value": "Azure 资源锁可防止意外删除或修改关键资源，例如生产数据库、网络组件和密钥保管库。如果没有资源锁，具有足够权限的用户可能无意间破坏基础结构，导致服务中断和潜在的数据丢失。对关键资源应用 CanNotDelete 或 ReadOnly 锁可在 RBAC 之外提供额外的安全层。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在所有生产资源组和关键的单个资源上应用 CanNotDelete 锁", "status": "machine-draft" },
+    "remediationSteps": { "value": "识别所有应防止意外删除或修改的生产及业务关键资源组和资源。在生产环境的资源组级别应用 CanNotDelete 锁，并对不可变的基础结构组件应用 ReadOnly 锁。记录锁定策略，并确保运营流程在需要进行有意更改时包含移除锁的步骤，并附有适当的变更管理审批。", "status": "machine-draft" }
+  }
+}

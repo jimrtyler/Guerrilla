@@ -1,0 +1,123 @@
+{
+  "_family": "EntraAppChecks.json",
+  "EIDAPP-001": {
+    "name": { "value": "应用程序注册清单", "status": "machine-draft" },
+    "description": { "value": "一份完整的应用程序注册清单可为集成到 Entra ID 租户的应用程序提供基础级别的可见性。如果没有全面的清单，组织就无法评估其应用程序攻击面，也无法识别未授权、已弃用或影子 IT 应用程序。此基线为所有后续的应用程序安全检查奠定基础，应作为一份动态文档持续维护。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有应用程序注册均已列入清单，并记录了所有者、用途和业务理由", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Applications > App registrations，导出已注册应用程序的完整列表。审查每项注册，确认其已分配所有者、有记录在案的业务用途，并且仍在积极使用中。删除或禁用任何不再需要或无法识别所有权的注册。", "status": "machine-draft" }
+  },
+  "EIDAPP-002": {
+    "name": { "value": "具有高风险 API 权限的应用注册", "status": "machine-draft" },
+    "description": { "value": "具有高风险 API 权限（例如 Mail.ReadWrite、Files.ReadWrite.All、RoleManagement.ReadWrite.Directory 或 Application.ReadWrite.All）的应用程序注册可被利用来读取敏感数据、修改目录对象或在整个租户范围内提升权限。攻陷具有这些权限的应用程序的攻击者可获得等同于甚至超过全局管理员的广泛访问权限。必须审查所有高风险权限，并以补偿性控制加以论证。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非有业务理由和补偿性控制记录在案，否则不应有具有高风险 API 权限的应用程序注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Entra ID > Applications > App registrations 中的所有应用程序注册，并检查每项注册的 API 权限选项卡。识别具有高权限的应用程序，例如 Directory.ReadWrite.All、Mail.ReadWrite 或 RoleManagement.ReadWrite.Directory。删除不必要的权限，并用仍能满足应用程序需求的最严格权限替换宽泛的范围。", "status": "machine-draft" }
+  },
+  "EIDAPP-003": {
+    "name": { "value": "添加了凭据的应用注册", "status": "machine-draft" },
+    "description": { "value": "添加了客户端机密或证书的应用程序注册可能成为攻击者的持久化机制。被盗的机密或证书允许攻击者以该应用程序的身份进行身份验证，并在无需用户交互的情况下行使其获授的所有权限。应对凭据进行清点、按计划轮换，并在不再需要时删除，以限制暴露窗口。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有应用程序凭据均已列入清单并定义了轮换计划，且没有超过 12 个月的凭据", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有应用程序注册，并检查每项注册的“证书和机密”边栏选项卡。记录所有活动凭据，包括其到期日期和创建时间戳。立即删除已过期或未使用的凭据，并建立一项轮换策略，要求凭据至少每年续订一次，并在到期前发出自动警报。", "status": "machine-draft" }
+  },
+  "EIDAPP-004": {
+    "name": { "value": "添加了凭据的第一方 Microsoft 服务主体", "status": "machine-draft" },
+    "description": { "value": "攻击者会向 Microsoft 第一方服务主体添加凭据，以建立与合法 Microsoft 服务混杂在一起的持久后门访问。由于第一方服务主体默认受信任且通常持有广泛权限，在这些对象上添加的凭据可提供隐蔽的高权限持久化，且很少受到审计。对第一方 Microsoft 服务主体的任何凭据添加都应视为严重的入侵指标。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有向任何第一方 Microsoft 服务主体添加凭据（机密或证书）", "status": "machine-draft" },
+    "remediationSteps": { "value": "枚举所有 appOwnerOrganizationId 与 Microsoft 租户 ID（f8cdef31-a31e-4b4a-93e4-5f571e91255a）匹配的服务主体，并检查是否添加了密钥凭据或密码凭据。立即删除在第一方 Microsoft 服务主体上发现的任何凭据，因为它们几乎肯定是未授权的。调查审计日志以确定是谁在何时添加了这些凭据，并将其视为潜在的安全事件。", "status": "machine-draft" }
+  },
+  "EIDAPP-005": {
+    "name": { "value": "具有高权限并添加了凭据的服务主体", "status": "machine-draft" },
+    "description": { "value": "既具有高权限 API 权限或目录角色分配、又添加了客户端凭据的服务主体是租户中风险最高的应用程序对象。获得这些凭据的攻击者可以在具有提升权限的情况下进行非交互式身份验证，从而完全绕过 MFA 和条件访问控制。这种权限与凭据访问的组合是基于云的攻击中主要的持久化和横向移动技术。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非有记录在案并配有强制性补偿性控制，否则不应有同时具有高权限和已添加凭据的服务主体", "status": "machine-draft" },
+    "remediationSteps": { "value": "将持有高权限 API 权限或目录角色分配的服务主体与添加了密钥或密码凭据的服务主体进行交叉引用。对于每个匹配项，验证其业务必要性，并删除过度权限或迁移到无需存储凭据的托管标识身份验证。在无法使用托管标识的情况下，实施使用短生命周期证书的基于证书的身份验证。", "status": "machine-draft" }
+  },
+  "EIDAPP-006": {
+    "name": { "value": "过度的 Microsoft Graph 权限", "status": "machine-draft" },
+    "description": { "value": "被授予广泛 Microsoft Graph 应用程序权限（例如 Directory.ReadWrite.All、Sites.ReadWrite.All 或 Mail.ReadWrite）的应用程序可在无用户上下文的情况下获得对整个租户范围数据和配置的访问权限。过度的 Graph 权限违反了最小权限原则，会使攻陷该应用程序的攻击者获得对邮箱、文件、目录对象和租户设置的广泛访问权限。权限应限定为应用程序功能所需的最低范围。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 Microsoft Graph 权限均限定为所需的最低范围，并在可能的情况下用委派权限替换应用程序权限", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有应用程序注册的 Microsoft Graph 权限，识别任何使用宽泛的 .All 范围或使用应用程序级权限、但委派权限即可满足需求的情况。用更细粒度的替代权限替换宽泛权限，例如用 Mail.Read 替换 Mail.ReadWrite.All，或用 User.Read.All 替换 Directory.Read.All。使用 Microsoft Graph 权限参考，为应用程序发出的每个 API 调用确定最小权限。", "status": "machine-draft" }
+  },
+  "EIDAPP-007": {
+    "name": { "value": "具有 Azure IAM 角色分配的应用注册", "status": "machine-draft" },
+    "description": { "value": "具有 Azure 资源级别 IAM 角色分配（例如 Contributor、Owner 或 User Access Administrator）的应用程序注册或其对应的服务主体可以修改 Azure 基础结构、部署资源或在多个订阅间提升权限。这些角色分配将应用程序的影响范围从 Entra ID 扩展到 Azure 资源层面，一旦应用程序凭据被盗，便可能导致基础结构被攻陷。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非有业务理由和最小权限范围记录在案，否则不应有具有高于 Reader 的 Azure IAM 角色分配的应用程序注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查管理组、订阅和资源组级别的 Azure IAM 角色分配，识别任何分配给应用程序服务主体的分配。删除 Owner 和 User Access Administrator 分配，并用限定到特定资源类型和操作的自定义角色替换宽泛的 Contributor 角色。将 IAM 分配限制在尽可能窄的范围内，优先使用资源组级别而非订阅级别的分配。", "status": "machine-draft" }
+  },
+  "EIDAPP-008": {
+    "name": { "value": "凭据到期监视", "status": "machine-draft" },
+    "description": { "value": "临近到期或已过期的应用程序凭据（客户端机密和证书）如果不及时轮换，可能导致服务中断；如果到期策略设置得过于遥远，则会造成安全风险。有效期过长的凭据会延长被泄露凭据可被利用的窗口。对凭据到期进行主动监视和告警可确保及时轮换并减少安全暴露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有应用程序凭据的最长有效期为 12 个月，并在到期前 30 天和 60 天发出自动警报", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Microsoft Graph API 枚举所有应用程序凭据及其到期日期。识别 30 天内即将到期的凭据以及有效期超过 12 个月的凭据。建立一个自动监视流程，在凭据临近到期时向应用程序所有者和安全团队发出警报，并通过治理程序强制执行最长凭据生命周期策略。", "status": "machine-draft" }
+  },
+  "EIDAPP-009": {
+    "name": { "value": "陈旧的应用程序注册", "status": "machine-draft" },
+    "description": { "value": "近期没有登录活动的应用程序注册可能已被弃用、成为孤立对象或不再需要，但它们仍保留着所有获授的权限和凭据。陈旧的应用程序会扩大攻击面，因为它们不太可能被其原始所有者监视或维护，从而成为攻击者利用被遗忘凭据或权限的诱人目标。定期清理未使用的应用程序可降低租户的整体风险暴露。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非有有效的例外记录在案，否则不应有在过去 90 天内没有登录活动的应用程序注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Entra ID 中的应用程序登录日志，识别在过去 90 天内没有身份验证活动的应用程序。联系列出的应用程序所有者，确认该应用程序是否仍然需要。在确认不再需要后，禁用或删除陈旧的应用程序注册，并删除任何关联的凭据和权限。", "status": "machine-draft" }
+  },
+  "EIDAPP-010": {
+    "name": { "value": "多租户应用程序分析", "status": "machine-draft" },
+    "description": { "value": "多租户应用程序注册配置为接受来自任何 Entra ID 租户的登录，从而允许来自外部组织的用户进行身份验证。虽然这对于 SaaS 和合作伙伴场景是必要的，但内部应用程序上的多租户配置会通过允许外部标识获取令牌而造成不必要的风险。应验证每个多租户应用程序，以确认该配置是有意为之，并且已实施适当的授权控制。", "status": "machine-draft" },
+    "recommendedValue": { "value": "除非业务需求要求并有理由记录在案且配有适当的授权控制，否则不应有多租户应用程序注册", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查所有应用程序注册，识别那些 signInAudience 设置为 AzureADMultipleOrgs 或 AzureADandPersonalMicrosoftAccount 的注册。对于每个多租户应用程序，验证是否确实需要多租户访问并记录业务理由。将不需要多租户访问的应用程序转换为单租户配置，并实施令牌验证以限制哪些外部租户可以访问多租户应用程序。", "status": "machine-draft" }
+  },
+  "EIDAPP-011": {
+    "name": { "value": "同意授权分析", "status": "machine-draft" },
+    "description": { "value": "OAuth 同意授权允许应用程序代表用户（委派）或以应用程序自身身份（应用程序级别）访问组织数据。管理员同意授权为所有用户提供租户范围的访问权限，而用户同意授权仅限于单个用户。恶意或过度的同意授权是 OAuth 钓鱼攻击中用于在无需凭据的情况下获得对邮箱、文件和目录数据持久访问权限的主要技术。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有管理员同意授权均已审查并论证。没有针对高风险权限的用户同意授权。已建立定期的同意授权审查", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Microsoft Graph 枚举租户中的所有 OAuth2 权限授予，并将其分类为管理员同意或用户同意。审查管理员同意授权中是否存在过于宽泛的权限，并撤销任何不再合理的授权。调查可疑应用程序的用户同意授权，尤其是那些请求 Mail.Read、Files.ReadWrite 或其他敏感范围的应用程序，并撤销未授权的授权。", "status": "machine-draft" }
+  },
+  "EIDAPP-012": {
+    "name": { "value": "用户同意设置策略", "status": "machine-draft" },
+    "description": { "value": "用户同意设置策略控制用户是否可以在未经管理员批准的情况下授予应用程序访问组织数据的权限。宽松的同意设置允许用户自行授权应用程序，而攻击者会通过非法同意授权钓鱼活动来利用这一点以获得持久访问权限。将用户同意限制为经过验证的发布者或将其完全禁用，可强制所有同意通过管理员审批工作流。", "status": "machine-draft" },
+    "recommendedValue": { "value": "禁用用户同意，或仅限于来自经过验证发布者且仅具有低风险权限的应用", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Enterprise applications > Consent and permissions > User consent settings。将用户同意设置为“不允许用户同意”，或“仅针对选定权限允许对来自经过验证发布者的应用进行用户同意”，且仅选择低风险权限。启用管理员同意工作流，为用户请求访问需要管理员批准的应用程序提供一个结构化的流程。", "status": "machine-draft" }
+  },
+  "EIDAPP-013": {
+    "name": { "value": "管理员同意工作流配置", "status": "machine-draft" },
+    "description": { "value": "管理员同意工作流为用户在应用程序访问组织数据之前请求管理员批准提供了一个结构化的流程。如果没有管理员同意工作流，同意受到限制的用户就没有正式机制来请求应用程序访问，从而导致影子 IT 变通做法或服务台瓶颈。配置得当的工作流可确保合法的应用程序请求由指定管理员审查和批准。", "status": "machine-draft" },
+    "recommendedValue": { "value": "启用管理员同意工作流，并指定审阅者和明确的审查完成 SLA", "status": "machine-draft" },
+    "remediationSteps": { "value": "转到 Entra ID > Enterprise applications > Consent and permissions > Admin consent settings。启用管理员同意工作流，并从你的安全或 IT 管理团队中指定适当的审阅者。配置通知设置以提醒审阅者有待处理的请求，并建立审查周转的服务级别协议以防止工作流瓶颈。", "status": "machine-draft" }
+  },
+  "EIDAPP-014": {
+    "name": { "value": "应用程序模拟角色持有者", "status": "machine-draft" },
+    "description": { "value": "Exchange Online 中的 ApplicationImpersonation 角色授予模拟组织中任何邮箱的能力，从而在邮箱所有者不知情的情况下对所有电子邮件进行完全的读写访问。此角色在商业电子邮件泄露和数据泄露攻击中经常被滥用，因为一个具有此角色的被攻陷账户就能访问整个组织的电子邮件。分配应极其有限、有时间限制并受到持续监视。", "status": "machine-draft" },
+    "recommendedValue": { "value": "没有永久的 ApplicationImpersonation 角色分配。任何必需的分配都必须限定到特定邮箱并设有时间限制", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Exchange Online 角色分配，使用 Exchange Online PowerShell 中的 Get-ManagementRoleAssignment 识别所有持有 ApplicationImpersonation 角色的主体。立即删除所有不必要的分配，并在需要时用限定到特定邮箱的范围分配替换宽泛的模拟授权。为任何新的 ApplicationImpersonation 角色分配实施监视警报，并每月审查现有分配。", "status": "machine-draft" }
+  },
+  "EIDAPP-015": {
+    "name": { "value": "OAuth2 权限授予审查", "status": "machine-draft" },
+    "description": { "value": "OAuth2 权限授予定义了应用程序被授权行使的具体权限，可以是代表用户的委派权限，也可以是独立行使的应用程序权限。众多应用程序累积的权限授予会形成一张难以审计的复杂访问网络，其中可能包含过于宽泛或不必要的授权。定期审查可确保授权与当前业务需求保持一致。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有 OAuth2 权限授予每季度审查一次，并撤销陈旧或过度的授权", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Microsoft Graph 导出所有 OAuth2 权限授予，并按权限类型（委派与应用程序）、资源和范围进行分类。识别针对不再活动的应用程序的授权，或超出当前应用程序功能所需的权限。通过 Entra 管理中心或 Microsoft Graph API 撤销不必要的授权，并为所有活动授权建立每季度审查周期。", "status": "machine-draft" }
+  },
+  "EIDAPP-016": {
+    "name": { "value": "托管标识清单和权限", "status": "machine-draft" },
+    "description": { "value": "托管标识为 Azure 资源提供自动管理的凭据，用于向支持 Entra ID 身份验证的服务进行身份验证。虽然托管标识消除了存储凭据的需要，但它们仍可能被过度授权或分配给不再需要它们的资源。一份全面的托管标识及其权限分配清单可确保最小权限访问，并识别与已删除资源关联的孤立标识。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有托管标识均已列入清单，并记录了资源关联和最小权限的权限分配", "status": "machine-draft" },
+    "remediationSteps": { "value": "使用 Azure Resource Graph 或 Azure 门户枚举各 Azure 订阅中所有系统分配和用户分配的托管标识。审查授予每个托管标识的角色分配和 API 权限，验证它们是否遵循最小权限原则。删除与已删除或已停用资源关联的托管标识上的角色分配，并记录每个活动托管标识的用途和权限要求。", "status": "machine-draft" }
+  },
+  "EIDAPP-017": {
+    "name": { "value": "服务主体登录活动", "status": "machine-draft" },
+    "description": { "value": "监视服务主体登录活动可提供对哪些应用程序正在进行身份验证以及来自哪些 IP 地址的可见性。异常的登录模式（例如来自意外地理位置的身份验证、异常的请求量，或来自本应休眠的应用程序的登录）可能表明凭据泄露或未授权使用。这些基线活动数据对于检测异常和调查事件至关重要。", "status": "machine-draft" },
+    "recommendedValue": { "value": "定期审查服务主体登录日志，并为关键应用程序建立基线活动画像", "status": "machine-draft" },
+    "remediationSteps": { "value": "审查 Entra ID > Monitoring > Sign-in logs > Service principal sign-ins 中的服务主体登录日志。为关键应用程序建立基线活动画像，包括正常的身份验证频率、源 IP 范围和目标资源。为异常的服务主体登录模式配置警报，例如来自新 IP 地址的身份验证、异常时段的活动，或来自曾处于休眠状态的应用程序的登录。", "status": "machine-draft" }
+  },
+  "EIDAPP-018": {
+    "name": { "value": "应用注册和服务主体的更改跟踪", "status": "machine-draft" },
+    "description": { "value": "应对应用程序注册和服务主体的更改（例如新增凭据、权限修改或配置更改）进行跟踪和审查。攻击者经常修改现有应用程序，以添加后门凭据、提升权限或更改重定向 URI，作为持久化和权限提升技术的一部分。如果没有更改跟踪，这些修改可能会无限期地不被发现。", "status": "machine-draft" },
+    "recommendedValue": { "value": "记录、监视和审查对应用程序注册和服务主体的所有更改，并对高风险修改发出警报", "status": "machine-draft" },
+    "remediationSteps": { "value": "配置审计日志监视，以捕获对应用程序注册和服务主体的所有更改，包括凭据添加、权限更改和配置修改。在 Microsoft Sentinel 或 Azure Monitor 中为高风险更改创建警报规则，例如向现有应用程序添加新凭据、应用程序权限授予更改以及回复 URL 修改。为所有应用程序更改建立审查流程并指定安全审阅者。", "status": "machine-draft" }
+  },
+  "EIDAPP-019": {
+    "name": { "value": "悬空的回复 URL", "status": "machine-draft" },
+    "description": { "value": "指向已过期、无人拥有或未认领域名的回复 URL 会导致令牌窃取，攻击者可以注册这些被弃用的域名并拦截 Entra ID 重定向的 OAuth 授权代码和令牌。这种被称为子域接管或悬空 DNS 攻击的漏洞，使攻击者无需任何凭据泄露即可获得该应用程序权限的有效访问令牌。必须验证所有回复 URL，以确保它们解析到组织控制的基础结构。", "status": "machine-draft" },
+    "recommendedValue": { "value": "所有回复 URL 均解析到活动的、组织拥有的域，且没有悬空或已过期的域引用", "status": "machine-draft" },
+    "remediationSteps": { "value": "从应用程序注册中提取所有回复 URL，并解析每个域以验证所有权和活动的 DNS 注册。识别任何指向已过期、可供注册或不受组织控制的域的回复 URL。立即删除或更新悬空的回复 URL，并实施定期审查流程，以在域到期或基础结构发生变化时检测新的悬空引用。", "status": "machine-draft" }
+  },
+  "EIDAPP-020": {
+    "name": { "value": "已阻止组所有者对应用程序的同意", "status": "machine-draft" },
+    "description": { "value": "当启用组特定（组所有者）同意时，Microsoft 365 组和 Teams 的所有者可以在未经管理员审查的情况下授权应用程序访问其组所拥有的数据。攻击者会通过针对组和团队所有者的非法同意授权钓鱼来利用这一点，以获得对组织数据持久的、有范围的访问权限。SCuBA 要求不允许组所有者对应用程序同意，从而强制所有此类同意通过管理员审批工作流。在 Entra ID 中，这由目录（组）设置中的 EnableGroupSpecificConsent 设置控制；它必须为 false。请注意，Microsoft 已弃用此控制项的管理中心切换开关，但底层的目录设置仍是权威信号。", "status": "machine-draft" },
+    "recommendedValue": { "value": "在目录（组）设置中将 EnableGroupSpecificConsent 设置为 false，即组所有者不能对应用程序同意", "status": "machine-draft" },
+    "remediationSteps": { "value": "确保组所有者不能对应用程序同意，从而满足 SCuBA MS.AAD.5.4。将目录（组）设置 'EnableGroupSpecificConsent' 设置为 false（Group.Unified 设置模板）。将对组所拥有数据的所有应用程序同意路由到管理员同意工作流，以便由审阅者批准访问。如果旧版管理中心切换开关不再存在，请通过组设置配置直接确认该目录设置的值。", "status": "machine-draft" }
+  }
+}
