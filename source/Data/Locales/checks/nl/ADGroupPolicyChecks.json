@@ -1,0 +1,147 @@
+{
+  "_family": "ADGroupPolicyChecks.json",
+  "ADGPO-001": {
+    "name": { "value": "GPO-inventaris met koppelingsstatus", "status": "machine-draft" },
+    "description": { "value": "Een uitgebreide inventaris van alle Groepsbeleidsobjecten met hun koppelingsstatus, bereik en afdwingingsstatus vormt de basis voor de beveiligingsanalyse van GPO's. Inzicht in welke GPO's zijn gekoppeld, afgedwongen of uitgeschakeld is essentieel om de effectieve beveiligingshouding te beoordelen die via Groepsbeleid wordt geleverd", "status": "machine-draft" },
+    "recommendedValue": { "value": "Volledige GPO-inventaris gedocumenteerd met koppelingsstatus, bereik en eigenaar voor elke GPO", "status": "machine-draft" },
+    "remediationSteps": { "value": "Genereer een volledige GPO-inventaris met Get-GPO -All en Get-GPOReport. Documenteer voor elke GPO het doel, de eigenaar, de koppelingslocaties en de afdwingingsstatus. Stel een naamgevingsconventie voor GPO's op en zorg dat alle GPO's daaraan voldoen. Voer een wijzigingsbeheerproces voor GPO's in.", "status": "machine-draft" }
+  },
+  "ADGPO-002": {
+    "name": { "value": "Lege GPO's", "status": "machine-draft" },
+    "description": { "value": "GPO's die geen geconfigureerde instellingen bevatten (zowel de sectie Computerconfiguratie als Gebruikersconfiguratie is leeg) voegen onnodige complexiteit toe aan de verwerking van Groepsbeleid en kunnen wijzen op verlaten configuratiepogingen of testartefacten die nooit zijn opgeruimd", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen lege GPO's in het domein; alle GPO's bevatten ten minste één geconfigureerde instelling", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificeer GPO's zonder geconfigureerde instellingen met Get-GPOReport in XML-indeling en controleer op lege ExtensionData-elementen. Controleer of lege GPO's geen tijdelijke aanduidingen voor toekomstig gebruik zijn. Verwijder werkelijk lege GPO's nadat u hebt bevestigd dat er in geen enkele automatisering of documentatie naar wordt verwezen.", "status": "machine-draft" }
+  },
+  "ADGPO-003": {
+    "name": { "value": "Niet-gekoppelde GPO's", "status": "machine-draft" },
+    "description": { "value": "GPO's die niet aan een site, domein of OU zijn gekoppeld, worden niet toegepast en vormen ongebruikte configuratie. Niet-gekoppelde GPO's kunnen gevoelige instellingen, referenties in GPP of scripts bevatten die kunnen worden misbruikt als een aanvaller ze later aan een doel-OU koppelt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen niet-gekoppelde GPO's, tenzij gedocumenteerd als sjablonen of back-ups met passende toegangsbeheermaatregelen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificeer niet-gekoppelde GPO's door alle GPO-GUID's te vergelijken met de gPLink-kenmerken op alle OU's, sites en de domeinroot. Beoordeel elke niet-gekoppelde GPO om te bepalen of deze moet worden gekoppeld, gearchiveerd of verwijderd. Verwijder gevoelige inhoud uit niet-gekoppelde GPO's die als sjabloon worden bewaard.", "status": "machine-draft" }
+  },
+  "ADGPO-004": {
+    "name": { "value": "Uitgeschakelde GPO's met inhoud", "status": "machine-draft" },
+    "description": { "value": "GPO's waarbij de sectie Gebruikersconfiguratie of Computerconfiguratie is uitgeschakeld maar nog steeds geconfigureerde instellingen bevat, kunnen wijzen op onvolledige buitengebruikstelling of onbedoelde uitschakeling. Indien een aanvaller met machtigingen om GPO's te bewerken ze opnieuw inschakelt, treden de sluimerende instellingen in werking", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen GPO's met uitgeschakelde secties die geconfigureerde instellingen bevatten; uitgeschakelde secties moeten leeg zijn", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel alle GPO's waarbij GpoStatus gelijk is aan UserSettingsDisabled of ComputerSettingsDisabled. Controleer of de uitgeschakelde sectie geen actieve instellingen bevat. Schakel de sectie ofwel opnieuw in als de instellingen nodig zijn, of verwijder de instellingen uit de uitgeschakelde sectie. Documenteer de reden voor eventuele opzettelijk uitgeschakelde secties.", "status": "machine-draft" }
+  },
+  "ADGPO-005": {
+    "name": { "value": "Gedupliceerde GPO's", "status": "machine-draft" },
+    "description": { "value": "Meerdere GPO's met wezenlijk vergelijkbare of identieke instellingen creëren beheerlast, verhogen het risico op configuratieafwijking en bemoeilijken het oplossen van problemen. Gedupliceerde GPO's kunnen ook leiden tot conflicterende instellingen die onvoorspelbaar gedrag veroorzaken", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen gedupliceerde GPO's; elke GPO heeft een uniek doel en niet-overlappende instellingen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Exporteer alle GPO-rapporten in XML-indeling en vergelijk de instellingen tussen GPO's om duplicaten te identificeren. Consolideer waar mogelijk gedupliceerde GPO's tot één GPO. Werk de OU-koppelingen bij om naar de geconsolideerde GPO te verwijzen. Test de geconsolideerde GPO in een staging-OU voordat u de duplicaten verwijdert.", "status": "machine-draft" }
+  },
+  "ADGPO-006": {
+    "name": { "value": "GPO's met verbroken koppelingen", "status": "machine-draft" },
+    "description": { "value": "GPO-koppelingen die verwijzen naar niet-bestaande GPO's of naar GPO's waarvan de SYSVOL-gegevens ontbreken, wijzen op replicatieproblemen, onjuiste verwijdering of corruptie. Verbroken koppelingen kunnen fouten in de verwerking van Groepsbeleid veroorzaken en kunnen de afwezigheid van bedoelde beveiligingsconfiguraties maskeren", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen verbroken GPO-koppelingen; alle gPLink-verwijzingen verwijzen naar geldige GPO's met intacte SYSVOL-gegevens", "status": "machine-draft" },
+    "remediationSteps": { "value": "Analyseer de gPLink-kenmerken op alle OU's, sites en de domeinroot om de GUID's van de aangehaalde GPO's te extraheren. Controleer of elke GUID bestaat in de GPC-container (AD) en de GPT-container (SYSVOL). Verwijder verbroken koppelingen met Set-GPLink of door het gPLink-kenmerk rechtstreeks te bewerken. Onderzoek de hoofdoorzaak van eventuele ontbrekende GPO-gegevens.", "status": "machine-draft" }
+  },
+  "ADGPO-007": {
+    "name": { "value": "Inconsistenties in GPO-machtigingen", "status": "machine-draft" },
+    "description": { "value": "Elke GPO heeft zowel AD-machtigingen (op het GPC-object) als NTFS-machtigingen (op de SYSVOL GPT-map). Inconsistenties tussen deze machtigingensets kunnen GPO-toepassing verhinderen, ongeautoriseerde wijziging toestaan of beveiligingslacunes creëren waarbij de SYSVOL-inhoud ruimer is ingesteld dan het AD-object", "status": "machine-draft" },
+    "recommendedValue": { "value": "Consistente machtigingen tussen AD GPC-objecten en SYSVOL GPT-mappen voor alle GPO's; Authenticated Users hebben leestoegang", "status": "machine-draft" },
+    "remediationSteps": { "value": "Vergelijk de beveiligingsdescriptor op elk GPC-object in AD met de NTFS-ACL op de bijbehorende GPT-map in SYSVOL. Zorg dat beide leestoegang verlenen aan Authenticated Users (vereist voor GPO-toepassing). Los eventuele inconsistenties op door de SYSVOL-machtigingen af te stemmen op het AD-object. Voer dcdiag /test:sysvolcheck uit om problemen te identificeren.", "status": "machine-draft" }
+  },
+  "ADGPO-008": {
+    "name": { "value": "GPO's niet toegepast door WMI-filters", "status": "machine-draft" },
+    "description": { "value": "WMI-filters kunnen op basis van WQL-query's verhinderen dat GPO's op doelsystemen worden toegepast. Te brede of verkeerd geconfigureerde WMI-filters kunnen onbedoeld beveiligingskritieke GPO's blokkeren op systemen die ze nodig hebben, waardoor lacunes in de bedoelde beveiligingsconfiguratie ontstaan", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle beveiligingskritieke GPO's worden toegepast op de bedoelde doelen; WMI-filters gevalideerd tegen de werkelijke omgevingscondities", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel de WMI-filters die aan beveiligingskritieke GPO's zijn gekoppeld met Get-GPO en bekijk de toewijzingen van WMI-filters. Test de WQL-query's van de WMI-filters op representatieve doelsystemen om te controleren of ze correct worden geëvalueerd. Gebruik Groepsbeleidsresultaten (gpresult) op steekproefsystemen om te bevestigen dat de GPO's worden toegepast. Vervang of corrigeer WMI-filters die de bedoelde toepassing blokkeren.", "status": "machine-draft" }
+  },
+  "ADGPO-009": {
+    "name": { "value": "GPO's zonder toepassingsmachtiging", "status": "machine-draft" },
+    "description": { "value": "Als de machtiging Groepsbeleid toepassen (Lezen + Toepassen) niet aan de juiste beveiligingsprincipals wordt verleend, wordt de GPO niet door die systemen verwerkt, zelfs niet wanneer deze aan de juiste OU is gekoppeld. Dit gebeurt vaak wanneer Authenticated Users uit de beveiligingsfiltering van de GPO wordt verwijderd zonder specifieke groepen toe te voegen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle GPO's hebben de machtiging Groepsbeleid toepassen verleend aan de juiste beveiligingsgroepen; geen GPO's zonder toepassingsdoelen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Controleer elke GPO op machtigingen voor Groepsbeleid toepassen met Get-GPPermission. Zorg dat ten minste één beveiligingsgroep met leden de machtiging Toepassen heeft. Controleer voor GPO's die alleen op specifieke groepen van toepassing moeten zijn of de doelgroepen de bedoelde leden bevatten. Voeg Authenticated Users toe met alleen-lezenmachtiging (zonder Toepassen) als beveiligingsfiltering wordt gebruikt.", "status": "machine-draft" }
+  },
+  "ADGPO-010": {
+    "name": { "value": "Versiediscrepantie tussen SYSVOL en AD voor GPO's", "status": "machine-draft" },
+    "description": { "value": "Elke GPO houdt versienummers bij in zowel het AD GPC-object (kenmerk versionNumber) als de SYSVOL GPT-map (gpt.ini). Een discrepantie tussen deze versies wijst op een replicatiefout, SYSVOL-corruptie of onvolledige GPO-updates. Versiediscrepanties kunnen ertoe leiden dat clients verouderd of onvolledig beleid toepassen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle GPO-versies komen overeen tussen de AD GPC-objecten en de SYSVOL GPT gpt.ini-bestanden op alle domeincontrollers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Vergelijk voor elke GPO het kenmerk versionNumber in AD met de waarde Version in de SYSVOL gpt.ini op alle domeincontrollers. Onderzoek en los eventuele DFSR- of FRS-replicatieproblemen op die de discrepanties veroorzaken. Forceer replicatie met repadmin /syncall en DFSRDIAG. Gebruik voor aanhoudende discrepanties het gezaghebbende herstelproces voor SYSVOL.", "status": "machine-draft" }
+  },
+  "ADGPO-011": {
+    "name": { "value": "Beveiligingsanalyse van GPO-instellingen", "status": "machine-draft" },
+    "description": { "value": "GPO-instellingen kunnen de beveiligingshouding verzwakken als ze beschermingen uitschakelen, authenticatievereisten versoepelen of onveilige standaardwaarden configureren. Deze controle analyseert belangrijke beveiligingsrelevante instellingen in alle GPO's, waaronder wachtwoordbeleid, accountvergrendeling, toewijzing van gebruikersrechten, beveiligingsopties en auditbeleid", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle GPO-instellingen sluiten aan op de beveiligingsbasislijn van de organisatie; geen GPO's die de standaardbeveiligingsconfiguraties verzwakken", "status": "machine-draft" },
+    "remediationSteps": { "value": "Exporteer alle GPO-rapporten en analyseer beveiligingsrelevante instellingen, waaronder wachtwoordbeleid, accountvergrendeling, toewijzing van gebruikersrechten, beperkte groepen, beveiligingsopties en Windows Firewall-regels. Vergelijk de instellingen met CIS-benchmarks of organisatiebasislijnen. Verhelp GPO's die zwakkere instellingen dan de basislijn configureren.", "status": "machine-draft" }
+  },
+  "ADGPO-012": {
+    "name": { "value": "Detectie van cPassword/GPP-wachtwoorden", "status": "machine-draft" },
+    "description": { "value": "Wachtwoorden die zijn opgeslagen in Groepsbeleidsvoorkeuren (cPassword) zijn versleuteld met een openbaar bekende AES-sleutel die door Microsoft is gepubliceerd (MS14-025). Elke domeingebruiker kan de XML-bestanden in SYSVOL die deze wachtwoorden bevatten lezen en ze triviaal ontsleutelen. Dit is een van de meest voorkomende en eenvoudig te misbruiken kwetsbaarheden in Active Directory", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen cPassword-waarden aanwezig in enig GPP XML-bestand in SYSVOL", "status": "machine-draft" },
+    "remediationSteps": { "value": "Doorzoek alle SYSVOL GPO-mappen naar XML-bestanden die cpassword-kenmerken bevatten in Groups.xml, Services.xml, Scheduledtasks.xml, DataSources.xml, Printers.xml en Drives.xml. Verwijder alle GPP-items die opgeslagen wachtwoorden bevatten. Gebruik in plaats daarvan LAPS, gMSA of andere moderne oplossingen voor referentiebeheer. Pas de MS14-025-patch toe om het aanmaken van nieuwe cPassword-waarden te voorkomen.", "status": "machine-draft" }
+  },
+  "ADGPO-013": {
+    "name": { "value": "Analyse van scripts in GPO's", "status": "machine-draft" },
+    "description": { "value": "GPO-scripts voor opstarten, afsluiten, aanmelden en afmelden worden uitgevoerd met de rechten van het systeem of de gebruiker en worden opgeslagen in de toegankelijke SYSVOL-share. Kwaadaardige scripts die in GPO's worden geplaatst, kunnen wijdverspreide code-uitvoering in het hele domein bereiken. Scripts moeten worden beoordeeld op beveiligingsproblemen, waaronder hardgecodeerde referenties, onveilige opdrachten en verwijzingen naar niet-veilige locaties", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle GPO-scripts beoordeeld, waar mogelijk ondertekend en vrij van hardgecodeerde referenties of onveilige bewerkingen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer alle scripts die in GPO's zijn geconfigureerd (Opstarten, Afsluiten, Aanmelden, Afmelden) uit de sectie Scripts van de GPO-rapporten. Beoordeel de scriptinhoud op hardgecodeerde referenties, gebruik van LOLBins, verwijzingen naar externe resources en onveilige bewerkingen. Implementeer scriptondertekening waar ondersteund. Zorg dat de machtigingen op scriptbestanden wijziging beperken tot uitsluitend geautoriseerde beheerders.", "status": "machine-draft" }
+  },
+  "ADGPO-014": {
+    "name": { "value": "MSI-pakketten in GPO's", "status": "machine-draft" },
+    "description": { "value": "GPO-instellingen voor software-installatie implementeren MSI-pakketten op gerichte computers. Gecompromitteerde of ongeautoriseerde MSI-pakketten in GPO's kunnen malware in het hele domein implementeren. De bronlocatie van MSI-pakketten en de toegangsbeheermaatregelen op die locaties moeten worden gecontroleerd", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle via GPO geïmplementeerde MSI-pakketten afkomstig van veilige, toegangsbeheerde locaties met geverifieerde integriteit", "status": "machine-draft" },
+    "remediationSteps": { "value": "Identificeer alle instellingen voor software-installatie in GPO's. Controleer of de MSI-bronpaden verwijzen naar beveiligde shares met passende NTFS- en share-machtigingen. Bevestig dat de MSI-pakketten afkomstig zijn van vertrouwde leveranciers en niet zijn gemanipuleerd. Overweeg WDAC of AppLocker te gebruiken om MSI-installatie te beperken tot goedgekeurde pakketten.", "status": "machine-draft" }
+  },
+  "ADGPO-015": {
+    "name": { "value": "Geplande taken in GPO's", "status": "machine-draft" },
+    "description": { "value": "Groepsbeleidsvoorkeuren kunnen geplande taken maken die met opgegeven referenties of als SYSTEM op gerichte computers worden uitgevoerd. Kwaadaardige geplande taken die via GPO worden geïmplementeerd, bieden persistente code-uitvoering in de hele omgeving. Dit is een veelgebruikte techniek na exploitatie om domeinbrede persistentie te behouden", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle via GPO geïmplementeerde geplande taken gedocumenteerd, met accounts met minimale rechten en uitsluitend geautoriseerde bewerkingen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel alle items voor geplande taken in GPO-voorkeuren in alle GPO's. Controleer of elke taak een legitieme en geautoriseerde opdracht uitvoert met de minimaal vereiste rechten. Verwijder taken die referenties opslaan (gebruik in plaats daarvan gMSA of de SYSTEM-context). Zorg dat de uitvoerbare bestanden van taken in beschermde locaties worden opgeslagen. Documenteer het zakelijke doel van elke via GPO geïmplementeerde geplande taak.", "status": "machine-draft" }
+  },
+  "ADGPO-016": {
+    "name": { "value": "Beveiligingsbeoordeling van registerinstellingen", "status": "machine-draft" },
+    "description": { "value": "GPO's kunnen registerinstellingen implementeren die beveiligingsconfiguraties beïnvloeden, waaronder het uitschakelen van beveiligingsfuncties, het verzwakken van authenticatieprotocollen of het inschakelen van onveilige services. Op het register gebaseerde instellingen in GPO's moeten worden beoordeeld om te waarborgen dat ze de beveiligingshouding van de gerichte systemen niet verzwakken", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen GPO-registerinstellingen die de beveiligingsstandaarden verzwakken; alle registerwijzigingen gedocumenteerd en gerechtvaardigd", "status": "machine-draft" },
+    "remediationSteps": { "value": "Exporteer de GPO-registerinstellingen uit Administratieve sjablonen en Registervoorkeuren. Beoordeel instellingen die beveiligingsrelevante registersleutels beïnvloeden, waaronder HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa, HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies en authenticatiegerelateerde sleutels. Verwijder of corrigeer instellingen die de beveiligingshouding verzwakken.", "status": "machine-draft" }
+  },
+  "ADGPO-017": {
+    "name": { "value": "Analyse van beperkte groepen", "status": "machine-draft" },
+    "description": { "value": "GPO-instellingen voor beperkte groepen dwingen groepslidmaatschap op doelsystemen af en worden vaak gebruikt om het lidmaatschap van de lokale groep Administrators te beheren. Verkeerd geconfigureerde beperkte groepen kunnen onbedoeld lokale beheerderstoegang aan ongeautoriseerde gebruikers verlenen of nalaten ongeautoriseerde leden uit bevoorrechte lokale groepen te verwijderen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Beperkte groepen geconfigureerd om lokaal beheerderslidmaatschap met minimale rechten af te dwingen; alleen geautoriseerde groepen in de lokale groep Administrators", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel de instellingen voor beperkte groepen in alle GPO's. Controleer of de lokale groep Administrators zo wordt beheerd dat alleen geautoriseerde beheergroepen worden opgenomen. Zorg dat beperkte groepen geen Domain Users of andere brede groepen aan bevoorrechte lokale groepen toevoegen. Overweeg Groepsbeleidsvoorkeuren te gebruiken voor gedetailleerdere controle (leden toevoegen/verwijderen zonder het volledige lidmaatschap te vervangen).", "status": "machine-draft" }
+  },
+  "ADGPO-018": {
+    "name": { "value": "Configuratie van auditbeleid via GPO", "status": "machine-draft" },
+    "description": { "value": "Windows-auditbeleid dat via Groepsbeleid wordt geconfigureerd, bepaalt welke beveiligingsgebeurtenissen worden vastgelegd op systemen die aan het domein zijn gekoppeld. Onvoldoende auditconfiguratie creëert blinde vlekken waardoor aanvallers onopgemerkt kunnen opereren. Belangrijke auditcategorieën zijn onder meer aanmeldingsgebeurtenissen, accountbeheer, toegang tot mapservices en objecttoegang", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geavanceerd auditbeleid geconfigureerd via GPO met audit van geslaagde en mislukte pogingen voor alle kritieke categorieën, afgestemd op de detectievereisten van de organisatie", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configureer de geavanceerde auditbeleidsconfiguratie (niet het verouderde auditbeleid) via GPO. Schakel ten minste in: Accountaanmelding (Geslaagd/Mislukt), Accountbeheer (Geslaagd/Mislukt), Toegang tot mapservices (Geslaagd/Mislukt), Aanmelden/Afmelden (Geslaagd/Mislukt), Objecttoegang (Geslaagd/Mislukt voor gevoelige resources), Beleidswijziging (Geslaagd), Bevoegdheidsgebruik (Geslaagd/Mislukt) en Systeem (Geslaagd/Mislukt). Implementeer op alle systemen die aan het domein zijn gekoppeld.", "status": "machine-draft" }
+  },
+  "ADGPO-019": {
+    "name": { "value": "Configuratie van Windows Firewall via GPO", "status": "machine-draft" },
+    "description": { "value": "Instellingen van Windows Defender Firewall met geavanceerde beveiliging die via GPO worden geïmplementeerd, beheren netwerktoegang op systemen die aan het domein zijn gekoppeld. GPO's die de firewall uitschakelen, te ruime binnenkomende regels toestaan of de firewall niet configureren, laten systemen kwetsbaar voor laterale beweging en netwerkgebaseerde aanvallen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Firewall ingeschakeld voor alle profielen (Domein, Privé, Openbaar) met via GPO geconfigureerde binnenkomende regels die standaard weigeren", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel de Windows Firewall-GPO-instellingen in alle toepasselijke GPO's. Zorg dat de firewall is ingeschakeld voor de profielen Domein, Privé en Openbaar. Controleer of binnenkomende regels een standaard-weigerbenadering volgen met specifieke toestaanregels uitsluitend voor vereiste services. Verwijder eventuele GPO-instellingen die de Windows Firewall uitschakelen. Test de firewallregels in een staging-OU voordat u ze domeinbreed implementeert.", "status": "machine-draft" }
+  },
+  "ADGPO-020": {
+    "name": { "value": "PowerShell-uitvoeringsbeleid via GPO", "status": "machine-draft" },
+    "description": { "value": "Het PowerShell-uitvoeringsbeleid bepaalt welke scripts op een systeem kunnen worden uitgevoerd. Hoewel het uitvoeringsbeleid geen beveiligingsgrens is, verwijdert het instellen ervan op Unrestricted of Bypass via GPO een verdedigingslaag en maakt het het voor aanvallers eenvoudiger om kwaadaardige scripts uit te voeren zonder gebruikersprompts", "status": "machine-draft" },
+    "recommendedValue": { "value": "PowerShell-uitvoeringsbeleid ingesteld op AllSigned of RemoteSigned via GPO; niet ingesteld op Unrestricted of Bypass", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel de GPO-instellingen onder Computerconfiguratie > Administratieve sjablonen > Windows-onderdelen > Windows PowerShell > Scriptuitvoering inschakelen. Stel het uitvoeringsbeleid in op AllSigned voor omgevingen met hoge beveiliging of RemoteSigned voor standaardomgevingen. Implementeer code-ondertekening voor geautoriseerde PowerShell-scripts. Vermijd het instellen van Bypass of Unrestricted via GPO.", "status": "machine-draft" }
+  },
+  "ADGPO-021": {
+    "name": { "value": "Configuratie van PowerShell-logboekregistratie", "status": "machine-draft" },
+    "description": { "value": "PowerShell-modulelogboekregistratie, scriptbloklogboekregistratie en transcriptie bieden kritiek inzicht in op PowerShell gebaseerde aanvallen, die bij het merendeel van de moderne Active Directory-compromitteringen worden gebruikt. Zonder deze logboekregistratiemogelijkheden kunnen verdedigers op PowerShell gebaseerde verkenning, referentiediefstal of laterale beweging niet detecteren of onderzoeken", "status": "machine-draft" },
+    "recommendedValue": { "value": "Modulelogboekregistratie, scriptbloklogboekregistratie en transcriptie ingeschakeld via GPO op alle systemen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configureer de GPO-instellingen onder Computerconfiguratie > Administratieve sjablonen > Windows-onderdelen > Windows PowerShell. Schakel modulelogboekregistratie in met '*' om alle modules te loggen. Schakel scriptbloklogboekregistratie in met 'Start-/stopgebeurtenissen van scriptblokaanroep loggen'. Schakel PowerShell-transcriptie in met een veilige uitvoermap. Implementeer op alle systemen die aan het domein zijn gekoppeld en controleer het verzamelen van logboeken.", "status": "machine-draft" }
+  },
+  "ADGPO-022": {
+    "name": { "value": "Beoordeling van AppLocker/WDAC-beleid", "status": "machine-draft" },
+    "description": { "value": "Toepassingsbeheerbeleid zoals AppLocker en Windows Defender Application Control beperkt welke uitvoerbare bestanden, scripts en DLL's op beheerde systemen kunnen worden uitgevoerd. Zonder toepassingsbeheer kunnen aanvallers willekeurige tools en malware op gecompromitteerde systemen uitvoeren om laterale beweging en persistentie te vergemakkelijken", "status": "machine-draft" },
+    "recommendedValue": { "value": "AppLocker- of WDAC-beleid geïmplementeerd via GPO in afdwingmodus op alle werkstations en servers met een gedocumenteerde basislijn", "status": "machine-draft" },
+    "remediationSteps": { "value": "Implementeer AppLocker- of WDAC-beleid via GPO, beginnend in auditmodus. Analyseer de auditlogboeken om een basislijn van goedgekeurde toepassingen op te bouwen. Maak toestaanlijstregels op basis van uitgever, pad of hash. Ga over van audit- naar afdwingmodus nadat u de basislijn hebt gevalideerd. Bewaak geblokkeerde uitvoeringsgebeurtenissen en werk de regels zo nodig bij.", "status": "machine-draft" }
+  },
+  "ADGPO-023": {
+    "name": { "value": "LAPS-GPO-configuratie", "status": "machine-draft" },
+    "description": { "value": "Local Administrator Password Solution (LAPS) biedt geautomatiseerde vernieuwing van lokale beheerderswachtwoorden op systemen die aan het domein zijn gekoppeld, waarmee laterale beweging via gedeelde lokale beheerdersreferenties wordt voorkomen. LAPS moet via GPO worden geïmplementeerd om effectief te zijn, en de configuratie-instellingen bepalen de wachtwoordcomplexiteit, de vernieuwingsfrequentie en welk account wordt beheerd", "status": "machine-draft" },
+    "recommendedValue": { "value": "LAPS ingeschakeld via GPO op alle systemen die aan het domein zijn gekoppeld, met wachtwoorden van 24 tekens en een maximale leeftijd van 30 dagen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Installeer de LAPS-CSE op alle beheerde systemen via GPO-software-installatie of SCCM. Configureer de LAPS-GPO-instellingen: schakel beheer van het lokale beheerderswachtwoord in, stel de wachtwoordcomplexiteit in op hoofdletters + kleine letters + cijfers + speciale tekens, stel de wachtwoordlengte in op 24 of meer tekens en stel de wachtwoordleeftijd in op 30 dagen of minder. Controleer of LAPS functioneert door de ms-Mcs-AdmPwdExpirationTime-kenmerken te controleren.", "status": "machine-draft" }
+  },
+  "ADGPO-024": {
+    "name": { "value": "Beoordeling van GPO WMI-filters", "status": "machine-draft" },
+    "description": { "value": "WMI-filters beheren GPO-toepassing op basis van WQL-query's die op doelsystemen worden geëvalueerd. Kwaadaardige of verkeerd geconfigureerde WMI-filters kunnen selectief verhinderen dat beveiligings-GPO's op specifieke systemen worden toegepast, waardoor gerichte beveiligingslacunes ontstaan. WMI-filters moeten worden beoordeeld op juistheid, prestatie-impact en mogelijk misbruik", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle WMI-filters gedocumenteerd, getest en met de verwachte resultaten; geen WMI-filters die beveiligingskritieke GPO's blokkeren", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer alle WMI-filters met Get-ADObject -Filter 'objectClass -eq \"msWMI-Som\"'. Beoordeel de WQL-query in elk filter op juistheid en test deze op representatieve doelsystemen. Controleer of WMI-filters de toepassing van beveiligingskritieke GPO's niet blokkeren. Verwijder ongebruikte WMI-filters. Documenteer het doel en het verwachte gedrag van elk actief WMI-filter.", "status": "machine-draft" }
+  }
+}

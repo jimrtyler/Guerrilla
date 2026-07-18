@@ -1,0 +1,99 @@
+{
+  "_family": "ADAclDelegationChecks.json",
+  "ADACL-001": {
+    "name": { "value": "Audit van ACL's op kritieke objecten", "status": "machine-draft" },
+    "description": { "value": "Toegangsbeheerlijsten op kritieke AD-objecten (domeinroot, AdminSDHolder, Schema, Configuration, OU Domain Controllers) moeten worden geaudit op ongeautoriseerde of buitensporige machtigingen. Verkeerd geconfigureerde ACL's op deze objecten kunnen aanvallers in staat stellen rechten te escaleren, mapservices te wijzigen of volledige controle over het domein te verkrijgen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alleen standaard en expliciet geautoriseerde ACE's op kritieke AD-objecten; geen onverwachte principals met wijzig- of volledige controletoegang", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel ACL's op kritieke objecten met Get-Acl of dsacls.exe. Verwijder niet-standaard ACE's die schrijf-, wijzig- of volledige controlemachtigingen verlenen aan ongeautoriseerde principals. Gebruik AdminSDHolder om consistente ACL's op beschermde groepen af te dwingen. Documenteer alle bedoelde delegaties.", "status": "machine-draft" }
+  },
+  "ADACL-002": {
+    "name": { "value": "GenericAll-machtigingen op kritieke objecten", "status": "machine-draft" },
+    "description": { "value": "GenericAll verleent volledige controle over een AD-object, waaronder de mogelijkheid om kenmerken te wijzigen, wachtwoorden opnieuw in te stellen, groepslidmaatschap te wijzigen en de DACL aan te passen. Niet-standaard principals met GenericAll op kritieke objecten zoals domeinbeheerders, domeincontrollers of de domeinroot vormen een directe weg naar compromittering van het domein", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen niet-standaard principals met GenericAll op kritieke AD-objecten", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer ACL's op kritieke objecten met PowerShell of BloodHound. Verwijder GenericAll-ACE's voor elke principal die geen volledige controle nodig heeft. Vervang ze door gedelegeerde machtigingen met minimale rechten waar operationele behoeften bestaan. Bewaak ACL-wijzigingen via auditing van wijzigingen in mapservices (Event ID 5136).", "status": "machine-draft" }
+  },
+  "ADACL-003": {
+    "name": { "value": "GenericWrite-machtigingen op kritieke objecten", "status": "machine-draft" },
+    "description": { "value": "GenericWrite maakt wijziging van de meeste kenmerken op een object mogelijk, wat aanvallen mogelijk maakt zoals gericht Kerberoasting (het schrijven van een SPN), Resource-Based Constrained Delegation (het schrijven van msDS-AllowedToActOnBehalfOfOtherIdentity) of Shadow Credentials (het schrijven van msDS-KeyCredentialLink). Niet-standaard principals met GenericWrite op kritieke objecten moeten worden onderzocht", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen niet-standaard principals met GenericWrite op kritieke AD-objecten", "status": "machine-draft" },
+    "remediationSteps": { "value": "Audit ACL's op gebruikers-, computer- en groepsobjecten op GenericWrite-machtigingen. Verwijder onnodige GenericWrite-ACE's en vervang ze door specifieke schrijfmachtigingen op kenmerkniveau. Besteed bijzondere aandacht aan schrijftoegang op de kenmerken msDS-AllowedToActOnBehalfOfOtherIdentity, servicePrincipalName en msDS-KeyCredentialLink.", "status": "machine-draft" }
+  },
+  "ADACL-004": {
+    "name": { "value": "WriteDACL-machtigingen op kritieke objecten", "status": "machine-draft" },
+    "description": { "value": "De machtiging WriteDACL stelt een principal in staat de discretionaire toegangsbeheerlijst van een object te wijzigen, wat feitelijk de mogelijkheid verleent om elke machtiging, inclusief GenericAll, aan zichzelf of anderen toe te kennen. Dit is een kritieke vector voor rechtenescalatie omdat het een aanvaller in staat stelt zichzelf volledige controle te verlenen zonder deze rechtstreeks te bezitten", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen niet-standaard principals met WriteDACL op kritieke AD-objecten", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer WriteDACL-machtigingen op alle kritieke objecten, waaronder de domeinroot, AdminSDHolder, GPO-objecten en objecten van bevoorrechte groepen. Verwijder WriteDACL voor niet-standaard principals. Schakel auditing van ACL-wijzigingen in (Event ID 5136) om ongeautoriseerde DACL-wijzigingen te detecteren. Beoordeel wijzigingen regelmatig.", "status": "machine-draft" }
+  },
+  "ADACL-005": {
+    "name": { "value": "WriteOwner-machtigingen op kritieke objecten", "status": "machine-draft" },
+    "description": { "value": "De machtiging WriteOwner maakt het mogelijk de eigenaar van een AD-object te wijzigen. De eigenaar van een object heeft impliciet de mogelijkheid de DACL te wijzigen, waardoor WriteOwner vanuit aanvalsperspectief functioneel gelijkwaardig is aan WriteDACL. Een aanvaller kan het eigendom overnemen en zichzelf vervolgens elke gewenste machtiging verlenen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen niet-standaard principals met WriteOwner op kritieke AD-objecten", "status": "machine-draft" },
+    "remediationSteps": { "value": "Audit WriteOwner-machtigingen op kritieke objecten. Verwijder WriteOwner-ACE's voor niet-standaard principals. Controleer of de eigenaren van objecten passende bevoorrechte accounts zijn. Schakel auditing van eigendomswijzigingen in en bewaak Event ID 4662 op WriteOwner-bewerkingen.", "status": "machine-draft" }
+  },
+  "ADACL-006": {
+    "name": { "value": "ForceChangePassword-rechten", "status": "machine-draft" },
+    "description": { "value": "Het uitgebreide recht User-Force-Change-Password (ook bekend als Reset Password) stelt een principal in staat het wachtwoord van een andere gebruiker opnieuw in te stellen zonder het huidige wachtwoord te kennen. Wanneer dit wordt verleend aan niet-bevoorrechte accounts of brede groepen, ontstaat er een directe weg voor accountovername die de normale authenticatievereisten omzeilt", "status": "machine-draft" },
+    "recommendedValue": { "value": "ForceChangePassword beperkt tot uitsluitend geautoriseerde helpdesk- en beheergroepen; niet verleend aan niet-bevoorrechte accounts", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer alle principals met het uitgebreide recht User-Force-Change-Password op gebruikersobjecten. Controleer of elke delegatie bedoeld is en passend is afgebakend. Verwijder rechten van elke principal die geen gedocumenteerde operationele behoefte heeft. Gebruik OU-afgebakende delegatie in plaats van domeinbrede verleningen.", "status": "machine-draft" }
+  },
+  "ADACL-007": {
+    "name": { "value": "Buitensporige delegatie aan brede groepen", "status": "machine-draft" },
+    "description": { "value": "Delegatie van gevoelige machtigingen aan brede groepen zoals Authenticated Users, Domain Users of Everyone creëert een breed aanvalsoppervlak waarbij elk gecompromitteerd account de gedelegeerde rechten kan misbruiken. Dit is een veelvoorkomende verkeerde configuratie die de benodigde inspanning voor rechtenescalatie drastisch verlaagt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen gevoelige machtigingen gedelegeerd aan Authenticated Users, Domain Users, Everyone of andere brede groepen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Audit alle ACL's op ACE's die zijn verleend aan bekende brede groepen (S-1-5-11 Authenticated Users, Domain Users, Everyone, Domain Computers). Vervang delegaties aan brede groepen door specifieke beveiligingsgroepen die alleen de vereiste principals bevatten. Pas delegaties toe op de smalst mogelijke OU-afbakening.", "status": "machine-draft" }
+  },
+  "ADACL-008": {
+    "name": { "value": "Analyse van OU-delegatie", "status": "machine-draft" },
+    "description": { "value": "Delegatie op organisatie-eenheden is de aanbevolen methode om beheermachtigingen in Active Directory te verlenen, maar verkeerd geconfigureerde OU-delegaties kunnen onbedoelde toegangspaden creëren. Deze controle analyseert alle machtigingsdelegaties op OU-niveau om te ruime verleningen, overgeërfde machtigingen die de bedoelde afbakening omzeilen en delegaties die verouderd kunnen zijn te identificeren", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle OU-delegaties gedocumenteerd, afgebakend tot specifieke objecttypen en met machtigingen op basis van minimale rechten", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel alle niet-standaard ACE's op elke OU met dsacls.exe of PowerShell. Controleer of delegaties het kenmerk InheritedObjectType gebruiken om machtigingen af te bakenen tot specifieke objectklassen. Verwijder delegaties die niet langer vereist zijn. Documenteer alle bedoelde delegaties in een autorisatiematrix.", "status": "machine-draft" }
+  },
+  "ADACL-009": {
+    "name": { "value": "Quotum voor machineaccounts", "status": "machine-draft" },
+    "description": { "value": "Het kenmerk ms-DS-MachineAccountQuota op de domeinroot bepaalt hoeveel computeraccounts een geauthenticeerde gebruiker kan aanmaken. De standaardwaarde van 10 stelt elke domeingebruiker in staat computers aan het domein toe te voegen en machineaccounts te creëren die kunnen worden misbruikt voor op resources gebaseerde gebonden delegatie-aanvallen, relay-aanvallen en andere technieken voor rechtenescalatie", "status": "machine-draft" },
+    "recommendedValue": { "value": "ms-DS-MachineAccountQuota ingesteld op 0", "status": "machine-draft" },
+    "remediationSteps": { "value": "Stel ms-DS-MachineAccountQuota in op 0 op de domeinroot met Set-ADDomain -Identity (Get-ADDomain) -Replace @{'ms-DS-MachineAccountQuota'=0}. Delegeer het aanmaken van computeraccounts aan specifieke beheergroepen of gebruik een prestaging-workflow. Beoordeel bestaande computeraccounts die door niet-beheergebruikers zijn aangemaakt.", "status": "machine-draft" }
+  },
+  "ADACL-010": {
+    "name": { "value": "Audit van uitgebreide rechten", "status": "machine-draft" },
+    "description": { "value": "Uitgebreide rechten in Active Directory omvatten krachtige bewerkingen zoals DS-Replication-Get-Changes (DCSync), User-Force-Change-Password en DS-Replication-Get-Changes-All. Ongeautoriseerde verlening van deze rechten kan leiden tot volledige compromittering van het domein via referentiediefstal of directe accountovername", "status": "machine-draft" },
+    "recommendedValue": { "value": "Uitgebreide rechten beperkt tot standaard en expliciet geautoriseerde principals; DCSync-rechten alleen op domeincontrollers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer alle ACE's voor uitgebreide rechten op de domeinroot en kritieke objecten. Controleer of DS-Replication-Get-Changes en DS-Replication-Get-Changes-All alleen worden verleend aan domeincontrollers en geautoriseerde replicatieaccounts. Verwijder alle niet-standaard verleningen van uitgebreide rechten. Bewaak Event ID 4662 op het gebruik van uitgebreide rechten.", "status": "machine-draft" }
+  },
+  "ADACL-011": {
+    "name": { "value": "Eigendom van kritieke objecten", "status": "machine-draft" },
+    "description": { "value": "De eigenaar van een AD-object heeft impliciete machtiging om de DACL van het object te wijzigen, ongeacht de expliciete ACL-vermeldingen. Als kritieke objecten zoals de domeinroot, AdminSDHolder, bevoorrechte groepen of GPO's eigendom zijn van niet-bevoorrechte of onverwachte accounts, hebben die accounts een verborgen weg naar volledige controle", "status": "machine-draft" },
+    "recommendedValue": { "value": "Kritieke objecten uitsluitend eigendom van Domain Admins, Enterprise Admins of SYSTEM", "status": "machine-draft" },
+    "remediationSteps": { "value": "Inventariseer het eigendom van alle kritieke objecten, waaronder de domeinroot, AdminSDHolder, de Schema-container, de Configuration-container, objecten van bevoorrechte groepen en GPO-objecten. Draag het eigendom van onjuist eigende objecten over aan Domain Admins met Set-Acl of het tabblad Beveiliging in ADUC. Schakel auditing van eigendomswijzigingen in.", "status": "machine-draft" }
+  },
+  "ADACL-012": {
+    "name": { "value": "Niet-standaard machtigingen op de domeinroot", "status": "machine-draft" },
+    "description": { "value": "Het domeinroot-object staat aan de top van de AD-hiërarchie en machtigingen die hier worden ingesteld kunnen door de hele map worden overgeërfd. Niet-standaard ACE's op de domeinroot die schrijf-, wijzig- of uitgebreide rechten verlenen aan onverwachte principals vormen een aanzienlijk risico, aangezien ze elk object in het domein kunnen beïnvloeden", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alleen standaard Microsoft-ACE's op de domeinroot; alle aangepaste ACE's gedocumenteerd en gerechtvaardigd", "status": "machine-draft" },
+    "remediationSteps": { "value": "Vergelijk de huidige ACL van de domeinroot met de standaard-ACL voor het functionele niveau van uw domein. Documenteer alle niet-standaard ACE's en valideer hun operationele noodzaak. Verwijder ACE's die niet langer vereist zijn of die buitensporige machtigingen verlenen. Besteed bijzondere aandacht aan ACE's die van toepassing zijn op 'Dit object en alle onderliggende objecten'.", "status": "machine-draft" }
+  },
+  "ADACL-013": {
+    "name": { "value": "Machtigingen voor GPO-koppelingen", "status": "machine-draft" },
+    "description": { "value": "De mogelijkheid om Groepsbeleidsobjecten te koppelen aan sites, domeinen of OU's bepaalt welk beleid op welke objecten van toepassing is. Ongeautoriseerde machtigingen voor GPO-koppelingen stellen een aanvaller in staat kwaadaardige GPO's toe te passen op gerichte OU's, waarmee mogelijk malware wordt uitgerold, beveiligingsinstellingen worden gewijzigd of geplande taken worden aangemaakt op getroffen computers", "status": "machine-draft" },
+    "recommendedValue": { "value": "Machtigingen voor GPO-koppelingen beperkt tot uitsluitend geautoriseerde Groepsbeleidsbeheerders", "status": "machine-draft" },
+    "remediationSteps": { "value": "Audit schrijfmachtigingen voor gPLink en gPOptions op alle OU's, de domeinroot en site-objecten. Verwijder machtigingen voor GPO-koppelingen van niet-beheerprincipals. Gebruik Groepsbeleidsmodellering om de impact van huidige GPO-koppelingen te verifiëren. Voer wijzigingsbeheer in voor GPO-koppelingsbewerkingen.", "status": "machine-draft" }
+  },
+  "ADACL-014": {
+    "name": { "value": "Machtigingen voor het bewerken van GPO's", "status": "machine-draft" },
+    "description": { "value": "Machtigingen om Groepsbeleidsobjecten te bewerken maken wijziging mogelijk van domeinbrede beveiligingsinstellingen, software-implementatie, aanmeldscripts en geplande taken. Ongeautoriseerde bewerktoegang tot GPO's is een waardevol doelwit voor aanvallers, aangezien het wijdverspreide code-uitvoering en configuratiewijzigingen in de hele omgeving mogelijk maakt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Machtigingen voor het bewerken van GPO's beperkt tot uitsluitend Group Policy Creator Owners en geautoriseerde beheerders", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel de tabbladen voor beveiligingsfiltering en delegatie op elke GPO. Controleer of alleen geautoriseerde principals de machtigingen Instellingen bewerken, Verwijderen of Beveiliging wijzigen hebben. Verwijder machtigingen voor het bewerken van GPO's van niet-beheergroepen. Gebruik de Groepsbeleidsbeheerconsole om GPO-machtigingen systematisch te auditen.", "status": "machine-draft" }
+  },
+  "ADACL-015": {
+    "name": { "value": "Detectie van shadow admins", "status": "machine-draft" },
+    "description": { "value": "Shadow admins zijn accounts die via ACL-ketens indirecte paden hebben naar toegang die gelijkwaardig is aan Domain Admin, maar geen lid zijn van bevoorrechte groepen. Deze accounts omzeilen de bescherming van AdminSDHolder en traditionele bewaking van bevoorrechte toegang. Een account met WriteDACL op de groep Domain Admins kan zichzelf bijvoorbeeld lidmaatschap verlenen zonder te worden gemarkeerd door bewaking van groepslidmaatschap", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen shadow-adminpaden geïdentificeerd; alle beheerdersgelijkwaardige toegang verloopt via expliciet lidmaatschap van bevoorrechte groepen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Gebruik BloodHound of vergelijkbare tools om op ACL gebaseerde aanvalspaden naar Domain Admin-gelijkwaardige toegang te identificeren. Verwijder onnodige ACE's die indirecte paden voor rechtenescalatie creëren. Zorg dat alle beheertoegang wordt verleend via lidmaatschap van beschermde groepen. Voer regelmatige aanvalspadanalyse uit als onderdeel van de beveiligingsactiviteiten.", "status": "machine-draft" }
+  },
+  "ADACL-016": {
+    "name": { "value": "Inventarisatie van aanvalspaden", "status": "machine-draft" },
+    "description": { "value": "Aanvalspaden in Active Directory zijn ketens van machtigingen, groepslidmaatschappen en vertrouwensrelaties die kunnen worden doorlopen om te escaleren van een laag bevoorrecht account naar domeinbeheerder. Uitgebreide inventarisatie van aanvalspaden identificeert risico's die individuele ACL-controles mogelijk missen, zoals escalatieketens met meerdere stappen via tussenliggende objecten", "status": "machine-draft" },
+    "recommendedValue": { "value": "Geen haalbare aanvalspaden van niet-bevoorrechte gebruikers naar Tier 0-assets; alle geïdentificeerde paden verholpen of gedocumenteerd als geaccepteerd risico", "status": "machine-draft" },
+    "remediationSteps": { "value": "Voer aanvalspadanalyse uit met tools zoals BloodHound. Richt u op de kortste paden van Domain Users of Authenticated Users naar Domain Admins, Enterprise Admins en Domain Controllers. Doorbreek geïdentificeerde aanvalsketens door de zwakste schakel in elk pad te verwijderen. Geef prioriteit aan paden die kunnen worden misbruikt zonder speciale tools of verhoogde toegang.", "status": "machine-draft" }
+  }
+}

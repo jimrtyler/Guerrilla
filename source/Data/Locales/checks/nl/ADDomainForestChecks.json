@@ -1,0 +1,123 @@
+{
+  "_family": "ADDomainForestChecks.json",
+  "ADDOM-001": {
+    "name": { "value": "Functioneel niveau van het forest", "status": "machine-draft" },
+    "description": { "value": "Het functionele niveau van het Active Directory-forest moet Windows Server 2016 of hoger zijn om moderne beveiligingsfuncties zoals Privileged Access Management en verbeterde Kerberos-beschermingen in te schakelen. Het draaien van oudere functionele niveaus stelt de omgeving bloot aan aanvallen die de zwakheden van verouderde protocollen misbruiken", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 of hoger", "status": "machine-draft" },
+    "remediationSteps": { "value": "Verhoog het functionele niveau van het forest via Active Directory-domeinen en -vertrouwensrelaties > klik met de rechtermuisknop op de forestroot > Functioneel niveau van forest verhogen. Zorg dat alle domeincontrollers een ondersteunde OS-versie draaien voordat u het niveau verhoogt", "status": "machine-draft" }
+  },
+  "ADDOM-002": {
+    "name": { "value": "Functioneel niveau van het domein", "status": "machine-draft" },
+    "description": { "value": "Het functionele niveau van het Active Directory-domein moet Windows Server 2016 of hoger zijn. Lagere functionele niveaus verhinderen het gebruik van kritieke beveiligingsfuncties, waaronder de functionaliteit van de groep Protected Users, authenticatiebeleid en moderne Kerberos-armoring", "status": "machine-draft" },
+    "recommendedValue": { "value": "Windows Server 2016 of hoger", "status": "machine-draft" },
+    "remediationSteps": { "value": "Verhoog het functionele niveau van het domein via Active Directory-domeinen en -vertrouwensrelaties > klik met de rechtermuisknop op het domein > Functioneel niveau van domein verhogen. Controleer eerst of alle DC's in het domein een compatibele OS-versie draaien", "status": "machine-draft" }
+  },
+  "ADDOM-003": {
+    "name": { "value": "Identificatie van de schemaversie", "status": "machine-draft" },
+    "description": { "value": "De AD-schemaversie moet worden gedocumenteerd en overeenkomen met de nieuwste ondersteunde versie. Een verouderd schema kan kenmerken missen die vereist zijn voor moderne beveiligingsfuncties en toepassingen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Schemaversie die overeenkomt met Windows Server 2022 (versie 88) of later", "status": "machine-draft" },
+    "remediationSteps": { "value": "Voer adprep /forestprep en adprep /domainprep uit vanaf de nieuwste installatiemedia van Windows Server om het schema bij te werken. Controleer het kenmerk objectVersion op CN=Schema,CN=Configuration,DC=domain", "status": "machine-draft" }
+  },
+  "ADDOM-004": {
+    "name": { "value": "Inventaris van domeincontrollers", "status": "machine-draft" },
+    "description": { "value": "Alle domeincontrollers moeten worden geïnventariseerd met hun OS-versie, patchniveau en locatie. Niet-bijgehouden domeincontrollers vormen een aanzienlijk beveiligingsrisico, aangezien ze patches kunnen missen of onopgemerkt gecompromitteerd kunnen raken", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle domeincontrollers gedocumenteerd met de huidige OS-versie, sitelidmaatschap en patchstatus", "status": "machine-draft" },
+    "remediationSteps": { "value": "Bevraag alle DC-computerobjecten uit de OU Domain Controllers. Controleer of elke DC in kaart is gebracht, een ondersteunde OS-versie draait en regelmatig patches ontvangt. Verwijder of degradeer eventuele ongeautoriseerde DC's onmiddellijk", "status": "machine-draft" }
+  },
+  "ADDOM-005": {
+    "name": { "value": "Verouderd besturingssysteem op domeincontrollers", "status": "machine-draft" },
+    "description": { "value": "Domeincontrollers die een besturingssysteem draaien waarvan de levensduur is verstreken (Windows Server 2012 R2 of eerder) ontvangen geen beveiligingsupdates en zijn kwetsbaar voor bekende exploits. Dit vormt een kritiek infrastructuurrisico, aangezien het compromitteren van een DC volledige controle over het domein geeft", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle domeincontrollers draaien Windows Server 2019 of later met actuele patches", "status": "machine-draft" },
+    "remediationSteps": { "value": "Plan de migratie van DC's die een verouderd besturingssysteem draaien. Bouw nieuwe DC's op Windows Server 2022, draag zo nodig FSMO-rollen over, repliceer, en degradeer en ontmantel vervolgens de oude DC's. Geef prioriteit aan deze verhelping, aangezien verouderde DC's actief worden aangevallen", "status": "machine-draft" }
+  },
+  "ADDOM-006": {
+    "name": { "value": "Identificatie van FSMO-rolhouders", "status": "machine-draft" },
+    "description": { "value": "De vijf FSMO-rollen (Schema Master, Domain Naming Master, RID Master, PDC Emulator, Infrastructure Master) moeten worden gedocumenteerd en op geschikte domeincontrollers worden geplaatst. Kennis van de rolplaatsing is essentieel voor noodherstel en operationeel bewustzijn", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle FSMO-rollen gedocumenteerd, geplaatst op betrouwbare DC's en opgenomen in de planning voor noodherstel", "status": "machine-draft" },
+    "remediationSteps": { "value": "Voer 'netdom query fsmo' uit of bevraag het AD-schema en de domeinpartities om de rolhouders te identificeren. Documenteer de rollen en controleer of ze op hoogbeschikbare DC's staan. Draag rollen over als de huidige houders ongeschikt zijn", "status": "machine-draft" }
+  },
+  "ADDOM-007": {
+    "name": { "value": "Gezondheid van AD-replicatie", "status": "machine-draft" },
+    "description": { "value": "Fouten in Active Directory-replicatie kunnen leiden tot inconsistente toepassing van beveiligingsbeleid, verouderde referenties die geldig blijven en split-brain-scenario's. Aanhoudende replicatiefouten kunnen ook wijzen op een gecompromitteerde of malafide DC", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle domeincontrollers repliceren succesvol zonder fouten in de afgelopen 24 uur", "status": "machine-draft" },
+    "remediationSteps": { "value": "Voer 'repadmin /replsummary' en 'repadmin /showrepl' uit om fouten te identificeren. Onderzoek en los DNS-problemen, netwerkverbindingsproblemen of USN-rollbackcondities op. Bewaak de replicatiestatus als onderdeel van de routineactiviteiten", "status": "machine-draft" }
+  },
+  "ADDOM-008": {
+    "name": { "value": "Configuratie van tombstone-levensduur", "status": "machine-draft" },
+    "description": { "value": "De tombstone-levensduur bepaalt hoelang verwijderde objecten worden bewaard voordat ze definitief worden verwijderd en bepaalt de maximale offlinetijd voor een DC voordat deze opnieuw moet worden opgebouwd. Een te lage waarde kan achterblijvende objecten veroorzaken; de standaardwaarde van 60 dagen moet voor moderne omgevingen worden verhoogd naar 180 dagen", "status": "machine-draft" },
+    "recommendedValue": { "value": "180 dagen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Wijzig het kenmerk tombstoneLifetime op CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=domain. Stel dit in op 180 met ADSIEdit of PowerShell. Zorg dat de AD-prullenbak is ingeschakeld voordat u de wijziging aanbrengt", "status": "machine-draft" }
+  },
+  "ADDOM-009": {
+    "name": { "value": "Status van de AD-prullenbak", "status": "machine-draft" },
+    "description": { "value": "De Active Directory-prullenbak maakt herstel van verwijderde objecten met alle kenmerken intact mogelijk. Zonder deze functie vereist het herstellen van per ongeluk of kwaadwillig verwijderde objecten een gezaghebbend herstel vanuit een back-up, wat aanzienlijke downtime veroorzaakt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Ingeschakeld", "status": "machine-draft" },
+    "remediationSteps": { "value": "Schakel de AD-prullenbak in via het Active Directory-beheercentrum > klik met de rechtermuisknop op het domein > Prullenbak inschakelen, of voer Enable-ADOptionalFeature 'Recycle Bin Feature' uit in PowerShell. Let op: deze actie is onomkeerbaar", "status": "machine-draft" }
+  },
+  "ADDOM-010": {
+    "name": { "value": "Configuratie van sites en subnetten", "status": "machine-draft" },
+    "description": { "value": "Alle in gebruik zijnde IP-subnetten moeten aan AD-sites worden toegewezen. Ontbrekende subnet-naar-site-toewijzingen zorgen ervoor dat clients zich authenticeren bij suboptimale DC's, waarbij referenties mogelijk in leesbare tekst over WAN-verbindingen worden verzonden en de beveiligingshouding wordt verzwakt", "status": "machine-draft" },
+    "recommendedValue": { "value": "Alle IP-subnetten toegewezen aan de juiste AD-sites zonder verweesde subnetten", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel AD-sites en -services > container Subnets. Correleer met de netwerkdocumentatie om niet-toegewezen subnetten te identificeren. Maak subnetobjecten voor alle productienetwerken en koppel ze aan de juiste site", "status": "machine-draft" }
+  },
+  "ADDOM-011": {
+    "name": { "value": "Configuratie van sitekoppelingen", "status": "machine-draft" },
+    "description": { "value": "AD-sitekoppelingen moeten worden geconfigureerd met de juiste kosten, replicatie-interval en schema om tijdige replicatie te waarborgen en tegelijk de netwerkbeperkingen te respecteren. Verkeerd geconfigureerde sitekoppelingen kunnen de verspreiding van beveiligingsbeleid vertragen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Sitekoppelingen geconfigureerd met passende kosten en replicatie-intervallen van 15 tot 60 minuten, afhankelijk van de capaciteit van de koppeling", "status": "machine-draft" },
+    "remediationSteps": { "value": "Beoordeel AD-sites en -services > Inter-Site Transports > IP. Controleer of elke sitekoppeling passende kostenwaarden, een replicatie-interval (de standaard van 180 minuten is vaak te lang) en een schema heeft. Pas deze aan op basis van de netwerktopologie", "status": "machine-draft" }
+  },
+  "ADDOM-012": {
+    "name": { "value": "Beveiliging van DNS-zones", "status": "machine-draft" },
+    "description": { "value": "In AD geïntegreerde DNS-zones moeten uitsluitend veilige dynamische updates gebruiken. Het toestaan van niet-veilige updates stelt aanvallers in staat DNS-records te vervuilen, authenticatieverkeer om te leiden en adversary-in-the-middle-aanvallen uit te voeren tegen systemen die aan het domein zijn gekoppeld", "status": "machine-draft" },
+    "recommendedValue": { "value": "Uitsluitend veilige dynamische updates op alle in AD geïntegreerde DNS-zones", "status": "machine-draft" },
+    "remediationSteps": { "value": "Open DNS-beheer > klik met de rechtermuisknop op elke in AD geïntegreerde zone > Eigenschappen > tabblad Algemeen > wijzig Dynamische updates in 'Alleen veilig'. Beoordeel alle zones voor voorwaartse en omgekeerde naamomzetting. Controleer DNSSEC-ondertekening indien van toepassing", "status": "machine-draft" }
+  },
+  "ADDOM-013": {
+    "name": { "value": "Vereisten voor LDAP-ondertekening", "status": "machine-draft" },
+    "description": { "value": "LDAP-ondertekening moet op alle domeincontrollers worden vereist om adversary-in-the-middle-aanvallen op LDAP-verkeer te voorkomen. Zonder ondertekening kunnen aanvallers LDAP-query's en -antwoorden onderscheppen en wijzigen, waarmee ze mogelijk rechten escaleren of gegevens exfiltreren", "status": "machine-draft" },
+    "recommendedValue": { "value": "Vereiste voor LDAP-serverondertekening ingesteld op 'Ondertekening vereisen' op alle DC's", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configureer via Groepsbeleid: Computerconfiguratie > Beleid > Windows-instellingen > Beveiligingsinstellingen > Lokaal beleid > Beveiligingsopties > 'Domeincontroller: vereisten voor LDAP-serverondertekening' = 'Ondertekening vereisen'. Pas dit toe op de OU Domain Controllers", "status": "machine-draft" }
+  },
+  "ADDOM-014": {
+    "name": { "value": "LDAP-kanaalkoppeling", "status": "machine-draft" },
+    "description": { "value": "Tokens voor LDAP-kanaalkoppeling voorkomen relay-aanvallen door de LDAP-sessie cryptografisch aan het TLS-kanaal te binden. Zonder kanaalkoppeling kunnen aanvallers LDAP-authenticatie doorsturen om ongeautoriseerde toegang te verkrijgen", "status": "machine-draft" },
+    "recommendedValue": { "value": "LDAP-kanaalkoppeling ingesteld op 'Altijd' op alle domeincontrollers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Stel de registerwaarde LdapEnforceChannelBinding in op 2 (Altijd) bij HKLM\\System\\CurrentControlSet\\Services\\NTDS\\Parameters op alle DC's. Test eerst met waarde 1 (Indien ondersteund) om incompatibele clients te identificeren", "status": "machine-draft" }
+  },
+  "ADDOM-015": {
+    "name": { "value": "Vereisten voor SMB-ondertekening", "status": "machine-draft" },
+    "description": { "value": "SMB-ondertekening moet op alle domeincontrollers worden vereist om adversary-in-the-middle- en relay-aanvallen op SMB-verkeer te voorkomen. SMB-relay-aanvallen kunnen worden gebruikt om toegang op SYSTEM-niveau tot domeincontrollers te verkrijgen, wat leidt tot volledige compromittering van het domein", "status": "machine-draft" },
+    "recommendedValue": { "value": "SMB-ondertekening vereist op alle domeincontrollers en lidservers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configureer via Groepsbeleid: Computerconfiguratie > Beleid > Windows-instellingen > Beveiligingsinstellingen > Lokaal beleid > Beveiligingsopties > 'Microsoft-netwerkserver: communicatie digitaal ondertekenen (altijd)' = Ingeschakeld. Pas dit toe op de OU Domain Controllers en alle server-OU's", "status": "machine-draft" }
+  },
+  "ADDOM-016": {
+    "name": { "value": "Detectie van NTLMv1-gebruik", "status": "machine-draft" },
+    "description": { "value": "NTLMv1 is een ernstig verzwakt authenticatieprotocol dat met moderne hardware in seconden kan worden gekraakt. Elk gebruik van NTLMv1 in de omgeving moet worden geïdentificeerd en geëlimineerd, aangezien het referenties blootstelt aan triviale offline aanvallen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Nul NTLMv1-authenticatiegebeurtenissen gedetecteerd; het niveau van LAN Manager-authenticatie ingesteld op het weigeren van NTLMv1", "status": "machine-draft" },
+    "remediationSteps": { "value": "Schakel NTLM-auditing in via Groepsbeleid: Computerconfiguratie > Beleid > Windows-instellingen > Beveiligingsinstellingen > Lokaal beleid > Beveiligingsopties > instellingen voor 'Netwerkbeveiliging: NTLM beperken'. Beoordeel de gebeurtenislogboeken op NTLMv1-gebruik en verhelp toepassingen, en stel vervolgens 'Netwerkbeveiliging: niveau van LAN Manager-authenticatie' in op 'Alleen NTLMv2-antwoord verzenden. LM en NTLM weigeren'", "status": "machine-draft" }
+  },
+  "ADDOM-017": {
+    "name": { "value": "Afdwinging van NTLMv2", "status": "machine-draft" },
+    "description": { "value": "Het niveau van LAN Manager-authenticatie moet worden geconfigureerd om alleen NTLMv2-antwoorden te verzenden en LM en NTLMv1 te weigeren. Hoewel NTLMv2 nog steeds minder veilig is dan Kerberos, is het aanzienlijk sterker dan NTLMv1 en moet het de minimale NTLM-standaard zijn", "status": "machine-draft" },
+    "recommendedValue": { "value": "Niveau van LAN Manager-authenticatie ingesteld op 'Alleen NTLMv2-antwoord verzenden. LM en NTLM weigeren' (niveau 5)", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configureer via Groepsbeleid: Computerconfiguratie > Beleid > Windows-instellingen > Beveiligingsinstellingen > Lokaal beleid > Beveiligingsopties > 'Netwerkbeveiliging: niveau van LAN Manager-authenticatie' = 'Alleen NTLMv2-antwoord verzenden. LM en NTLM weigeren'. Test grondig vóór afdwinging", "status": "machine-draft" }
+  },
+  "ADDOM-018": {
+    "name": { "value": "Inventarisatie via null-sessie", "status": "machine-draft" },
+    "description": { "value": "Anonieme toegang (null-sessie) tot Active Directory stelt niet-geauthenticeerde aanvallers in staat gebruikers, groepen, shares en domeininformatie te inventariseren. Deze verkenningsgegevens worden gebruikt om referentieaanvallen en laterale beweging te plannen", "status": "machine-draft" },
+    "recommendedValue": { "value": "Inventarisatie via null-sessie uitgeschakeld; RestrictAnonymous en RestrictAnonymousSAM ingesteld om anonieme toegang te voorkomen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Configureer via Groepsbeleid: Computerconfiguratie > Beleid > Windows-instellingen > Beveiligingsinstellingen > Lokaal beleid > Beveiligingsopties > stel 'Netwerktoegang: anonieme toegang tot named pipes en shares beperken' = Ingeschakeld, 'Netwerktoegang: anonieme inventarisatie van SAM-accounts niet toestaan' = Ingeschakeld, 'Netwerktoegang: anonieme inventarisatie van SAM-accounts en -shares niet toestaan' = Ingeschakeld in", "status": "machine-draft" }
+  },
+  "ADDOM-019": {
+    "name": { "value": "Print Spooler op domeincontrollers", "status": "machine-draft" },
+    "description": { "value": "De Print Spooler-service op domeincontrollers maakt de PrintNightmare-aanval (CVE-2021-34527) en de SpoolSample/PrinterBug-aanvallen mogelijk. Een aanvaller kan een DC dwingen zich te authenticeren bij een door de aanvaller beheerde server, waardoor referentierelay en misbruik van ongebonden delegatie mogelijk worden", "status": "machine-draft" },
+    "recommendedValue": { "value": "Print Spooler-service uitgeschakeld op alle domeincontrollers", "status": "machine-draft" },
+    "remediationSteps": { "value": "Schakel de Print Spooler-service uit op alle domeincontrollers via Groepsbeleid: Computerconfiguratie > Beleid > Windows-instellingen > Beveiligingsinstellingen > Systeemservices > Print Spooler > Opstartmodus = Uitgeschakeld. Pas dit toe op de OU Domain Controllers. Controleer of geen enkele afdrukfunctionaliteit afhankelijk is van DC's", "status": "machine-draft" }
+  },
+  "ADDOM-020": {
+    "name": { "value": "Configuratie van het DSRM-wachtwoord", "status": "machine-draft" },
+    "description": { "value": "Het wachtwoord voor Directory Services Restore Mode (DSRM) biedt lokale beheerderstoegang tot een domeincontroller wanneer deze in de herstelmodus wordt opgestart. Een aanvaller met fysieke of externe toegang die het DSRM-wachtwoord kent, kan de volledige AD-database uitlezen. Het DSRM-wachtwoord moet per DC uniek zijn en regelmatig worden vernieuwd", "status": "machine-draft" },
+    "recommendedValue": { "value": "DSRM-wachtwoord uniek per DC, jaarlijks vernieuwd en veilig opgeslagen. DsrmAdminLogonBehavior ingesteld op 0 om DSRM-aanmelding via het netwerk te voorkomen", "status": "machine-draft" },
+    "remediationSteps": { "value": "Stel DSRM-wachtwoorden opnieuw in met 'ntdsutil > set dsrm password' op elke DC. Stel de registerwaarde DsrmAdminLogonBehavior in op 0 bij HKLM\\System\\CurrentControlSet\\Control\\Lsa om te voorkomen dat het DSRM-account voor netwerkaanmelding wordt gebruikt. Documenteer en bewaar wachtwoorden veilig", "status": "machine-draft" }
+  }
+}
