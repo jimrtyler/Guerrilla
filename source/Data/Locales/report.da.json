@@ -1,0 +1,1476 @@
+{
+  "_language": {
+    "code": "da",
+    "name": "Dansk"
+  },
+  "common": {
+    "domain": {
+      "value": "Domæne",
+      "status": "machine-draft"
+    },
+    "tenant": {
+      "value": "Lejer",
+      "status": "machine-draft"
+    },
+    "generated": {
+      "value": "Genereret",
+      "status": "machine-draft"
+    },
+    "reportGenerated": {
+      "value": "Rapport genereret",
+      "status": "machine-draft"
+    },
+    "checksSummary": {
+      "value": "{0} kontroller vurderet &middot; {1} bestået, {2} fejlet, {3} advarsler, {4} sprunget over",
+      "status": "machine-draft"
+    },
+    "summaryCounts": {
+      "value": "{0} kontroller &middot; B:{1} F:{2} A:{3}",
+      "status": "machine-draft"
+    },
+    "totalChecks": {
+      "value": "Kontroller i alt",
+      "status": "machine-draft"
+    },
+    "passed": {
+      "value": "Bestået",
+      "status": "machine-draft"
+    },
+    "failed": {
+      "value": "Fejlet",
+      "status": "machine-draft"
+    },
+    "warnings": {
+      "value": "Advarsler",
+      "status": "machine-draft"
+    },
+    "skipped": {
+      "value": "Sprunget over",
+      "status": "machine-draft"
+    },
+    "pass": {
+      "value": "Bestået",
+      "status": "machine-draft"
+    },
+    "fail": {
+      "value": "Fejlet",
+      "status": "machine-draft"
+    },
+    "warn": {
+      "value": "Advarsel",
+      "status": "machine-draft"
+    },
+    "skip": {
+      "value": "Sprunget over",
+      "status": "machine-draft"
+    },
+    "passLabel": {
+      "value": "Bestået:",
+      "status": "machine-draft"
+    },
+    "failLabel": {
+      "value": "Fejlet:",
+      "status": "machine-draft"
+    },
+    "warnLabel": {
+      "value": "Advarsel:",
+      "status": "machine-draft"
+    },
+    "skipLabel": {
+      "value": "Sprunget over:",
+      "status": "machine-draft"
+    },
+    "critical": {
+      "value": "Kritisk",
+      "status": "machine-draft"
+    },
+    "high": {
+      "value": "Høj",
+      "status": "machine-draft"
+    },
+    "medium": {
+      "value": "Middel",
+      "status": "machine-draft"
+    },
+    "low": {
+      "value": "Lav",
+      "status": "machine-draft"
+    },
+    "executiveSummary": {
+      "value": "Ledelsesresumé",
+      "status": "machine-draft"
+    },
+    "categoryBreakdown": {
+      "value": "Fordeling efter kategori",
+      "status": "machine-draft"
+    },
+    "categoryScores": {
+      "value": "Kategoriscorer",
+      "status": "machine-draft"
+    },
+    "detailedByCategory": {
+      "value": "Detaljerede fund efter kategori",
+      "status": "machine-draft"
+    },
+    "complianceMapping": {
+      "value": "Overholdelseskortlægning",
+      "status": "machine-draft"
+    },
+    "complianceCrossReference": {
+      "value": "Krydsreference for overholdelse",
+      "status": "machine-draft"
+    },
+    "allFindings": {
+      "value": "Alle fund",
+      "status": "machine-draft"
+    },
+    "thId": {
+      "value": "ID",
+      "status": "machine-draft"
+    },
+    "thSeverity": {
+      "value": "Alvorsgrad",
+      "status": "machine-draft"
+    },
+    "thStatus": {
+      "value": "Status",
+      "status": "machine-draft"
+    },
+    "thCategory": {
+      "value": "Kategori",
+      "status": "machine-draft"
+    },
+    "thCheck": {
+      "value": "Kontrol",
+      "status": "machine-draft"
+    },
+    "thCheckName": {
+      "value": "Kontrolnavn",
+      "status": "machine-draft"
+    },
+    "thCheckId": {
+      "value": "Kontrol-ID",
+      "status": "machine-draft"
+    },
+    "thFinding": {
+      "value": "Fund",
+      "status": "machine-draft"
+    },
+    "thRemediation": {
+      "value": "Udbedring",
+      "status": "machine-draft"
+    },
+    "thCurrentValue": {
+      "value": "Nuværende værdi",
+      "status": "machine-draft"
+    },
+    "thRecommended": {
+      "value": "Anbefalet",
+      "status": "machine-draft"
+    },
+    "thRecommendedValue": {
+      "value": "Anbefalet værdi",
+      "status": "machine-draft"
+    },
+    "thRemediationSteps": {
+      "value": "Udbedringstrin",
+      "status": "machine-draft"
+    },
+    "thName": {
+      "value": "Navn",
+      "status": "machine-draft"
+    },
+    "thDescription": {
+      "value": "Beskrivelse",
+      "status": "machine-draft"
+    },
+    "thPlatform": {
+      "value": "Platform",
+      "status": "machine-draft"
+    },
+    "thTimestamp": {
+      "value": "Tidsstempel",
+      "status": "machine-draft"
+    },
+    "thScore": {
+      "value": "Score",
+      "status": "machine-draft"
+    },
+    "thLabel": {
+      "value": "Etiket",
+      "status": "machine-draft"
+    },
+    "thDelta": {
+      "value": "Delta",
+      "status": "machine-draft"
+    },
+    "thProfile": {
+      "value": "Profil",
+      "status": "machine-draft"
+    },
+    "thMitre": {
+      "value": "MITRE ATT&CK",
+      "status": "machine-draft"
+    },
+    "thNist": {
+      "value": "NIST SP 800-53",
+      "status": "machine-draft"
+    },
+    "thCisAd": {
+      "value": "CIS AD",
+      "status": "machine-draft"
+    },
+    "thCisBenchmark": {
+      "value": "CIS Benchmark",
+      "status": "machine-draft"
+    },
+    "thAnssi": {
+      "value": "ANSSI",
+      "status": "machine-draft"
+    },
+    "accepted": {
+      "value": "ACCEPTERET",
+      "status": "machine-draft"
+    }
+  },
+  "sections": {
+    "affectedItems": {
+      "value": "Berørte elementer",
+      "status": "machine-draft"
+    }
+  },
+  "maturity": {
+    "heading": {
+      "value": "Sikkerhedsmodenhed",
+      "status": "machine-draft"
+    },
+    "overall": {
+      "value": "Samlet modenhed: Niveau {0} af 5 &middot; {1}",
+      "status": "machine-draft"
+    },
+    "anchorNote": {
+      "value": "Den laveste ikke-opfyldte kontrol forankrer vurderingen (CMMI-lignende skala: 1 Indledende til 5 Optimeret), så en enkelt kritisk eksponering sætter loft over scoren, indtil den er løst.",
+      "status": "machine-draft"
+    },
+    "toReach": {
+      "value": "For at nå <strong>Niveau {0}</strong>, håndtér:",
+      "status": "machine-draft"
+    },
+    "thCategory": {
+      "value": "Kategori",
+      "status": "machine-draft"
+    },
+    "thLevel": {
+      "value": "Niveau",
+      "status": "machine-draft"
+    },
+    "thMaturity": {
+      "value": "Modenhed",
+      "status": "machine-draft"
+    },
+    "levelCell": {
+      "value": "Niveau {0}",
+      "status": "machine-draft"
+    },
+    "na": {
+      "value": "i/t",
+      "status": "machine-draft"
+    }
+  },
+  "ioe": {
+    "heading": {
+      "value": "Eksponeringsindikatorer",
+      "status": "machine-draft"
+    },
+    "note": {
+      "value": "{0} åben(ne) eksponering(er), rangeret efter alvorsgrad og sprængradius.",
+      "status": "machine-draft"
+    },
+    "critical": {
+      "value": "Kritisk",
+      "status": "machine-draft"
+    },
+    "high": {
+      "value": "Høj",
+      "status": "machine-draft"
+    },
+    "medium": {
+      "value": "Middel",
+      "status": "machine-draft"
+    },
+    "low": {
+      "value": "Lav",
+      "status": "machine-draft"
+    },
+    "affected": {
+      "value": "{0} berørt",
+      "status": "machine-draft"
+    },
+    "warning": {
+      "value": "advarsel",
+      "status": "machine-draft"
+    },
+    "more": {
+      "value": "+ {0} yderligere eksponering(er) i de detaljerede fund nedenfor.",
+      "status": "machine-draft"
+    }
+  },
+  "attackpath": {
+    "heading": {
+      "value": "Angrebsstier til Tier-0",
+      "status": "machine-draft"
+    },
+    "noneRan": {
+      "value": "Ingen eskaleringsstier til Tier-0 blev fundet i det indsamlede ACL-omfang. Dybe kæder med lave privilegier kræver ACL-indsamling for hele domænet &middot; kør igen med <code>-FullDomainAcl</code> for at udvide dækningen.",
+      "status": "machine-draft"
+    },
+    "noneNotRun": {
+      "value": "Analyse af angrebsstier blev ikke kørt. Aktivér kategorierne <code>ACLDelegation</code> + <code>PrivilegedAccounts</code> (eller <code>All</code>), og tilføj <code>-FullDomainAcl</code> for dybe transitive kæder.",
+      "status": "machine-draft"
+    },
+    "summary": {
+      "value": "{0} eskaleringssti(er) der når Tier-0 &middot; {1} fra IKKE-privilegerede principaler (vist først, højeste risiko). Hver pil er en kontrol- eller medlemskabskant, som en angriber kan gennemløbe.",
+      "status": "machine-draft"
+    },
+    "hop": {
+      "value": "spring",
+      "status": "machine-draft"
+    },
+    "hops": {
+      "value": "spring",
+      "status": "machine-draft"
+    },
+    "nonPrivSource": {
+      "value": "ikke-privilegeret kilde",
+      "status": "machine-draft"
+    },
+    "privSource": {
+      "value": "allerede privilegeret kilde",
+      "status": "machine-draft"
+    }
+  },
+  "cartography": {
+    "heading": {
+      "value": "Kortlægning af angrebsstier",
+      "status": "machine-draft"
+    },
+    "legend": {
+      "value": "Visuelt kort over eskaleringsruter til Tier-0. <span style='color:var(--g-sev-critical)'>&#9873; Rød</span> = ikke-privilegeret start, <span style='color:var(--g-sev-high)'>orange</span> = allerede privilegeret, <span style='color:var(--g-accent)'>&#9733; blå</span> = Tier-0-mål. Følg pilene fra venstre mod højre.",
+      "status": "machine-draft"
+    },
+    "showingFirst": {
+      "value": " Viser de første {0} stier.",
+      "status": "machine-draft"
+    }
+  },
+  "comparison": {
+    "heading": {
+      "value": "Hvad har ændret sig siden sidste kørsel",
+      "status": "machine-draft"
+    },
+    "firstRun": {
+      "value": "Dette er den første registrerede kørsel for dette omfang. Kørselshistorikken\nbegynder med denne versions samlede sammenligningsmotor, så tidligere deltafiler\nlæses ikke; sammenligningen begynder med din næste vurdering, når denne kørsel\nbliver udgangspunktet.",
+      "status": "machine-draft"
+    },
+    "previousRun": {
+      "value": "Forrige kørsel: {0}, modulversion {1}",
+      "status": "machine-draft"
+    },
+    "versionSkew": {
+      "value": " (denne kørsel: {0}; kontrolkatalogerne afviger, så NYE og UDGÅEDE poster nedenfor er forventede)",
+      "status": "machine-draft"
+    },
+    "scoreLabel": {
+      "value": "Score (nu {0}, var {1})",
+      "status": "machine-draft"
+    },
+    "notAssessedLabel": {
+      "value": "Antal Ikke vurderet",
+      "status": "machine-draft"
+    },
+    "pillarsMoved": {
+      "value": "Zero Trust-søjler der har flyttet sig:",
+      "status": "machine-draft"
+    },
+    "newlyFailing": {
+      "value": "Nyligt fejlende",
+      "status": "machine-draft"
+    },
+    "lostVisibility": {
+      "value": "Tabt synlighed (vurderet før, Ikke vurderet nu)",
+      "status": "machine-draft"
+    },
+    "stillNotAssessed": {
+      "value": "Stadig ikke vurderet (mørk i denne kørsel og den forrige)",
+      "status": "machine-draft"
+    },
+    "newlyPassing": {
+      "value": "Nyligt bestået (udbedring bekræftet)",
+      "status": "machine-draft"
+    },
+    "regressed": {
+      "value": "Faldet tilbage til advarsel",
+      "status": "machine-draft"
+    },
+    "improved": {
+      "value": "Forbedret til advarsel (endnu ikke bestået)",
+      "status": "machine-draft"
+    },
+    "restoredVisibility": {
+      "value": "Synlighed genoprettet",
+      "status": "machine-draft"
+    },
+    "newChecks": {
+      "value": "Nye kontroller i denne kørsel (ikke en overgang)",
+      "status": "machine-draft"
+    },
+    "retiredChecks": {
+      "value": "Udgåede kontroller (til stede før, fraværende nu; ikke en overgang)",
+      "status": "machine-draft"
+    },
+    "noChange": {
+      "value": "Ingen kendelse har ændret sig siden den forrige kørsel. {0} kontroller er uændrede.{1}",
+      "status": "machine-draft"
+    },
+    "unchanged": {
+      "value": "{0} kontroller uændrede.{1}",
+      "status": "machine-draft"
+    }
+  },
+  "filter": {
+    "status": {
+      "value": "Status",
+      "status": "machine-draft"
+    },
+    "severity": {
+      "value": "Alvorsgrad",
+      "status": "machine-draft"
+    },
+    "all": {
+      "value": "Alle",
+      "status": "machine-draft"
+    },
+    "searchPlaceholder": {
+      "value": "Søg i fund (id, navn, værdi)...",
+      "status": "machine-draft"
+    },
+    "empty": {
+      "value": "Ingen fund matcher det aktuelle filter.",
+      "status": "machine-draft"
+    },
+    "platform": {
+      "value": "Platform",
+      "status": "machine-draft"
+    },
+    "showingAll": {
+      "value": "Viser alle fund",
+      "status": "machine-draft"
+    }
+  },
+  "ad": {
+    "title": {
+      "value": "Active Directory-rapport",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Active Directory-vurdering",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Active Directory-rapport",
+      "status": "machine-draft"
+    },
+    "postureDesc": {
+      "value": "Sikkerhedspositurscore for Active Directory (0-100)",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Active Directory-audit",
+      "status": "machine-draft"
+    },
+    "verdict90": {
+      "value": "Active Directory-miljøet udviser en stærk sikkerhedspositur med minimale fund.",
+      "status": "machine-draft"
+    },
+    "verdict75": {
+      "value": "AD-miljøet har en god sikkerhedspositur med nogle områder, der kræver opmærksomhed.",
+      "status": "machine-draft"
+    },
+    "verdict60": {
+      "value": "AD-miljøet har en rimelig sikkerhedspositur. Flere vigtige fund kræver udbedring.",
+      "status": "machine-draft"
+    },
+    "verdict40": {
+      "value": "AD-miljøet har en dårlig sikkerhedspositur. Flere kritiske fund og fund med høj alvorsgrad kræver øjeblikkelig opmærksomhed.",
+      "status": "machine-draft"
+    },
+    "verdict0": {
+      "value": "AD-miljøet har kritiske sikkerhedsmangler. Øjeblikkelig udbedring er påkrævet for at forhindre kompromittering.",
+      "status": "machine-draft"
+    },
+    "sevSummary": {
+      "value": "Kritisk: <strong>{0}</strong> &middot; Høj: <strong>{1}</strong> &middot;\n     Middel: <strong>{2}</strong> &middot; Lav: <strong>{3}</strong>",
+      "status": "machine-draft"
+    },
+    "bloodhoundHeading": {
+      "value": "BloodHound-eksport",
+      "status": "machine-draft"
+    },
+    "bloodhoundExport": {
+      "value": "En OpenGraph-eksport af den indsamlede AD-angrebsgraf blev skrevet til <code>{0}</code>.",
+      "status": "machine-draft"
+    },
+    "bloodhoundImport": {
+      "value": "Importér i BloodHound CE: <strong>Administration &rarr; File Ingest</strong> &rarr; upload filen, og kør derefter de indbyggede stifindingsforespørgsler. Noder er SID-indekseret (de lægges oven på oprindelige SharpHound-data), og kanter bruger BloodHounds oprindelige typer.",
+      "status": "machine-draft"
+    },
+    "findingsByPriority": {
+      "value": "Fund efter prioritet",
+      "status": "machine-draft"
+    }
+  },
+  "entra": {
+    "title": {
+      "value": "Entra ID / M365-rapport",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Entra ID / M365-vurdering",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Entra ID / M365-rapport",
+      "status": "machine-draft"
+    },
+    "postureDesc": {
+      "value": "Sikkerhedspositurscore for Entra ID / Azure / M365 (0-100)",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Entra ID / M365-audit",
+      "status": "machine-draft"
+    },
+    "zeroTrust": {
+      "value": "Zero Trust-positur",
+      "status": "machine-draft"
+    },
+    "openInPortal": {
+      "value": "Åbn i administrationsportalen",
+      "status": "machine-draft"
+    }
+  },
+  "gws": {
+    "title": {
+      "value": "Google Workspace-rapport",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Google Workspace-vurdering",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Google Workspace-rapport",
+      "status": "machine-draft"
+    },
+    "postureDesc": {
+      "value": "Sikkerhedspositurscore for Google Workspace (0-100)",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Google Workspace-audit",
+      "status": "machine-draft"
+    },
+    "configChecksEvaluated": {
+      "value": "{0} konfigurationskontroller vurderet",
+      "status": "machine-draft"
+    },
+    "verdictCrit": {
+      "value": "Øjeblikkelig handling påkrævet. {0} konfigurationsfejl med kritisk alvorsgrad registreret, der udsætter lejeren for betydelig risiko.",
+      "status": "machine-draft"
+    },
+    "verdictHigh": {
+      "value": "Udbedring anbefales. {0} fund med høj alvorsgrad identificeret, som bør håndteres omgående.",
+      "status": "machine-draft"
+    },
+    "verdictMed": {
+      "value": "Overvåg og forbedr. {0} fund med middel alvorsgrad berettiger gennemgang og hærdning.",
+      "status": "machine-draft"
+    },
+    "verdictLow": {
+      "value": "Mindre mangler registreret. {0} fund med lav alvorsgrad til stede. Den samlede positur er sund.",
+      "status": "machine-draft"
+    },
+    "verdictPass": {
+      "value": "Alle kontroller bestået. Lejerkonfigurationen opfylder de grundlæggende sikkerhedsforventninger.",
+      "status": "machine-draft"
+    },
+    "assessmentLabel": {
+      "value": "Vurdering:",
+      "status": "machine-draft"
+    },
+    "scopeLabel": {
+      "value": "Omfang:",
+      "status": "machine-draft"
+    },
+    "resultsLabel": {
+      "value": "Resultater:",
+      "status": "machine-draft"
+    },
+    "scope": {
+      "value": "{0} konfigurationskontroller på tværs af {1} kategorier.",
+      "status": "machine-draft"
+    },
+    "results": {
+      "value": "{0} bestået, {1} fejlet, {2} advarsler, {3} sprunget over.",
+      "status": "machine-draft"
+    },
+    "criticalRequire": {
+      "value": "{0} kritisk(e) fund kræver øjeblikkelig udbedring.",
+      "status": "machine-draft"
+    },
+    "priorityCritHigh": {
+      "value": "Prioriterede fund &middot; Kritisk &amp; Høj",
+      "status": "machine-draft"
+    },
+    "fixInConsole": {
+      "value": "Ret i administrationskonsollen",
+      "status": "machine-draft"
+    },
+    "whyUnsafe": {
+      "value": "Hvorfor det er usikkert",
+      "status": "machine-draft"
+    },
+    "whyUnsafeDefault": {
+      "value": "Hvorfor dette er usikkert",
+      "status": "machine-draft"
+    },
+    "whyUnsafeArticle": {
+      "value": "Hvorfor dette er usikkert: {0}",
+      "status": "machine-draft"
+    }
+  },
+  "campaign": {
+    "title": {
+      "value": "Kampagnerapport",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Samlet kampagnevurdering",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Kampagnerapport",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Samlet kampagneaudit",
+      "status": "machine-draft"
+    },
+    "subtitleLead": {
+      "value": "Samlet vurdering af sikkerhedspositur",
+      "status": "machine-draft"
+    },
+    "subtitleChecks": {
+      "value": "{0} kontroller på tværs af {1} platforme ({2})",
+      "status": "machine-draft"
+    },
+    "scanId": {
+      "value": "Scannings-ID",
+      "status": "machine-draft"
+    },
+    "duration": {
+      "value": "Varighed",
+      "status": "machine-draft"
+    },
+    "scoreDesc": {
+      "value": "Kampagnescore (0-100) &middot; vægtet vurdering af {0} kontroller på tværs af {1} platforme",
+      "status": "machine-draft"
+    },
+    "platformSummary": {
+      "value": "Platformsresumé",
+      "status": "machine-draft"
+    },
+    "categoryScoresByPlatform": {
+      "value": "Kategoriscorer efter platform",
+      "status": "machine-draft"
+    },
+    "checksWord": {
+      "value": "kontroller",
+      "status": "machine-draft"
+    },
+    "categoriesWord": {
+      "value": "kategorier",
+      "status": "machine-draft"
+    },
+    "unknown": {
+      "value": "Ukendt",
+      "status": "machine-draft"
+    },
+    "descriptionLabel": {
+      "value": "Beskrivelse",
+      "status": "machine-draft"
+    },
+    "affectedEntities": {
+      "value": "Berørte enheder",
+      "status": "machine-draft"
+    },
+    "currentValueLabel": {
+      "value": "Nuværende værdi",
+      "status": "machine-draft"
+    },
+    "recommendedValueLabel": {
+      "value": "Anbefalet værdi",
+      "status": "machine-draft"
+    },
+    "remediationStepsLabel": {
+      "value": "Udbedringstrin",
+      "status": "machine-draft"
+    },
+    "remediationUrlLabel": {
+      "value": "Udbedrings-URL",
+      "status": "machine-draft"
+    },
+    "complianceMappingsLabel": {
+      "value": "Overholdelseskortlægninger",
+      "status": "machine-draft"
+    },
+    "showingAllFindings": {
+      "value": "Viser alle {0} fund",
+      "status": "machine-draft"
+    },
+    "showingSome": {
+      "value": "Viser {0} af {1} fund",
+      "status": "machine-draft"
+    }
+  },
+  "technical": {
+    "title": {
+      "value": "Teknisk sikkerhedsvurderingsrapport",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Teknisk rapport",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Teknisk sikkerhedsrapport",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Teknisk rapport",
+      "status": "machine-draft"
+    },
+    "thTotal": {
+      "value": "I alt",
+      "status": "machine-draft"
+    },
+    "detailedFindings": {
+      "value": "Detaljerede fund ({0})",
+      "status": "machine-draft"
+    },
+    "descriptionLabel": {
+      "value": "Beskrivelse",
+      "status": "machine-draft"
+    },
+    "recommendedLabel": {
+      "value": "Anbefalet",
+      "status": "machine-draft"
+    },
+    "remediationStepsLabel": {
+      "value": "Udbedringstrin",
+      "status": "machine-draft"
+    },
+    "referenceLabel": {
+      "value": "Reference",
+      "status": "machine-draft"
+    },
+    "riskAcceptanceLabel": {
+      "value": "Risikoaccept",
+      "status": "machine-draft"
+    },
+    "acceptedBy": {
+      "value": "Accepteret af {0} &middot; {1}",
+      "status": "machine-draft"
+    },
+    "complianceLabel": {
+      "value": "Overholdelse",
+      "status": "machine-draft"
+    },
+    "noFindings": {
+      "value": "Ingen auditfund tilgængelige. Kør en scanning først.",
+      "status": "machine-draft"
+    }
+  },
+  "exec": {
+    "title": {
+      "value": "Ledelsesresumé for sikkerhed",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Ledelsesresumé",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Ledelsesresumé",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Ledelsesresumé",
+      "status": "machine-draft"
+    },
+    "profileSuffix": {
+      "value": "Profil",
+      "status": "machine-draft"
+    },
+    "securityPosture": {
+      "value": "Sikkerhedspositur: {0}",
+      "status": "machine-draft"
+    },
+    "verdictNoScore": {
+      "value": "Der kunne ikke beregnes nogen score ud fra de tilgængelige fund. Kør en scanning for at etablere et udgangspunkt.",
+      "status": "machine-draft"
+    },
+    "verdict75": {
+      "value": "Din organisation har et stærkt sikkerhedsfundament. Fortsæt overvågningen og håndtér de resterende mangler.",
+      "status": "machine-draft"
+    },
+    "verdict50": {
+      "value": "Din sikkerhedspositur har plads til forbedring. Prioriteret handling på kritiske fund anbefales.",
+      "status": "machine-draft"
+    },
+    "verdict0": {
+      "value": "Øjeblikkelig opmærksomhed påkrævet. Kritiske sikkerhedsmangler udsætter din organisation for forhøjet risiko.",
+      "status": "machine-draft"
+    },
+    "passRate": {
+      "value": "Beståelsesrate",
+      "status": "machine-draft"
+    },
+    "criticalIssues": {
+      "value": "Kritiske problemer",
+      "status": "machine-draft"
+    },
+    "highIssues": {
+      "value": "Høje problemer",
+      "status": "machine-draft"
+    },
+    "maturityStat": {
+      "value": "Modenhed ({0})",
+      "status": "machine-draft"
+    },
+    "maturityHeading": {
+      "value": "Sikkerhedsmodenhed",
+      "status": "machine-draft"
+    },
+    "maturityOverall": {
+      "value": "Samlet modenhed: <strong style=\"color:{0}\">Niveau {1} af 5: {2}</strong>. Den laveste ikke-opfyldte kontrol forankrer vurderingen, så en enkelt kritisk eksponering sætter loft over scoren, indtil den er løst (CMMI-lignende skala: 1 Indledende til 5 Optimeret).",
+      "status": "machine-draft"
+    },
+    "maturityToReach": {
+      "value": "For at nå <strong>Niveau {0}</strong>, håndtér:",
+      "status": "machine-draft"
+    },
+    "thCategory": {
+      "value": "Kategori",
+      "status": "machine-draft"
+    },
+    "thLevel": {
+      "value": "Niveau",
+      "status": "machine-draft"
+    },
+    "thMaturity": {
+      "value": "Modenhed",
+      "status": "machine-draft"
+    },
+    "matLevelCell": {
+      "value": "Niveau {0}",
+      "status": "machine-draft"
+    },
+    "keyFindings": {
+      "value": "Nøglefund der kræver opmærksomhed",
+      "status": "machine-draft"
+    },
+    "complianceImpact": {
+      "value": "Indvirkning på overholdelse",
+      "status": "machine-draft"
+    },
+    "complianceIntro": {
+      "value": "Følgende overholdelsesrammer har identificeret mangler:",
+      "status": "machine-draft"
+    },
+    "gaps": {
+      "value": "{0} mangel(er)",
+      "status": "machine-draft"
+    },
+    "quickWins": {
+      "value": "Anbefalede hurtige gevinster (uden omkostning)",
+      "status": "machine-draft"
+    },
+    "quickWinsIntro": {
+      "value": "Disse handlinger kan gennemføres uden omkostning ved hjælp af eksisterende værktøjer:",
+      "status": "machine-draft"
+    },
+    "quickWinItem": {
+      "value": "({0}, ~{1} t indsats)",
+      "status": "machine-draft"
+    },
+    "nextSteps": {
+      "value": "Næste trin",
+      "status": "machine-draft"
+    },
+    "nextStep1": {
+      "value": "Håndtér kritiske fund øjeblikkeligt &middot; de udgør den højeste risiko for din organisation.",
+      "status": "machine-draft"
+    },
+    "nextStep2": {
+      "value": "Implementér de hurtige gevinster ovenfor for at forbedre din sikkerhedsscore med minimal indsats.",
+      "status": "machine-draft"
+    },
+    "nextStep3": {
+      "value": "Gennemgå den detaljerede tekniske rapport for komplet udbedringsvejledning.",
+      "status": "machine-draft"
+    },
+    "nextStep4": {
+      "value": "Planlæg en opfølgende scanning om 30 dage for at måle forbedringen.",
+      "status": "machine-draft"
+    },
+    "disclaimer": {
+      "value": "Denne rapport giver en øjebliksbaseret sikkerhedsvurdering til intern planlægning. Fund bør valideres og udbedres i henhold til organisationens risikotolerance.",
+      "status": "machine-draft"
+    }
+  },
+  "playbook": {
+    "title": {
+      "value": "Udbedringsdrejebog",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Udbedringsdrejebog",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Udbedringsdrejebog",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Udbedringsdrejebog",
+      "status": "machine-draft"
+    },
+    "subtitle": {
+      "value": "{0} handlingsrettet element(er) &middot; Maks. omkostning: {1}",
+      "status": "machine-draft"
+    },
+    "phase1": {
+      "value": "Fase 1: Kritiske rettelser",
+      "status": "machine-draft"
+    },
+    "phase2": {
+      "value": "Fase 2: Høj prioritet",
+      "status": "machine-draft"
+    },
+    "phase3": {
+      "value": "Fase 3: Middel prioritet",
+      "status": "machine-draft"
+    },
+    "phase4": {
+      "value": "Fase 4: Lav prioritet",
+      "status": "machine-draft"
+    },
+    "phaseItems": {
+      "value": "{0} ({1} elementer)",
+      "status": "machine-draft"
+    },
+    "idLabel": {
+      "value": "ID:",
+      "status": "machine-draft"
+    },
+    "costLabel": {
+      "value": "Omkostning:",
+      "status": "machine-draft"
+    },
+    "effortLabel": {
+      "value": "Indsats:",
+      "status": "machine-draft"
+    },
+    "categoryLabel": {
+      "value": "Kategori:",
+      "status": "machine-draft"
+    },
+    "stepsLabel": {
+      "value": "Trin:",
+      "status": "machine-draft"
+    },
+    "targetLabel": {
+      "value": "Mål:",
+      "status": "machine-draft"
+    },
+    "noteLabel": {
+      "value": "Note:",
+      "status": "machine-draft"
+    },
+    "disclaimer": {
+      "value": "Gennemgå hvert udbedringstrin før implementering. Test ændringer i et ikke-produktionsmiljø først.",
+      "status": "machine-draft"
+    }
+  },
+  "budget": {
+    "title": {
+      "value": "Begrundelse for sikkerhedsbudget",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Budgetbegrundelse",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Guerrilla Budgetbegrundelse",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Budgetbegrundelse",
+      "status": "machine-draft"
+    },
+    "profileLabel": {
+      "value": "Profil",
+      "status": "machine-draft"
+    },
+    "executiveSummary": {
+      "value": "Ledelsesresumé",
+      "status": "machine-draft"
+    },
+    "guerrillaScore": {
+      "value": "Guerrilla-score",
+      "status": "machine-draft"
+    },
+    "criticalFailures": {
+      "value": "Kritiske fejl",
+      "status": "machine-draft"
+    },
+    "highFailures": {
+      "value": "Høje fejl",
+      "status": "machine-draft"
+    },
+    "totalChecksBreakdown": {
+      "value": "Kontroller i alt ({0} bestået / {1} fejlet / {2} advarsel)",
+      "status": "machine-draft"
+    },
+    "complianceImpact": {
+      "value": "Indvirkning på overholdelse",
+      "status": "machine-draft"
+    },
+    "complianceIntro": {
+      "value": "Følgende overholdelsesrammer har mangler baseret på de aktuelle auditfund:",
+      "status": "machine-draft"
+    },
+    "thFramework": {
+      "value": "Ramme",
+      "status": "machine-draft"
+    },
+    "thGapsFound": {
+      "value": "Fundne mangler",
+      "status": "machine-draft"
+    },
+    "gaps": {
+      "value": "{0} mangel(er)",
+      "status": "machine-draft"
+    },
+    "investmentPhases": {
+      "value": "Anbefalede investeringsfaser",
+      "status": "machine-draft"
+    },
+    "phase1Title": {
+      "value": "Fase 1: Hurtige gevinster (uden omkostning)",
+      "status": "machine-draft"
+    },
+    "phase1Desc": {
+      "value": "Konfigurationsændringer med eksisterende værktøjer &middot; højeste investeringsafkast, øjeblikkelig sikkerhedsforbedring.",
+      "status": "machine-draft"
+    },
+    "phase2Title": {
+      "value": "Fase 2: Forbedringer til lav omkostning",
+      "status": "machine-draft"
+    },
+    "phase2Desc": {
+      "value": "Mindre indkøb eller licenstilføjelser inden for det eksisterende budget.",
+      "status": "machine-draft"
+    },
+    "phase3Title": {
+      "value": "Fase 3: Moderat investering",
+      "status": "machine-draft"
+    },
+    "phase3Desc": {
+      "value": "Licensopgraderinger eller tillægsprodukter for forbedrede sikkerhedskapaciteter.",
+      "status": "machine-draft"
+    },
+    "phase4Title": {
+      "value": "Fase 4: Strategisk investering",
+      "status": "machine-draft"
+    },
+    "phase4Desc": {
+      "value": "Større indkøb eller infrastrukturændringer for langsigtet forbedring af sikkerhedspositur.",
+      "status": "machine-draft"
+    },
+    "phase4Body": {
+      "value": "<strong>{0} element(er)</strong> identificeret, der kræver betydelig investering. Kontakt din sikkerhedsrådgiver for detaljeret afgrænsning.",
+      "status": "machine-draft"
+    },
+    "thCheck": {
+      "value": "Kontrol",
+      "status": "machine-draft"
+    },
+    "thFinding": {
+      "value": "Fund",
+      "status": "machine-draft"
+    },
+    "thSeverity": {
+      "value": "Alvorsgrad",
+      "status": "machine-draft"
+    },
+    "thEffort": {
+      "value": "Indsats",
+      "status": "machine-draft"
+    },
+    "thTime": {
+      "value": "Tid",
+      "status": "machine-draft"
+    },
+    "actions": {
+      "value": "{0} handling(er)",
+      "status": "machine-draft"
+    },
+    "estimatedEffort": {
+      "value": "Estimeret samlet indsats: {0} timer",
+      "status": "machine-draft"
+    },
+    "noFree": {
+      "value": "Ingen gratis rettelser identificeret.",
+      "status": "machine-draft"
+    },
+    "noLow": {
+      "value": "Ingen rettelser til lav omkostning identificeret.",
+      "status": "machine-draft"
+    },
+    "noMed": {
+      "value": "Ingen rettelser til middel omkostning identificeret.",
+      "status": "machine-draft"
+    },
+    "disclaimer": {
+      "value": "Denne rapport er beregnet til intern planlægning.",
+      "status": "machine-draft"
+    }
+  },
+  "dashboard": {
+    "title": {
+      "value": "Sikkerhedsdashboard",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Dashboard",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Sikkerhedsdashboard",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Samlet dashboard",
+      "status": "machine-draft"
+    },
+    "scoreDesc": {
+      "value": "Guerrilla-score (0-100)",
+      "status": "machine-draft"
+    },
+    "checksSummary": {
+      "value": "{0} kontroller vurderet &middot; {1} bestået, {2} fejlet, {3} advarsler",
+      "status": "machine-draft"
+    },
+    "scoreComponents": {
+      "value": "Scorekomponenter",
+      "status": "machine-draft"
+    },
+    "passRate": {
+      "value": "Beståelsesrate",
+      "status": "machine-draft"
+    },
+    "failures": {
+      "value": "Fejl",
+      "status": "machine-draft"
+    },
+    "platformOverview": {
+      "value": "Platformsoversigt",
+      "status": "machine-draft"
+    },
+    "checks": {
+      "value": "Kontroller: {0}",
+      "status": "machine-draft"
+    },
+    "failuresLabel": {
+      "value": "Fejl: {0}",
+      "status": "machine-draft"
+    },
+    "notScanned": {
+      "value": "Ikke scannet",
+      "status": "machine-draft"
+    },
+    "topFindings": {
+      "value": "Vigtigste fund",
+      "status": "machine-draft"
+    },
+    "showingTop50": {
+      "value": "Viser de 50 vigtigste fund. Se de detaljerede rapporter for den fulde liste.",
+      "status": "machine-draft"
+    },
+    "posture": {
+      "value": "Positur",
+      "status": "machine-draft"
+    },
+    "threats": {
+      "value": "Trusler",
+      "status": "machine-draft"
+    },
+    "coverage": {
+      "value": "Dækning",
+      "status": "machine-draft"
+    },
+    "trend": {
+      "value": "Tendens",
+      "status": "machine-draft"
+    }
+  },
+  "trend": {
+    "title": {
+      "value": "Sikkerhedstendensrapport",
+      "status": "machine-draft"
+    },
+    "topbar": {
+      "value": "Scoretendens",
+      "status": "machine-draft"
+    },
+    "htmlTitle": {
+      "value": "Sikkerhedstendensrapport",
+      "status": "machine-draft"
+    },
+    "footer": {
+      "value": "Scoretendens",
+      "status": "machine-draft"
+    },
+    "scansCount": {
+      "value": "{0} scanning(er)",
+      "status": "machine-draft"
+    },
+    "currentScore": {
+      "value": "Aktuel score",
+      "status": "machine-draft"
+    },
+    "averageScore": {
+      "value": "Gennemsnitlig score",
+      "status": "machine-draft"
+    },
+    "trendLabel": {
+      "value": "Tendens ({0})",
+      "status": "machine-draft"
+    },
+    "improving": {
+      "value": "Forbedres",
+      "status": "machine-draft"
+    },
+    "declining": {
+      "value": "Forværres",
+      "status": "machine-draft"
+    },
+    "stable": {
+      "value": "Stabil",
+      "status": "machine-draft"
+    },
+    "highestLowest": {
+      "value": "Højeste / Laveste",
+      "status": "machine-draft"
+    },
+    "scoreHistory": {
+      "value": "Scorehistorik",
+      "status": "machine-draft"
+    },
+    "scanLog": {
+      "value": "Scanningslog",
+      "status": "machine-draft"
+    },
+    "defaultProfile": {
+      "value": "Standard",
+      "status": "machine-draft"
+    }
+  },
+  "category": {
+    "adacldelegation": {
+      "value": "AD ACL og delegering",
+      "status": "machine-draft"
+    },
+    "adadversarytradecraftindicators": {
+      "value": "AD-indikatorer for modstanderteknikker",
+      "status": "machine-draft"
+    },
+    "adcertificateservices": {
+      "value": "AD-certifikattjenester",
+      "status": "machine-draft"
+    },
+    "addomainforestconfiguration": {
+      "value": "AD-domæne- og skovkonfiguration",
+      "status": "machine-draft"
+    },
+    "adgrouppolicy": {
+      "value": "AD-gruppepolitik",
+      "status": "machine-draft"
+    },
+    "adkerberossecurity": {
+      "value": "AD Kerberos-sikkerhed",
+      "status": "machine-draft"
+    },
+    "adloggingedrposture": {
+      "value": "AD-logning og EDR-positur",
+      "status": "machine-draft"
+    },
+    "adlogonscriptsnetworkshares": {
+      "value": "AD-logonscripts og netværksshares",
+      "status": "machine-draft"
+    },
+    "adnetworkrelaypreconditions": {
+      "value": "AD-netværks- og relæforudsætninger",
+      "status": "machine-draft"
+    },
+    "adpasswordlockoutpolicies": {
+      "value": "AD-adgangskode- og låsningspolitikker",
+      "status": "machine-draft"
+    },
+    "adprivilegedaccountsecurity": {
+      "value": "AD-sikkerhed for privilegerede konti",
+      "status": "machine-draft"
+    },
+    "adstaleobsoleteobjects": {
+      "value": "AD-forældede og obsolete objekter",
+      "status": "machine-draft"
+    },
+    "adtrustrelationships": {
+      "value": "AD-tillidsforhold",
+      "status": "machine-draft"
+    },
+    "adminusermanagement": {
+      "value": "Administrator- og brugerstyring",
+      "status": "machine-draft"
+    },
+    "adversarytradecraft": {
+      "value": "Modstanderteknikker",
+      "status": "machine-draft"
+    },
+    "attackpaths": {
+      "value": "Angrebsstier",
+      "status": "machine-draft"
+    },
+    "authenticationaccesscontrols": {
+      "value": "Godkendelse og adgangskontrol",
+      "status": "machine-draft"
+    },
+    "azureiamresourcesecurity": {
+      "value": "Azure IAM og ressourcesikkerhed",
+      "status": "machine-draft"
+    },
+    "collaborationcommunicationsecurity": {
+      "value": "Samarbejds- og kommunikationssikkerhed",
+      "status": "machine-draft"
+    },
+    "copilotstudioaiagentgovernance": {
+      "value": "Styring af Copilot Studio AI-agenter",
+      "status": "machine-draft"
+    },
+    "defenderforoffice365": {
+      "value": "Defender for Office 365",
+      "status": "machine-draft"
+    },
+    "deviceendpointmanagement": {
+      "value": "Enheds- og slutpunktsstyring",
+      "status": "machine-draft"
+    },
+    "drivesecuritydataprotection": {
+      "value": "Drive-sikkerhed og databeskyttelse",
+      "status": "machine-draft"
+    },
+    "eidscabaseline": {
+      "value": "EIDSCA-referenceramme",
+      "status": "machine-draft"
+    },
+    "emailsecurity": {
+      "value": "E-mailsikkerhed",
+      "status": "machine-draft"
+    },
+    "entraidapplicationserviceprincipalsecurity": {
+      "value": "Entra ID-sikkerhed for applikationer og tjenesteprincipaler",
+      "status": "machine-draft"
+    },
+    "entraidauthenticationmethodsmfa": {
+      "value": "Entra ID-godkendelsesmetoder og MFA",
+      "status": "machine-draft"
+    },
+    "entraidconditionalaccess": {
+      "value": "Entra ID betinget adgang",
+      "status": "machine-draft"
+    },
+    "entraidfederationhybrididentity": {
+      "value": "Entra ID-føderation og hybrid identitet",
+      "status": "machine-draft"
+    },
+    "entraidgovernance": {
+      "value": "Entra ID-styring",
+      "status": "machine-draft"
+    },
+    "entraidprivilegedidentitymanagement": {
+      "value": "Entra ID-styring af privilegerede identiteter",
+      "status": "machine-draft"
+    },
+    "entraidtenantconfiguration": {
+      "value": "Entra ID-lejerkonfiguration",
+      "status": "machine-draft"
+    },
+    "exchangeonlinesecurity": {
+      "value": "Exchange Online-sikkerhed",
+      "status": "machine-draft"
+    },
+    "intuneendpointmanagement": {
+      "value": "Intune / Slutpunktsstyring",
+      "status": "machine-draft"
+    },
+    "k12baseline": {
+      "value": "K12-referenceramme",
+      "status": "machine-draft"
+    },
+    "loggingalertingmonitoring": {
+      "value": "Logning, alarmering og overvågning",
+      "status": "machine-draft"
+    },
+    "microsoftteamssecurity": {
+      "value": "Microsoft Teams-sikkerhed",
+      "status": "machine-draft"
+    },
+    "oauthapisecurity": {
+      "value": "OAuth- og API-sikkerhed",
+      "status": "machine-draft"
+    },
+    "powerplatformsecurity": {
+      "value": "Power Platform-sikkerhed",
+      "status": "machine-draft"
+    },
+    "sharepointonedrivesecurity": {
+      "value": "SharePoint- og OneDrive-sikkerhed",
+      "status": "machine-draft"
+    },
+    "tier0hygienehybrididentitysurface": {
+      "value": "Tier-0-hygiejne og hybrid identitetsoverflade",
+      "status": "machine-draft"
+    },
+    "unifiedauditlogging": {
+      "value": "Samlet audit og logning",
+      "status": "machine-draft"
+    },
+    "workspaceservicesecuritysitesclassroomgemini": {
+      "value": "Sikkerhed for Workspace-tjenester (Sites / Classroom / Gemini)",
+      "status": "machine-draft"
+    }
+  }
+}
