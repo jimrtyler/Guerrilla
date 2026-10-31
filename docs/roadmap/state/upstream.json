@@ -1,10 +1,20 @@
 {
-  "generated": "2026-10-30 17:26 UTC",
+  "generated": "2026-10-31 16:29 UTC",
   "kev": {
-    "catalogVersion": "2026.10.29",
-    "count": 1764,
-    "date": "2026-10-29",
+    "catalogVersion": "2026.10.30",
+    "count": 1766,
+    "date": "2026-10-30",
     "newest": [
+      {
+        "added": "2026-10-30",
+        "cve": "CVE-2026-118527",
+        "name": "Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability"
+      },
+      {
+        "added": "2026-10-30",
+        "cve": "CVE-2026-111357",
+        "name": "Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability"
+      },
       {
         "added": "2026-10-29",
         "cve": "CVE-2026-97229",
@@ -19,16 +29,6 @@
         "added": "2026-10-28",
         "cve": "CVE-2026-41709",
         "name": "Broadcom VMWare ESX Insufficient Logging Vulnerability"
-      },
-      {
-        "added": "2026-10-28",
-        "cve": "CVE-2026-46300",
-        "name": "Linux Kernel Missing Initialization of a Variable Vulnerability"
-      },
-      {
-        "added": "2026-10-27",
-        "cve": "CVE-2026-48356",
-        "name": "Adobe Commerce and Magento Unrestricted Upload of File with Dangerous Type Vulnerability"
       }
     ]
   },
