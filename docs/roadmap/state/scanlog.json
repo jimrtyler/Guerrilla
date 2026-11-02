@@ -1,5 +1,13 @@
 [
   {
+    "at": "2026-11-02 21:01 UTC",
+    "changes": [
+      "ScubaGoggles new policies: GWS.GMAIL.7.5v2",
+      "ScubaGoggles removed policies: GWS.GMAIL.7.5v1"
+    ],
+    "date": "2026-11-02"
+  },
+  {
     "at": "2026-11-01 17:23 UTC",
     "changes": [
       "No upstream changes detected."

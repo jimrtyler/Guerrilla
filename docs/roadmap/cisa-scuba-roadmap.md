@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-01 17:23 UTC**
+Last scan: **2026-11-02 21:01 UTC**
 
 ## Upstream state
 
@@ -156,6 +156,10 @@ Version drift (Guerrilla references an older policy version than upstream):
 - [ ] `GWS.MEET.6.2`
 - [ ] `GWS.MEET.6.3`
 
+Version drift (Guerrilla references an older policy version than upstream):
+
+- `GWS.GMAIL.7.5v1 -> GWS.GMAIL.7.5v2`
+
 ## Newest CISA KEV entries
 
 Broader CISA context (CVE-level, not directly a config baseline):
@@ -169,6 +173,10 @@ Broader CISA context (CVE-level, not directly a config baseline):
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-02
+- ScubaGoggles new policies: GWS.GMAIL.7.5v2
+- ScubaGoggles removed policies: GWS.GMAIL.7.5v1
 
 ### 2026-11-01
 - No upstream changes detected.
