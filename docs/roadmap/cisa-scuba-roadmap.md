@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-04 19:02 UTC**
+Last scan: **2026-11-05 19:13 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-04 19:02 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.03 (2026-11-03) | 1767 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.04 (2026-11-04) | 1768 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -217,15 +217,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2024-27834` Apple Multiple Products Improper Authentication Vulnerability (added 2026-11-04)
 - `CVE-2026-119977` WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability (added 2026-11-03)
 - `CVE-2026-118527` Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability (added 2026-10-30)
 - `CVE-2026-111357` Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability (added 2026-10-30)
 - `CVE-2026-97229` GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability (added 2026-10-29)
-- `CVE-2026-76418` Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability (added 2026-10-29)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-05
+- KEV catalog 2026.11.03 -> 2026.11.04 (+1 entries, now 1768)
 
 ### 2026-11-04
 - ScubaGear new policies: MS.SI.1.1v1, MS.SI.1.2v1, MS.SI.1.3v1, MS.SI.10.1v1, MS.SI.10.2v1, MS.SI.10.3v1, MS.SI.10.4v1, MS.SI.10.5v1, MS.SI.10.6v1, MS.SI.10.7v1, MS.SI.11.1v1, MS.SI.11.2v1, MS.SI.11.3v1, MS.SI.11.4v1, MS.SI.11.5v1, MS.SI.11.6v1, MS.SI.12.1v1, MS.SI.12.2v1, MS.SI.12.3v1, MS.SI.12.4v1, MS.SI.13.1v1, MS.SI.13.2v1, MS.SI.13.3v1, MS.SI.13.4v1, MS.SI.13.5v1, MS.SI.13.6v1, MS.SI.2.1v1, MS.SI.2.2v1, MS.SI.2.3v1, MS.SI.3.1v1, MS.SI.3.2v1, MS.SI.3.3v1, MS.SI.3.4v1, MS.SI.4.1v1, MS.SI.4.2v1, MS.SI.4.3v1, MS.SI.5.1v1, MS.SI.6.1v1, MS.SI.6.2v1, MS.SI.6.3v1, MS.SI.6.4v1, MS.SI.7.1v1, MS.SI.7.2v1, MS.SI.7.3v1, MS.SI.7.4v1, MS.SI.8.1v1, MS.SI.8.2v1, MS.SI.8.3v1, MS.SI.8.4v1, MS.SI.8.5v1, MS.SI.9.1v1, MS.SI.9.2v1, MS.SI.9.3v1

@@ -1,10 +1,15 @@
 {
-  "generated": "2026-11-04 19:02 UTC",
+  "generated": "2026-11-05 19:13 UTC",
   "kev": {
-    "catalogVersion": "2026.11.03",
-    "count": 1767,
-    "date": "2026-11-03",
+    "catalogVersion": "2026.11.04",
+    "count": 1768,
+    "date": "2026-11-04",
     "newest": [
+      {
+        "added": "2026-11-04",
+        "cve": "CVE-2024-27834",
+        "name": "Apple Multiple Products Improper Authentication Vulnerability"
+      },
       {
         "added": "2026-11-03",
         "cve": "CVE-2026-119977",
@@ -24,11 +29,6 @@
         "added": "2026-10-29",
         "cve": "CVE-2026-97229",
         "name": "GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability"
-      },
-      {
-        "added": "2026-10-29",
-        "cve": "CVE-2026-76418",
-        "name": "Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability"
       }
     ]
   },
