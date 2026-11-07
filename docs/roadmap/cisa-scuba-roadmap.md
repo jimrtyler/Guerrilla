@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-06 18:39 UTC**
+Last scan: **2026-11-07 17:09 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-06 18:39 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.04 (2026-11-04) | 1768 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.06 (2026-11-06) | 1769 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -217,15 +217,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-19868` SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability (added 2026-11-06)
 - `CVE-2024-27834` Apple Multiple Products Improper Authentication Vulnerability (added 2026-11-04)
 - `CVE-2026-119977` WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability (added 2026-11-03)
 - `CVE-2026-118527` Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability (added 2026-10-30)
 - `CVE-2026-111357` Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability (added 2026-10-30)
-- `CVE-2026-97229` GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability (added 2026-10-29)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-07
+- KEV catalog 2026.11.04 -> 2026.11.06 (+1 entries, now 1769)
 
 ### 2026-11-06
 - No upstream changes detected.

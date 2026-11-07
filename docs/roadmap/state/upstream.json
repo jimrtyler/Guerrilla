@@ -1,10 +1,15 @@
 {
-  "generated": "2026-11-06 18:39 UTC",
+  "generated": "2026-11-07 17:09 UTC",
   "kev": {
-    "catalogVersion": "2026.11.04",
-    "count": 1768,
-    "date": "2026-11-04",
+    "catalogVersion": "2026.11.06",
+    "count": 1769,
+    "date": "2026-11-06",
     "newest": [
+      {
+        "added": "2026-11-06",
+        "cve": "CVE-2026-19868",
+        "name": "SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability"
+      },
       {
         "added": "2026-11-04",
         "cve": "CVE-2024-27834",
@@ -24,11 +29,6 @@
         "added": "2026-10-30",
         "cve": "CVE-2026-111357",
         "name": "Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability"
-      },
-      {
-        "added": "2026-10-29",
-        "cve": "CVE-2026-97229",
-        "name": "GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability"
       }
     ]
   },
