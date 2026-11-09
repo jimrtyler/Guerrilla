@@ -1,5 +1,14 @@
 [
   {
+    "at": "2026-11-09 21:43 UTC",
+    "changes": [
+      "ScubaGoggles new policies: GWS.COMMONCONTROLS.16.3v2, GWS.GEMINI.5.1v1",
+      "ScubaGoggles removed policies: GWS.COMMONCONTROLS.16.3v1",
+      "KEV catalog 2026.11.06 -> 2026.11.09 (+4 entries, now 1773)"
+    ],
+    "date": "2026-11-09"
+  },
+  {
     "at": "2026-11-08 17:22 UTC",
     "changes": [
       "No upstream changes detected."

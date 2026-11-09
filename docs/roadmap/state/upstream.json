@@ -1,34 +1,34 @@
 {
-  "generated": "2026-11-08 17:22 UTC",
+  "generated": "2026-11-09 21:43 UTC",
   "kev": {
-    "catalogVersion": "2026.11.06",
-    "count": 1769,
-    "date": "2026-11-06",
+    "catalogVersion": "2026.11.09",
+    "count": 1773,
+    "date": "2026-11-09",
     "newest": [
+      {
+        "added": "2026-11-09",
+        "cve": "CVE-2026-102895",
+        "name": "GPUStack Improper Authentication Vulnerability"
+      },
+      {
+        "added": "2026-11-09",
+        "cve": "CVE-2026-123158",
+        "name": "OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability"
+      },
+      {
+        "added": "2026-11-09",
+        "cve": "CVE-2026-116779",
+        "name": "SignalWire FreeSwitch Code Injection Vulnerability"
+      },
+      {
+        "added": "2026-11-09",
+        "cve": "CVE-2026-123218",
+        "name": "IBM Aspera Faspex Incorrect Authorization Vulnerability"
+      },
       {
         "added": "2026-11-06",
         "cve": "CVE-2026-19868",
         "name": "SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability"
-      },
-      {
-        "added": "2026-11-04",
-        "cve": "CVE-2024-27834",
-        "name": "Apple Multiple Products Improper Authentication Vulnerability"
-      },
-      {
-        "added": "2026-11-03",
-        "cve": "CVE-2026-119977",
-        "name": "WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability"
-      },
-      {
-        "added": "2026-10-30",
-        "cve": "CVE-2026-118527",
-        "name": "Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability"
-      },
-      {
-        "added": "2026-10-30",
-        "cve": "CVE-2026-111357",
-        "name": "Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability"
       }
     ]
   },
@@ -306,7 +306,7 @@
       "GWS.COMMONCONTROLS.15.2v1",
       "GWS.COMMONCONTROLS.16.1v1",
       "GWS.COMMONCONTROLS.16.2v1",
-      "GWS.COMMONCONTROLS.16.3v1",
+      "GWS.COMMONCONTROLS.16.3v2",
       "GWS.COMMONCONTROLS.16.4v1",
       "GWS.COMMONCONTROLS.17.1v1",
       "GWS.COMMONCONTROLS.18.1v1",
@@ -351,6 +351,7 @@
       "GWS.GEMINI.3.1v1",
       "GWS.GEMINI.3.2v1",
       "GWS.GEMINI.4.1v1",
+      "GWS.GEMINI.5.1v1",
       "GWS.GMAIL.1.1v1",
       "GWS.GMAIL.10.1v1",
       "GWS.GMAIL.11.1v1",

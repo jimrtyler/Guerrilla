@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-08 17:22 UTC**
+Last scan: **2026-11-09 21:43 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-08 17:22 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.06 (2026-11-06) | 1769 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.09 (2026-11-09) | 1773 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -20,7 +20,7 @@ Coverage compares the base policy ID (version tag stripped) so a version bump do
 | Baseline | Upstream policies | Covered by Guerrilla | Gap |
 |---|---|---|---|
 | ScubaGear MS.* | 222 | 79 | **143** |
-| ScubaGoggles GWS.* | 138 | 110 | **28** |
+| ScubaGoggles GWS.* | 139 | 110 | **29** |
 
 Guerrilla references 80 MS.* and 110 GWS.* policy IDs today.
 
@@ -178,7 +178,7 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 ## ScubaGoggles (Google Workspace) gaps
 
-28 upstream policies have no Guerrilla check yet (candidate roadmap items):
+29 upstream policies have no Guerrilla check yet (candidate roadmap items):
 
 - [ ] `GWS.CALENDAR.3.2`
 - [ ] `GWS.CHAT.5.1`
@@ -202,6 +202,7 @@ Version drift (Guerrilla references an older policy version than upstream):
 - [ ] `GWS.DRIVEDOCS.1.10`
 - [ ] `GWS.DRIVEDOCS.1.11`
 - [ ] `GWS.DRIVEDOCS.5.2`
+- [ ] `GWS.GEMINI.5.1`
 - [ ] `GWS.GMAIL.13.1`
 - [ ] `GWS.GMAIL.4.3`
 - [ ] `GWS.GMAIL.4.4`
@@ -217,15 +218,20 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-102895` GPUStack Improper Authentication Vulnerability (added 2026-11-09)
+- `CVE-2026-123158` OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability (added 2026-11-09)
+- `CVE-2026-116779` SignalWire FreeSwitch Code Injection Vulnerability (added 2026-11-09)
+- `CVE-2026-123218` IBM Aspera Faspex Incorrect Authorization Vulnerability (added 2026-11-09)
 - `CVE-2026-19868` SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability (added 2026-11-06)
-- `CVE-2024-27834` Apple Multiple Products Improper Authentication Vulnerability (added 2026-11-04)
-- `CVE-2026-119977` WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability (added 2026-11-03)
-- `CVE-2026-118527` Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability (added 2026-10-30)
-- `CVE-2026-111357` Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability (added 2026-10-30)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-09
+- ScubaGoggles new policies: GWS.COMMONCONTROLS.16.3v2, GWS.GEMINI.5.1v1
+- ScubaGoggles removed policies: GWS.COMMONCONTROLS.16.3v1
+- KEV catalog 2026.11.06 -> 2026.11.09 (+4 entries, now 1773)
 
 ### 2026-11-08
 - No upstream changes detected.
