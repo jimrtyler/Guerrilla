@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-10 19:01 UTC**
+Last scan: **2026-11-11 18:58 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-10 19:01 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.09 (2026-11-09) | 1773 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.10 (2026-11-10) | 1779 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -218,15 +218,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
-- `CVE-2026-102895` GPUStack Improper Authentication Vulnerability (added 2026-11-09)
-- `CVE-2026-123158` OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability (added 2026-11-09)
-- `CVE-2026-116779` SignalWire FreeSwitch Code Injection Vulnerability (added 2026-11-09)
-- `CVE-2026-123218` IBM Aspera Faspex Incorrect Authorization Vulnerability (added 2026-11-09)
-- `CVE-2026-19868` SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability (added 2026-11-06)
+- `CVE-2026-124194` Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability (added 2026-11-10)
+- `CVE-2026-111793` Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability (added 2026-11-10)
+- `CVE-2026-20320` Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability (added 2026-11-10)
+- `CVE-2026-111560` Barracuda Networks Multiple Products OS Command Injection Vulnerability (added 2026-11-10)
+- `CVE-2026-116606` Barracuda Networks Email Security Gateway (ESG) Authentication Bypass Using an Alternate Path or Channel Vulnerability (added 2026-11-10)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-11
+- KEV catalog 2026.11.09 -> 2026.11.10 (+6 entries, now 1779)
 
 ### 2026-11-10
 - No upstream changes detected.

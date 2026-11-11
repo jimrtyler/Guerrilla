@@ -1,34 +1,34 @@
 {
-  "generated": "2026-11-10 19:01 UTC",
+  "generated": "2026-11-11 18:58 UTC",
   "kev": {
-    "catalogVersion": "2026.11.09",
-    "count": 1773,
-    "date": "2026-11-09",
+    "catalogVersion": "2026.11.10",
+    "count": 1779,
+    "date": "2026-11-10",
     "newest": [
       {
-        "added": "2026-11-09",
-        "cve": "CVE-2026-102895",
-        "name": "GPUStack Improper Authentication Vulnerability"
+        "added": "2026-11-10",
+        "cve": "CVE-2026-124194",
+        "name": "Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability"
       },
       {
-        "added": "2026-11-09",
-        "cve": "CVE-2026-123158",
-        "name": "OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability"
+        "added": "2026-11-10",
+        "cve": "CVE-2026-111793",
+        "name": "Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability"
       },
       {
-        "added": "2026-11-09",
-        "cve": "CVE-2026-116779",
-        "name": "SignalWire FreeSwitch Code Injection Vulnerability"
+        "added": "2026-11-10",
+        "cve": "CVE-2026-20320",
+        "name": "Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability"
       },
       {
-        "added": "2026-11-09",
-        "cve": "CVE-2026-123218",
-        "name": "IBM Aspera Faspex Incorrect Authorization Vulnerability"
+        "added": "2026-11-10",
+        "cve": "CVE-2026-111560",
+        "name": "Barracuda Networks Multiple Products OS Command Injection Vulnerability"
       },
       {
-        "added": "2026-11-06",
-        "cve": "CVE-2026-19868",
-        "name": "SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability"
+        "added": "2026-11-10",
+        "cve": "CVE-2026-116606",
+        "name": "Barracuda Networks Email Security Gateway (ESG) Authentication Bypass Using an Alternate Path or Channel Vulnerability"
       }
     ]
   },
