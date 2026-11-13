@@ -1,10 +1,20 @@
 {
-  "generated": "2026-11-12 19:18 UTC",
+  "generated": "2026-11-13 18:54 UTC",
   "kev": {
-    "catalogVersion": "2026.11.10",
-    "count": 1779,
-    "date": "2026-11-10",
+    "catalogVersion": "2026.11.13",
+    "count": 1781,
+    "date": "2026-11-13",
     "newest": [
+      {
+        "added": "2026-11-13",
+        "cve": "CVE-2026-114713",
+        "name": "UnrealIRCd Improper Neutralization of Delimiters Vulnerability"
+      },
+      {
+        "added": "2026-11-13",
+        "cve": "CVE-2026-123039",
+        "name": "Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability"
+      },
       {
         "added": "2026-11-10",
         "cve": "CVE-2026-124194",
@@ -19,16 +29,6 @@
         "added": "2026-11-10",
         "cve": "CVE-2026-20320",
         "name": "Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability"
-      },
-      {
-        "added": "2026-11-10",
-        "cve": "CVE-2026-111560",
-        "name": "Barracuda Networks Multiple Products OS Command Injection Vulnerability"
-      },
-      {
-        "added": "2026-11-10",
-        "cve": "CVE-2026-116606",
-        "name": "Barracuda Networks Email Security Gateway (ESG) Authentication Bypass Using an Alternate Path or Channel Vulnerability"
       }
     ]
   },

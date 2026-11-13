@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-12 19:18 UTC**
+Last scan: **2026-11-13 18:54 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-12 19:18 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.10 (2026-11-10) | 1779 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.13 (2026-11-13) | 1781 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -218,15 +218,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-114713` UnrealIRCd Improper Neutralization of Delimiters Vulnerability (added 2026-11-13)
+- `CVE-2026-123039` Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability (added 2026-11-13)
 - `CVE-2026-124194` Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability (added 2026-11-10)
 - `CVE-2026-111793` Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability (added 2026-11-10)
 - `CVE-2026-20320` Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability (added 2026-11-10)
-- `CVE-2026-111560` Barracuda Networks Multiple Products OS Command Injection Vulnerability (added 2026-11-10)
-- `CVE-2026-116606` Barracuda Networks Email Security Gateway (ESG) Authentication Bypass Using an Alternate Path or Channel Vulnerability (added 2026-11-10)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-13
+- KEV catalog 2026.11.10 -> 2026.11.13 (+2 entries, now 1781)
 
 ### 2026-11-12
 - No upstream changes detected.
