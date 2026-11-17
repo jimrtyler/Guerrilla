@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-16 21:24 UTC**
+Last scan: **2026-11-17 20:12 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-16 21:24 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.13 (2026-11-13) | 1781 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.17 (2026-11-17) | 1782 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -19,14 +19,14 @@ Coverage compares the base policy ID (version tag stripped) so a version bump do
 
 | Baseline | Upstream policies | Covered by Guerrilla | Gap |
 |---|---|---|---|
-| ScubaGear MS.* | 222 | 79 | **143** |
+| ScubaGear MS.* | 224 | 79 | **145** |
 | ScubaGoggles GWS.* | 139 | 110 | **29** |
 
 Guerrilla references 80 MS.* and 110 GWS.* policy IDs today.
 
 ## ScubaGear (M365 / Entra) gaps
 
-143 upstream policies have no Guerrilla check yet (candidate roadmap items):
+145 upstream policies have no Guerrilla check yet (candidate roadmap items):
 
 - [ ] `MS.AAD.3.9`
 - [ ] `MS.AAD.5.4`
@@ -104,6 +104,8 @@ Guerrilla references 80 MS.* and 110 GWS.* policy IDs today.
 - [ ] `MS.SECURITYSUITE.7.3`
 - [ ] `MS.SECURITYSUITE.8.1`
 - [ ] `MS.SECURITYSUITE.8.2`
+- [ ] `MS.SECURITYSUITE.9.1`
+- [ ] `MS.SECURITYSUITE.9.2`
 - [ ] `MS.SHAREPOINT.1.4`
 - [ ] `MS.SHAREPOINT.3.3`
 - [ ] `MS.SHAREPOINT.4.1`
@@ -218,15 +220,19 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-115731` Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability (added 2026-11-17)
 - `CVE-2026-114713` UnrealIRCd Improper Neutralization of Delimiters Vulnerability (added 2026-11-13)
 - `CVE-2026-123039` Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability (added 2026-11-13)
 - `CVE-2026-124194` Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability (added 2026-11-10)
 - `CVE-2026-111793` Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability (added 2026-11-10)
-- `CVE-2026-20320` Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability (added 2026-11-10)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-17
+- ScubaGear new policies: MS.SECURITYSUITE.9.1v1, MS.SECURITYSUITE.9.2v1
+- KEV catalog 2026.11.13 -> 2026.11.17 (+1 entries, now 1782)
 
 ### 2026-11-16
 - No upstream changes detected.

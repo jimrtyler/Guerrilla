@@ -1,10 +1,15 @@
 {
-  "generated": "2026-11-16 21:24 UTC",
+  "generated": "2026-11-17 20:12 UTC",
   "kev": {
-    "catalogVersion": "2026.11.13",
-    "count": 1781,
-    "date": "2026-11-13",
+    "catalogVersion": "2026.11.17",
+    "count": 1782,
+    "date": "2026-11-17",
     "newest": [
+      {
+        "added": "2026-11-17",
+        "cve": "CVE-2026-115731",
+        "name": "Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability"
+      },
       {
         "added": "2026-11-13",
         "cve": "CVE-2026-114713",
@@ -24,11 +29,6 @@
         "added": "2026-11-10",
         "cve": "CVE-2026-111793",
         "name": "Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability"
-      },
-      {
-        "added": "2026-11-10",
-        "cve": "CVE-2026-20320",
-        "name": "Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability"
       }
     ]
   },
@@ -171,6 +171,8 @@
       "MS.SECURITYSUITE.7.3v1",
       "MS.SECURITYSUITE.8.1v1",
       "MS.SECURITYSUITE.8.2v1",
+      "MS.SECURITYSUITE.9.1v1",
+      "MS.SECURITYSUITE.9.2v1",
       "MS.SHAREPOINT.1.1v1",
       "MS.SHAREPOINT.1.2v1",
       "MS.SHAREPOINT.1.3v1",

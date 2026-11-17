@@ -1,5 +1,13 @@
 [
   {
+    "at": "2026-11-17 20:12 UTC",
+    "changes": [
+      "ScubaGear new policies: MS.SECURITYSUITE.9.1v1, MS.SECURITYSUITE.9.2v1",
+      "KEV catalog 2026.11.13 -> 2026.11.17 (+1 entries, now 1782)"
+    ],
+    "date": "2026-11-17"
+  },
+  {
     "at": "2026-11-16 21:24 UTC",
     "changes": [
       "No upstream changes detected."
