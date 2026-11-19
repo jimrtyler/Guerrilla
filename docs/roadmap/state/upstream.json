@@ -1,34 +1,34 @@
 {
-  "generated": "2026-11-18 19:43 UTC",
+  "generated": "2026-11-19 19:44 UTC",
   "kev": {
-    "catalogVersion": "2026.11.17",
-    "count": 1782,
-    "date": "2026-11-17",
+    "catalogVersion": "2026.11.18",
+    "count": 1786,
+    "date": "2026-11-18",
     "newest": [
+      {
+        "added": "2026-11-18",
+        "cve": "CVE-2024-10441",
+        "name": "Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability"
+      },
+      {
+        "added": "2026-11-18",
+        "cve": "CVE-2026-40217",
+        "name": "BerriAI LiteLLM Unprotected Alternate Channel Vulnerability"
+      },
+      {
+        "added": "2026-11-18",
+        "cve": "CVE-2026-90817",
+        "name": "Vanderbilt University Research Electronic Data Capture (REDCap) Code Injection Vulnerability"
+      },
+      {
+        "added": "2026-11-18",
+        "cve": "CVE-2026-90436",
+        "name": "Apache Axis Unsafe Reflection Vulnerability"
+      },
       {
         "added": "2026-11-17",
         "cve": "CVE-2026-115731",
         "name": "Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability"
-      },
-      {
-        "added": "2026-11-13",
-        "cve": "CVE-2026-114713",
-        "name": "UnrealIRCd Improper Neutralization of Delimiters Vulnerability"
-      },
-      {
-        "added": "2026-11-13",
-        "cve": "CVE-2026-123039",
-        "name": "Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability"
-      },
-      {
-        "added": "2026-11-10",
-        "cve": "CVE-2026-124194",
-        "name": "Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability"
-      },
-      {
-        "added": "2026-11-10",
-        "cve": "CVE-2026-111793",
-        "name": "Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability"
       }
     ]
   },
