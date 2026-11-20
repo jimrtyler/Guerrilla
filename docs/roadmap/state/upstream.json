@@ -1,34 +1,34 @@
 {
-  "generated": "2026-11-19 19:44 UTC",
+  "generated": "2026-11-20 19:24 UTC",
   "kev": {
-    "catalogVersion": "2026.11.18",
-    "count": 1786,
-    "date": "2026-11-18",
+    "catalogVersion": "2026.11.20",
+    "count": 1790,
+    "date": "2026-11-20",
     "newest": [
+      {
+        "added": "2026-11-20",
+        "cve": "CVE-2026-129448",
+        "name": "Apache Roller Deserialization of Untrusted Data Vulnerability"
+      },
+      {
+        "added": "2026-11-20",
+        "cve": "CVE-2026-123890",
+        "name": "VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability"
+      },
+      {
+        "added": "2026-11-20",
+        "cve": "CVE-2025-42884",
+        "name": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability"
+      },
+      {
+        "added": "2026-11-20",
+        "cve": "CVE-2026-76466",
+        "name": "Cisco Expressway Series Use of Hard-coded Credentials Vulnerability"
+      },
       {
         "added": "2026-11-18",
         "cve": "CVE-2024-10441",
         "name": "Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability"
-      },
-      {
-        "added": "2026-11-18",
-        "cve": "CVE-2026-40217",
-        "name": "BerriAI LiteLLM Unprotected Alternate Channel Vulnerability"
-      },
-      {
-        "added": "2026-11-18",
-        "cve": "CVE-2026-90817",
-        "name": "Vanderbilt University Research Electronic Data Capture (REDCap) Code Injection Vulnerability"
-      },
-      {
-        "added": "2026-11-18",
-        "cve": "CVE-2026-90436",
-        "name": "Apache Axis Unsafe Reflection Vulnerability"
-      },
-      {
-        "added": "2026-11-17",
-        "cve": "CVE-2026-115731",
-        "name": "Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability"
       }
     ]
   },

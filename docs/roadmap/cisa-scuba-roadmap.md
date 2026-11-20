@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-19 19:44 UTC**
+Last scan: **2026-11-20 19:24 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-19 19:44 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.18 (2026-11-18) | 1786 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.20 (2026-11-20) | 1790 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -220,15 +220,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-129448` Apache Roller Deserialization of Untrusted Data Vulnerability (added 2026-11-20)
+- `CVE-2026-123890` VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability (added 2026-11-20)
+- `CVE-2025-42884` SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability (added 2026-11-20)
+- `CVE-2026-76466` Cisco Expressway Series Use of Hard-coded Credentials Vulnerability (added 2026-11-20)
 - `CVE-2024-10441` Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability (added 2026-11-18)
-- `CVE-2026-40217` BerriAI LiteLLM Unprotected Alternate Channel Vulnerability (added 2026-11-18)
-- `CVE-2026-90817` Vanderbilt University Research Electronic Data Capture (REDCap) Code Injection Vulnerability (added 2026-11-18)
-- `CVE-2026-90436` Apache Axis Unsafe Reflection Vulnerability (added 2026-11-18)
-- `CVE-2026-115731` Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability (added 2026-11-17)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-20
+- KEV catalog 2026.11.18 -> 2026.11.20 (+4 entries, now 1790)
 
 ### 2026-11-19
 - KEV catalog 2026.11.17 -> 2026.11.18 (+4 entries, now 1786)
