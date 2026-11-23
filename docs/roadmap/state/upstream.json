@@ -1,10 +1,20 @@
 {
-  "generated": "2026-11-22 18:48 UTC",
+  "generated": "2026-11-23 23:01 UTC",
   "kev": {
-    "catalogVersion": "2026.11.20",
-    "count": 1790,
-    "date": "2026-11-20",
+    "catalogVersion": "2026.11.23",
+    "count": 1792,
+    "date": "2026-11-23",
     "newest": [
+      {
+        "added": "2026-11-23",
+        "cve": "CVE-2026-133968",
+        "name": "Project MONAI MONAI Label Path Traversal Vulnerability"
+      },
+      {
+        "added": "2026-11-23",
+        "cve": "CVE-2026-134624",
+        "name": "N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability"
+      },
       {
         "added": "2026-11-20",
         "cve": "CVE-2026-129448",
@@ -19,16 +29,6 @@
         "added": "2026-11-20",
         "cve": "CVE-2025-42884",
         "name": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability"
-      },
-      {
-        "added": "2026-11-20",
-        "cve": "CVE-2026-76466",
-        "name": "Cisco Expressway Series Use of Hard-coded Credentials Vulnerability"
-      },
-      {
-        "added": "2026-11-18",
-        "cve": "CVE-2024-10441",
-        "name": "Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability"
       }
     ]
   },
@@ -311,6 +311,9 @@
       "GWS.COMMONCONTROLS.16.3v2",
       "GWS.COMMONCONTROLS.16.4v1",
       "GWS.COMMONCONTROLS.17.1v1",
+      "GWS.COMMONCONTROLS.17.2v1",
+      "GWS.COMMONCONTROLS.17.3v1",
+      "GWS.COMMONCONTROLS.17.4v1",
       "GWS.COMMONCONTROLS.18.1v1",
       "GWS.COMMONCONTROLS.18.2v1",
       "GWS.COMMONCONTROLS.2.1v1",
@@ -331,11 +334,11 @@
       "GWS.COMMONCONTROLS.8.3v1",
       "GWS.COMMONCONTROLS.9.1v1",
       "GWS.COMMONCONTROLS.9.2v1",
-      "GWS.DRIVEDOCS.1.10v1",
-      "GWS.DRIVEDOCS.1.11v1",
+      "GWS.DRIVEDOCS.1.10v2",
+      "GWS.DRIVEDOCS.1.11v2",
       "GWS.DRIVEDOCS.1.1v1",
       "GWS.DRIVEDOCS.1.2v1",
-      "GWS.DRIVEDOCS.1.3v1",
+      "GWS.DRIVEDOCS.1.3v2",
       "GWS.DRIVEDOCS.1.4v1",
       "GWS.DRIVEDOCS.1.5v1",
       "GWS.DRIVEDOCS.1.6v1",

@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-22 18:48 UTC**
+Last scan: **2026-11-23 23:01 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-22 18:48 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.20 (2026-11-20) | 1790 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.23 (2026-11-23) | 1792 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -20,7 +20,7 @@ Coverage compares the base policy ID (version tag stripped) so a version bump do
 | Baseline | Upstream policies | Covered by Guerrilla | Gap |
 |---|---|---|---|
 | ScubaGear MS.* | 224 | 79 | **145** |
-| ScubaGoggles GWS.* | 139 | 110 | **29** |
+| ScubaGoggles GWS.* | 142 | 110 | **32** |
 
 Guerrilla references 80 MS.* and 110 GWS.* policy IDs today.
 
@@ -180,7 +180,7 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 ## ScubaGoggles (Google Workspace) gaps
 
-29 upstream policies have no Guerrilla check yet (candidate roadmap items):
+32 upstream policies have no Guerrilla check yet (candidate roadmap items):
 
 - [ ] `GWS.CALENDAR.3.2`
 - [ ] `GWS.CHAT.5.1`
@@ -192,6 +192,9 @@ Version drift (Guerrilla references an older policy version than upstream):
 - [ ] `GWS.COMMONCONTROLS.14.2`
 - [ ] `GWS.COMMONCONTROLS.16.3`
 - [ ] `GWS.COMMONCONTROLS.16.4`
+- [ ] `GWS.COMMONCONTROLS.17.2`
+- [ ] `GWS.COMMONCONTROLS.17.3`
+- [ ] `GWS.COMMONCONTROLS.17.4`
 - [ ] `GWS.COMMONCONTROLS.18.1`
 - [ ] `GWS.COMMONCONTROLS.18.2`
 - [ ] `GWS.COMMONCONTROLS.2.1`
@@ -214,21 +217,27 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Version drift (Guerrilla references an older policy version than upstream):
 
+- `GWS.DRIVEDOCS.1.3v1 -> GWS.DRIVEDOCS.1.3v2`
 - `GWS.GMAIL.7.5v1 -> GWS.GMAIL.7.5v2`
 
 ## Newest CISA KEV entries
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-133968` Project MONAI MONAI Label Path Traversal Vulnerability (added 2026-11-23)
+- `CVE-2026-134624` N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability (added 2026-11-23)
 - `CVE-2026-129448` Apache Roller Deserialization of Untrusted Data Vulnerability (added 2026-11-20)
 - `CVE-2026-123890` VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability (added 2026-11-20)
 - `CVE-2025-42884` SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability (added 2026-11-20)
-- `CVE-2026-76466` Cisco Expressway Series Use of Hard-coded Credentials Vulnerability (added 2026-11-20)
-- `CVE-2024-10441` Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability (added 2026-11-18)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-23
+- ScubaGoggles new policies: GWS.COMMONCONTROLS.17.2v1, GWS.COMMONCONTROLS.17.3v1, GWS.COMMONCONTROLS.17.4v1, GWS.DRIVEDOCS.1.10v2, GWS.DRIVEDOCS.1.11v2, GWS.DRIVEDOCS.1.3v2
+- ScubaGoggles removed policies: GWS.DRIVEDOCS.1.10v1, GWS.DRIVEDOCS.1.11v1, GWS.DRIVEDOCS.1.3v1
+- KEV catalog 2026.11.20 -> 2026.11.23 (+2 entries, now 1792)
 
 ### 2026-11-22
 - No upstream changes detected.
