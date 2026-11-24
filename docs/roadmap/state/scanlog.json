@@ -1,5 +1,12 @@
 [
   {
+    "at": "2026-11-24 21:42 UTC",
+    "changes": [
+      "KEV catalog 2026.11.23 -> 2026.11.24 (+3 entries, now 1795)"
+    ],
+    "date": "2026-11-24"
+  },
+  {
     "at": "2026-11-23 23:01 UTC",
     "changes": [
       "ScubaGoggles new policies: GWS.COMMONCONTROLS.17.2v1, GWS.COMMONCONTROLS.17.3v1, GWS.COMMONCONTROLS.17.4v1, GWS.DRIVEDOCS.1.10v2, GWS.DRIVEDOCS.1.11v2, GWS.DRIVEDOCS.1.3v2",

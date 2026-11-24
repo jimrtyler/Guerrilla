@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-23 23:01 UTC**
+Last scan: **2026-11-24 21:42 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-23 23:01 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.23 (2026-11-23) | 1792 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.24 (2026-11-24) | 1795 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -224,15 +224,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-132224` Optimizely Web Experimentation External Control of Critical State Data Vulnerability (added 2026-11-24)
+- `CVE-2026-131914` Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability (added 2026-11-24)
+- `CVE-2026-132165` Drupal Core Remote Code Execution Vulnerability (added 2026-11-24)
 - `CVE-2026-133968` Project MONAI MONAI Label Path Traversal Vulnerability (added 2026-11-23)
 - `CVE-2026-134624` N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability (added 2026-11-23)
-- `CVE-2026-129448` Apache Roller Deserialization of Untrusted Data Vulnerability (added 2026-11-20)
-- `CVE-2026-123890` VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability (added 2026-11-20)
-- `CVE-2025-42884` SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability (added 2026-11-20)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-24
+- KEV catalog 2026.11.23 -> 2026.11.24 (+3 entries, now 1795)
 
 ### 2026-11-23
 - ScubaGoggles new policies: GWS.COMMONCONTROLS.17.2v1, GWS.COMMONCONTROLS.17.3v1, GWS.COMMONCONTROLS.17.4v1, GWS.DRIVEDOCS.1.10v2, GWS.DRIVEDOCS.1.11v2, GWS.DRIVEDOCS.1.3v2

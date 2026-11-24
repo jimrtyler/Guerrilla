@@ -1,10 +1,25 @@
 {
-  "generated": "2026-11-23 23:01 UTC",
+  "generated": "2026-11-24 21:42 UTC",
   "kev": {
-    "catalogVersion": "2026.11.23",
-    "count": 1792,
-    "date": "2026-11-23",
+    "catalogVersion": "2026.11.24",
+    "count": 1795,
+    "date": "2026-11-24",
     "newest": [
+      {
+        "added": "2026-11-24",
+        "cve": "CVE-2026-132224",
+        "name": "Optimizely Web Experimentation External Control of Critical State Data Vulnerability"
+      },
+      {
+        "added": "2026-11-24",
+        "cve": "CVE-2026-131914",
+        "name": "Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability"
+      },
+      {
+        "added": "2026-11-24",
+        "cve": "CVE-2026-132165",
+        "name": "Drupal Core Remote Code Execution Vulnerability"
+      },
       {
         "added": "2026-11-23",
         "cve": "CVE-2026-133968",
@@ -14,21 +29,6 @@
         "added": "2026-11-23",
         "cve": "CVE-2026-134624",
         "name": "N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability"
-      },
-      {
-        "added": "2026-11-20",
-        "cve": "CVE-2026-129448",
-        "name": "Apache Roller Deserialization of Untrusted Data Vulnerability"
-      },
-      {
-        "added": "2026-11-20",
-        "cve": "CVE-2026-123890",
-        "name": "VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability"
-      },
-      {
-        "added": "2026-11-20",
-        "cve": "CVE-2025-42884",
-        "name": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability"
       }
     ]
   },
