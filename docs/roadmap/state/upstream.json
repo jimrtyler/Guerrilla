@@ -1,34 +1,34 @@
 {
-  "generated": "2026-11-24 21:42 UTC",
+  "generated": "2026-11-25 20:49 UTC",
   "kev": {
-    "catalogVersion": "2026.11.24",
-    "count": 1795,
-    "date": "2026-11-24",
+    "catalogVersion": "2026.11.25",
+    "count": 1805,
+    "date": "2026-11-25",
     "newest": [
       {
-        "added": "2026-11-24",
-        "cve": "CVE-2026-132224",
-        "name": "Optimizely Web Experimentation External Control of Critical State Data Vulnerability"
+        "added": "2026-11-25",
+        "cve": "CVE-2026-103406",
+        "name": "Hewlett Packard Enterprise (HPE) Juniper Session Smart Conductor and Session Smart Router OS Command Injection Vulnerability"
       },
       {
-        "added": "2026-11-24",
-        "cve": "CVE-2026-131914",
-        "name": "Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability"
+        "added": "2026-11-25",
+        "cve": "CVE-2026-133469",
+        "name": "Vates Xen Orchestra Improper Validation of Specified Type of Input Vulnerability"
       },
       {
-        "added": "2026-11-24",
-        "cve": "CVE-2026-132165",
-        "name": "Drupal Core Remote Code Execution Vulnerability"
+        "added": "2026-11-25",
+        "cve": "CVE-2025-41450",
+        "name": "Danfoss AK-SM 800A Series Improper Authentication Vulnerability"
       },
       {
-        "added": "2026-11-23",
-        "cve": "CVE-2026-133968",
-        "name": "Project MONAI MONAI Label Path Traversal Vulnerability"
+        "added": "2026-11-25",
+        "cve": "CVE-2023-25914",
+        "name": "Danfoss AK-SM 800A Series Path Traversal Vulnerability"
       },
       {
-        "added": "2026-11-23",
-        "cve": "CVE-2026-134624",
-        "name": "N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability"
+        "added": "2026-11-25",
+        "cve": "CVE-2023-25915",
+        "name": "Danfoss AK-SM 800A Series Improper Input Validation Vulnerability"
       }
     ]
   },
