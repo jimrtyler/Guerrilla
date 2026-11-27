@@ -1,10 +1,25 @@
 {
-  "generated": "2026-11-26 20:41 UTC",
+  "generated": "2026-11-27 20:27 UTC",
   "kev": {
-    "catalogVersion": "2026.11.25",
-    "count": 1805,
-    "date": "2026-11-25",
+    "catalogVersion": "2026.11.27",
+    "count": 1808,
+    "date": "2026-11-27",
     "newest": [
+      {
+        "added": "2026-11-27",
+        "cve": "CVE-2026-120705",
+        "name": "OSGeo GeoServer XML Injection Vulnerability"
+      },
+      {
+        "added": "2026-11-27",
+        "cve": "CVE-2026-129243",
+        "name": "OSGeo GeoServer Incorrect Authorization Vulnerability"
+      },
+      {
+        "added": "2026-11-27",
+        "cve": "CVE-2026-136716",
+        "name": "Drupal Core Improper Check for Unusual or Exceptional Conditions Vulnerability"
+      },
       {
         "added": "2026-11-25",
         "cve": "CVE-2026-103406",
@@ -14,21 +29,6 @@
         "added": "2026-11-25",
         "cve": "CVE-2026-133469",
         "name": "Vates Xen Orchestra Improper Validation of Specified Type of Input Vulnerability"
-      },
-      {
-        "added": "2026-11-25",
-        "cve": "CVE-2025-41450",
-        "name": "Danfoss AK-SM 800A Series Improper Authentication Vulnerability"
-      },
-      {
-        "added": "2026-11-25",
-        "cve": "CVE-2023-25914",
-        "name": "Danfoss AK-SM 800A Series Path Traversal Vulnerability"
-      },
-      {
-        "added": "2026-11-25",
-        "cve": "CVE-2023-25915",
-        "name": "Danfoss AK-SM 800A Series Improper Input Validation Vulnerability"
       }
     ]
   },

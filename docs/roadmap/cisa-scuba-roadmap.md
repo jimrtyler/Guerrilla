@@ -2,7 +2,7 @@
 
 > Generated daily by `.github/workflows/cisa-roadmap.yml` (`scripts/roadmap/cisa-scan.py`). Do not edit by hand: changes are overwritten on the next scan. This is a deterministic diff of upstream CISA SCuBA baselines against the checks Guerrilla ships. No AI is involved.
 
-Last scan: **2026-11-26 20:41 UTC**
+Last scan: **2026-11-27 20:27 UTC**
 
 ## Upstream state
 
@@ -10,7 +10,7 @@ Last scan: **2026-11-26 20:41 UTC**
 |---|---|---|
 | ScubaGear (M365 / Entra) | [v2.0.0](https://github.com/cisagov/ScubaGear/releases/tag/v2.0.0) (2026-10-22) | MS.* Secure Configuration Baselines |
 | ScubaGoggles (Google Workspace) | [v1.1.0](https://github.com/cisagov/ScubaGoggles/releases/tag/v1.1.0) (2026-10-22) | GWS.* Secure Configuration Baselines |
-| CISA KEV catalog | 2026.11.25 (2026-11-25) | 1805 known-exploited CVEs |
+| CISA KEV catalog | 2026.11.27 (2026-11-27) | 1808 known-exploited CVEs |
 | CISA BOD 25-01 | [SCuBA mandate](https://www.cisa.gov/news-events/directives/binding-operational-directive-25-01) | Secure cloud baselines for FCEB M365 |
 
 ## SCuBA coverage summary
@@ -224,15 +224,18 @@ Version drift (Guerrilla references an older policy version than upstream):
 
 Broader CISA context (CVE-level, not directly a config baseline):
 
+- `CVE-2026-120705` OSGeo GeoServer XML Injection Vulnerability (added 2026-11-27)
+- `CVE-2026-129243` OSGeo GeoServer Incorrect Authorization Vulnerability (added 2026-11-27)
+- `CVE-2026-136716` Drupal Core Improper Check for Unusual or Exceptional Conditions Vulnerability (added 2026-11-27)
 - `CVE-2026-103406` Hewlett Packard Enterprise (HPE) Juniper Session Smart Conductor and Session Smart Router OS Command Injection Vulnerability (added 2026-11-25)
 - `CVE-2026-133469` Vates Xen Orchestra Improper Validation of Specified Type of Input Vulnerability (added 2026-11-25)
-- `CVE-2025-41450` Danfoss AK-SM 800A Series Improper Authentication Vulnerability (added 2026-11-25)
-- `CVE-2023-25914` Danfoss AK-SM 800A Series Path Traversal Vulnerability (added 2026-11-25)
-- `CVE-2023-25915` Danfoss AK-SM 800A Series Improper Input Validation Vulnerability (added 2026-11-25)
 
 ## Scan log
 
 Most recent first. One entry per day the scanner ran.
+
+### 2026-11-27
+- KEV catalog 2026.11.25 -> 2026.11.27 (+3 entries, now 1808)
 
 ### 2026-11-26
 - No upstream changes detected.
